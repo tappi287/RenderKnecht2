@@ -1,0 +1,147 @@
+from bisect import bisect_left
+from typing import List, Union
+
+from PySide2.QtCore import QModelIndex, QObject, QUuid, Signal
+
+from modules.settings import KnechtSettings
+from modules.itemview.item import KnechtItem
+from modules.itemview.model import KnechtModel
+from modules.itemview.model_globals import KnechtModelGlobals as Kg
+from modules.knecht_variants import KnechtVariantList
+from modules.language import get_translation
+from modules.log import init_logging
+
+LOGGER = init_logging(__name__)
+
+# translate strings
+lang = get_translation()
+lang.install()
+_ = lang.gettext
+
+
+class KnechtCollectVariants(QObject):
+    """ Helper class for KnechtEditor to collect variants from the current model """
+    reset_missing = Signal()
+    recursion_limit = 3
+
+    def __init__(self, view):
+        """ Collects variants, so basically Name and Value fields of model items.
+
+        :param modules.itemview.treeview.KnechtTreeView view: The Tree View to collect variants from
+        """
+        super(KnechtCollectVariants, self).__init__()
+        self.view = view
+        self.recursion_depth = 0
+
+    def collect_current_index(self, collect_reset: bool=True) -> KnechtVariantList:
+        """ Collect variants from the current model index """
+        index, __ = self.view.editor.get_current_selection()
+        return self.collect_index(index, collect_reset)
+
+    def collect_index(self, index: QModelIndex, collect_reset: bool=True) -> KnechtVariantList:
+        """ Collect variants from the given model index """
+        self.recursion_depth = 0
+        src_model = self.view.model().sourceModel()
+
+        if not index or not index.isValid():
+            return KnechtVariantList()
+
+        return self._collect(index, src_model, collect_reset)
+
+    def _collect(self, index: QModelIndex, src_model: KnechtModel, collect_reset: bool=True
+                 ) -> KnechtVariantList:
+        variants = KnechtVariantList()
+        current_item = src_model.get_item(index)
+
+        if not current_item:
+            return variants
+
+        if KnechtSettings.dg['reset'] and collect_reset:
+            self._collect_reset_preset(variants, src_model)
+
+        if current_item.userType == Kg.reference:
+            # Current item is reference, use referenced item instead
+            ref_id = current_item.reference
+            current_item = src_model.id_mgr.get_preset_from_id(ref_id)
+
+            if not current_item:
+                return variants
+
+        if current_item.userType == Kg.variant:
+            self._add_variant(current_item, variants, src_model)
+            return variants
+
+        self._collect_preset_variants(current_item, variants, src_model)
+
+        return variants
+
+    def _collect_preset_variants(self, preset_item: KnechtItem, variants_ls: KnechtVariantList,
+                                 src_model: KnechtModel) -> None:
+        self.recursion_depth = 0
+        self._collect_preset_variants_recursive(preset_item, variants_ls, src_model)
+
+    def _collect_reset_preset(self, variants_ls: KnechtVariantList, src_model: KnechtModel):
+        reset_presets = list()
+
+        for item in src_model.id_mgr.iterate_presets():
+            if item.data(Kg.TYPE) == 'reset':
+                reset_presets.append(item)
+
+        if not reset_presets:
+            self.reset_missing.emit()
+
+        for reset_preset in reset_presets:
+            self._collect_preset_variants(reset_preset, variants_ls, src_model)
+
+    def _collect_preset_variants_recursive(self, preset_item: KnechtItem, variants_ls: KnechtVariantList,
+                                           src_model: KnechtModel) -> None:
+        if self.recursion_depth > self.recursion_limit:
+            LOGGER.warning('Recursion limit reached while collecting references! Aborting further collections!')
+            return
+
+        LOGGER.debug('Collecting from preset: %s', preset_item.data(Kg.NAME))
+
+        ordered_child_ls = self._order_children(preset_item)
+
+        for child in ordered_child_ls:
+            self._add_variant(child, variants_ls, src_model)
+
+            if child.userType == Kg.reference:
+                ref_preset = self._collect_single_reference(child, src_model)
+
+                if ref_preset:
+                    self.recursion_depth += 1
+                    self._collect_preset_variants(ref_preset, variants_ls, src_model)
+
+    @staticmethod
+    def _add_variant(item: KnechtItem, variants: KnechtVariantList, src_model: KnechtModel) -> None:
+        if item.userType == Kg.variant:
+            index = src_model.get_index_from_item(item)
+
+            LOGGER.debug('Adding variant: %s %s', item.data(Kg.NAME), item.data(Kg.VALUE))
+
+            variants.add(index, item.data(Kg.NAME), item.data(Kg.VALUE))
+
+    @staticmethod
+    def _order_children(preset_item: KnechtItem) -> List[KnechtItem]:
+        """ The children list of an item corresponds to the source indices which
+            do not necessarily reflect the item order by order column.
+            We create a list ordered by the order column of each child.
+        """
+        child_order_ls, child_ls = list(), list()
+
+        for child in preset_item.iter_children():
+            order = int(child.data(Kg.ORDER))
+            child_order_ls.append(order)
+
+            insert_idx = bisect_left(sorted(child_order_ls), order)
+            child_ls.insert(insert_idx, child)
+
+        return child_ls
+
+    @staticmethod
+    def _collect_single_reference(item, src_model) -> Union[KnechtItem, None]:
+        ref_id: QUuid = item.reference
+
+        if ref_id:
+            return src_model.id_mgr.get_preset_from_id(ref_id)

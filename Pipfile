@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+lxml = "*"
+numpy = "*"
+"pyside2" = "==5.11.2"
+pandas = "*"
+xlrd = "*"
+imageio = "*"
+requests = "*"
+bottleneck = "*"
+
+[dev-packages]
+jupyter = "*"
+paramiko = "*"
+pyinstaller = "*"
