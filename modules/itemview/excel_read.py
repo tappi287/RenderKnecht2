@@ -1,8 +1,13 @@
-from typing import List
+import time
+from pathlib import Path
+from threading import Thread
+from queue import Queue
+from typing import List, Tuple
+
+from PySide2.QtCore import QObject, Signal, Slot
 
 from modules.idgen import KnechtUuidGenerator
 from modules.itemview.item import KnechtItem
-from modules.itemview.model import KnechtModel
 from modules.knecht_excel import ExcelData
 from modules.language import get_translation
 from modules.log import init_logging
@@ -15,6 +20,47 @@ lang.install()
 _ = lang.gettext
 
 
+class KnechtExcelDataThreadSignals(QObject):
+    finished = Signal(Path, KnechtItem)
+    error = Signal(str)
+    progress_msg = Signal(str)
+
+
+class KnechtExcelDataThread(Thread):
+    def __init__(self, file: Path, queue: Queue):
+        super(KnechtExcelDataThread, self).__init__()
+        self.file = file
+        self.queue = queue
+
+        self.signals = KnechtExcelDataThreadSignals()
+        self.finished = self.signals.finished
+        self.error = self.signals.error
+        self.progress_msg = self.signals.progress_msg
+
+    def run(self):
+        LOGGER.debug('Excel data to KnechtModel thread started.')
+        self.progress_msg.emit(_('Excel Daten werden konvertiert...'))
+        time.sleep(0.5)
+        data = self.queue.get()
+
+        xl_reader = KnechtExcelDataToModel(
+            *data
+            )
+        root_item = xl_reader.create_root_item()
+
+        if not root_item.childCount():
+            self.error.emit(_('Konnte keinen Baum aus Excel Daten erstellen.'))
+            self.finish()
+            return
+
+        self.finished.emit(self.file, root_item)
+        self.finish()
+
+    def finish(self):
+        self.progress_msg.emit('')
+        self.signals.deleteLater()
+
+
 class KnechtExcelDataToModel:
 
     def __init__(self, data: ExcelData, models: List[str], pr_families: List[str],
@@ -25,10 +71,10 @@ class KnechtExcelDataToModel:
         self.id_gen = KnechtUuidGenerator()
         self.root_item = KnechtItem()
 
-    def create_model(self):
+    def create_root_item(self):
         self.create_items()
         LOGGER.debug('Created %s items from ExcelData.', self.root_item.childCount())
-        return KnechtModel(self.root_item)
+        return self.root_item
 
     def create_items(self):
         # -- Model Columns

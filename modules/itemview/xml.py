@@ -97,7 +97,7 @@ class SaveLoadController(QObject):
         try:
             root_item, error_str, file = self.xml_worker_queue.get(timeout=2)
 
-            _root_item = self._copy_item_to_main_thread(root_item)
+            _root_item = self.copy_item_to_main_thread(root_item)
             root_item.deleteLater()
             self._xml_items_loaded(_root_item, error_str, file)
         except TimeoutError:
@@ -126,7 +126,7 @@ class SaveLoadController(QObject):
         self.model_loaded.emit(new_model, file)
 
     @staticmethod
-    def _copy_item_to_main_thread(root_item: KnechtItem):
+    def copy_item_to_main_thread(root_item: KnechtItem):
         """ Creates a copy of a loaded root item that lives in the main thread """
 
         # Create root item that lives in the main thread
