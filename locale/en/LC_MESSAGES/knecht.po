@@ -3,17 +3,136 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr "File could not be validated as a valid image file: {}\n"
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-25 11:40+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+msgstr ""
+"File could not be validated as a valid image file: {}\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2019-03-04 22:47+0100\n"
+"PO-Revision-Date: 2019-03-04 23:01+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"X-Generator: Poedit 2.2.1\n"
 
+#: modules/gui/widgets\excel_dialog.py:50
+msgid "Excel Datei wird gelesen..."
+msgstr "Reading Excel file..."
+
+#: modules/gui/widgets\excel_dialog.py:54
+msgid "Daten übertragen..."
+msgstr "Transmit data..."
+
+#: modules/gui/widgets\excel_dialog.py:68
+msgid "PR-Familie"
+msgstr "PR-Family"
+
+#: modules/gui/widgets\excel_dialog.py:68
+#: modules/gui/widgets\excel_dialog.py:70 modules/itemview\model_globals.py:22
+msgid "Beschreibung"
+msgstr "Description"
+
+#: modules/gui/widgets\excel_dialog.py:70
+msgid "Getriebe"
+msgstr "Gearbox"
+
+#: modules/gui/widgets\excel_dialog.py:70
+msgid "Markt"
+msgstr "Market"
+
+#: modules/gui/widgets\excel_dialog.py:70
+msgid "Model"
+msgstr "Model"
+
+#: modules/gui/widgets\excel_dialog.py:97
+msgid "V-Plus Browser Leseoptionen"
+msgstr "V-Plus Browser Import Options"
+
+#: modules/gui/widgets\excel_dialog.py:122
+msgid "Trimlines erstellen"
+msgstr "Create Trimlines"
+
+#: modules/gui/widgets\excel_dialog.py:125
+msgid "Optionen erstellen"
+msgstr "Create Options"
+
+#: modules/gui/widgets\excel_dialog.py:128
+msgid "Pakete erstellen"
+msgstr "Create Packages"
+
+#: modules/gui/widgets\excel_dialog.py:132
+msgid "PR-Familien Filter Vorlagen"
+msgstr "PR-Families Filter Templates"
+
+#: modules/gui/widgets\excel_dialog.py:134
+msgid "Alle PR-Familien"
+msgstr "All PR-Families"
+
+#: modules/gui/widgets\excel_dialog.py:136
+msgid "Interieur I/VX-13"
+msgstr "Interior I/VX-13"
+
+#: modules/gui/widgets\excel_dialog.py:138
+msgid "Exterieur I/VX-13"
+msgstr "Exterior I/VX-13"
+
+#: modules/gui/widgets\excel_dialog.py:141
+msgid "PR-Familien Filter auf Pakete anwenden"
+msgstr "Apply PR-Families filter to Packages"
+
+#: modules/gui/widgets\excel_dialog.py:144
+msgid "Zum filtern tippen ..."
+msgstr "Type to start filtering..."
+
+#: modules/gui/widgets\excel_dialog.py:147
+msgid "Modellfilter"
+msgstr "Model filter"
+
+#: modules/gui/widgets\excel_dialog.py:149
+msgid "PR-Familien-Filter"
+msgstr "PR-Family Filter"
+
+#: modules/gui/widgets\excel_dialog.py:153
+msgid "PR Familien auswählen die ausgelesen werden sollen."
+msgstr "Choose PR-Families that should be imported."
+
+#: modules/gui/widgets\excel_dialog.py:155
+msgid "Modelle auswählen die ausgelesen werden sollen."
+msgstr "Choose Models that should be imported."
+
+#: modules/gui/widgets\excel_dialog.py:189
+msgid "Excel Daten werden geladen..."
+msgstr "Loading Excel data..."
+
+#: modules/gui/widgets\excel_dialog.py:202
+msgid "Excel Import Fehler"
+msgstr "Excel Import Error"
+
+#: modules/gui/widgets\excel_dialog.py:390
+msgid "Importvorgang"
+msgstr "Import process"
+
+#: modules/gui/widgets\excel_dialog.py:391
+msgid "Soll der Vorgang wirklich abgebrochen werden?"
+msgstr "Do you really want to cancel this process?"
+
+#: modules/gui/widgets\excel_dialog.py:392
+msgid "Ja"
+msgstr "Yes"
+
+#: modules/gui/widgets\excel_dialog.py:393
+msgid "Nein"
+msgstr "No"
+
+#: modules/gui/widgets\excel_dialog.py:433
+msgid "Alle Einträge auswählen"
+msgstr "Check all items"
+
+#: modules/gui/widgets\excel_dialog.py:435
+msgid "Alle Einträge abwählen"
+msgstr "Un-check all items"
 
 #: modules/gui/widgets\file_dialog.py:25
 msgid "Variant Preset Dateien (*.xml);"
@@ -28,8 +147,8 @@ msgid "Excel Dateien (*.xlsx);"
 msgstr "Excel files (*.xlsx);"
 
 #: modules/gui/widgets\file_dialog.py:26
-msgid "Excel Dateien *.xlxs auswaehlen"
-msgstr "Select Excel files * .xlxs"
+msgid "Excel Dateien *.xlsx auswaehlen"
+msgstr "Choose Excel Files *.xlsx"
 
 #: modules/gui/widgets\file_dialog.py:27
 msgid "Variant CMD Dateien (*.cmd);"
@@ -208,60 +327,71 @@ msgstr "Select references\tCtrl+R"
 msgid "Selektion aufheben\tStrg+D"
 msgstr "Clear selection\tCtrl+D"
 
-#: modules/gui/widgets\menu_file.py:43
+#: modules/gui/widgets\menu_file.py:44
 msgid "Zuletzt geöffnet"
 msgstr "Recent files"
 
-#: modules/gui/widgets\menu_file.py:68
+#: modules/gui/widgets\menu_file.py:71
 msgid "Neu\tStrg+N"
 msgstr "New\tCtrl+N"
 
-#: modules/gui/widgets\menu_file.py:74
+#: modules/gui/widgets\menu_file.py:77
 msgid "Öffnen\tStrg+O"
 msgstr "Open\tCtrl+O"
 
-#: modules/gui/widgets\menu_file.py:81
+#: modules/gui/widgets\menu_file.py:87
 msgid "Speichern\tStrg+S"
 msgstr "Save\tCtrl+S"
 
-#: modules/gui/widgets\menu_file.py:87
+#: modules/gui/widgets\menu_file.py:93
 msgid "Speichern unter ...\tStrg+Shift+S"
 msgstr "Save as ...\tCtrl+Shift+S"
 
-#: modules/gui/widgets\menu_file.py:102
+#: modules/gui/widgets\menu_file.py:108
 msgid "Neues_Dokument_{:02d}.xml"
 msgstr "New_Document_{:02d}.xml"
 
-#: modules/gui/widgets\menu_file.py:143
+#: modules/gui/widgets\menu_file.py:149
 msgid ""
 "Datei gespeichert:\n"
 "{0}\n"
 "{1:.3}s"
-msgstr "File could not be validated as a valid image file: {}\n"
+msgstr ""
+"File saved:\n"
+"{0}\n"
+"{1:.3}s"
 
-#: modules/gui/widgets\menu_file.py:170
+#: modules/gui/widgets\menu_file.py:176
 msgid "Daten werden gelesen"
 msgstr "Data is being read"
 
-#: modules/gui/widgets\menu_file.py:189
+#: modules/gui/widgets\menu_file.py:195
 msgid "{0} in {1:.3}s geladen."
 msgstr "{0} loaded in {1:.3}s."
 
-#: modules/gui/widgets\menu_file.py:223
+#: modules/gui/widgets\menu_file.py:233
 msgid "Zieldatei zum Speichern festlegen?"
 msgstr "Set destination file to save?"
 
-#: modules/gui/widgets\menu_file.py:224
+#: modules/gui/widgets\menu_file.py:234
 msgid "Die Datei: <i>{}</i><br>Pfad: <i>{}</i><br>wurde entfernt oder existiert nicht mehr.<br><br>Neue Zieldatei zum Speichern festlegen?"
 msgstr "The file: <i>{}</i><br>Path: <i>{}</i><br> has been removed or does not exist anymore.<br><br>Set new target file to save?"
 
-#: modules/gui/widgets\menu_file.py:229
+#: modules/gui/widgets\menu_file.py:239
 msgid "Speichern unter.."
 msgstr "Save as.."
 
-#: modules/gui/widgets\menu_file.py:238
+#: modules/gui/widgets\menu_file.py:248
 msgid "Keine Einträge vorhanden"
 msgstr "No entries"
+
+#: modules/gui/widgets\menu_import.py:26
+msgid "Import"
+msgstr "Import"
+
+#: modules/gui/widgets\menu_import.py:29
+msgid "V-Plus Browser"
+msgstr "V-Plus Browser"
 
 #: modules/gui/widgets\menu_info.py:43
 msgid "Aktualisierung auf Version {}..."
@@ -389,11 +519,11 @@ msgid "Variantenbaum"
 msgstr "Variants Tree"
 
 #: modules/gui\main_ui.py:58 modules/gui\ui_resource.py:115
-#: modules\knecht_render.py:639
+#: modules\knecht_render.py:642
 msgid "Renderliste"
 msgstr "Render Queue"
 
-#: modules/gui\main_ui.py:161
+#: modules/gui\main_ui.py:162
 msgid "Die Varianten enthalten keine Reset Schaltung! Die zu sendenden Varianten werden mit vorangegangen Schaltungen kollidieren."
 msgstr "The variants do not contain a reset circuit! The variants to be sent will collide with previous circuits."
 
@@ -489,7 +619,7 @@ msgstr "Changes the global DeltaGen viewer background color. This setting will a
 msgid "Bricht laufende Sendung an DeltaGen ab."
 msgstr "Cancel running DeltaGen variants send operation."
 
-#: modules/gui\ui_translations.py:116 modules\knecht_render.py:670
+#: modules/gui\ui_translations.py:116 modules\knecht_render.py:673
 msgid "Rendering"
 msgstr "Rendering"
 
@@ -527,7 +657,7 @@ msgstr "Create Render Preset directorys"
 
 #: modules/gui\ui_translations.py:138
 msgid "Erstellt einen Unterordner benannt nach dem Render Preset."
-msgstr "Creates a sub-directory per Render Preset"
+msgstr "Creates a sub-directory per Render Preset."
 
 #: modules/gui\ui_translations.py:140
 msgid "Bilder zu PNG konvertieren"
@@ -537,7 +667,7 @@ msgstr "Convert images to PNG"
 msgid "Konvertiert die ausgegebenen Bilder nach dem Render Vorgang in PNG."
 msgstr "Converts the created images to PNG after rendering."
 
-#: modules/gui\ui_translations.py:143 modules\knecht_render.py:286
+#: modules/gui\ui_translations.py:143 modules\knecht_render.py:289
 msgid "Rendering starten"
 msgstr "Start rendering"
 
@@ -595,7 +725,7 @@ msgstr "CSB Importer option to deactivate import of hidden objects. Speeds up th
 
 #: modules/gui\ui_translations.py:182
 msgid "Renderer:"
-msgstr ""
+msgstr "Renderer:"
 
 #: modules/gui\ui_translations.py:184
 msgid "Den zu verwendenden Renderer wählen."
@@ -619,7 +749,7 @@ msgstr "New_Document.xml"
 
 #: modules/gui\ui_view_manager.py:134
 msgid "Kann Beschäftigten nicht entlassen. Verstoß gegen Arbeitnehmerschutzgesetz festgestellt."
-msgstr "Can not delete widget that is busy!"
+msgstr "Can not delete widget that is busy."
 
 #: modules/itemview\editor_undo.py:187
 msgid "Elemente hinzufügen"
@@ -636,10 +766,6 @@ msgstr "move"
 #: modules/itemview\item_edit_undo.py:76
 msgid "{0} ändern {1} ..."
 msgstr "{0} change to {1} ..."
-
-#: modules/itemview\model_globals.py:22
-msgid "Beschreibung"
-msgstr "Description"
 
 #: modules/itemview\model_globals.py:22
 msgid "Id"
@@ -673,15 +799,15 @@ msgstr "Restore tree contents."
 msgid "Bauminhalte verwerfen."
 msgstr "Discard tree content."
 
-#: modules/itemview\model_update.py:93
+#: modules/itemview\model_update.py:91
 msgid "Daten werden eingerichtet."
 msgstr "Data is being set up."
 
-#: modules/itemview\view_manager.py:104
+#: modules/itemview\view_manager.py:105
 msgid "Fehler - Kann bereits geöffnete Datei nicht in Tabulatoren finden."
 msgstr "Error - Can not find already opened file within document tabulators."
 
-#: modules/itemview\view_manager.py:108
+#: modules/itemview\view_manager.py:109
 msgid "Datei ist bereits geöffnet."
 msgstr "File is already opened."
 
@@ -749,41 +875,36 @@ msgstr "DeltaGen Send Operation <b> aborted. </ B>"
 msgid "{0} {1} gesendet"
 msgstr "{0} {1} sent"
 
-#: modules\knecht_excel.py:130
+#: modules\knecht_excel.py:298
 msgid "Datei exisitiert nicht: {}"
 msgstr "File does not exist: {}"
 
-#: modules\knecht_excel.py:143
+#: modules\knecht_excel.py:314
 msgid "Die Arbeitsblätter für PR-Optionen oder Modelle enthalten keine Daten oder konnten nicht gelesen werden."
 msgstr "The worksheets for PR-Options or Models contained no data or could not be read."
 
-#: modules\knecht_excel.py:274
+#: modules\knecht_excel.py:457
 msgid "Es wurden nicht alle benötigten Arbeitsblätter gefunden {}. Es fehlen: {}"
 msgstr "Not all necessary worksheets have been found {}. Missing: {}"
 
 #: modules\knecht_image.py:91
-msgid ""
-"Konnte Ausgabe Verzeichnis nicht erstellen: {}\n"
+msgid "Konnte Ausgabe Verzeichnis nicht erstellen: {}\n"
 msgstr "File could not be validated as a valid image file: {}\n"
 
 #: modules\knecht_image.py:98
-msgid ""
-"Konnte Bilddatei {} nicht konvertieren: {}\n"
+msgid "Konnte Bilddatei {} nicht konvertieren: {}\n"
 msgstr "File could not be validated as a valid image file: {}\n"
 
 #: modules\knecht_image.py:105
-msgid ""
-"Bilddatei erstellt: {}\n"
+msgid "Bilddatei erstellt: {}\n"
 msgstr "File could not be validated as a valid image file: {}\n"
 
 #: modules\knecht_image.py:107
-msgid ""
-"Konnte Bilddatei {} nicht erstellen: {}\n"
+msgid "Konnte Bilddatei {} nicht erstellen: {}\n"
 msgstr "File could not be validated as a valid image file: {}\n"
 
 #: modules\knecht_image.py:124
-msgid ""
-"Konnte unkonvertierte Bilddatei nicht verschieben: {}\n"
+msgid "Konnte unkonvertierte Bilddatei nicht verschieben: {}\n"
 msgstr "File could not be validated as a valid image file: {}\n"
 
 #: modules\knecht_render.py:91
@@ -803,80 +924,91 @@ msgid ""
 "Die folgenden Ausgabepfade sind zu lang, Rendering wird abgebrochen. \n"
 "\n"
 "{}"
-msgstr "File could not be validated as a valid image file: {}\n"
+msgstr ""
+"The following Output paths are too lone. Rendering will be canceled.\n"
+"{}"
 
 #: modules\knecht_render.py:184
 msgid "Die Render Presets enthalten einen ungültigen Ausgabepfad. Rendering wird abgebrochen."
 msgstr "Render Presets contain invalid output directory. Render process will be canceled."
 
-#: modules\knecht_render.py:214
+#: modules\knecht_render.py:217
 msgid "Konvertiere Bilddaten..."
 msgstr "Convert image data ..."
 
-#: modules\knecht_render.py:226
+#: modules\knecht_render.py:229
 msgid "{} Rendering von {} Bildern abgeschlossen"
 msgstr "{} Rendering of {} images completed"
 
-#: modules\knecht_render.py:240
+#: modules\knecht_render.py:243
 msgid "Sende Varianten..."
 msgstr "Send variants ..."
 
-#: modules\knecht_render.py:250
+#: modules\knecht_render.py:253
 msgid "Sende Einstellungen..."
 msgstr "Send settings ..."
 
-#: modules\knecht_render.py:338 modules\knecht_render.py:339
+#: modules\knecht_render.py:341 modules\knecht_render.py:342
 msgid "Prüfe Bilddaten..."
 msgstr "Checking image data..."
 
-#: modules\knecht_render.py:343 modules\knecht_render.py:344
+#: modules\knecht_render.py:346 modules\knecht_render.py:347
 msgid "Rendering erzeugt."
 msgstr "Rendering generated."
 
-#: modules\knecht_render.py:349
+#: modules\knecht_render.py:352
 msgid "Erzeuge nächstes Bild in {}..."
 msgstr "Creating next image in {}..."
 
-#: modules\knecht_render.py:386
+#: modules\knecht_render.py:389
 msgid ""
 "\n"
 "Bild Konvertierung:\n"
 "{}"
-msgstr "File could not be validated as a valid image file: {}\n"
+msgstr ""
+"\n"
+"Image conversion\n"
+"{}"
 
-#: modules\knecht_render.py:395
+#: modules\knecht_render.py:398
 msgid ""
 "Render Vorgang abgebrochen.\n"
 "\n"
 "Konnte keine Verbindung zu einer DeltaGen Instanz herstellen."
-msgstr "File could not be validated as a valid image file: {}\n"
+msgstr ""
+"Render process canceled.\n"
+"\n"
+"Could not establish Connection to DeltaGen."
 
-#: modules\knecht_render.py:432
+#: modules\knecht_render.py:435
 msgid ""
 "Bilddaten konnten nicht als gültiges Bild verifiziert werden.\n"
 "{}"
+msgstr ""
+"File could not be validated as a valid image file:\n"
+"{}"
+
+#: modules\knecht_render.py:447
+msgid "Bilddaten wurden erfolgreich verifiziert.\n"
 msgstr "File could not be validated as a valid image file: {}\n"
 
-#: modules\knecht_render.py:444
-msgid ""
-"Bilddaten wurden erfolgreich verifiziert.\n"
-msgstr "File could not be validated as a valid image file: {}\n"
-
-#: modules\knecht_render.py:454
+#: modules\knecht_render.py:457
 msgid ""
 "\n"
 "Datei konnte nicht als gültige Bilddatei verfiziert werden: {}\n"
-msgstr "File could not be validated as a valid image file: {}\n"
+msgstr ""
+"\n"
+"File could not be validated as a valid image file: {}\n"
 
-#: modules\knecht_render.py:518
+#: modules\knecht_render.py:521
 msgid "{} Einstellungen - "
 msgstr "{} Settings - "
 
-#: modules\knecht_render.py:519
+#: modules\knecht_render.py:522
 msgid "Sampling: {} - Res: "
 msgstr "Sampling: {} - Res: "
 
-#: modules\knecht_render.py:520
+#: modules\knecht_render.py:523
 msgid "{}px - Ext: "
 msgstr "{}px - Ext: "
 
@@ -915,4 +1047,3 @@ msgstr "Update"
 #: modules\knecht_update.py:246
 msgid "Version {} ist bereit zur Installation."
 msgstr "Version {} is ready for installation."
-

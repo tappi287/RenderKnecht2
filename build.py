@@ -1,7 +1,7 @@
 from pathlib import Path
 from knechtapp import VERSION
 from subprocess import Popen
-from update.sftp import Remote
+from private.sftp import Remote
 from modules.globals import UPDATE_INSTALL_FILE, UPDATE_VERSION_FILE
 
 from lxml import etree as Et
