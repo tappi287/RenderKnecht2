@@ -24,6 +24,7 @@ class KnechtExcelDataThreadSignals(QObject):
     finished = Signal(Path, KnechtItem)
     error = Signal(str)
     progress_msg = Signal(str)
+    worker_progress = Signal(str)
 
 
 class KnechtExcelDataThread(Thread):
@@ -35,6 +36,7 @@ class KnechtExcelDataThread(Thread):
         self.signals = KnechtExcelDataThreadSignals()
         self.finished = self.signals.finished
         self.error = self.signals.error
+        self.worker_progress = self.signals.worker_progress
         self.progress_msg = self.signals.progress_msg
 
     def run(self):
@@ -46,6 +48,8 @@ class KnechtExcelDataThread(Thread):
         xl_reader = KnechtExcelDataToModel(
             *data
             )
+        xl_reader.progress_signal = self.worker_progress
+        self.worker_progress.connect(self._work_progress)
         root_item = xl_reader.create_root_item()
 
         if not root_item.childCount():
@@ -56,12 +60,19 @@ class KnechtExcelDataThread(Thread):
         self.finished.emit(self.file, root_item)
         self.finish()
 
+    @Slot(str)
+    def _work_progress(self, msg: str):
+        self.progress_msg.emit(msg)
+        time.sleep(0.1)
+
     def finish(self):
         self.progress_msg.emit('')
         self.signals.deleteLater()
 
 
 class KnechtExcelDataToModel:
+    pr_family_cache = dict(PR_Code='PR_Family_Code')
+    progress_signal = None
 
     def __init__(self, data: ExcelData, models: List[str], pr_families: List[str],
                  read_trim: bool=True, read_options: bool=True, read_pkg: bool=True):
@@ -71,10 +82,33 @@ class KnechtExcelDataToModel:
         self.id_gen = KnechtUuidGenerator()
         self.root_item = KnechtItem()
 
+    def _show_progress(self, msg: str):
+        if self.progress_signal is None:
+            return
+        self.progress_signal.emit(msg)
+
     def create_root_item(self):
+        self.update_pr_family_cache()
         self.create_items()
         LOGGER.debug('Created %s items from ExcelData.', self.root_item.childCount())
         return self.root_item
+
+    def update_pr_family_cache(self):
+        if self.data.pr_options.empty:
+            return
+
+        pr_col = self.data.pr_options.columns[self.data.map.Pr.ColumnIdx.pr]
+        family_col = self.data.pr_options.columns[self.data.map.Pr.ColumnIdx.family]
+
+        pr_codes = self.data.pr_options[pr_col].unique()
+        self._show_progress(_('Indiziere {} PR Codes').format(len(pr_codes)))
+
+        for pr in pr_codes:
+            pr_rows = self.data.pr_options.loc[self.data.pr_options[pr_col] == pr]
+            pr_fam = pr_rows[family_col].unique()[0]
+            self.pr_family_cache[pr] = pr_fam
+
+        LOGGER.debug('Indexed %s PR-Codes to PR Families.', len(self.pr_family_cache))
 
     def create_items(self):
         # -- Model Columns
@@ -84,6 +118,7 @@ class KnechtExcelDataToModel:
         gearbox_column = self.data.models.columns[self.data.map.Models.ColumnIdx.gearbox]
 
         for idx, model in enumerate(sorted(self.models)):
+            self._show_progress(_('Erstelle Model {} {:02d}/{:02d}...').format(model, idx, len(self.models)))
             # Filter rows not matching -, P, E
             trim = self.data.pr_options.loc[~self.data.pr_options[model].isin(['-', 'P', 'E'])]
             options = self.data.pr_options.loc[self.data.pr_options[model].isin(['E'])]
@@ -96,7 +131,7 @@ class KnechtExcelDataToModel:
 
             if self.read_trim:
                 # Create trimline
-                data = (f'{idx:03d}', model_desc, model, 'trim_setup', '',
+                data = (f'{self.root_item.childCount():03d}', model_desc, model, 'trim_setup', '',
                         self.id_gen.create_id(), f'{market} - {gearbox}')
                 trim_item = KnechtItem(self.root_item, data)
                 self.create_pr_options(trim, trim_item)
@@ -104,11 +139,51 @@ class KnechtExcelDataToModel:
 
             if self.read_options:
                 # Create options
-                data = (f'{idx:03d}', f'{model_desc} Options', model, 'options', '',
+                data = (f'{self.root_item.childCount():03d}', f'{model_desc} Options', model, 'options', '',
                         self.id_gen.create_id(), f'{market} - {gearbox}')
                 options_item = KnechtItem(self.root_item, data)
                 self.create_pr_options(options, options_item)
                 self.root_item.append_item_child(options_item)
+
+            if self.read_pkg:
+                # Create packages
+                self.create_packages(model, market)
+
+    def create_packages(self, model, market):
+        if self.data.packages.empty:
+            return
+
+        # Package columns
+        pkg_col = self.data.packages.columns[self.data.map.Packages.ColumnIdx.package]
+        pkg_text_col = self.data.packages.columns[self.data.map.Packages.ColumnIdx.package_text]
+        # PR columns inside package sheet
+        pr_col = self.data.packages.columns[self.data.map.Packages.ColumnIdx.pr]
+        pr_text_col = self.data.packages.columns[self.data.map.Packages.ColumnIdx.pr_text]
+
+        # Extract rows not matching '-'
+        pkg_rows = self.data.packages.loc[~self.data.packages[model].isin(['-'])]
+
+        for pkg, pkg_text in zip(pkg_rows[pkg_col].unique(), pkg_rows[pkg_text_col].unique()):
+            # Extract package content
+            pkg_content = pkg_rows.loc[pkg_rows[pkg_col] == pkg]
+
+            if pkg_content.empty:
+                # Skip empty packages
+                continue
+
+            # Create package parent item
+            data = (f'{self.root_item.childCount():03d}', f'{pkg} {pkg_text} {model} {market}',
+                    pkg, 'package', '', self.id_gen.create_id())
+            pkg_item = KnechtItem(self.root_item, data)
+
+            # TODO: Integrate Pr Family Filter
+            for pr, pr_text in zip(pkg_content[pr_col], pkg_content[pr_text_col]):
+                pr_fam = self.pr_family_cache.get(pr) or ''
+                pr_item = KnechtItem(pkg_item, (f'{pkg_item.childCount():03d}', pr, 'on', pr_fam, '', '', pr_text))
+                pkg_item.append_item_child(pr_item)
+
+            if pkg_item.childCount():
+                self.root_item.append_item_child(pkg_item)
 
     def create_pr_options(self, trim, parent_item: KnechtItem):
         # -- PR Columns
@@ -123,6 +198,10 @@ class KnechtExcelDataToModel:
                 continue
 
             # Create Pr items
-            for pr, pr_text in zip(trim_rows[pr_col].unique(), trim_rows[pr_text_col].unique()):
-                pr_item = KnechtItem(parent_item, (f'{pr_idx:03d}', pr, 'on', pr_fam, '', '', pr_text))
+            for idx, (pr, pr_text) in enumerate(zip(trim_rows[pr_col].unique(), trim_rows[pr_text_col].unique())):
+                pr_item = KnechtItem(parent_item, (f'{parent_item.childCount():03d}',
+                                                   pr, 'on', pr_fam, '', '', pr_text))
                 parent_item.append_item_child(pr_item)
+
+                # Update PR Family cache
+                self.pr_family_cache[pr] = pr_fam
