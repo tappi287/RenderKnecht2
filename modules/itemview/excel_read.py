@@ -42,7 +42,7 @@ class KnechtExcelDataThread(Thread):
     def run(self):
         LOGGER.debug('Excel data to KnechtModel thread started.')
         self.progress_msg.emit(_('Excel Daten werden konvertiert...'))
-        time.sleep(0.5)
+        time.sleep(0.01)
         data = self.queue.get()
 
         xl_reader = KnechtExcelDataToModel(
@@ -63,7 +63,7 @@ class KnechtExcelDataThread(Thread):
     @Slot(str)
     def _work_progress(self, msg: str):
         self.progress_msg.emit(msg)
-        time.sleep(0.1)
+        time.sleep(0.02)
 
     def finish(self):
         self.progress_msg.emit('')
@@ -75,9 +75,11 @@ class KnechtExcelDataToModel:
     progress_signal = None
 
     def __init__(self, data: ExcelData, models: List[str], pr_families: List[str],
-                 read_trim: bool=True, read_options: bool=True, read_pkg: bool=True):
+                 read_trim: bool=True, read_options: bool=True, read_pkg: bool=True,
+                 pr_filter_pkg: bool=False):
         self.data, self.models, self.pr_families = data, models, pr_families
         self.read_trim, self.read_options, self.read_pkg = read_trim, read_options, read_pkg
+        self.pr_filter_pkg = pr_filter_pkg
 
         self.id_gen = KnechtUuidGenerator()
         self.root_item = KnechtItem()
@@ -175,15 +177,26 @@ class KnechtExcelDataToModel:
             data = (f'{self.root_item.childCount():03d}', f'{pkg} {pkg_text} {model} {market}',
                     pkg, 'package', '', self.id_gen.create_id())
             pkg_item = KnechtItem(self.root_item, data)
+            keep_package = False
 
-            # TODO: Integrate Pr Family Filter
             for pr, pr_text in zip(pkg_content[pr_col], pkg_content[pr_text_col]):
                 pr_fam = self.pr_family_cache.get(pr) or ''
+
+                if pr_fam in self.pr_families:
+                    # Apply PR Family Filter to Packages
+                    # If it contains any chosen PR Family, keep the package
+                    keep_package = True
+
                 pr_item = KnechtItem(pkg_item, (f'{pkg_item.childCount():03d}', pr, 'on', pr_fam, '', '', pr_text))
                 pkg_item.append_item_child(pr_item)
 
             if pkg_item.childCount():
-                self.root_item.append_item_child(pkg_item)
+                if self.pr_filter_pkg and keep_package:
+                    # Only create packages that contain PR Families in the filter
+                    self.root_item.append_item_child(pkg_item)
+                elif not self.pr_filter_pkg:
+                    # Create all packages and do not apply any filtering
+                    self.root_item.append_item_child(pkg_item)
 
     def create_pr_options(self, trim, parent_item: KnechtItem):
         # -- PR Columns

@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List
 from queue import Queue
 
 from PySide2.QtCore import Signal, Slot
@@ -59,7 +58,8 @@ class ImportMenu(QMenu):
     def xlsx_result(self, xl: ExcelImportDialog):
         options = (xl.check_read_trim.isChecked(),
                    xl.check_read_options.isChecked(),
-                   xl.check_read_packages.isChecked()
+                   xl.check_read_packages.isChecked(),
+                   xl.check_pr_fam_filter_packages.isChecked(),
                    )
 
         # Start ExcelData to KnechtModel conversion thread
