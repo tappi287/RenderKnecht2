@@ -176,8 +176,6 @@ class KnechtTreeView(QTreeView):
         if not self.filter_text_widget:
             return
 
-        LOGGER.debug('Filter text: %s', filter_text)
-
         self.filter_text_widget.setText(filter_text)
         self.filter_bgr_animation.blink()
         self.filter(filter_text)

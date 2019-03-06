@@ -275,9 +275,7 @@ class ViewManager(QObject):
         self.list_tabs()
 
         # Update view filtering
-        filter_txt = current_view.current_filter_text()
-        if filter_txt:
-            current_view.set_filter_widget_text(filter_txt)
+        current_view.set_filter_widget_text(current_view.current_filter_text())
 
     def current_view(self) -> KnechtTreeView:
         current_tab = self.tab.currentWidget()
