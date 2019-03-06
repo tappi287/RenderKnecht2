@@ -1,7 +1,7 @@
 from typing import List
 
 from PySide2.QtCore import QModelIndex, QTimer, Qt, Signal, Slot
-from PySide2.QtWidgets import QAbstractItemView, QLineEdit, QTreeView, QUndoGroup, QUndoStack, QWidget, QMenu
+from PySide2.QtWidgets import QAbstractItemView, QLineEdit, QMenu, QTreeView, QUndoGroup, QUndoStack, QWidget
 
 from modules.globals import UNDO_LIMIT
 from modules.gui.animation import BgrAnimation
@@ -11,7 +11,6 @@ from modules.gui.widgets.progress_overlay import ProgressOverlay, ShowTreeViewPr
 from modules.itemview.delegates import KnechtValueDelegate
 from modules.itemview.editor import KnechtEditor
 from modules.itemview.item_edit_undo import ViewItemEditUndo
-from modules.itemview.model import KnechtSortFilterProxyModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.tree_view_utils import setup_header_layout
 from modules.language import get_translation
