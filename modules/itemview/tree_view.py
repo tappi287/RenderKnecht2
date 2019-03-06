@@ -11,6 +11,7 @@ from modules.gui.widgets.progress_overlay import ProgressOverlay, ShowTreeViewPr
 from modules.itemview.delegates import KnechtValueDelegate
 from modules.itemview.editor import KnechtEditor
 from modules.itemview.item_edit_undo import ViewItemEditUndo
+from modules.itemview.model import KnechtSortFilterProxyModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.tree_view_utils import setup_header_layout
 from modules.language import get_translation
@@ -90,6 +91,9 @@ class KnechtTreeView(QTreeView):
         self.filter_expand_timer.setSingleShot(True)
         self.filter_expand_timer.setInterval(300)
         self.filter_expand_timer.timeout.connect(self.filter_expand_results)
+
+        # Cache last applied filter
+        self._cached_filter = str()
 
         # Setup view properties
         # Permanent type filter for eg. renderTree
@@ -176,15 +180,18 @@ class KnechtTreeView(QTreeView):
         if not self.filter_text_widget:
             return
 
-        LOGGER.debug('Filter text: %s', filter_text)
+        if filter_text == self._cached_filter:
+            # Skip filtering if eg. view tab changed but re-applied filter text is identical to last used filter
+            return
 
         self.filter_text_widget.setText(filter_text)
         self.filter_bgr_animation.blink()
-        self.filter(filter_text)
+        self._set_filter(filter_text)
 
     @Slot(str)
-    def filter(self, txt: str):
+    def _set_filter(self, txt: str):
         self.model().setFilterWildcard(txt)
+        self._cached_filter = txt
         self.filter_expand_timer.start()
 
     def quick_view_filter(self, enabled: bool):
