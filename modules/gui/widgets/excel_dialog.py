@@ -118,6 +118,9 @@ class ExcelImportDialog(QDialog):
         self.excel_thread.progress_msg.connect(self.show_progress)
 
         # --- Init Icons + Translations ---
+        self.option_box: QGroupBox
+        self.option_box.setTitle(_('Optionen'))
+        self.option_box.setEnabled(False)
         self.check_read_trim: QCheckBox
         self.check_read_trim.setText(_('Trimlines erstellen'))
         self.check_read_trim.setIcon(IconRsc.get_icon('car'))
@@ -130,6 +133,7 @@ class ExcelImportDialog(QDialog):
 
         self.family_box: QGroupBox
         self.family_box.setTitle(_('PR-Familien Filter Vorlagen'))
+        self.family_box.setEnabled(False)
         self.btn_filter_all: QCheckBox
         self.btn_filter_all.setText(_('Alle PR-Familien'))
         self.btn_filter_int: QCheckBox
@@ -239,6 +243,9 @@ class ExcelImportDialog(QDialog):
 
         self._setup_tree_columns()
         self.buttonBox.setEnabled(True)
+        self.family_box.setEnabled(True)
+        self.option_box.setEnabled(True)
+
         self._setup_header_width()
         self._load_default_pr_filter()
         self.load_settings()
@@ -286,7 +293,8 @@ class ExcelImportDialog(QDialog):
             return False
 
         # Restore filter settings
-        for box in [self.btn_filter_all, self.btn_filter_int, self.btn_filter_ext]:
+        for box in [self.btn_filter_all, self.btn_filter_int, self.btn_filter_ext, self.check_pr_fam_filter_packages,
+                    self.check_read_trim, self.check_read_options, self.check_read_packages]:
             check_state = entry.get(box.objectName())
 
             if check_state is not None:
@@ -314,7 +322,8 @@ class ExcelImportDialog(QDialog):
         settings['pr_families'] = list()
 
         # Save filter setting
-        for box in [self.btn_filter_all, self.btn_filter_int, self.btn_filter_ext]:
+        for box in [self.btn_filter_all, self.btn_filter_int, self.btn_filter_ext, self.check_pr_fam_filter_packages,
+                    self.check_read_trim, self.check_read_options, self.check_read_packages]:
             settings.update({box.objectName(): int(box.checkState())})
         # Save model selection
         for (src_index, item) in self._iter_view(self.treeView_Models, self.ModelColumn.code):
@@ -340,6 +349,8 @@ class ExcelImportDialog(QDialog):
         # Only keep the last 5 number of items
         if len(KnechtSettings.excel) > 5:
             KnechtSettings.excel = KnechtSettings.excel[:5]
+
+        KnechtSettings.add_recent_file(self.file.as_posix(), 'xlsx')
 
         LOGGER.debug('Saved: %s', KnechtSettings.excel[0])
 

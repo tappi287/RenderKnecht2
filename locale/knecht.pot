@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-04 22:47+0100\n"
+"POT-Creation-Date: 2019-03-06 22:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,86 +49,90 @@ msgid "V-Plus Browser Leseoptionen"
 msgstr ""
 
 #: modules/gui/widgets\excel_dialog.py:122
-msgid "Trimlines erstellen"
+msgid "Optionen"
 msgstr ""
 
 #: modules/gui/widgets\excel_dialog.py:125
-msgid "Optionen erstellen"
+msgid "Trimlines erstellen"
 msgstr ""
 
 #: modules/gui/widgets\excel_dialog.py:128
+msgid "Optionen erstellen"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:131
 msgid "Pakete erstellen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:132
+#: modules/gui/widgets\excel_dialog.py:135
 msgid "PR-Familien Filter Vorlagen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:134
+#: modules/gui/widgets\excel_dialog.py:138
 msgid "Alle PR-Familien"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:136
+#: modules/gui/widgets\excel_dialog.py:140
 msgid "Interieur I/VX-13"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:138
+#: modules/gui/widgets\excel_dialog.py:142
 msgid "Exterieur I/VX-13"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:141
+#: modules/gui/widgets\excel_dialog.py:145
 msgid "PR-Familien Filter auf Pakete anwenden"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:144
+#: modules/gui/widgets\excel_dialog.py:148
 msgid "Zum filtern tippen ..."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:147
+#: modules/gui/widgets\excel_dialog.py:151
 msgid "Modellfilter"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:149
+#: modules/gui/widgets\excel_dialog.py:153
 msgid "PR-Familien-Filter"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:153
+#: modules/gui/widgets\excel_dialog.py:157
 msgid "PR Familien auswählen die ausgelesen werden sollen."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:155
+#: modules/gui/widgets\excel_dialog.py:159
 msgid "Modelle auswählen die ausgelesen werden sollen."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:189
+#: modules/gui/widgets\excel_dialog.py:193
 msgid "Excel Daten werden geladen..."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:202
+#: modules/gui/widgets\excel_dialog.py:206
 msgid "Excel Import Fehler"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:390
+#: modules/gui/widgets\excel_dialog.py:401
 msgid "Importvorgang"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:391
+#: modules/gui/widgets\excel_dialog.py:402
 msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:392
+#: modules/gui/widgets\excel_dialog.py:403
 msgid "Ja"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:393
+#: modules/gui/widgets\excel_dialog.py:404
 msgid "Nein"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:433
+#: modules/gui/widgets\excel_dialog.py:444
 msgid "Alle Einträge auswählen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:435
+#: modules/gui/widgets\excel_dialog.py:446
 msgid "Alle Einträge abwählen"
 msgstr ""
 
@@ -380,11 +384,11 @@ msgstr ""
 msgid "Keine Einträge vorhanden"
 msgstr ""
 
-#: modules/gui/widgets\menu_import.py:26
+#: modules/gui/widgets\menu_import.py:34
 msgid "Import"
 msgstr ""
 
-#: modules/gui/widgets\menu_import.py:29
+#: modules/gui/widgets\menu_import.py:37
 msgid "V-Plus Browser"
 msgstr ""
 
@@ -758,6 +762,22 @@ msgstr ""
 msgid "verschieben"
 msgstr ""
 
+#: modules/itemview\excel_read.py:44
+msgid "Excel Daten werden konvertiert..."
+msgstr ""
+
+#: modules/itemview\excel_read.py:56
+msgid "Konnte keinen Baum aus Excel Daten erstellen."
+msgstr ""
+
+#: modules/itemview\excel_read.py:106
+msgid "Indiziere {} PR Codes"
+msgstr ""
+
+#: modules/itemview\excel_read.py:123
+msgid "Erstelle Model {} {:02d}/{:02d}..."
+msgstr ""
+
 #: modules/itemview\item_edit_undo.py:76
 msgid "{0} ändern {1} ..."
 msgstr ""
@@ -1001,39 +1021,39 @@ msgstr ""
 msgid "{}px - Ext: "
 msgstr ""
 
-#: modules\knecht_update.py:161
+#: modules\knecht_update.py:169
 msgid "Suche nach Anwendungs Updates gestartet."
 msgstr ""
 
-#: modules\knecht_update.py:213
+#: modules\knecht_update.py:221
 msgid "Die Anwendung ist auf dem neusten Stand."
 msgstr ""
 
-#: modules\knecht_update.py:218
+#: modules\knecht_update.py:226
 msgid "Aktualisierung konnte nicht durchgeführt werden."
 msgstr ""
 
-#: modules\knecht_update.py:227
+#: modules\knecht_update.py:235
 msgid "App Update"
 msgstr ""
 
-#: modules\knecht_update.py:228
+#: modules\knecht_update.py:236
 msgid "Eine aktualisierte Version {} ist verfügbar.<br><br>Möchten Sie die Aktualisierung jetzt durchführen?<br><br>Die Anwendung muss für das Update beendet werden."
 msgstr ""
 
-#: modules\knecht_update.py:232
+#: modules\knecht_update.py:240
 msgid "Jetzt aktualisieren"
 msgstr ""
 
-#: modules\knecht_update.py:233
+#: modules\knecht_update.py:241
 msgid "Vielleicht später..."
 msgstr ""
 
-#: modules\knecht_update.py:245
+#: modules\knecht_update.py:253
 msgid "Aktualisierung"
 msgstr ""
 
-#: modules\knecht_update.py:246
+#: modules\knecht_update.py:254
 msgid "Version {} ist bereit zur Installation."
 msgstr ""
 
