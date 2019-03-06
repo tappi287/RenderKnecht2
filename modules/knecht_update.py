@@ -29,16 +29,16 @@ class _KnechtUpdateThreadSignals(QObject):
 
 
 class _KnechtUpdateThread(Thread):
-    signals = _KnechtUpdateThreadSignals()
-    update_ready = signals.update_ready
-    update_failed = signals.update_failed
-    new_version = signals.new_version
-    already_up_to_date = signals.already_up_to_date
-
     def __init__(self, parent):
         super(_KnechtUpdateThread, self).__init__()
         self.parent = parent
         self.version = '0.00'
+
+        self.signals = _KnechtUpdateThreadSignals()
+        self.update_ready = self.signals.update_ready
+        self.update_failed = self.signals.update_failed
+        self.new_version = self.signals.new_version
+        self.already_up_to_date = self.signals.already_up_to_date
 
     def run(self):
         # --- Download version info
@@ -89,6 +89,8 @@ class _KnechtUpdateThread(Thread):
             LOGGER.error(e)
             self.update_failed.emit()
 
+        self.signals.deleteLater()
+
     def _is_newer_version(self) -> bool:
         if self.version > KnechtSettings.app['version']:
             return True
@@ -118,6 +120,14 @@ class KnechtUpdate(QObject):
         self.ui = ui
 
         # Update check thread
+        self.ut: _KnechtUpdateThread = None
+
+        self.timeout = QTimer()
+        self.timeout.setSingleShot(True)
+        self.timeout.setInterval(3000)
+
+    def _init_thread(self):
+        # Update check thread
         self.ut = _KnechtUpdateThread(self)
 
         # Update thread signals
@@ -125,10 +135,6 @@ class KnechtUpdate(QObject):
         self.ut.update_failed.connect(self._update_error)
         self.ut.update_ready.connect(self._set_update_available)
         self.ut.new_version.connect(self._set_remote_version)
-
-        self.timeout = QTimer()
-        self.timeout.setSingleShot(True)
-        self.timeout.setInterval(3000)
 
     def run_update(self):
         """
@@ -158,8 +164,9 @@ class KnechtUpdate(QObject):
             self._already_latest_version()
             return
 
-        self.ui.msg(_('Suche nach Anwendungs Updates gestartet.'))
+        self._init_thread()
         self.ut.start()
+        self.ui.msg(_('Suche nach Anwendungs Updates gestartet.'))
 
     def is_up_to_date(self) -> bool:
         """ Return True if the remote version equals current version """
@@ -175,8 +182,9 @@ class KnechtUpdate(QObject):
 
     def is_running(self):
         """ Determine wherever a Update thread is running. """
-        if self.ut.is_alive():
-            return True
+        if self.ut is not None:
+            if self.ut.is_alive():
+                return True
         return False
 
     def _is_update_ready(self) -> bool:
