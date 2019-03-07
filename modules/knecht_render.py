@@ -1,5 +1,6 @@
 import math
 import time
+import multiprocessing
 from datetime import datetime
 from pathlib import Path
 from threading import Thread
@@ -32,20 +33,21 @@ RENDER_RES_FACTOR = 0.00078125
 RENDER_MACHINE_FACTOR = 0.00105
 # RenderTime would be
 # render_time = (resolution_x * sampling) * RENDER_MACHINE_FACTOR * (resolution_x * RENDER_RES_FACTOR)
+CPU_COUNT = multiprocessing.cpu_count()
 
 
 def calculate_render_time(render_preset: KnechtRenderPreset) -> float:
     """ Calculate Render Time per Image in float seconds """
-    cpu_count = QThread.idealThreadCount()
-    LOGGER.debug('Calculating render time with %s CPUs', cpu_count)
-    if cpu_count > 1 and cpu_count != 72:
+    LOGGER.debug('Calculating render time with %s CPUs', CPU_COUNT)
+
+    if CPU_COUNT > 1 and CPU_COUNT != 72:
         # CPU guessed as Workstation with slow, but many cores CPU @~2.4GHz
-        cpu_factor = (1-0.003)/12 * (1-0.001) / cpu_count
+        cpu_factor = (1-0.003)/12 * (1-0.001) / CPU_COUNT
     else:
         # If ideal thread count is undetected, it will return 1
         # We will assume a machine with 72 cores @~2.4GHz
         cpu_factor = RENDER_MACHINE_FACTOR
-    if cpu_count == 12:
+    if CPU_COUNT == 12:
         # We exactly know the speed of current gen 12c CPUs @~4GHz
         cpu_factor = 0.004
 
@@ -226,8 +228,9 @@ class KnechtRenderThread(Thread):
             self._write_render_log(render_preset)
 
         if self.rendered_img_count >= self.total_image_count():
-            self.progress_text.emit(_('{} Rendering von {} Bildern abgeschlossen').format(
-                datetime.now().strftime('%A %H:%M -'), self.total_image_count()))
+            duration = time_string(time.time() - self.render_start_time)
+            self.progress_text.emit(_('{} Rendering von {} Bildern abgeschlossen in {}').format(
+                datetime.now().strftime('%A %H:%M -'), self.total_image_count(), duration))
             self.render_result = self.Result.rendering_completed
 
     def render_image(self, name: str, variant_ls: KnechtVariantList, render_preset: KnechtRenderPreset):

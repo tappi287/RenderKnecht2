@@ -1,14 +1,13 @@
 from pathlib import Path
 
-from PySide2.QtCore import QObject, QTimer, Signal, Slot, QThread
+from PySide2.QtCore import QObject, QTimer, Slot
 from PySide2.QtWidgets import QPushButton
 
 from modules.gui.gui_utils import MouseDblClickFilter
-from modules.knecht_utils import time_string
 from modules.gui.widgets.path_util import SetDirectoryPath
 from modules.gui.widgets.variants_field import VariantInputFields
-from modules.itemview.tree_view import KnechtTreeView
-from modules.knecht_render import KnechtRenderThread
+from modules.knecht_render import CPU_COUNT, KnechtRenderThread
+from modules.knecht_utils import time_string
 from modules.language import get_translation
 from modules.log import init_logging
 from modules.settings import KnechtSettings
@@ -75,7 +74,7 @@ class MainWindowWidgets(QObject):
         self.ui.pushButton_startRender.pressed.connect(self.start_render_btn)
 
         # Render calculation description
-        self.ui.label_renderTimeDesc.setText(_('Geschätzte Renderzeit ({} CPUs/GI)').format(QThread.idealThreadCount()))
+        self.ui.label_renderTimeDesc.setText(_('Geschätzte Renderzeit ({} CPUs/GI)').format(CPU_COUNT))
 
         # Render global Output path
         self.render_path = SetDirectoryPath(
