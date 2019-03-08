@@ -2,8 +2,7 @@ from pathlib import Path
 from threading import Thread
 
 from PySide2.QtCore import QByteArray, QEvent, QFile, QIODevice, QObject, QTimer, Qt, Signal, Slot
-from PySide2.QtWidgets import QAction, QDialog, QMenu, QTreeView, QCheckBox, QGroupBox, QLineEdit, QWidget, QTabWidget, \
-    QLabel
+from PySide2.QtWidgets import QAction, QCheckBox, QDialog, QGroupBox, QLabel, QLineEdit, QMenu, QTabWidget, QTreeView
 
 from modules.globals import Resource
 from modules.gui.gui_utils import SetupWidget, replace_widget
@@ -28,41 +27,14 @@ lang.install()
 _ = lang.gettext
 
 
-class ExcelReaderThreadSignals(QObject):
-    finished = Signal(ExcelData)
-    error = Signal(list)
-    progress_msg = Signal(str)
-
-
-class ExcelReaderThread(Thread):
-    def __init__(self, file: Path):
-        super(ExcelReaderThread, self).__init__()
-        self.file = file
-
-        self.signals = ExcelReaderThreadSignals()
-        self.finished = self.signals.finished
-        self.error = self.signals.error
-        self.progress_msg = self.signals.progress_msg
-
-    def run(self):
-        LOGGER.debug('Excel file reader thread started: %s', self.file.name)
-        xl = ExcelReader()
-        self.progress_msg.emit(_('Excel Datei wird gelesen...'))
-        result = xl.read_file(self.file)
-
-        if result:
-            self.progress_msg.emit(_('Daten übertragen...'))
-            LOGGER.debug('Excel read succeded.')
-            self.finished.emit(xl.data)
-        else:
-            LOGGER.debug('Excel read failed: %s', xl.errors)
-            self.error.emit(xl.errors)
-
-        self.signals.deleteLater()
-
-
 class ExcelImportDialog(QDialog):
     finished = Signal(QDialog)
+
+    class ThreadSignals(QObject):
+        """ The thread will use an instance of these """
+        finished = Signal(ExcelData)
+        error = Signal(list)
+        progress_msg = Signal(str)
 
     pr_root_item = KnechtItem(data=(
         '', _('PR-Familie'), _('Beschreibung'),))
@@ -112,10 +84,11 @@ class ExcelImportDialog(QDialog):
         self.treeView_PrFam = self._init_tree_view(self.treeView_PrFam)
 
         # --- Reader Thread ---
-        self.excel_thread = ExcelReaderThread(file)
-        self.excel_thread.finished.connect(self.read_finished)
-        self.excel_thread.error.connect(self.read_failed)
-        self.excel_thread.progress_msg.connect(self.show_progress)
+        thread_signals = self.ThreadSignals()
+        self.excel_thread = Thread(target=self.excel_load_thread, args=(thread_signals, self.file))
+        thread_signals.finished.connect(self.read_finished)
+        thread_signals.error.connect(self.read_failed)
+        thread_signals.progress_msg.connect(self.show_progress)
 
         # --- Init Icons + Translations ---
         self.option_box: QGroupBox
@@ -172,6 +145,23 @@ class ExcelImportDialog(QDialog):
 
         QTimer.singleShot(100, self._start_load)
 
+    @staticmethod
+    def excel_load_thread(signals: ThreadSignals, file: Path):
+        """ The thread that loads the excel file """
+        LOGGER.debug('Excel file reader thread started: %s', file.name)
+        signals.progress_msg.emit(_('Excel Datei wird gelesen...'))
+
+        xl = ExcelReader()
+        result = xl.read_file(file)
+
+        if result:
+            signals.progress_msg.emit(_('Daten übertragen...'))
+            LOGGER.debug('Excel read succeded.')
+            signals.finished.emit(xl.data)
+        else:
+            LOGGER.debug('Excel read failed: %s', xl.errors)
+            signals.error.emit(xl.errors)
+
     def _load_default_pr_filter(self):
         if self.PrDefaultFilter.interior:
             # Filter already loaded
@@ -217,11 +207,12 @@ class ExcelImportDialog(QDialog):
         models = self.models_root_item.copy()
         pr_fam = self.pr_root_item.copy()
 
+        # Populate models tree
         for idx, d in enumerate(self.data.get_models()):
             models.insertChildren(
                 models.childCount(), 1, (f'{idx:01d}', d[0], d[1], d[2], '', '', d[3])
                 )
-
+        # Populate PR Family tree
         for idx, d in enumerate(self.data.get_pr_families()):
             pr_fam.insertChildren(
                 pr_fam.childCount(), 1, (f'{idx:01d}', d[0], d[1])
@@ -413,17 +404,9 @@ class ExcelImportDialog(QDialog):
 
     def accept(self):
         self.save_settings()
-        self._finish_dialog(False)
+        self._finalize_dialog(False)
         self.finished.emit(self)
         self.done(0)
-
-    def _finish_dialog(self, self_destruct: bool=True):
-        self._abort = True
-        if self.excel_thread.is_alive():
-            self.excel_thread.join()
-
-        if self_destruct:
-            self.deleteLater()
 
     def closeEvent(self, close_event):
         if self._ask_close():
@@ -433,7 +416,15 @@ class ExcelImportDialog(QDialog):
         LOGGER.info('V Plus Browser window close event triggered. Aborting excel conversion')
         # End thread
         close_event.accept()
-        self._finish_dialog()
+        self._finalize_dialog()
+
+    def _finalize_dialog(self, self_destruct: bool=True):
+        self._abort = True
+        if self.excel_thread.is_alive():
+            self.excel_thread.join()
+
+        if self_destruct:
+            self.deleteLater()
 
 
 class ExcelContextMenu(QMenu):
