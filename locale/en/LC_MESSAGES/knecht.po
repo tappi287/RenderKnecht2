@@ -956,9 +956,9 @@ msgstr "Render Presets contain invalid output directory. Render process will be 
 msgid "Konvertiere Bilddaten..."
 msgstr "Convert image data ..."
 
-#: modules\knecht_render.py:229
-msgid "{} Rendering von {} Bildern abgeschlossen"
-msgstr "{} Rendering of {} images completed"
+#: modules\knecht_render.py:232
+msgid "{} Rendering von {} Bildern abgeschlossen in {}"
+msgstr "{} Rendering of {} images completed in {}"
 
 #: modules\knecht_render.py:243
 msgid "Sende Varianten..."
