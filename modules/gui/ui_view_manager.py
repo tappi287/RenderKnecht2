@@ -73,6 +73,9 @@ class UiViewManager(ViewManager):
     def ui_tab_changed(self, index):
         """ View Manager Tab changed signal """
         current_tab = self.tab.widget(index)
+        if hasattr(current_tab, 'none_document_tab'):
+            return
+
         current_view = current_tab.user_view
         self.ui.set_last_focus_tree(current_view)
         self.ui.pushButton_Dest_show.toggled.emit(self.ui.pushButton_Dest_show.isChecked())

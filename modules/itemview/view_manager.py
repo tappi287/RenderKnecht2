@@ -236,21 +236,20 @@ class ViewManager(QObject):
     def _remove_view_tab(self, index):
         QApplication.processEvents()
 
-        current_view = self.current_view()
+        tab_to_remove = self.tab.widget(index)
+        if not tab_to_remove or hasattr(tab_to_remove, 'none_document_tab'):
+            return
 
-        if not current_view.undo_stack.isActive() and not current_view.undo_stack.isClean():
+        tab_view = tab_to_remove.user_view
+
+        if not tab_view.undo_stack.isActive() and not tab_view.undo_stack.isClean():
             # Undo in progress
             self.reject_tab_remove()
             return
 
-        if not current_view.editor.enabled:
+        if not tab_view.editor.enabled:
             self.reject_tab_remove()
             return
-
-        tab_to_remove = self.tab.widget(index)
-        if not tab_to_remove:
-            return
-        tab_view = tab_to_remove.user_view
 
         if not self.ask_on_close(tab_view):
             return
@@ -271,6 +270,9 @@ class ViewManager(QObject):
             even if he has not yet focused the view itself
         """
         current_tab = self.tab.widget(index)
+        if hasattr(current_tab, 'none_document_tab'):
+            return
+
         current_view = current_tab.user_view
         self.list_tabs()
 
@@ -279,6 +281,17 @@ class ViewManager(QObject):
 
     def current_view(self) -> KnechtTreeView:
         current_tab = self.tab.currentWidget()
+
+        if not hasattr(current_tab, 'user_view'):
+            for i in range(self.tab.count() - 1, -1, -1):
+                if hasattr(self.tab.widget(i), 'user_view'):
+                    self.tab.setCurrentIndex(i)
+                    return self.tab.widget(i).user_view
+
+            # model = KnechtModel()
+            # return self.create_view(model, Path('New_Document_View.xml'))
+            return None
+
         return current_tab.user_view
 
     def current_file(self) -> Path:
@@ -287,7 +300,7 @@ class ViewManager(QObject):
 
     def setup_tree_view(self,
                         tree_view: KnechtTreeView, model: Union[KnechtModel, None] = None,
-                        file: Path = Path(), filter_widget: QLineEdit=None):
+                        file: Path = Path('New_Document.xml'), filter_widget: QLineEdit=None):
         # Setup TreeView model
         if not model:
             # Use empty model if none provided
