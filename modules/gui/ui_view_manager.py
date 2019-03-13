@@ -1,14 +1,14 @@
-from typing import List
 from pathlib import Path
+from typing import List
 
-from PySide2.QtCore import Slot, Qt
+from PySide2.QtCore import Qt, Slot
 from PySide2.QtWidgets import QLineEdit
 
-from modules.itemview.view_manager import ViewManager
 from modules.gui.widgets.menu_tree_context import TreeContextMenu
 from modules.gui.widgets.message_box import AskToContinue
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.tree_view import KnechtTreeView
+from modules.itemview.view_manager import ViewManager
 from modules.language import get_translation
 from modules.log import init_logging
 

@@ -53,9 +53,6 @@ class ImportMenu(QMenu):
         xl_dialog.finished.connect(self.xlsx_result)
 
         new_tab = GenericTabWidget(self.ui, xl_dialog)
-        # xl_dialog.open()
-
-        LOGGER.debug('Xlsx file dialog opened')
 
     @Slot(ExcelImportDialog)
     def xlsx_result(self, xl: ExcelImportDialog):

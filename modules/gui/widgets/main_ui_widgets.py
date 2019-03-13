@@ -4,8 +4,10 @@ from PySide2.QtCore import QObject, QTimer, Slot
 from PySide2.QtWidgets import QPushButton
 
 from modules.gui.gui_utils import MouseDblClickFilter
+from modules.gui.ui_generic_tab import GenericTabWidget
 from modules.gui.widgets.path_util import SetDirectoryPath
 from modules.gui.widgets.variants_field import VariantInputFields
+from modules.gui.widgets.welcome_page import KnechtWelcome
 from modules.knecht_render import CPU_COUNT, KnechtRenderThread
 from modules.knecht_utils import time_string
 from modules.language import get_translation
@@ -36,6 +38,10 @@ class MainWindowWidgets(QObject):
         # -- Path Rendering Widget --
         # Not yet
         self.ui.Pfad_Rendering.setEnabled(False)
+
+        # --- Welcome Page ---
+        welcome_page = KnechtWelcome(self.ui)
+        welcome_tab = GenericTabWidget(self.ui, welcome_page)
 
         # -- Clear Buttons --
         MouseDblClickFilter(self.ui.pushButton_Src_clear, self.clear_document_view)

@@ -157,11 +157,11 @@ class ViewManager(QObject):
 
         return new_view
 
-    def create_view(self, new_model: KnechtModel, file: Path) -> QTreeView:
+    def create_view(self, new_model: KnechtModel, file: Path, new_page: bool=False) -> QTreeView:
         """ Creates a new tab page and tree view or update untouched empty views
         """
         # Try to update existing empty tab page
-        if self._update_existing_page(new_model, file):
+        if not new_page and self._update_existing_page(new_model, file):
             self.view_updated.emit(self.current_view())
             self.widget_about_to_be_removed.emit(self.tab.currentWidget())
             self.file_update.emit(file, self.tab.currentWidget(), True)
@@ -279,19 +279,19 @@ class ViewManager(QObject):
         # Update view filtering
         current_view.set_filter_widget_text(current_view.current_filter_text())
 
-    def current_view(self) -> KnechtTreeView:
+    def current_view(self):
         current_tab = self.tab.currentWidget()
 
         if not hasattr(current_tab, 'user_view'):
+            # Look for existing tab with tree view
             for i in range(self.tab.count() - 1, -1, -1):
                 if hasattr(self.tab.widget(i), 'user_view'):
                     self.tab.setCurrentIndex(i)
                     return self.tab.widget(i).user_view
 
-            # model = KnechtModel()
-            # return self.create_view(model, Path('New_Document_View.xml'))
-            return None
-
+            # Create a tab with a view if necessary
+            model = KnechtModel()
+            return self.create_view(model, Path('New_Document_View.xml'), new_page=True)
         return current_tab.user_view
 
     def current_file(self) -> Path:

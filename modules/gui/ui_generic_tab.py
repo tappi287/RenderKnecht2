@@ -1,3 +1,4 @@
+from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QVBoxLayout, QWidget
 
 from modules.language import get_translation
@@ -15,7 +16,7 @@ class GenericTabWidget(QWidget):
     none_document_tab = True
 
     def __init__(self, ui, widget: QWidget):
-        """
+        """ Creates a tab inside ui containing widget
 
         :param modules.gui.main_ui.KnechtWindow ui: Knecht main window
         :param widget: widget to display as tab widget
@@ -39,13 +40,30 @@ class GenericTabWidget(QWidget):
         self.setLayout(layout)
 
         # Add tab and make current
-        self.index = self.ui.view_mgr.tab.addTab(self, self.name)
-        self.ui.view_mgr.tab.setCurrentIndex(self.index)
+        index = self.ui.view_mgr.tab.insertTab(0, self, self.name)
+        self.ui.view_mgr.tab.setCurrentIndex(index)
+        self.ui.view_mgr.tab.tabCloseRequested.connect(self.tab_close_request)
 
         self.org_widget_close_event = self.widget.closeEvent
+        self.widget.closeEvent = self.close_event_wrapper
+
+    @Slot(int)
+    def tab_close_request(self, index):
+        # Update index
+        own_index = self.ui.view_mgr.tab.indexOf(self)
+
+        if index != own_index:
+            return
+
+        # Forward tab close request to widget
+        self.widget.close()
 
     def close_event_wrapper(self, event):
         self.org_widget_close_event(event)
 
+        own_index = self.ui.view_mgr.tab.indexOf(self)
+
         if event.isAccepted():
-            LOGGER.debug('TabIndex(%s) child widget was closed', self.index)
+            LOGGER.debug('TabIndex %s child widget was closed', own_index)
+            self.ui.view_mgr.tab.removeTab(own_index)
+            self.deleteLater()
