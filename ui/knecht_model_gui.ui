@@ -981,7 +981,7 @@
               <property name="title">
                <string>Rendering</string>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0">
+              <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0,0">
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_4">
                  <item alignment="Qt::AlignLeft">
@@ -998,6 +998,17 @@
                   <widget class="QLabel" name="label_renderTime">
                    <property name="text">
                     <string>0m : 00s</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_11">
+                 <item alignment="Qt::AlignRight">
+                  <widget class="QLabel" name="label_renderTimeEnd">
+                   <property name="text">
+                    <string/>
                    </property>
                   </widget>
                  </item>

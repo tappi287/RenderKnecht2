@@ -347,8 +347,9 @@ class ViewManager(QObject):
         for tab_idx in range(0, self.tab.count()):
             tab_page = self.tab.widget(tab_idx)
 
-            if tab_page.user_view is view:
-                break
+            if hasattr(tab_page, 'user_view'):
+                if tab_page.user_view is view:
+                    break
         else:
             tab_idx = 0
 

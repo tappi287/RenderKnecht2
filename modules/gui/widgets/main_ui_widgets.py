@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import datetime, timedelta
 
 from PySide2.QtCore import QObject, QTimer, Slot
 from PySide2.QtWidgets import QPushButton
@@ -137,7 +138,11 @@ class MainWindowWidgets(QObject):
             return
 
         rt = KnechtRenderThread(render_presets, Path('.'))
-        self.ui.label_renderTime.setText(time_string(rt.calculate_remaining_time()))
+        duration = rt.calculate_remaining_time()
+        projected_end = datetime.now() + timedelta(seconds=duration)
+        projected_end = projected_end.strftime('%A %d.%m.%Y %H:%M')
+        self.ui.label_renderTime.setText(time_string(duration))
+        self.ui.label_renderTimeEnd.setText(_('Ende: ') + projected_end)
 
     @Slot(Path)
     def render_path_changed(self, render_path: Path):
