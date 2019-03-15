@@ -18,7 +18,7 @@ if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     print('Using high dpi Pixmaps')
 
-VERSION = '0.6'
+VERSION = '0.61'
 
 # TODO: Rename, Renumber Images from different RenderPresets
 
