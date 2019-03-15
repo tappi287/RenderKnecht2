@@ -9,7 +9,7 @@ from zipfile import ZIP_LZMA, ZipFile
 import pandas as pd
 
 from modules.globals import get_settings_dir
-from modules.knecht_utils import list_class_fields
+from modules.knecht_utils import list_class_fields, CreateZip
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -197,29 +197,18 @@ class ExcelData:
         else:
             out_zip = file_path
 
-        tmp_dir = mkdtemp()
+        tmp_dir = CreateZip.create_tmp_dir()
 
         for file_name, df in zip(self.file_names, (self.pr_options, self.packages, self.models)):
             csv_file = Path(tmp_dir) / file_name
+
             try:
                 df.to_csv(csv_file.as_posix())
             except Exception as e:
                 LOGGER.error(e)
                 return False
 
-        with ZipFile(out_zip, 'w') as zip_file:
-            for f in Path(tmp_dir).glob('*'):
-                try:
-                    zip_file.write(f, arcname=f.name, compress_type=ZIP_LZMA)
-                except Exception as e:
-                    LOGGER.error(e)
-                    return False
-        try:
-            shutil.rmtree(tmp_dir)
-        except Exception as e:
-            LOGGER.error(e)
-
-        return True
+        return CreateZip.save_dir_to_zip(tmp_dir, out_zip)
 
     def load_from_zip(self, file_path: Path=None) -> bool:
         if file_path is None:

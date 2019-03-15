@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Union
+from typing import Union, Tuple, List
 
 from PySide2.QtCore import QObject, Qt, Signal, Slot
 from PySide2.QtWidgets import QApplication, QLineEdit, QTabWidget, QTreeView, QVBoxLayout, QWidget, QUndoGroup
@@ -274,7 +274,7 @@ class ViewManager(QObject):
             return
 
         current_view = current_tab.user_view
-        self.list_tabs()
+        self.log_tabs()
 
         # Update view filtering
         current_view.set_filter_widget_text(current_view.current_filter_text())
@@ -347,9 +347,11 @@ class ViewManager(QObject):
         for tab_idx in range(0, self.tab.count()):
             tab_page = self.tab.widget(tab_idx)
 
-            if hasattr(tab_page, 'user_view'):
-                if tab_page.user_view is view:
-                    break
+            if not hasattr(tab_page, 'user_view'):
+                continue
+
+            if tab_page.user_view is view:
+                break
         else:
             tab_idx = 0
 
@@ -358,7 +360,7 @@ class ViewManager(QObject):
     def get_view_by_file(self, file: Path):
         return self.file_mgr.get_widget_from_file(file).user_view
 
-    def list_tabs(self):
+    def log_tabs(self):
         """ Debug fn """
 
         def get_tab_view_name(tab):

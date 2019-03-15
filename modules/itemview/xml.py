@@ -58,7 +58,7 @@ class SaveLoadController(QObject):
     load_start_time = float()
     last_progress_time = float()
 
-    def __init__(self, parent):
+    def __init__(self, parent: Union[None, QObject]):
         super(SaveLoadController, self).__init__(parent)
 
         self.xml_worker = None

@@ -109,7 +109,8 @@ QPushButton:hover {color: rgb(85, 170, 255);
      <item>
       <widget class="QLabel" name="news">
        <property name="text">
-        <string>-this page&lt;br&gt;
+        <string>-Session save&lt;br&gt;
+-this page&lt;br&gt;
 -V Plus Import&lt;br&gt;
 -all new all shiny&lt;br&gt;</string>
        </property>

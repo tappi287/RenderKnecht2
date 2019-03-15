@@ -1,11 +1,13 @@
 import sys
+from pathlib import Path
 
 from PySide2 import QtWidgets
-from PySide2.QtCore import QFile, QTextStream
+from PySide2.QtCore import QFile, QTextStream, QTimer
 
 from modules.gui.gui_utils import KnechtExceptionHook
 from modules.gui.widgets.message_box import AskToContinueCritical, GenericErrorBox
 from modules.knecht_render import KnechtRender
+from modules.knecht_session import KnechtSession
 from modules.settings import KnechtSettings
 from modules.globals import Resource
 from modules.gui.main_ui import KnechtWindow
@@ -84,6 +86,11 @@ class KnechtApp(QtWidgets.QApplication):
         # the menu font sizes
         self.setFont(FontRsc.regular)
 
+        self.session_handler = None
+
+        # Restore Session
+        QTimer.singleShot(50, self.init_session)
+
     def ui_close_event(self, close_event):
         """ Handle the MainWindow close event """
         confirm_close = True
@@ -125,7 +132,15 @@ class KnechtApp(QtWidgets.QApplication):
         close_event.ignore()
 
         if confirm_close:
+            self.save_session()
             self.quit()
+
+    def init_session(self):
+        self.session_handler = KnechtSession(self.ui, idle_save=True)
+        self.session_handler.restore()
+
+    def save_session(self):
+        self.session_handler.save()
 
     def report_exception(self, msg):
         """ Receives KnechtExceptHook exception signal """

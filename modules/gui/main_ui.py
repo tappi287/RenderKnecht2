@@ -1,18 +1,18 @@
 from typing import Union
 
-from PySide2.QtCore import QTimer, Qt, Signal, Slot
+from PySide2.QtCore import QTimer, Qt, Signal
 from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtWidgets import QMainWindow, QSystemTrayIcon, QTreeView, QWidget
 from PySide2.QtWinExtras import QWinTaskbarButton
 
-from modules.globals import Resource, FROZEN
+from modules.globals import FROZEN, Resource
 from modules.gui.clipboard import TreeClipboard
 from modules.gui.gui_utils import SetupWidget
 from modules.gui.main_menu import MainWindowMenu
-from modules.gui.ui_translations import translate_main_ui
-from modules.gui.ui_view_manager import UiViewManager
 from modules.gui.ui_overlay import MainWindowOverlay
 from modules.gui.ui_resource import SoundRsc
+from modules.gui.ui_translations import translate_main_ui
+from modules.gui.ui_view_manager import UiViewManager
 from modules.gui.widgets.button_color import QColorButton
 from modules.gui.widgets.main_ui_widgets import MainWindowWidgets
 from modules.itemview.model_globals import KnechtModelGlobals as Kg

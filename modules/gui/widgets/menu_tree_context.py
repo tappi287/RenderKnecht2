@@ -129,7 +129,7 @@ class TreeContextMenu(QMenu):
         self.view.showColumn(Kg.ID)
 
     def list_tab_widgets(self):
-        self.ui.view_mgr.list_tabs()
+        self.ui.view_mgr.log_tabs()
 
     def report_current(self):
         self.view.editor.report_current()

@@ -1,6 +1,46 @@
-from typing import Union
+import shutil
+from pathlib import Path
+from tempfile import mkdtemp
+from zipfile import ZIP_LZMA, ZipFile
 
-from PySide2.QtCore import QUuid
+from modules.globals import get_settings_dir
+from modules.language import get_translation
+from modules.log import init_logging
+
+LOGGER = init_logging(__name__)
+
+# translate strings
+lang = get_translation()
+lang.install()
+_ = lang.gettext
+
+
+class CreateZip:
+    settings_dir = Path(get_settings_dir())
+
+    @staticmethod
+    def create_tmp_dir() -> Path:
+        tmp_dir = Path(mkdtemp())
+        return tmp_dir
+
+    @staticmethod
+    def save_dir_to_zip(dir_path: Path, zip_file: Path) -> bool:
+        with ZipFile(zip_file, 'w') as zip_obj:
+            for f in Path(dir_path).glob('*'):
+                try:
+                    zip_obj.write(f, arcname=f.name, compress_type=ZIP_LZMA)
+                except Exception as e:
+                    LOGGER.error(e)
+                    return False
+
+        return True
+
+    @staticmethod
+    def remove_dir(dir_path: Path):
+        try:
+            shutil.rmtree(dir_path)
+        except Exception as e:
+            LOGGER.error(e)
 
 
 def search_list_indices(ls: list, value):

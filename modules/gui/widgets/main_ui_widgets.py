@@ -139,10 +139,12 @@ class MainWindowWidgets(QObject):
 
         rt = KnechtRenderThread(render_presets, Path('.'))
         duration = rt.calculate_remaining_time()
-        projected_end = datetime.now() + timedelta(seconds=duration)
-        projected_end = projected_end.strftime('%A %d.%m.%Y %H:%M')
         self.ui.label_renderTime.setText(time_string(duration))
-        self.ui.label_renderTimeEnd.setText(_('Ende: ') + projected_end)
+
+        if duration >= 500.0:
+            projected_end = datetime.now() + timedelta(seconds=duration)
+            projected_end = projected_end.strftime('%A %d.%m.%Y %H:%M')
+            self.ui.label_renderTimeEnd.setText(_('abgeschlossen am: ') + projected_end)
 
     @Slot(Path)
     def render_path_changed(self, render_path: Path):

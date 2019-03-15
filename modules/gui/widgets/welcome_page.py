@@ -1,5 +1,5 @@
-from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QLabel, QVBoxLayout, QWidget, QPushButton
+from PySide2.QtCore import QEvent, Qt
+from PySide2.QtWidgets import QPushButton, QVBoxLayout, QWidget
 
 from modules import KnechtSettings
 from modules.globals import Resource
@@ -47,8 +47,8 @@ class KnechtWelcome(QWidget):
 
         # --- Update recent files ---
         self.ui.main_menu.file_menu.update_recent_files_menu()
+        # TODO: Update on tab focus
         self.update()
-        self.ui.main_menu.file_menu.recent_menu.aboutToShow.connect(self.update)
 
     def _open(self):
         self.ui.main_menu.file_menu.open_xml()
