@@ -2,7 +2,6 @@ import time
 from pathlib import Path
 from queue import Queue
 from threading import Thread
-from typing import List
 
 from PySide2.QtCore import QObject, Signal, Slot
 
@@ -28,10 +27,10 @@ class KnechtExcelDataThreadSignals(QObject):
 
 
 class KnechtExcelDataThread(Thread):
-    def __init__(self, file: Path, queue: Queue):
+    def __init__(self, file: Path, xl_queue: Queue):
         super(KnechtExcelDataThread, self).__init__()
         self.file = file
-        self.queue = queue
+        self.xl_queue = xl_queue
 
         self.signals = KnechtExcelDataThreadSignals()
         self.finished = self.signals.finished
@@ -43,11 +42,9 @@ class KnechtExcelDataThread(Thread):
         LOGGER.debug('Excel data to KnechtModel thread started.')
         self.progress_msg.emit(_('Excel Daten werden konvertiert...'))
         time.sleep(0.01)
-        data = self.queue.get()
+        data = self.xl_queue.get()
 
-        xl_reader = KnechtExcelDataToModel(
-            *data
-            )
+        xl_reader = KnechtExcelDataToModel(data)
         xl_reader.progress_signal = self.worker_progress
         self.worker_progress.connect(self._work_progress)
         root_item = xl_reader.create_root_item()
@@ -74,13 +71,8 @@ class KnechtExcelDataToModel:
     pr_family_cache = dict(PR_Code='PR_Family_Code')
     progress_signal = None
 
-    def __init__(self, data: ExcelData, models: List[str], pr_families: List[str],
-                 read_trim: bool=True, read_options: bool=True, read_pkg: bool=True,
-                 pr_filter_pkg: bool=False, read_fakom: bool=False):
-        self.data, self.models, self.pr_families = data, models, pr_families
-        self.read_trim, self.read_options, self.read_pkg = read_trim, read_options, read_pkg
-        self.read_fakom = False
-        self.pr_filter_pkg = pr_filter_pkg
+    def __init__(self, data: ExcelData):
+        self.data = data
 
         self.id_gen = KnechtUuidGenerator()
         self.root_item = KnechtItem()
@@ -120,8 +112,9 @@ class KnechtExcelDataToModel:
         market_column = self.data.models.columns[self.data.map.Models.ColumnIdx.market]
         gearbox_column = self.data.models.columns[self.data.map.Models.ColumnIdx.gearbox]
 
-        for idx, model in enumerate(sorted(self.models)):
-            self._show_progress(_('Erstelle Model {} {:02d}/{:02d}...').format(model, idx, len(self.models)))
+        for idx, model in enumerate(sorted(self.data.selected_models)):
+            self._show_progress(_('Erstelle Model {} {:02d}/{:02d}...').format(
+                model, idx, len(self.data.selected_models)))
 
             # Model info
             model_rows = self.data.models.loc[self.data.models[model_column] == model]
@@ -130,7 +123,7 @@ class KnechtExcelDataToModel:
             gearbox = model_rows[gearbox_column].unique()[0]
 
             # -- Create trimline --
-            if self.read_trim:
+            if self.data.read_trim:
                 # Filter rows ~not matching -, P, E
                 trim = self.data.pr_options.loc[~self.data.pr_options[model].isin(['-', 'P', 'E'])]
 
@@ -141,7 +134,7 @@ class KnechtExcelDataToModel:
                 self.root_item.append_item_child(trim_item)
 
             # -- Create options --
-            if self.read_options:
+            if self.data.read_options:
                 # Filter rows matching E
                 options = self.data.pr_options.loc[self.data.pr_options[model].isin(['E'])]
 
@@ -152,7 +145,7 @@ class KnechtExcelDataToModel:
                 self.root_item.append_item_child(options_item)
 
             # -- Create packages --
-            if self.read_pkg:
+            if self.data.read_packages:
                 self.create_packages(model, market)
 
     def create_packages(self, model, market):
@@ -186,7 +179,7 @@ class KnechtExcelDataToModel:
             for pr, pr_text in zip(pkg_content[pr_col], pkg_content[pr_text_col]):
                 pr_fam = self.pr_family_cache.get(pr) or ''
 
-                if pr_fam in self.pr_families:
+                if pr_fam in self.data.selected_pr_families:
                     # Apply PR Family Filter to Packages
                     # If it contains any chosen PR Family, keep the package
                     keep_package = True
@@ -195,10 +188,10 @@ class KnechtExcelDataToModel:
                 pkg_item.append_item_child(pr_item)
 
             if pkg_item.childCount():
-                if self.pr_filter_pkg and keep_package:
+                if self.data.pr_fam_filter_packages and keep_package:
                     # Only create packages that contain PR Families in the filter
                     self.root_item.append_item_child(pkg_item)
-                elif not self.pr_filter_pkg:
+                elif not self.data.pr_fam_filter_packages:
                     # Create all packages and do not apply any filtering
                     self.root_item.append_item_child(pkg_item)
 
@@ -208,7 +201,7 @@ class KnechtExcelDataToModel:
         pr_col = self.data.pr_options.columns[self.data.map.Pr.ColumnIdx.pr]
         pr_text_col = self.data.pr_options.columns[self.data.map.Pr.ColumnIdx.pr_text]
 
-        for pr_idx, pr_fam in enumerate(sorted(self.pr_families)):
+        for pr_idx, pr_fam in enumerate(sorted(self.data.selected_pr_families)):
             trim_rows = trim.loc[trim[family_col] == pr_fam]
             if trim_rows.empty:
                 # Skip PR Families that do not match
@@ -219,6 +212,3 @@ class KnechtExcelDataToModel:
                 pr_item = KnechtItem(parent_item, (f'{parent_item.childCount():03d}',
                                                    pr, 'on', pr_fam, '', '', pr_text))
                 parent_item.append_item_child(pr_item)
-
-                # Update PR Family cache
-                self.pr_family_cache[pr] = pr_fam

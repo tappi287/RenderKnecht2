@@ -106,6 +106,10 @@ class KnechtSettings:
         viewer_background='#ffffff',
         viewer_apply_bg=False,
         )
+    fakom = dict(
+        last_pos_file='',
+        last_xlsx_file='',
+        )
     excel = list()
 
     language = 'de'

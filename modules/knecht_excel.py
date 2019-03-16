@@ -173,6 +173,19 @@ class ExcelData:
         # Fakom data
         self.fakom = FakomData()
 
+        # Ui options - will be set by the excel dialog
+        # and be used by the excel-to-model module
+        # These options do not matter until model creation. We will
+        # keep the complete set of spreadsheet data.
+        self.read_trim = False
+        self.read_options = False
+        self.read_packages = False
+        self.read_fakom = False
+        self.pr_fam_filter_packages = False
+
+        self.selected_models = list()
+        self.selected_pr_families = list()
+
     def verify(self):
         if self.pr_options.empty or self.models.empty:
             return False

@@ -7,6 +7,7 @@ from PySide2.QtWidgets import QAction, QMenu
 from modules.gui.ui_generic_tab import GenericTabWidget
 from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.excel_dialog import ExcelImportDialog
+from modules.gui.widgets.fakom_dialog import FakomImportDialog
 from modules.gui.widgets.file_dialog import FileDialog
 from modules.itemview.excel_read import KnechtExcelDataThread
 from modules.itemview.item import KnechtItem
@@ -25,7 +26,6 @@ _ = lang.gettext
 
 class ImportMenu(QMenu):
     new_model_ready = Signal(KnechtModel, Path)
-    excel_data_thread_signal = Signal(tuple)
 
     def __init__(self, ui):
         """ Menu to import data
@@ -37,10 +37,22 @@ class ImportMenu(QMenu):
 
         xl_action = QAction(IconRsc.get_icon('excel'), _('V-Plus Browser'), self)
         xl_action.triggered.connect(self.open_xlsx)
+        fa_action = QAction(IconRsc.get_icon('fakom'), _('FaKom Lutscher'), self)
+        fa_action.triggered.connect(self.open_fakom)
 
-        self.addAction(xl_action)
+        self.addActions([xl_action, fa_action])
 
     @Slot()
+    def open_fakom(self):
+        fakom_dlg = FakomImportDialog(self.ui)
+        fakom_dlg.open_fakom_xlsx.connect(self.open_xlsx)
+        fakom_dlg.destroyed.connect(self._report_destroyed)
+
+        # Create FaKom import tab
+        GenericTabWidget(self.ui, fakom_dlg)
+
+    @Slot()
+    @Slot(Path, Path)
     def open_xlsx(self, file: Path=None, pos_file: Path=None):
         if not file:
             file = FileDialog.open(self.ui, None, 'xlsx')
@@ -53,27 +65,20 @@ class ImportMenu(QMenu):
         xl_dialog.destroyed.connect(self._report_destroyed)
         xl_dialog.finished.connect(self.xlsx_result)
 
-        new_tab = GenericTabWidget(self.ui, xl_dialog)
+        # Create V Plus Import tab
+        GenericTabWidget(self.ui, xl_dialog)
 
     @Slot(ExcelImportDialog)
     def xlsx_result(self, xl: ExcelImportDialog):
-        options = (xl.check_read_trim.isChecked(),
-                   xl.check_read_options.isChecked(),
-                   xl.check_read_packages.isChecked(),
-                   xl.check_pr_fam_filter_packages.isChecked(),
-                   xl.read_fakom,
-                   )
+        xl_queue = Queue()
 
         # Start ExcelData to KnechtModel conversion thread
-        queue = Queue()
-        xl_thread = KnechtExcelDataThread(Path(xl.file.as_posix()), queue)
+        xl_thread = KnechtExcelDataThread(xl.file, xl_queue)
         xl_thread.finished.connect(self.xlsx_conversion_finished)
         xl_thread.error.connect(self.ui.msg)
         xl_thread.progress_msg.connect(self.xlsx_progress_msg)
         xl_thread.start()
-        queue.put(
-            (xl.data, xl.selected_models, xl.selected_pr_families, *options)
-            )
+        xl_queue.put(xl.data)
         xl.deleteLater()
 
     @Slot(str)

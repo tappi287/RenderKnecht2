@@ -1,6 +1,7 @@
 {
 	"ui_paths": {
 		"knecht_excel_gui": "knecht_excel_gui.ui",
+		"knecht_fakom": "knecht_fakom.ui",
 		"knecht_history": "knecht_history.ui",
 		"knecht_model_gui": "knecht_model_gui.ui",
 		"knecht_welcome": "knecht_welcome.ui"

@@ -62,13 +62,23 @@ class ExcelImportDialog(QDialog):
 
         :param modules.gui.main_ui.KnechtWindow ui: Main Window
         :param Path file:
+        :param Path pos_file: optional POS file to read fakom combinations and store in self.data.fakom
         """
         super(ExcelImportDialog, self).__init__(ui)
         SetupWidget.from_ui_file(self, Resource.ui_paths['knecht_excel_gui'])
-        self.ui = ui
         self.setWindowTitle(file.name)
 
+        # --- Attributes ---
+        self.ui = ui
         self.file = file
+        self.data = None
+        self.selected_models = list()
+        self.selected_pr_families = list()
+
+        self._asked_for_close = False
+        self._settings_loaded = False
+        self._abort = False
+        self._data_ready_count = 0
 
         # --- Read Fakom if pos file provided ---
         self.read_fakom = False
@@ -135,16 +145,6 @@ class ExcelImportDialog(QDialog):
         self.label_Models: QLabel
         self.label_Models.setText(_('Modelle auswählen die ausgelesen werden sollen.'))
 
-        # --- Attributes ---
-        self.data = None
-        self.selected_models = list()
-        self.selected_pr_families = list()
-
-        self._asked_for_close = False
-        self._settings_loaded = False
-        self._abort = False
-        self._data_ready_count = 0
-
         self.buttonBox.setEnabled(False)
 
         QTimer.singleShot(100, self._start_load)
@@ -156,18 +156,32 @@ class ExcelImportDialog(QDialog):
         signals.progress_msg.emit(_('Excel Datei wird gelesen...'))
 
         xl = ExcelReader()
-        result = xl.read_file(file)
+        fakom_result, xl_result = True, False
 
-        # Add FaKom data if POS file provided
-        if pos_file:
-            if pos_file.exists():
+        # -- Read Fakom data if pos file provided --
+        if pos_file and pos_file.exists():
+            try:
                 fakom_data = FakomReader.read_pos_file(pos_file)
+                xl.data.fakom = fakom_data
 
-                if not fakom_data.empty():
-                    xl.data.fakom = fakom_data
+                if xl.data.fakom.empty():
+                    xl.errors.append(_('POS Xml enthält keine bekannten Farbkombinationsmuster.'))
+                    fakom_result = False
+            except Exception as e:
+                LOGGER.error(e)
+                xl.errors.append(_('Konnte POS Xml Daten nicht lesen oder verarbeiten.'))
+                fakom_result = False
+
+        # -- Read Excel file --
+        if fakom_result:
+            try:
+                xl_result = xl.read_file(file)
+            except Exception as e:
+                LOGGER.error(e)
+                xl_result = False
 
         # Transmit resulting data or report error
-        if result:
+        if xl_result and fakom_result:
             signals.progress_msg.emit(_('Daten übertragen...'))
             LOGGER.debug('Excel read succeded.')
             signals.finished.emit(xl.data)
@@ -411,12 +425,27 @@ class ExcelImportDialog(QDialog):
             return True
 
         return False
+    
+    def _set_options(self):
+        """ Save Dialog settings to ExcelData """
+        if not self.data:
+            return
+
+        self.data: ExcelData
+        self.data.read_trim = self.check_read_trim.isChecked()
+        self.data.read_options = self.check_read_options.isChecked()
+        self.data.read_packages = self.check_read_packages.isChecked()
+        self.data.pr_fam_filter_packages = self.check_pr_fam_filter_packages.isChecked()
+        self.data.read_fakom = self.read_fakom
+        self.data.selected_models = self.selected_models
+        self.data.selected_pr_families = self.selected_pr_families
 
     def reject(self):
         self.close()
 
     def accept(self):
-        self.save_settings()
+        self.save_settings()    # Will save settings for dialog re-use and populate selected modes + pr-families
+        self._set_options()     # Needs to be called -after- save settings
         self._finalize_dialog(False)
         self.finished.emit(self)
 
