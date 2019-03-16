@@ -66,9 +66,7 @@ class ExcelImportDialog(QDialog):
         super(ExcelImportDialog, self).__init__(ui)
         SetupWidget.from_ui_file(self, Resource.ui_paths['knecht_excel_gui'])
         self.ui = ui
-        self.setWindowTitle(
-            _('V-Plus Browser Leseoptionen')
-            )
+        self.setWindowTitle(file.name)
 
         self.file = file
 
@@ -421,7 +419,9 @@ class ExcelImportDialog(QDialog):
         self.save_settings()
         self._finalize_dialog(False)
         self.finished.emit(self)
-        self.done(0)
+
+        self._asked_for_close = True
+        self.close()
 
     def closeEvent(self, close_event):
         if self._ask_close():
@@ -430,8 +430,9 @@ class ExcelImportDialog(QDialog):
 
         LOGGER.info('V Plus Browser window close event triggered. Aborting excel conversion')
         # End thread
-        close_event.accept()
         self._finalize_dialog()
+
+        close_event.accept()
 
     def _finalize_dialog(self, self_destruct: bool=True):
         self._abort = True

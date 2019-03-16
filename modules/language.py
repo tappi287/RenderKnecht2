@@ -32,10 +32,19 @@ def setup_translation(language=None):
     if not language:
         if not os.environ.get('LANGUAGE'):
             # Set from OS language en or de
-            os.environ.setdefault('LANGUAGE', get_ms_windows_language())
+            language = get_ms_windows_language()
+            os.environ.setdefault('LANGUAGE', language)
     else:
         # Set language from settings
         os.environ.setdefault('LANGUAGE', language)
+
+    # Setup OS locale for MS Windows
+    # needed for eg. datetime weekday strings
+    # https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c
+    if language == 'de':
+        locale.setlocale(category=locale.LC_ALL, locale="German")
+    elif language == 'en':
+        locale.setlocale(category=locale.LC_ALL, locale="English")
 
 
 def get_translation():

@@ -1,14 +1,14 @@
-from typing import List
 from pathlib import Path
+from typing import List
 
-from PySide2.QtCore import Slot, Qt
+from PySide2.QtCore import Qt, Slot
 from PySide2.QtWidgets import QLineEdit
 
-from modules.itemview.view_manager import ViewManager
 from modules.gui.widgets.menu_tree_context import TreeContextMenu
 from modules.gui.widgets.message_box import AskToContinue
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.tree_view import KnechtTreeView
+from modules.itemview.view_manager import ViewManager
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -73,6 +73,9 @@ class UiViewManager(ViewManager):
     def ui_tab_changed(self, index):
         """ View Manager Tab changed signal """
         current_tab = self.tab.widget(index)
+        if hasattr(current_tab, 'none_document_tab'):
+            return
+
         current_view = current_tab.user_view
         self.ui.set_last_focus_tree(current_view)
         self.ui.pushButton_Dest_show.toggled.emit(self.ui.pushButton_Dest_show.isChecked())

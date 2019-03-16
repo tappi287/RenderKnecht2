@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Union
+from typing import Union, Tuple, List
 
 from PySide2.QtCore import QObject, Qt, Signal, Slot
 from PySide2.QtWidgets import QApplication, QLineEdit, QTabWidget, QTreeView, QVBoxLayout, QWidget, QUndoGroup
@@ -157,11 +157,11 @@ class ViewManager(QObject):
 
         return new_view
 
-    def create_view(self, new_model: KnechtModel, file: Path) -> QTreeView:
+    def create_view(self, new_model: KnechtModel, file: Path, new_page: bool=False) -> QTreeView:
         """ Creates a new tab page and tree view or update untouched empty views
         """
         # Try to update existing empty tab page
-        if self._update_existing_page(new_model, file):
+        if not new_page and self._update_existing_page(new_model, file):
             self.view_updated.emit(self.current_view())
             self.widget_about_to_be_removed.emit(self.tab.currentWidget())
             self.file_update.emit(file, self.tab.currentWidget(), True)
@@ -236,21 +236,20 @@ class ViewManager(QObject):
     def _remove_view_tab(self, index):
         QApplication.processEvents()
 
-        current_view = self.current_view()
+        tab_to_remove = self.tab.widget(index)
+        if not tab_to_remove or hasattr(tab_to_remove, 'none_document_tab'):
+            return
 
-        if not current_view.undo_stack.isActive() and not current_view.undo_stack.isClean():
+        tab_view = tab_to_remove.user_view
+
+        if not tab_view.undo_stack.isActive() and not tab_view.undo_stack.isClean():
             # Undo in progress
             self.reject_tab_remove()
             return
 
-        if not current_view.editor.enabled:
+        if not tab_view.editor.enabled:
             self.reject_tab_remove()
             return
-
-        tab_to_remove = self.tab.widget(index)
-        if not tab_to_remove:
-            return
-        tab_view = tab_to_remove.user_view
 
         if not self.ask_on_close(tab_view):
             return
@@ -271,14 +270,28 @@ class ViewManager(QObject):
             even if he has not yet focused the view itself
         """
         current_tab = self.tab.widget(index)
+        if hasattr(current_tab, 'none_document_tab'):
+            return
+
         current_view = current_tab.user_view
-        self.list_tabs()
+        self.log_tabs()
 
         # Update view filtering
         current_view.set_filter_widget_text(current_view.current_filter_text())
 
-    def current_view(self) -> KnechtTreeView:
+    def current_view(self):
         current_tab = self.tab.currentWidget()
+
+        if not hasattr(current_tab, 'user_view'):
+            # Look for existing tab with tree view
+            for i in range(self.tab.count() - 1, -1, -1):
+                if hasattr(self.tab.widget(i), 'user_view'):
+                    self.tab.setCurrentIndex(i)
+                    return self.tab.widget(i).user_view
+
+            # Create a tab with a view if necessary
+            model = KnechtModel()
+            return self.create_view(model, Path('New_Document_View.xml'), new_page=True)
         return current_tab.user_view
 
     def current_file(self) -> Path:
@@ -287,7 +300,7 @@ class ViewManager(QObject):
 
     def setup_tree_view(self,
                         tree_view: KnechtTreeView, model: Union[KnechtModel, None] = None,
-                        file: Path = Path(), filter_widget: QLineEdit=None):
+                        file: Path = Path('New_Document.xml'), filter_widget: QLineEdit=None):
         # Setup TreeView model
         if not model:
             # Use empty model if none provided
@@ -334,6 +347,9 @@ class ViewManager(QObject):
         for tab_idx in range(0, self.tab.count()):
             tab_page = self.tab.widget(tab_idx)
 
+            if not hasattr(tab_page, 'user_view'):
+                continue
+
             if tab_page.user_view is view:
                 break
         else:
@@ -344,7 +360,7 @@ class ViewManager(QObject):
     def get_view_by_file(self, file: Path):
         return self.file_mgr.get_widget_from_file(file).user_view
 
-    def list_tabs(self):
+    def log_tabs(self):
         """ Debug fn """
 
         def get_tab_view_name(tab):

@@ -1,19 +1,19 @@
 import math
-import time
 import multiprocessing
+import time
 from datetime import datetime
 from pathlib import Path
 from threading import Thread
 from typing import List
 
-from PySide2.QtCore import QObject, Qt, Signal, Slot, QThread
+from PySide2.QtCore import QObject, Qt, Signal, Slot
 from imageio import imread
 
-from modules.knecht_utils import time_string
 from modules.gui.widgets.message_box import GenericErrorBox
 from modules.itemview.tree_view import KnechtTreeView
 from modules.knecht_deltagen import CommunicateDeltaGen, SendToDeltaGen
 from modules.knecht_image import KnechtImage
+from modules.knecht_utils import time_string
 from modules.knecht_variants import KnechtRenderPreset, KnechtVariantList
 from modules.language import get_translation
 from modules.log import init_logging

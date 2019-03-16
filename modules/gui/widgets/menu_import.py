@@ -4,6 +4,7 @@ from queue import Queue
 from PySide2.QtCore import Signal, Slot
 from PySide2.QtWidgets import QAction, QMenu
 
+from modules.gui.ui_generic_tab import GenericTabWidget
 from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.excel_dialog import ExcelImportDialog
 from modules.gui.widgets.file_dialog import FileDialog
@@ -51,9 +52,8 @@ class ImportMenu(QMenu):
         xl_dialog = ExcelImportDialog(self.ui, Path(file), pos_file)
         xl_dialog.destroyed.connect(self._report_destroyed)
         xl_dialog.finished.connect(self.xlsx_result)
-        xl_dialog.open()
 
-        LOGGER.debug('Xlsx file dialog opened')
+        new_tab = GenericTabWidget(self.ui, xl_dialog)
 
     @Slot(ExcelImportDialog)
     def xlsx_result(self, xl: ExcelImportDialog):
