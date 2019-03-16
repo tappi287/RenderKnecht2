@@ -38,7 +38,7 @@ def list_class_fields(obj) -> dict:
     attr = dict()
 
     for k, v in obj.__dict__.items():
-        if k.startswith('__'):
+        if k.startswith('__') or not isinstance(v, (int, str, float, bool, list, dict, tuple)):
             continue
         attr[k] = v
 

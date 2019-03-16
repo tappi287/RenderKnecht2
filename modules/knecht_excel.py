@@ -2,13 +2,13 @@ import shutil
 from pathlib import Path
 from tempfile import mkdtemp
 from time import time
-from typing import List, Tuple, Type, Union
+from typing import List, Tuple, Union
 from zipfile import ZIP_LZMA, ZipFile
 
-# TODO: pandas not buildable with pyinstaller
 import pandas as pd
 
 from modules.globals import get_settings_dir
+from modules.knecht_fakom import FakomData
 from modules.knecht_utils import list_class_fields
 from modules.language import get_translation
 from modules.log import init_logging
@@ -21,12 +21,24 @@ lang.install()
 _ = lang.gettext
 
 
-class ExcelMap:
-    """ Definition where to obtain data in Excel sheets """
-    class Models:           # --- Models Worksheet ---
-        name = 'models'     # Used for representation
+class _SheetColumns:
+    """ Lists sheet columns indices or names """
+    @classmethod
+    def list(cls):
+        return list_class_fields(cls)
 
-        class ColumnIdx:    # Used to locate columns independently of the column name
+
+class _Models:  # --- Models Worksheet ---
+    name = 'models'  # Used for representation
+
+    # Sheets containing this Type could be named:
+    possible_sheet_names = ('Modelle', 'Models')
+    # Sheets could contain empty columns with names:
+    empty_columns = tuple()
+
+    def __init__(self):
+        # Used to locate columns independently of the column name
+        class _ColumnIdx(_SheetColumns):
             """ Column locations """
             market = 0
             market_text = 1
@@ -44,7 +56,7 @@ class ExcelMap:
             engine_power = 13
             gearbox = 14
 
-        class ColumnNames:
+        class _ColumnNames(_SheetColumns):
             market = 'Markt'
             market_text = 'Markttext'
             modelyear = 'Modelljahr'
@@ -61,57 +73,64 @@ class ExcelMap:
             engine_power = 'Leistung'
             gearbox = 'Getriebe'
 
-        # Dict containing column attribute names and values
-        possible_columns = list_class_fields(ColumnNames)
-        # Sheets containing this Type could be named:
-        possible_sheet_names = ('Modelle', 'Models')
-        # Sheets could contain empty columns with names:
-        empty_columns = tuple()
+        self.ColumnIdx = _ColumnIdx()
+        self.ColumnNames = _ColumnNames()
 
-    class Pr:               # --- PR-Options Worksheet ---
-        name = 'pr_options'
 
-        class ColumnIdx:
+class _Pr:  # --- PR-Options Worksheet ---
+    name = 'pr_options'
+
+    possible_sheet_names = ('PR-Nummern', 'PR', 'Interior Scope', 'Exterior Scope',)
+    empty_columns = ('Modell',)
+
+    def __init__(self):
+        class _ColumnIdx(_SheetColumns):
             """ Column locations """
             family = 0
             family_text = 1
             pr = 2
             pr_text = 3
 
-        class ColumnNames:
+        class _ColumnNames(_SheetColumns):
             family = 'PR-Familie'
             family_text = 'PR-FamilienText'
             pr = 'PR-Nummer'
             pr_text = 'Text'
 
-        possible_columns = list_class_fields(ColumnNames)
-        possible_sheet_names = ('PR-Nummern', 'PR', 'Interior Scope', 'Exterior Scope',)
-        empty_columns = ('Modell',)
+        self.ColumnIdx = _ColumnIdx()
+        self.ColumnNames = _ColumnNames()
 
-    class Packages:         # --- Packages Worksheet ---
-        name = 'packages'
 
-        class ColumnIdx:
+class _Packages:  # --- Packages Worksheet ---
+    name = 'packages'
+
+    possible_sheet_names = ('Pakete', 'Pakete purged', 'Packages (purged)',)
+    empty_columns = ('Modell',)
+
+    def __init__(self):
+        class _ColumnIdx(_SheetColumns):
             """ Column locations """
             package = 0
             package_text = 1
             pr = 2
             pr_text = 3
 
-        class ColumnNames:
+        class _ColumnNames(_SheetColumns):
             package = 'Paket'
             package_text = 'Pakettext'
             pr = 'PR-Nummer'
             pr_text = 'Text'
 
-        possible_columns = list_class_fields(ColumnNames)
-        possible_sheet_names = ('Pakete', 'Pakete purged', 'Packages (purged)',)
-        empty_columns = ('Modell',)
+        self.ColumnIdx = _ColumnIdx()
+        self.ColumnNames = _ColumnNames()
 
+
+class ExcelMap:
+    """ Definition where to obtain data in Excel sheets """
     def __init__(self):
-        self.Models: Type[ExcelMap.Models] = self.Models()
-        self.Pr: Type[ExcelMap.Pr] = self.Pr()
-        self.Packages: Type[ExcelMap.Packages] = self.Packages()
+        self.Models: _Models = _Models()
+        self.Pr: _Pr = _Pr()
+        self.Packages: _Packages = _Packages()
 
         # --- Define a Set of valid Worksheets to read ---
         # we will only accept worksheets with these known names
@@ -134,7 +153,7 @@ class ExcelMap:
 class Worksheet:
     def __init__(self,
                  name: str,
-                 sheet_type: Union[None, ExcelMap.Models, ExcelMap.Pr, ExcelMap.Packages],
+                 sheet_type: Union[None, _Models, _Pr, _Packages],
                  df: pd.DataFrame):
         """ Intermediate single worksheet """
         self.name, self.sheet_type, self.df = name, sheet_type, df
@@ -143,13 +162,16 @@ class Worksheet:
 class ExcelData:
     file_names = ('pr.csv', 'pkg.csv', 'mdl.csv')
 
-    def __init__(self, map: ExcelMap):
+    def __init__(self, sheet_map: ExcelMap):
         """ Data extracted from one excel file as data frames """
         # Mutable ExcelMap Instance
-        self.map = map
+        self.map = sheet_map
 
         # Dummy data
         self.pr_options, self.packages, self.models = pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
+
+        # Fakom data
+        self.fakom = FakomData()
 
     def verify(self):
         if self.pr_options.empty or self.models.empty:
@@ -280,9 +302,9 @@ class ExcelReader:
         self.data = ExcelData(self.map)
 
     @staticmethod
-    def _update_column_indices(df: pd.DataFrame, sheet_type: Union[ExcelMap.Pr, ExcelMap.Packages, ExcelMap.Models]):
+    def _update_column_indices(df: pd.DataFrame, sheet_type: Union[_Pr, _Packages, _Models]):
         """ Lookup column indices and update self.map accordingly """
-        for attribute_name, column_name in sheet_type.possible_columns.items():
+        for attribute_name, column_name in sheet_type.ColumnNames.list().items():
             if column_name in df.columns:
                 column_index = df.columns.get_loc(column_name)
                 setattr(sheet_type.ColumnIdx, attribute_name, column_index)
@@ -374,7 +396,6 @@ class ExcelReader:
         self._update_column_indices(df, sheet_type)
         return Worksheet(name, sheet_type, df)
 
-    # TODO: Replace column names with column number definitions
     def _prepare_pr_specific(self, df: pd.DataFrame) -> pd.DataFrame:
         """ Prepare part of the dataframe unique to PR Options sheet """
         # Forward fill PR-Family column and convert to category
@@ -405,7 +426,7 @@ class ExcelReader:
 
     @staticmethod
     def _prepare_pr_dataframe(excel_file: pd.ExcelFile, sheet_name: str,
-                              sheet_type: Union[ExcelMap.Pr, ExcelMap.Packages]):
+                              sheet_type: Union[_Pr, _Packages]):
         """ Prepare the PR-Options or Package Worksheets.
 
             - parse with two-row header, mapping it back to one row and joining the model codes

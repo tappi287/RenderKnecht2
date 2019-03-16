@@ -15,6 +15,7 @@ from modules.itemview.model_update import UpdateModel
 from modules.itemview.tree_view import KnechtTreeView
 from modules.itemview.tree_view_utils import KnechtTreeViewShortcuts, setup_header_layout
 from modules.knecht_excel import ExcelData, ExcelReader
+from modules.knecht_fakom import FakomReader
 from modules.language import get_translation
 from modules.log import init_logging
 from modules.settings import KnechtSettings, Settings
@@ -56,7 +57,7 @@ class ExcelImportDialog(QDialog):
         interior = list()
         exterior = list()
 
-    def __init__(self, ui, file: Path):
+    def __init__(self, ui, file: Path, pos_file: Path=None):
         """ Dialog to set Excel V Plus import options
 
         :param modules.gui.main_ui.KnechtWindow ui: Main Window
@@ -70,6 +71,11 @@ class ExcelImportDialog(QDialog):
             )
 
         self.file = file
+
+        # --- Read Fakom if pos file provided ---
+        self.read_fakom = False
+        if pos_file:
+            self.read_fakom = True
 
         # --- Filter Buttons ---
         for a in (self.btn_filter_all, self.btn_filter_ext, self.btn_filter_int):
@@ -85,7 +91,7 @@ class ExcelImportDialog(QDialog):
 
         # --- Reader Thread ---
         thread_signals = self.ThreadSignals()
-        self.excel_thread = Thread(target=self.excel_load_thread, args=(thread_signals, self.file))
+        self.excel_thread = Thread(target=self.excel_load_thread, args=(thread_signals, self.file, pos_file))
         thread_signals.finished.connect(self.read_finished)
         thread_signals.error.connect(self.read_failed)
         thread_signals.progress_msg.connect(self.show_progress)
@@ -146,7 +152,7 @@ class ExcelImportDialog(QDialog):
         QTimer.singleShot(100, self._start_load)
 
     @staticmethod
-    def excel_load_thread(signals: ThreadSignals, file: Path):
+    def excel_load_thread(signals: ThreadSignals, file: Path, pos_file: Path=None):
         """ The thread that loads the excel file """
         LOGGER.debug('Excel file reader thread started: %s', file.name)
         signals.progress_msg.emit(_('Excel Datei wird gelesen...'))
@@ -154,6 +160,15 @@ class ExcelImportDialog(QDialog):
         xl = ExcelReader()
         result = xl.read_file(file)
 
+        # Add FaKom data if POS file provided
+        if pos_file:
+            if pos_file.exists():
+                fakom_data = FakomReader.read_pos_file(pos_file)
+
+                if not fakom_data.empty():
+                    xl.data.fakom = fakom_data
+
+        # Transmit resulting data or report error
         if result:
             signals.progress_msg.emit(_('Daten übertragen...'))
             LOGGER.debug('Excel read succeded.')

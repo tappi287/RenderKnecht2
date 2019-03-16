@@ -1,5 +1,6 @@
 import re
-from typing import Union, List, Tuple
+from pathlib import Path
+from typing import Union, List, Tuple, Set
 from lxml import etree as Et
 
 
@@ -9,7 +10,7 @@ class FakomPattern:
 
     # FaKom Pattern as list of tuple(str, tuple(int, int, int, int))
     # (RegEx-String, (Color-index-start, Color-index-end, Seat-Code-Index-Start, Seat-Code-Index-End))
-    fa = '[A-Z]{2}'     # match two letter color code
+    fa = '[A-Z]{2}'      # match two letter color code
     sib = '[A-Z0-9]{3}'  # match three character alphanumeric PR code
     lum = '[A-Z0-9]{3}'  # match three character alphanumeric PR code
 
@@ -54,3 +55,47 @@ class FakomPattern:
                 sib_key = result.string[sib_start:sib_end]
 
                 return color_key, sib_key
+
+
+class FakomData:
+    def __init__(self):
+        self._fakom_dict = dict()
+
+    def add(self, color: str, sib: str):
+        if color not in self._fakom_dict:
+            self._fakom_dict[color] = set()
+
+        self._fakom_dict[color].add(sib)
+
+    def iterate_colors(self) -> Tuple[str, Set[str]]:
+        for color, sib_set in self._fakom_dict.items():
+            yield color, sib_set
+
+    def empty(self) -> bool:
+        if not self._fakom_dict:
+            return True
+        return False
+
+
+class FakomReader:
+    @staticmethod
+    def iterate_action_lists(pos_file: Path) -> Tuple[str, str]:
+        for _, al in Et.iterparse(pos_file.as_posix(), tag='actionList'):
+            action_list_name = al.get('name') or ''
+
+            result = FakomPattern.search(action_list_name)
+
+            if not result:
+                continue
+
+            color, sib = result
+            yield color, sib
+
+    @classmethod
+    def read_pos_file(cls, pos_file: Path):
+        data = FakomData()
+
+        for color, sib in cls.iterate_action_lists(pos_file):
+            data.add(color, sib)
+
+        return data

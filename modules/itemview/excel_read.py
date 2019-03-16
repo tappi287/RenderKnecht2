@@ -1,8 +1,8 @@
 import time
 from pathlib import Path
-from threading import Thread
 from queue import Queue
-from typing import List, Tuple
+from threading import Thread
+from typing import List
 
 from PySide2.QtCore import QObject, Signal, Slot
 
@@ -76,9 +76,10 @@ class KnechtExcelDataToModel:
 
     def __init__(self, data: ExcelData, models: List[str], pr_families: List[str],
                  read_trim: bool=True, read_options: bool=True, read_pkg: bool=True,
-                 pr_filter_pkg: bool=False):
+                 pr_filter_pkg: bool=False, read_fakom: bool=False):
         self.data, self.models, self.pr_families = data, models, pr_families
         self.read_trim, self.read_options, self.read_pkg = read_trim, read_options, read_pkg
+        self.read_fakom = False
         self.pr_filter_pkg = pr_filter_pkg
 
         self.id_gen = KnechtUuidGenerator()
@@ -121,9 +122,6 @@ class KnechtExcelDataToModel:
 
         for idx, model in enumerate(sorted(self.models)):
             self._show_progress(_('Erstelle Model {} {:02d}/{:02d}...').format(model, idx, len(self.models)))
-            # Filter rows not matching -, P, E
-            trim = self.data.pr_options.loc[~self.data.pr_options[model].isin(['-', 'P', 'E'])]
-            options = self.data.pr_options.loc[self.data.pr_options[model].isin(['E'])]
 
             # Model info
             model_rows = self.data.models.loc[self.data.models[model_column] == model]
@@ -131,24 +129,30 @@ class KnechtExcelDataToModel:
             market = model_rows[market_column].unique()[0]
             gearbox = model_rows[gearbox_column].unique()[0]
 
+            # -- Create trimline --
             if self.read_trim:
-                # Create trimline
+                # Filter rows ~not matching -, P, E
+                trim = self.data.pr_options.loc[~self.data.pr_options[model].isin(['-', 'P', 'E'])]
+
                 data = (f'{self.root_item.childCount():03d}', model_desc, model, 'trim_setup', '',
                         self.id_gen.create_id(), f'{market} - {gearbox}')
                 trim_item = KnechtItem(self.root_item, data)
                 self.create_pr_options(trim, trim_item)
                 self.root_item.append_item_child(trim_item)
 
+            # -- Create options --
             if self.read_options:
-                # Create options
+                # Filter rows matching E
+                options = self.data.pr_options.loc[self.data.pr_options[model].isin(['E'])]
+
                 data = (f'{self.root_item.childCount():03d}', f'{model_desc} Options', model, 'options', '',
                         self.id_gen.create_id(), f'{market} - {gearbox}')
                 options_item = KnechtItem(self.root_item, data)
                 self.create_pr_options(options, options_item)
                 self.root_item.append_item_child(options_item)
 
+            # -- Create packages --
             if self.read_pkg:
-                # Create packages
                 self.create_packages(model, market)
 
     def create_packages(self, model, market):

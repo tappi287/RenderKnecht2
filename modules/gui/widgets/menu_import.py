@@ -39,7 +39,8 @@ class ImportMenu(QMenu):
 
         self.addAction(xl_action)
 
-    def open_xlsx(self, file: Path=None):
+    @Slot()
+    def open_xlsx(self, file: Path=None, pos_file: Path=None):
         if not file:
             file = FileDialog.open(self.ui, None, 'xlsx')
 
@@ -47,7 +48,7 @@ class ImportMenu(QMenu):
             LOGGER.info('Open Xlsx File dialog canceled.')
             return
 
-        xl_dialog = ExcelImportDialog(self.ui, Path(file))
+        xl_dialog = ExcelImportDialog(self.ui, Path(file), pos_file)
         xl_dialog.destroyed.connect(self._report_destroyed)
         xl_dialog.finished.connect(self.xlsx_result)
         xl_dialog.open()
@@ -60,6 +61,7 @@ class ImportMenu(QMenu):
                    xl.check_read_options.isChecked(),
                    xl.check_read_packages.isChecked(),
                    xl.check_pr_fam_filter_packages.isChecked(),
+                   xl.read_fakom,
                    )
 
         # Start ExcelData to KnechtModel conversion thread
