@@ -88,23 +88,23 @@ class ConversionThread(Thread):
                 try:
                     self.output_dir.mkdir(parents=True)
                 except Exception as e:
-                    result += _('Konnte Ausgabe Verzeichnis nicht erstellen: {}\n').format(e)
+                    result += _('Konnte Ausgabe Verzeichnis nicht erstellen: {}').format(f'{e}\n')
                     break
 
             # Open and convert image
             try:
                 img = KnechtImage.open_with_imageio(img_file)
             except Exception as e:
-                result += _('Konnte Bilddatei {} nicht konvertieren: {}\n').format(img_file.name, e)
+                result += _('Konnte Bilddatei {} nicht konvertieren: {}').format(img_file.name, f'{e}\n')
                 continue
 
             # Write image to file
             try:
                 img_out = self.output_dir / Path(img_file.stem).with_suffix(self.output_format)
                 imwrite(img_out, img)
-                result += _('Bilddatei erstellt: {}\n').format(img_out.name)
+                result += _('Bilddatei erstellt: {}').format(f'{img_out.name}\n')
             except Exception as e:
-                result += _('Konnte Bilddatei {} nicht erstellen: {}\n').format(img_file.name, e)
+                result += _('Konnte Bilddatei {} nicht erstellen: {}').format(img_file.name, f'{e}\n')
                 continue
 
             # Move source files
@@ -121,7 +121,8 @@ class ConversionThread(Thread):
                 img_file.replace(move_dir / img_file.name)
                 LOGGER.debug('Moving un-converted image file: %s', img_file.name)
             except FileNotFoundError or FileExistsError:
-                result += _('Konnte unkonvertierte Bilddatei nicht verschieben: {}\n').format(img_file.name)
+                result += _('Konnte unkonvertierte Bilddatei nicht verschieben: {}').format(
+                    f'{img_file.name}')
                 pass
 
         self.result_signal.emit(result)

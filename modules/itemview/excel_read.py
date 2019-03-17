@@ -9,6 +9,7 @@ from PySide2.QtCore import QObject, Signal, Slot
 from modules.idgen import KnechtUuidGenerator
 from modules.itemview.item import KnechtItem
 from modules.knecht_excel import ExcelData
+from modules.knecht_utils import shorten_model_name
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -153,7 +154,7 @@ class KnechtExcelDataToModel:
             if self.data.read_fakom:
                 # Filter rows ~not matching -
                 fakom_rows = self.data.pr_options.loc[~self.data.pr_options[model].isin(['-'])]
-                self.create_fakom(model, fakom_rows)
+                self.create_fakom(model, model_desc, fakom_rows)
 
     def create_packages(self, model: str, market: str):
         if self.data.packages.empty:
@@ -220,7 +221,8 @@ class KnechtExcelDataToModel:
                                                    pr, 'on', pr_fam, '', '', pr_text))
                 parent_item.append_item_child(pr_item)
 
-    def create_fakom(self, model: str, fakom_rows: pd.DataFrame):
+    def create_fakom(self, model: str, model_desc: str, fakom_rows: pd.DataFrame):
+        model_desc = shorten_model_name(model_desc)
         # -- PR Column Keys
         pr_col = self.data.pr_options.columns[self.data.map.Pr.ColumnIdx.pr]
         family_col = self.data.pr_options.columns[self.data.map.Pr.ColumnIdx.family]
@@ -260,12 +262,12 @@ class KnechtExcelDataToModel:
                             fakom_type = 'fakom_setup'
 
                         self.create_fakom_item(
-                            model, color, sib, vos, lum, sib_text, vos_text, lum_text, fakom_type
+                            model, model_desc, color, sib, vos, lum, sib_text, vos_text, lum_text, fakom_type
                             )
 
-    def create_fakom_item(self, model, color, sib, vos, lum, sib_text, vos_text, lum_text, fakom_type):
+    def create_fakom_item(self, model, model_desc, color, sib, vos, lum, sib_text, vos_text, lum_text, fakom_type):
         # Create package parent item
-        data = (f'{self.root_item.childCount():03d}', f'{model} {color}-{sib}-{vos}-{lum}',
+        data = (f'{self.root_item.childCount():03d}', f'{model_desc} {color}-{sib}-{vos}-{lum}',
                 model, fakom_type, '', self.id_gen.create_id())
 
         # Create FaKom item

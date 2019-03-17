@@ -146,7 +146,7 @@ class FileMenu(QObject):
         if result:
             LOGGER.debug('File saved: %s', file.as_posix())
             self.view_mgr.tab_view_saved(file)
-            self.ui.msg(_('Datei gespeichert:\n{0}\n{1:.3}s').format(file.name,
+            self.ui.msg(_('Datei gespeichert:{0}{1:.3}s').format(f'\n{file.name}\n',
                                                                     self.load_save_mgr.last_progress_time))
         else:
             self._save_aborted(error, file)

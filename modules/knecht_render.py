@@ -177,8 +177,8 @@ class KnechtRenderThread(Thread):
 
         if too_long_paths:
             self.error.emit(
-                _('Die folgenden Ausgabepfade sind zu lang, Rendering wird abgebrochen. \n\n{}'
-                  ).format('\n'.join(too_long_paths))
+                _('Die folgenden Ausgabepfade sind zu lang, Rendering wird abgebrochen. {}{}'
+                  ).format('\n\n', '\n'.join(too_long_paths))
                 )
             return False
 
@@ -389,7 +389,7 @@ class KnechtRenderThread(Thread):
 
     @Slot(str)
     def _image_conversion_result(self, result: str):
-        self.render_log += _('\nBild Konvertierung:\n{}').format(result)
+        self.render_log += _('{0}Bild Konvertierung:{0}{1}').format('\n', result)
         self.img_conversion_finished = True
 
     @Slot(int)
@@ -398,8 +398,8 @@ class KnechtRenderThread(Thread):
         self.dg_operation_finished = True
 
     def abort_no_connection(self):
-        self.error.emit(_('Render Vorgang abgebrochen.\n\nKonnte keine Verbindung zu einer '
-                          'DeltaGen Instanz herstellen.'))
+        self.error.emit(_('Render Vorgang abgebrochen.{}Konnte keine Verbindung zu einer '
+                          'DeltaGen Instanz herstellen.').format('\n\n'))
         self.abort()
         self.render_result = self.Result.rendering_failed
 
@@ -435,8 +435,8 @@ class KnechtRenderThread(Thread):
                                  exception_message)
 
                 # Display image verification in Overlay
-                self.status.emit(_('Bilddaten konnten nicht als gültiges Bild verifiziert werden.\n{}'
-                                   ).format(img_path.name))
+                self.status.emit(_('Bilddaten konnten nicht als gültiges Bild verifiziert werden.{}'
+                                   ).format(f'\n{img_path.name}'))
 
                 # Wait 10 seconds
                 time.sleep(10)
@@ -447,7 +447,7 @@ class KnechtRenderThread(Thread):
 
                 # Display image verification in Overlay
                 try:
-                    msg = _('Bilddaten wurden erfolgreich verifiziert.\n') + str(img_path.name)
+                    msg = _('Bilddaten wurden erfolgreich verifiziert: {}').format(f'{img_path.name}\n')
                     self.status.emit(msg)
                 except Exception as e:
                     LOGGER.error('Tried to send overlay error message. But:\n%s', e)
@@ -457,8 +457,8 @@ class KnechtRenderThread(Thread):
             # Timeout
             if time.time() - begin > timeout:
                 LOGGER.error('Rendered image could not be verified as valid image file after %s seconds.', timeout)
-                self.render_log += _('\nDatei konnte nicht als gültige Bilddatei verfiziert werden: {}\n'
-                                     ).format(img_path)
+                self.render_log += _('{0}Datei konnte nicht als gültige Bilddatei verfiziert werden: {1}{0}'
+                                     ).format('\n', img_path)
 
                 try:
                     if exception_message:

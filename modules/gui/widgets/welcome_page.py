@@ -27,6 +27,8 @@ class KnechtWelcome(QWidget):
         self.setWindowTitle(_('Willkommen'))
 
         self.title_label.setText(_('RenderKnecht v{}').format(KnechtSettings.app['version']))
+        self.news_title.setText('Updates:')
+        self.news_title.setStyleSheet('font-weight: 800;')
         self.create_label.setText(_('Erstellen'))
         self.create_label.setStyleSheet('font-weight: 800;')
         self.recent_label.setText(_('Kürzlich verwendet'))

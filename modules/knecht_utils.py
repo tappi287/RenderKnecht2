@@ -1,3 +1,4 @@
+import re
 import shutil
 from pathlib import Path
 from tempfile import mkdtemp
@@ -109,3 +110,40 @@ def time_string(time_f: float) -> str:
         return '{:=02.0f}min:{:=02.0f}sec'.format(m, s)
     else:
         return '{:=01.0f}h:{:=02.0f}min:{:=02.0f}sec'.format(h, m, s)
+
+
+def shorten_model_name(model_name, num_words: int = 6, shorten: bool = False):
+    # Remove horse power description
+    model_name = re.sub(r'(\d?\d\d)[()](...........)\s', '', model_name)
+    # Replace to one word
+    model_name = re.sub(r'(S\sline)', 'S-line', model_name)
+    model_name = re.sub(r'(S\stronic)', 'S-tronic', model_name)
+    model_name = re.sub(r'(RS\s)', 'RS', model_name)
+
+    # Split and make sure end index is not smaller than number of words
+    # (Do not limit num of words if no shorten set)
+    model_name = model_name.split(' ')
+    if len(model_name) < num_words or not shorten:
+        num_words = len(model_name)
+
+    # If shorten is set, limit to 5 chars/word
+    short_name = ''
+    for m in model_name[0:num_words]:
+        if shorten:
+            short_name += m[0:5] + ' '
+        else:
+            short_name += m + ' '
+
+    # Readability
+    short_name = re.sub(r'(quatt\s)', 'quattro ', short_name, flags=re.I)
+    short_name = re.sub(r'(Limou\s)', 'Limo ', short_name)
+    short_name = re.sub(r'(allro\s)', 'allroad ', short_name)
+    short_name = re.sub(r'(desig\s)', 'design ', short_name)
+    short_name = re.sub(r'(RSD)', 'RS D', short_name)
+    short_name = re.sub(r'(Navig\s)', 'Navi ', short_name, flags=re.I)
+    short_name = re.sub(r'(Premi\s)', 'Prem ', short_name, flags=re.I)
+    short_name = re.sub(r'(packa\s)', 'Pkg ', short_name, flags=re.I)
+    short_name = re.sub(r'(Techn\s)', 'Tech ', short_name, flags=re.I)
+    short_name = re.sub(r'(Advan\s)', 'Adv ', short_name, flags=re.I)
+
+    return short_name

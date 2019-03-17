@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-17 20:54+0100\n"
+"POT-Creation-Date: 2019-03-17 21:31+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -414,10 +414,7 @@ msgid "Neues_Dokument_{:02d}.xml"
 msgstr ""
 
 #: modules/gui/widgets\menu_file.py:149
-msgid ""
-"Datei gespeichert:\n"
-"{0}\n"
-"{1:.3}s"
+msgid "Datei gespeichert:{0}{1:.3}s"
 msgstr ""
 
 #: modules/gui/widgets\menu_file.py:176
@@ -984,28 +981,23 @@ msgid "Es wurden nicht alle benötigten Arbeitsblätter gefunden {}. Es fehlen: {}
 msgstr ""
 
 #: modules\knecht_image.py:91
-msgid ""
-"Konnte Ausgabe Verzeichnis nicht erstellen: {}\n"
+msgid "Konnte Ausgabe Verzeichnis nicht erstellen: {}"
 msgstr ""
 
 #: modules\knecht_image.py:98
-msgid ""
-"Konnte Bilddatei {} nicht konvertieren: {}\n"
+msgid "Konnte Bilddatei {} nicht konvertieren: {}"
 msgstr ""
 
 #: modules\knecht_image.py:105
-msgid ""
-"Bilddatei erstellt: {}\n"
+msgid "Bilddatei erstellt: {}"
 msgstr ""
 
 #: modules\knecht_image.py:107
-msgid ""
-"Konnte Bilddatei {} nicht erstellen: {}\n"
+msgid "Konnte Bilddatei {} nicht erstellen: {}"
 msgstr ""
 
 #: modules\knecht_image.py:124
-msgid ""
-"Konnte unkonvertierte Bilddatei nicht verschieben: {}\n"
+msgid "Konnte unkonvertierte Bilddatei nicht verschieben: {}"
 msgstr ""
 
 #: modules\knecht_render.py:93
@@ -1021,10 +1013,7 @@ msgid "Varianten:"
 msgstr ""
 
 #: modules\knecht_render.py:180
-msgid ""
-"Die folgenden Ausgabepfade sind zu lang, Rendering wird abgebrochen. \n"
-"\n"
-"{}"
+msgid "Die folgenden Ausgabepfade sind zu lang, Rendering wird abgebrochen. {}{}"
 msgstr ""
 
 #: modules\knecht_render.py:186
@@ -1060,34 +1049,23 @@ msgid "Erzeuge nächstes Bild in {}..."
 msgstr ""
 
 #: modules\knecht_render.py:392
-msgid ""
-"\n"
-"Bild Konvertierung:\n"
-"{}"
+msgid "{0}Bild Konvertierung:{0}{1}"
 msgstr ""
 
 #: modules\knecht_render.py:401
-msgid ""
-"Render Vorgang abgebrochen.\n"
-"\n"
-"Konnte keine Verbindung zu einer DeltaGen Instanz herstellen."
+msgid "Render Vorgang abgebrochen.{}Konnte keine Verbindung zu einer DeltaGen Instanz herstellen."
 msgstr ""
 
 #: modules\knecht_render.py:438
-msgid ""
-"Bilddaten konnten nicht als gültiges Bild verifiziert werden.\n"
-"{}"
+msgid "Bilddaten konnten nicht als gültiges Bild verifiziert werden.{}"
 msgstr ""
 
 #: modules\knecht_render.py:450
-msgid ""
-"Bilddaten wurden erfolgreich verifiziert.\n"
+msgid "Bilddaten wurden erfolgreich verifiziert: {}"
 msgstr ""
 
 #: modules\knecht_render.py:460
-msgid ""
-"\n"
-"Datei konnte nicht als gültige Bilddatei verfiziert werden: {}\n"
+msgid "{0}Datei konnte nicht als gültige Bilddatei verfiziert werden: {1}{0}"
 msgstr ""
 
 #: modules\knecht_render.py:524
