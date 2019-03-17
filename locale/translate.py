@@ -42,7 +42,7 @@ class CreatePo:
         if not os.path.exists(self.en_file):
             print(self.en_file, ' not found.')
 
-    def create_po(self):
+    def create_updated_en_po(self):
         msg_dict = self.read_current_po(self.en_file, self.pot_file)
 
         if not len(msg_dict):
@@ -61,17 +61,22 @@ class CreatePo:
 
         print(f'Updated from pot: {de_file}')
 
-    @staticmethod
-    def create_po_file(msg_dict, file):
+    @classmethod
+    def create_po_file(cls, msg_dict, file):
         if 'pot_data' not in msg_dict.keys():
             return
 
-        current_msgid = ''
-        for idx, l in enumerate(msg_dict['pot_data']):
-            if l.startswith('msgid'):
-                current_msgid = l.replace('msgid ', '').replace('"', '').replace('\n', '')
+        current_msgid = None
+        for idx, line in enumerate(msg_dict['pot_data']):
+            if line.startswith('msgid'):
+                current_msgid = cls.prepare_msg_line(line)
+                continue
 
-            if l.startswith('msgstr'):
+            # Fix pot file created with msgid separated by a line
+            if line.startswith('"') and current_msgid == '':
+                current_msgid = cls.prepare_msg_line(line)
+
+            if line.startswith('msgstr'):
                 if current_msgid in msg_dict.keys():
                     msg = msg_dict[current_msgid]
                     if msg:
@@ -81,9 +86,10 @@ class CreatePo:
         with open(file, 'w', encoding=ENCODING_VAL) as f:
             f.writelines(msg_dict['pot_data'])
 
-    @staticmethod
-    def read_current_po(po_file, pot_file):
+    @classmethod
+    def read_current_po(cls, po_file, pot_file):
         msg_dict = dict()
+        current_msgid = None
 
         with open(po_file, 'r', encoding=ENCODING_VAL) as f:
             msg_dict['file_data'] = f.readlines()
@@ -91,15 +97,36 @@ class CreatePo:
         with open(pot_file, 'r', encoding=ENCODING_VAL) as f:
             msg_dict['pot_data'] = f.readlines()
 
-        for l in msg_dict['file_data']:
-            if l.startswith('msgid'):
-                current_msgid = l.replace('msgid ', '').replace('"', '').replace('\n', '')
-            if l.startswith('msgstr'):
-                msg_dict[current_msgid] = l.replace('msgstr ', '').replace('"', '').replace('\n', '')
+        for line in msg_dict['file_data']:
+            if line.startswith('msgid'):
+                current_msgid = cls.prepare_msg_line(line)
+                continue
+
+            # Fix pot file created with msgid separated by a line
+            # msgid ""
+            # "Actual msgid"
+            if line.startswith('"') and current_msgid == '':
+                current_msgid = cls.prepare_msg_line(line)
+
+            if line.startswith('msgstr') and current_msgid:
+                msg_dict[current_msgid] = cls.prepare_msg_line(line)
 
         msg_dict['file_data'] = None
         # os.rename(po_file, os.path.join(po_file, '.old'))
         return msg_dict
+
+    @staticmethod
+    def prepare_msg_line(line: str, remove_new_line=True) -> str:
+        # Remove prefix
+        for prefix in ('msgstr ', 'msgid '):
+            if line.startswith(prefix):
+                line = line[len(prefix):]
+        # Remove new line
+        if line.endswith('\n') and remove_new_line:
+            line = line[:-2]
+        # Remove ""
+        line = line.replace('"', '')
+        return line
 
 
 def create_pot():
@@ -140,7 +167,7 @@ def main():
 
     if choice == '1':
         cp = CreatePo()
-        cp.create_po()
+        cp.create_updated_en_po()
         cp.update_po_de()
 
     if choice == '2':

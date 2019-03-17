@@ -21,11 +21,13 @@ Copyright (C) 2017 Stefan Tapper, All rights reserved.
 """
 import os.path
 from pathlib import Path
-from PySide2.QtWidgets import QFileDialog
-from PySide2.QtCore import QObject, Signal
 
-from modules.log import init_logging
+from PySide2.QtCore import QObject, Signal, QRegExp, Qt
+from PySide2.QtGui import QRegExpValidator
+from PySide2.QtWidgets import QFileDialog, QLineEdit, QToolButton
+
 from modules.language import get_translation
+from modules.log import init_logging
 from modules.settings import KnechtSettings
 
 LOGGER = init_logging(__name__)
@@ -43,8 +45,8 @@ class SetDirectoryPath(QObject):
     def __init__(self,
                  parent,
                  mode='dir',
-                 line_edit=None,
-                 tool_button=None,
+                 line_edit: QLineEdit=None,
+                 tool_button: QToolButton=None,
                  dialog_args=(),
                  reject_invalid_path_edits=False):
         super(SetDirectoryPath, self).__init__(parent)
@@ -61,6 +63,10 @@ class SetDirectoryPath(QObject):
 
         if self.line_edit:
             self.reject_invalid_path_edits = reject_invalid_path_edits
+            regex = QRegExp(r'[^<>?"|*´`ß]*')
+            regex.setCaseSensitivity(Qt.CaseInsensitive)
+            self.line_edit.setValidator(QRegExpValidator(regex))
+
             self.line_edit.editingFinished.connect(self.path_text_changed)
 
     def btn_open_dialog(self):

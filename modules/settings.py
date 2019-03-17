@@ -57,11 +57,10 @@ class Settings:
             with open(file, 'w') as f:
                 json.dump(save_dict, f, indent='\t')
 
-            msg = 'Saved settings to file: %s', file.absolute().as_posix()
+            msg = 'Saved settings to file: {}'.format(file.absolute().as_posix())
             LOGGER.info(msg)
             print(msg)
         except Exception as e:
-            msg = 'Could not save file!\n%s', e
             LOGGER.error('Could not save file!\n%s', e)
             print('Could not save file!\n%s', e)
 

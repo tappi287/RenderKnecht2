@@ -919,7 +919,8 @@ msgid "Bilddatei erstellt: {}\n"
 msgstr "Image file created: {}\n"
 
 #: modules\knecht_image.py:107
-msgid "Konnte Bilddatei {} nicht erstellen: {}\n"
+msgid ""
+"Konnte Bilddatei {} nicht erstellen: {}\n"
 msgstr "Couldn't create image file {}: {}\n"
 
 #: modules\knecht_image.py:124

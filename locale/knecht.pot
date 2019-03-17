@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-07 16:37+0100\n"
+"POT-Creation-Date: 2019-03-17 20:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,125 +15,192 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: modules/gui/widgets\excel_dialog.py:50
-msgid "Excel Datei wird gelesen..."
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:54
-msgid "Daten übertragen..."
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:68
+#: modules/gui/widgets\excel_dialog.py:41
 msgid "PR-Familie"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:68
-#: modules/gui/widgets\excel_dialog.py:70 modules/itemview\model_globals.py:22
+#: modules/gui/widgets\excel_dialog.py:41
+#: modules/gui/widgets\excel_dialog.py:43 modules/itemview\model_globals.py:22
 msgid "Beschreibung"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:70
+#: modules/gui/widgets\excel_dialog.py:43
 msgid "Getriebe"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:70
+#: modules/gui/widgets\excel_dialog.py:43
 msgid "Markt"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:70
+#: modules/gui/widgets\excel_dialog.py:43
 msgid "Model"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:97
-msgid "V-Plus Browser Leseoptionen"
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:122
+#: modules/gui/widgets\excel_dialog.py:110
 msgid "Optionen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:125
+#: modules/gui/widgets\excel_dialog.py:113
 msgid "Trimlines erstellen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:128
+#: modules/gui/widgets\excel_dialog.py:116
 msgid "Optionen erstellen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:131
+#: modules/gui/widgets\excel_dialog.py:119
 msgid "Pakete erstellen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:135
+#: modules/gui/widgets\excel_dialog.py:123
 msgid "PR-Familien Filter Vorlagen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:138
+#: modules/gui/widgets\excel_dialog.py:126
 msgid "Alle PR-Familien"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:140
+#: modules/gui/widgets\excel_dialog.py:128
 msgid "Interieur I/VX-13"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:142
+#: modules/gui/widgets\excel_dialog.py:130
 msgid "Exterieur I/VX-13"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:145
+#: modules/gui/widgets\excel_dialog.py:133
 msgid "PR-Familien Filter auf Pakete anwenden"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:148
+#: modules/gui/widgets\excel_dialog.py:136
 msgid "Zum filtern tippen ..."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:151
+#: modules/gui/widgets\excel_dialog.py:139
 msgid "Modellfilter"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:153
+#: modules/gui/widgets\excel_dialog.py:141
 msgid "PR-Familien-Filter"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:157
+#: modules/gui/widgets\excel_dialog.py:145
 msgid "PR Familien auswählen die ausgelesen werden sollen."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:159
+#: modules/gui/widgets\excel_dialog.py:147
 msgid "Modelle auswählen die ausgelesen werden sollen."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:193
+#: modules/gui/widgets\excel_dialog.py:157
+msgid "Excel Datei wird gelesen..."
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:169
+msgid "POS Xml enthält keine bekannten Farbkombinationsmuster."
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:173
+msgid "Konnte POS Xml Daten nicht lesen oder verarbeiten."
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:186
+msgid "Daten übertragen..."
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:211
 msgid "Excel Daten werden geladen..."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:206
+#: modules/gui/widgets\excel_dialog.py:224
 msgid "Excel Import Fehler"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:401
+#: modules/gui/widgets\excel_dialog.py:420
 msgid "Importvorgang"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:402
+#: modules/gui/widgets\excel_dialog.py:421
 msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:403
+#: modules/gui/widgets\excel_dialog.py:422
 msgid "Ja"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:404
+#: modules/gui/widgets\excel_dialog.py:423
 msgid "Nein"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:444
+#: modules/gui/widgets\excel_dialog.py:481
 msgid "Alle Einträge auswählen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:446
+#: modules/gui/widgets\excel_dialog.py:483
 msgid "Alle Einträge abwählen"
+msgstr ""
+
+#: modules/gui/widgets\fakom_dialog.py:39 modules/gui\ui_translations.py:38
+msgid "Pfad:"
+msgstr ""
+
+#: modules/gui/widgets\fakom_dialog.py:40
+msgid "Pfad als Text in das Feld kopieren oder über den Dateidialog wählen."
+msgstr ""
+
+#: modules/gui/widgets\fakom_dialog.py:41
+msgid "Dateidialog öffnen um Datei oder Verzeichnis auszuwählen."
+msgstr ""
+
+#: modules/gui/widgets\fakom_dialog.py:43
+msgid "POS Xml Varianten"
+msgstr ""
+
+#: modules/gui/widgets\fakom_dialog.py:45
+msgid "DeltaGen POS XML Datei eines Freigabemodells auswählen. Die Farbschlüssel und Sitzbezug Kombinatorik wird aus den Action Listen der Xml Struktur gelutscht."
+msgstr ""
+
+#: modules/gui/widgets\fakom_dialog.py:51
+msgid "POS Xml Variantendatei auswählen..."
+msgstr ""
+
+#: modules/gui/widgets\fakom_dialog.py:57
+msgid "V Plus Browserauszug"
+msgstr ""
+
+#: modules/gui/widgets\fakom_dialog.py:59
+msgid "Pfad zum V Plus Browserauszug festlegen. Die verfügbaren Sitzbezüge(SIB), Vordersitze(VOS) und Lederumfänge(LUM) je Trimline werden ausgelesen.<br/><br/>Im nächsten Schritt können und sollten <b>Modelfilter</b> gesetzt werden."
+msgstr ""
+
+#: modules/gui/widgets\fakom_dialog.py:66
+msgid "V Plus Browserauszug auswählen..."
+msgstr ""
+
+#: modules/gui/widgets\fakom_dialog.py:72
+msgid "Information zu Farbkombinationen"
+msgstr ""
+
+#: modules/gui/widgets\fakom_dialog.py:74
+msgid "<span style=\" font-weight:600; color:#aa0000;\">ACHTUNG:</span> Die Farb- und Sitzbezugskombinationen werden aus den POS Varianten gelutscht und anschließend mit dem V Plus Browserauszug auf Sitzbezüge, Vordersitze und Lederumfänge abgeglichen. Sitzbezüge die im V Plus Dokument vorhanden sind, nicht aber in den POS Varianten, können nicht berücksichtigt werden.<br/><br/>Dieser Import garantiert keine Vollständigkeit oder Richtigkeit gegenüber der aktuellen FaKom. Er basiert ausschließlich auf der Datengrundlage der POS Varianten des DeltaGen Modells."
+msgstr ""
+
+#: modules/gui/widgets\fakom_dialog.py:88
+msgid "POS Varianten Xml auswählen ..."
+msgstr ""
+
+#: modules/gui/widgets\fakom_dialog.py:88
+#: modules/gui/widgets\file_dialog.py:29
+msgid "DeltaGen POS Datei (*.xml;*.pos);"
+msgstr ""
+
+#: modules/gui/widgets\fakom_dialog.py:99
+#: modules/gui/widgets\file_dialog.py:26
+msgid "Excel Dateien (*.xlsx);"
+msgstr ""
+
+#: modules/gui/widgets\fakom_dialog.py:99
+#: modules/gui/widgets\file_dialog.py:26
+msgid "Excel Dateien *.xlsx auswaehlen"
 msgstr ""
 
 #: modules/gui/widgets\file_dialog.py:25
@@ -142,14 +209,6 @@ msgstr ""
 
 #: modules/gui/widgets\file_dialog.py:25
 msgid "Variants *.XML auswaehlen"
-msgstr ""
-
-#: modules/gui/widgets\file_dialog.py:26
-msgid "Excel Dateien (*.xlsx);"
-msgstr ""
-
-#: modules/gui/widgets\file_dialog.py:26
-msgid "Excel Dateien *.xlsx auswaehlen"
 msgstr ""
 
 #: modules/gui/widgets\file_dialog.py:27
@@ -162,10 +221,6 @@ msgstr ""
 
 #: modules/gui/widgets\file_dialog.py:28
 msgid "DeltaGen POS Varianten *.xml oder *.pos auswaehlen"
-msgstr ""
-
-#: modules/gui/widgets\file_dialog.py:29
-msgid "DeltaGen POS Datei (*.xml;*.pos);"
 msgstr ""
 
 #: modules/gui/widgets\file_dialog.py:30
@@ -208,19 +263,24 @@ msgstr ""
 msgid "  0: Aktueller Zustand des Dokuments"
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:77
+#: modules/gui/widgets\main_ui_widgets.py:84
 msgid "Geschätzte Renderzeit ({} CPUs/GI)"
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:84
+#: modules/gui/widgets\main_ui_widgets.py:91
 msgid "Ausgabe Verzeichnis auswählen ..."
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:115
+#: modules/gui/widgets\main_ui_widgets.py:122
 msgid "Es läuft bereits ein Render Vorgang."
 msgstr ""
 
+#: modules/gui/widgets\main_ui_widgets.py:147
+msgid "abgeschlossen am: "
+msgstr ""
+
 #: modules/gui/widgets\menu_create.py:23
+#: modules/gui/widgets\welcome_page.py:30
 msgid "Erstellen"
 msgstr ""
 
@@ -384,12 +444,17 @@ msgstr ""
 msgid "Keine Einträge vorhanden"
 msgstr ""
 
-#: modules/gui/widgets\menu_import.py:34
+#: modules/gui/widgets\menu_import.py:35
+#: modules/gui/widgets\welcome_page.py:42
 msgid "Import"
 msgstr ""
 
-#: modules/gui/widgets\menu_import.py:37
+#: modules/gui/widgets\menu_import.py:38
 msgid "V-Plus Browser"
+msgstr ""
+
+#: modules/gui/widgets\menu_import.py:40
+msgid "FaKom Lutscher"
 msgstr ""
 
 #: modules/gui/widgets\menu_info.py:43
@@ -476,40 +541,60 @@ msgstr ""
 msgid "Fortfahren"
 msgstr ""
 
-#: modules/gui/widgets\message_box.py:69 modules/gui\main_app.py:101
-#: modules/gui\main_app.py:120
+#: modules/gui/widgets\message_box.py:69 modules/gui\main_app.py:108
+#: modules/gui\main_app.py:127
 msgid "Abbrechen"
 msgstr ""
 
-#: modules/gui/widgets\path_util.py:82
+#: modules/gui/widgets\path_util.py:88
 msgid "Verzeichnis auswählen"
 msgstr ""
 
-#: modules/gui/widgets\path_util.py:147
+#: modules/gui/widgets\path_util.py:153
 msgid "< Gültigen Pfad eingeben >"
 msgstr ""
 
-#: modules/gui\main_app.py:97 modules/gui\main_app.py:116
+#: modules/gui/widgets\welcome_page.py:27
+msgid "Willkommen"
+msgstr ""
+
+#: modules/gui/widgets\welcome_page.py:29
+msgid "RenderKnecht v{}"
+msgstr ""
+
+#: modules/gui/widgets\welcome_page.py:32
+msgid "Kürzlich verwendet"
+msgstr ""
+
+#: modules/gui/widgets\welcome_page.py:35
+msgid "Neues Dokument"
+msgstr ""
+
+#: modules/gui/widgets\welcome_page.py:38
+msgid "Dokument öffnen"
+msgstr ""
+
+#: modules/gui\main_app.py:104 modules/gui\main_app.py:123
 msgid "Anwendung beenden"
 msgstr ""
 
-#: modules/gui\main_app.py:98
+#: modules/gui\main_app.py:105
 msgid "Achtung! Ein Render Vorgang läuft.<br><br>Der Vorgang wird durch das Beenden abgebrochen.<br><br>Soll die Anwendung wirklich beendet werden?"
 msgstr ""
 
-#: modules/gui\main_app.py:102 modules/gui\main_app.py:119
+#: modules/gui\main_app.py:109 modules/gui\main_app.py:126
 msgid "Beenden erzwingen"
 msgstr ""
 
-#: modules/gui\main_app.py:117
+#: modules/gui\main_app.py:124
 msgid "Achtung! Ein laufender Prozess sendet Daten an DeltaGen.<br><br>Soll die Anwendung wirklich beendet werden?"
 msgstr ""
 
-#: modules/gui\main_app.py:132
+#: modules/gui\main_app.py:147
 msgid "<h3>Hoppla!</h3>Eine schwerwiegende Anwendungsausnahme ist aufgetreten. Speichern Sie Ihre Daten und starten Sie die Anwendung neu.<br><br>"
 msgstr ""
 
-#: modules/gui\main_app.py:135
+#: modules/gui\main_app.py:150
 msgid "Anwendungsausnahme"
 msgstr ""
 
@@ -548,10 +633,6 @@ msgstr ""
 
 #: modules/gui\ui_translations.py:36
 msgid "Im Baum tippen um Filter zu starten. 1x Escape löscht den Filter. 2x Escape klappt Bauminhalt ein."
-msgstr ""
-
-#: modules/gui\ui_translations.py:38
-msgid "Pfad:"
 msgstr ""
 
 #: modules/gui\ui_translations.py:41
@@ -746,7 +827,7 @@ msgstr ""
 msgid "Neues_Dokument.xml"
 msgstr ""
 
-#: modules/gui\ui_view_manager.py:134
+#: modules/gui\ui_view_manager.py:137
 msgid "Kann Beschäftigten nicht entlassen. Verstoß gegen Arbeitnehmerschutzgesetz festgestellt."
 msgstr ""
 
@@ -762,19 +843,19 @@ msgstr ""
 msgid "verschieben"
 msgstr ""
 
-#: modules/itemview\excel_read.py:44
+#: modules/itemview\excel_read.py:45
 msgid "Excel Daten werden konvertiert..."
 msgstr ""
 
-#: modules/itemview\excel_read.py:56
+#: modules/itemview\excel_read.py:55
 msgid "Konnte keinen Baum aus Excel Daten erstellen."
 msgstr ""
 
-#: modules/itemview\excel_read.py:106
+#: modules/itemview\excel_read.py:101
 msgid "Indiziere {} PR Codes"
 msgstr ""
 
-#: modules/itemview\excel_read.py:123
+#: modules/itemview\excel_read.py:118
 msgid "Erstelle Model {} {:02d}/{:02d}..."
 msgstr ""
 
@@ -890,15 +971,15 @@ msgstr ""
 msgid "{0} {1} gesendet"
 msgstr ""
 
-#: modules\knecht_excel.py:298
+#: modules\knecht_excel.py:322
 msgid "Datei exisitiert nicht: {}"
 msgstr ""
 
-#: modules\knecht_excel.py:314
+#: modules\knecht_excel.py:338
 msgid "Die Arbeitsblätter für PR-Optionen oder Modelle enthalten keine Daten oder konnten nicht gelesen werden."
 msgstr ""
 
-#: modules\knecht_excel.py:457
+#: modules\knecht_excel.py:480
 msgid "Es wurden nicht alle benötigten Arbeitsblätter gefunden {}. Es fehlen: {}"
 msgstr ""
 

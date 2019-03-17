@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from PySide2.QtCore import Signal, Slot
-from PySide2.QtWidgets import QDialog
+from PySide2.QtCore import Signal, Slot, QObject, QEvent
+from PySide2.QtWidgets import QDialog, QGroupBox, QLabel, QLineEdit, QToolButton
 
 from modules import KnechtSettings
 from modules.globals import Resource
@@ -26,15 +26,63 @@ class FakomImportDialog(QDialog):
 
         :param modules.gui.main_ui.KnechtWindow ui: Main Window
         """
-        super(FakomImportDialog, self).__init__(ui)
+        super(FakomImportDialog, self).__init__()
         SetupWidget.from_ui_file(self, Resource.ui_paths['knecht_fakom'])
 
         # --- Attributes ---
         self.ui = ui
 
+        # CleanUp on application exit
+        self.ui.app.aboutToQuit.connect(self.close)
+
+        # --- Translations ---
+        path_txt = _('Pfad:')
+        path_status_tip = _('Pfad als Text in das Feld kopieren oder über den Dateidialog wählen.')
+        path_btn_tip = _('Dateidialog öffnen um Datei oder Verzeichnis auszuwählen.')
+        self.groupBox_fakom: QGroupBox
+        self.groupBox_fakom.setTitle(_('POS Xml Varianten'))
+        self.label_fakomDesc: QLabel
+        self.label_fakomDesc.setText(_('DeltaGen POS XML Datei eines Freigabemodells auswählen. '
+                                       'Die Farbschlüssel und Sitzbezug Kombinatorik wird aus den Action '
+                                       'Listen der Xml Struktur gelutscht.'))
+        self.label_fakomPath: QLabel
+        self.label_fakomPath.setText(path_txt)
+        self.lineEdit_fakom: QLineEdit
+        self.lineEdit_fakom.setPlaceholderText(_('POS Xml Variantendatei auswählen...'))
+        self.lineEdit_fakom.setStatusTip(path_status_tip)
+        self.toolBtn_fakom: QToolButton
+        self.toolBtn_fakom.setStatusTip(path_btn_tip)
+
+        self.groupBox_vplus: QGroupBox
+        self.groupBox_vplus.setTitle(_('V Plus Browserauszug'))
+        self.label_vplus_desc: QLabel
+        self.label_vplus_desc.setText(_('Pfad zum V Plus Browserauszug festlegen. Die verfügbaren '
+                                        'Sitzbezüge(SIB), Vordersitze(VOS) und Lederumfänge(LUM) je Trimline '
+                                        'werden ausgelesen.<br/><br/>Im nächsten Schritt können und sollten '
+                                        '<b>Modelfilter</b> gesetzt werden.'))
+        self.label_vplusPath: QLabel
+        self.label_vplusPath.setText(path_txt)
+        self.lineEdit_vplus: QLineEdit
+        self.lineEdit_vplus.setPlaceholderText(_('V Plus Browserauszug auswählen...'))
+        self.lineEdit_vplus.setStatusTip(path_status_tip)
+        self.toolBtn_vplus: QToolButton
+        self.toolBtn_vplus.setStatusTip(path_btn_tip)
+
+        self.groupBox_info: QGroupBox
+        self.groupBox_info.setTitle(_('Information zu Farbkombinationen'))
+        self.label_info: QLabel
+        self.label_info.setText(_('<span style=" font-weight:600; color:#aa0000;">ACHTUNG:</span> '
+                                  'Die Farb- und Sitzbezugskombinationen werden aus den POS Varianten '
+                                  'gelutscht und anschließend mit dem V Plus Browserauszug auf Sitzbezüge, '
+                                  'Vordersitze und Lederumfänge abgeglichen. Sitzbezüge die im V Plus Dokument '
+                                  'vorhanden sind, nicht aber in den POS Varianten, können nicht berücksichtigt '
+                                  'werden.<br/><br/>Dieser Import garantiert keine Vollständigkeit oder Richtigkeit '
+                                  'gegenüber der aktuellen FaKom. Er basiert ausschließlich auf der Datengrundlage der '
+                                  'POS Varianten des DeltaGen Modells.'))
+
         # --- POS path UI ---
         self.pos_path = SetDirectoryPath(
-            self.ui, mode='file',
+            self, mode='file',
             line_edit=self.lineEdit_fakom,
             tool_button=self.toolBtn_fakom,
             dialog_args=(_('POS Varianten Xml auswählen ...'), _('DeltaGen POS Datei (*.xml;*.pos);'),),
@@ -45,7 +93,7 @@ class FakomImportDialog(QDialog):
 
         # --- V plus path UI ---
         self.xlsx_path = SetDirectoryPath(
-            self.ui, mode='file',
+            self, mode='file',
             line_edit=self.lineEdit_vplus,
             tool_button=self.toolBtn_vplus,
             dialog_args=(_('Excel Dateien *.xlsx auswaehlen'), _('Excel Dateien (*.xlsx);')),
@@ -86,4 +134,5 @@ class FakomImportDialog(QDialog):
 
     def _finalize_dialog(self, self_destruct: bool=True):
         if self_destruct:
-            self.deleteLater()
+            pass
+            # self.deleteLater()

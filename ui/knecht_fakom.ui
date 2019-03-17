@@ -2,16 +2,8 @@
 <ui version="4.0">
  <class>fakom_dialog</class>
  <widget class="QDialog" name="fakom_dialog">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>357</width>
-    <height>279</height>
-   </rect>
-  </property>
   <property name="windowTitle">
-   <string>FaKom</string>
+   <string>FaKom Import</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -29,6 +21,9 @@
       <bool>false</bool>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMinimumSize</enum>
+      </property>
       <item alignment="Qt::AlignTop">
        <widget class="QLabel" name="label_fakomDesc">
         <property name="font">
@@ -96,9 +91,6 @@
           <property name="statusTip">
            <string>Pfad zum Ausgabe Ordner. (.) Punkt bedeutet relativ zur ausgeführten Datei.</string>
           </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
           <property name="placeholderText">
            <string>POS Variantendatei auswählen...</string>
           </property>
@@ -106,6 +98,12 @@
         </item>
         <item>
          <widget class="QToolButton" name="toolBtn_fakom">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>19</height>
+           </size>
+          </property>
           <property name="font">
            <font>
             <weight>50</weight>
@@ -126,7 +124,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="groupBox_vplus">
      <property name="font">
       <font>
        <weight>75</weight>
@@ -141,7 +139,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item alignment="Qt::AlignTop">
-       <widget class="QLabel" name="label_fakomDesc_2">
+       <widget class="QLabel" name="label_vplus_desc">
         <property name="font">
          <font>
           <weight>50</weight>
@@ -206,9 +204,6 @@
           <property name="statusTip">
            <string>Pfad zum Ausgabe Ordner. (.) Punkt bedeutet relativ zur ausgeführten Datei.</string>
           </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
           <property name="placeholderText">
            <string>V Plus Browserauszug auswählen...</string>
           </property>
@@ -216,6 +211,12 @@
         </item>
         <item>
          <widget class="QToolButton" name="toolBtn_vplus">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>19</height>
+           </size>
+          </property>
           <property name="font">
            <font>
             <weight>50</weight>
@@ -236,7 +237,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="groupBox_info">
      <property name="font">
       <font>
        <weight>75</weight>
@@ -250,8 +251,11 @@
       <bool>false</bool>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMinimumSize</enum>
+      </property>
       <item alignment="Qt::AlignTop">
-       <widget class="QLabel" name="label_fakomDesc_3">
+       <widget class="QLabel" name="label_info">
         <property name="font">
          <font>
           <weight>50</weight>

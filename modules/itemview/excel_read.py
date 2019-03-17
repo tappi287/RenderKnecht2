@@ -3,6 +3,7 @@ from pathlib import Path
 from queue import Queue
 from threading import Thread
 
+import pandas as pd
 from PySide2.QtCore import QObject, Signal, Slot
 
 from modules.idgen import KnechtUuidGenerator
@@ -31,6 +32,7 @@ class KnechtExcelDataThread(Thread):
         super(KnechtExcelDataThread, self).__init__()
         self.file = file
         self.xl_queue = xl_queue
+        self.daemon = True
 
         self.signals = KnechtExcelDataThreadSignals()
         self.finished = self.signals.finished
@@ -148,7 +150,12 @@ class KnechtExcelDataToModel:
             if self.data.read_packages:
                 self.create_packages(model, market)
 
-    def create_packages(self, model, market):
+            if self.data.read_fakom:
+                # Filter rows ~not matching -
+                fakom_rows = self.data.pr_options.loc[~self.data.pr_options[model].isin(['-'])]
+                self.create_fakom(model, fakom_rows)
+
+    def create_packages(self, model: str, market: str):
         if self.data.packages.empty:
             return
 
@@ -212,3 +219,64 @@ class KnechtExcelDataToModel:
                 pr_item = KnechtItem(parent_item, (f'{parent_item.childCount():03d}',
                                                    pr, 'on', pr_fam, '', '', pr_text))
                 parent_item.append_item_child(pr_item)
+
+    def create_fakom(self, model: str, fakom_rows: pd.DataFrame):
+        # -- PR Column Keys
+        pr_col = self.data.pr_options.columns[self.data.map.Pr.ColumnIdx.pr]
+        family_col = self.data.pr_options.columns[self.data.map.Pr.ColumnIdx.family]
+        pr_text_col = self.data.pr_options.columns[self.data.map.Pr.ColumnIdx.pr_text]
+
+        # Limit Fakom rows to SIB/VOS/LUM families
+        sib_rows = fakom_rows.loc[fakom_rows[family_col].str.match('SIB', case=False)]
+        lum_rows = fakom_rows.loc[fakom_rows[family_col].str.match('LUM', case=False)]
+        vos_rows = fakom_rows.loc[fakom_rows[family_col].str.match('VOS', case=False)]
+
+        for color, sib_set in self.data.fakom.iterate_colors():
+            valid_sib_set = sib_set.intersection(sib_rows[pr_col].values)
+            if not valid_sib_set:
+                continue
+
+            # --- Iterate SIB Codes ---
+            for sib in valid_sib_set:
+                sib_row = sib_rows.loc[sib_rows[pr_col] == sib]
+                sib_text = sib_row[pr_text_col].unique()[0]
+                sib_code = sib_row[model].unique()[0]
+
+                # --- Iterate VOS Codes ---
+                for vos in vos_rows[pr_col].values:
+                    vos_row = vos_rows.loc[vos_rows[pr_col] == vos]
+                    vos_text = vos_row[pr_text_col].unique()[0]
+                    vos_code = vos_row[model].unique()[0]
+
+                    # --- Iterate LUM Codes ---
+                    for lum in lum_rows[pr_col].values:
+                        lum_row = lum_rows.loc[lum_rows[pr_col] == lum]
+                        lum_text = lum_row[pr_text_col].unique()[0]
+                        lum_code = lum_row[model].unique()[0]
+
+                        # Determine if all options belong to standard equipment
+                        fakom_type = 'fakom_option'
+                        if not {sib_code, vos_code, lum_code}.difference('L'):
+                            fakom_type = 'fakom_setup'
+
+                        self.create_fakom_item(
+                            model, color, sib, vos, lum, sib_text, vos_text, lum_text, fakom_type
+                            )
+
+    def create_fakom_item(self, model, color, sib, vos, lum, sib_text, vos_text, lum_text, fakom_type):
+        # Create package parent item
+        data = (f'{self.root_item.childCount():03d}', f'{model} {color}-{sib}-{vos}-{lum}',
+                model, fakom_type, '', self.id_gen.create_id())
+
+        # Create FaKom item
+        fa_item = KnechtItem(self.root_item, data)
+        # Create FaKom item content
+        color_item = KnechtItem(fa_item, (f'{fa_item.childCount():03d}', color, 'on'))
+        sib_item = KnechtItem(fa_item, (f'{fa_item.childCount():03d}', sib, 'on', 'SIB', '', '', sib_text))
+        vos_item = KnechtItem(fa_item, (f'{fa_item.childCount():03d}', vos, 'on', 'VOS', '', '', vos_text))
+        lum_item = KnechtItem(fa_item, (f'{fa_item.childCount():03d}', lum, 'on', 'LUM', '', '', lum_text))
+
+        for i in (color_item, sib_item, vos_item, lum_item):
+            fa_item.append_item_child(i)
+
+        self.root_item.append_item_child(fa_item)
