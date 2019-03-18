@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from pathlib import Path
 from typing import List, Tuple
 from zipfile import ZipFile
@@ -27,7 +28,23 @@ class KnechtSession(QObject):
 
     class FileNameStorage:
         def __init__(self):
-            self.store = dict()
+            self.store = OrderedDict()
+
+        def restore_file_order(self, load_dir: Path) -> list:
+            """ Restore the order in which the files have been saved """
+            file_ls = list()
+            files_to_restore = [f for f in load_dir.glob('*.xml')]
+
+            for file in reversed(list(self.store.values())):
+                for restore_file in files_to_restore:
+                    if Path(file).name == restore_file.name:
+                        file_ls.append(restore_file)
+
+            for restore_file in files_to_restore:
+                if restore_file not in file_ls:
+                    file_ls.append(restore_file)
+
+            return file_ls
 
     def __init__(self, ui, idle_save: bool=False):
         """ Save and restore user session of opened documents
@@ -189,7 +206,8 @@ class KnechtSession(QObject):
         # Restore original file save paths
         Settings.load(self.restore_files_storage, self.load_dir / self.files_list_name)
 
-        for file in self.load_dir.glob('*.xml'):
+        # Restore in saved order
+        for file in self.restore_files_storage.restore_file_order(self.load_dir):
             LOGGER.debug('Starting restore of document: %s @ %s',
                          file.name, self.restore_files_storage.store.get(file.name))
             self.load_queue.append(file)
