@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-17 21:31+0100\n"
+"POT-Creation-Date: 2019-03-19 23:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -280,7 +280,7 @@ msgid "abgeschlossen am: "
 msgstr ""
 
 #: modules/gui/widgets\menu_create.py:23
-#: modules/gui/widgets\welcome_page.py:30
+#: modules/gui/widgets\welcome_page.py:32
 msgid "Erstellen"
 msgstr ""
 
@@ -442,7 +442,7 @@ msgid "Keine Einträge vorhanden"
 msgstr ""
 
 #: modules/gui/widgets\menu_import.py:35
-#: modules/gui/widgets\welcome_page.py:42
+#: modules/gui/widgets\welcome_page.py:44
 msgid "Import"
 msgstr ""
 
@@ -559,15 +559,15 @@ msgstr ""
 msgid "RenderKnecht v{}"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:32
+#: modules/gui/widgets\welcome_page.py:34
 msgid "Kürzlich verwendet"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:35
+#: modules/gui/widgets\welcome_page.py:37
 msgid "Neues Dokument"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:38
+#: modules/gui/widgets\welcome_page.py:40
 msgid "Dokument öffnen"
 msgstr ""
 
@@ -840,19 +840,19 @@ msgstr ""
 msgid "verschieben"
 msgstr ""
 
-#: modules/itemview\excel_read.py:45
+#: modules/itemview\excel_read.py:46
 msgid "Excel Daten werden konvertiert..."
 msgstr ""
 
-#: modules/itemview\excel_read.py:55
+#: modules/itemview\excel_read.py:56
 msgid "Konnte keinen Baum aus Excel Daten erstellen."
 msgstr ""
 
-#: modules/itemview\excel_read.py:101
+#: modules/itemview\excel_read.py:102
 msgid "Indiziere {} PR Codes"
 msgstr ""
 
-#: modules/itemview\excel_read.py:118
+#: modules/itemview\excel_read.py:119
 msgid "Erstelle Model {} {:02d}/{:02d}..."
 msgstr ""
 
@@ -1078,6 +1078,14 @@ msgstr ""
 
 #: modules\knecht_render.py:526
 msgid "{}px - Ext: "
+msgstr ""
+
+#: modules\knecht_session.py:148
+msgid "Sitzung während Leerlauf erfolgreich gespeichert"
+msgstr ""
+
+#: modules\knecht_session.py:225
+msgid "Sitzungswiederherstellung abgeschlossen"
 msgstr ""
 
 #: modules\knecht_update.py:169

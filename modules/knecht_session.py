@@ -142,7 +142,10 @@ class KnechtSession(QObject):
         if self.load_queue or not self.idle:
             return
 
-        self.save()
+        result = self.save()
+
+        if result:
+            self.ui.statusBar().showMessage(_('Sitzung während Leerlauf erfolgreich gespeichert'))
 
     def save(self) -> bool:
         tmp_dir = CreateZip.create_tmp_dir()
@@ -218,3 +221,5 @@ class KnechtSession(QObject):
     def restore_finished(self):
         CreateZip.remove_dir(self.load_dir)
         LOGGER.debug('Session restored.')
+
+        self.ui.statusBar().showMessage(_('Sitzungswiederherstellung abgeschlossen'), 8000)

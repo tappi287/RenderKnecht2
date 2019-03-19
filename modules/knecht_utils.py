@@ -58,21 +58,7 @@ def search_list_indices(ls: list, value):
         yield idx
 
 
-def list_class_values(obj):
-    if not hasattr(obj, '__dict__'):
-        return []
-
-    values = list()
-
-    for k, v in obj.__dict__.items():
-        if k.startswith('__'):
-            continue
-        values.append(v)
-
-    return values
-
-
-def list_class_fields(obj) -> dict:
+def list_class_values(obj) -> dict:
     if not hasattr(obj, '__dict__'):
         return []
 

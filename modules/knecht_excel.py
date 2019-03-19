@@ -8,7 +8,7 @@ from zipfile import ZIP_LZMA, ZipFile
 import pandas as pd
 
 from modules.globals import get_settings_dir
-from modules.knecht_utils import list_class_fields, CreateZip
+from modules.knecht_utils import list_class_values, CreateZip
 from modules.knecht_fakom import FakomData
 from modules.language import get_translation
 from modules.log import init_logging
@@ -25,7 +25,7 @@ class _SheetColumns:
     """ Lists sheet columns indices or names """
     @classmethod
     def list(cls):
-        return list_class_fields(cls)
+        return list_class_values(cls)
 
 
 class _Models:  # --- Models Worksheet ---
