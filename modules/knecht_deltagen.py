@@ -10,7 +10,7 @@ from modules.globals import DG_TCP_IP, DG_TCP_PORT
 from modules.gui.widgets.button_color import QColorButton
 from modules.itemview.tree_view import KnechtTreeView
 from modules.knecht_socket import Ncat
-from modules.knecht_variants import KnechtVariant, KnechtVariantList
+from modules.knecht_objects import KnechtVariant, KnechtVariantList
 from modules.language import get_translation
 from modules.log import init_logging
 from modules.settings import KnechtSettings

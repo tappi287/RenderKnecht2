@@ -1,8 +1,10 @@
 import re
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 from PySide2.QtCore import QModelIndex
+
+from modules.knecht_fakom import FakomData
 
 
 def create_file_safe_name(filename: str) -> str:
@@ -87,7 +89,7 @@ class RenderShot:
 
 
 class KnechtRenderPreset:
-    def __init__(self, name: str='Render_Preset'):
+    def __init__(self, name: str = 'Render_Preset'):
         self.name = create_file_safe_name(name)
 
         self.settings = dict(
@@ -243,3 +245,144 @@ class KnechtRenderPreset:
         self.__image_count += 1
 
         return image_name, image_variants
+
+
+class _DataTrimOption:
+    def __init__(self, parent=None, name=None, desc=None, family=None, family_desc=None, value=None):
+        """
+        The base class for PR-Options and Packages.
+        """
+        self.name = name
+        self.desc = desc
+        self.family = family
+        self.family_desc = family_desc
+        self.value = value
+
+        self.parent: Union[_DataParent, None] = parent
+
+        if self.parent is not None:
+            self.parent.children.append(self)
+
+    def num(self) -> int:
+        """ Returns this items number in it's parent child list """
+        if self.parent:
+            if hasattr(self.parent, 'children'):
+                if isinstance(self.parent.children, list):
+                    self.parent.children: list
+                    return self.parent.children.index(self)
+
+        return 0
+
+
+class _DataParent:
+    def __init__(self):
+        """ Data Item that can have PR/Package children """
+        self.children: List[_DataTrimOption] = list()
+
+    def iterate_children(self):
+        yield from self.children
+
+    def iterate_trim_pr(self):
+        for c in self.children:
+            if type(c) is KnPr and c.value == 'L':
+                yield c
+
+    def iterate_optional_pr(self):
+        for c in self.children:
+            if type(c) is KnPr and c.value != 'L':
+                yield c
+
+    def iterate_packages(self):
+        for c in self.children:
+            if c.__class__ is KnPackage:
+                yield c
+
+    def child_count(self):
+        return len(self.children)
+
+
+class _DataTrim(_DataParent):
+    def __init__(self,
+                 market='Markt',
+                 market_text='Markttext',
+                 modelyear='Modelljahr',
+                 model_class='Klasse',
+                 model_class_text='Klassentext',
+                 derivate='Derivat',
+                 model='Modell',
+                 version='Version',
+                 status='Status',
+                 model_text='Modelltext',
+                 start='Einsatz',
+                 end='Entfall',
+                 engine_size='Hubraum',
+                 engine_power='Leistung',
+                 gearbox='Getriebe'
+                 ):
+        super(_DataTrim, self).__init__()
+
+        self.market = market
+        self.market_text = market_text
+        self.modelyear = modelyear
+        self.model_class = model_class
+        self.model_class_text = model_class_text
+        self.derivate = derivate
+        self.model = model
+        self.version = version
+        self.status = status
+        self.model_text = model_text
+        self.start = start
+        self.end = end
+        self.engine_size = engine_size
+        self.engine_power = engine_power
+        self.gearbox = gearbox
+
+
+class _DataColumns:
+    def __init__(self, cls_object):
+        """ This will create the same class property/attributes for this class as in cls_object
+            but will save a column integer value instead of the attribute value.
+            Eg. class.name = 0 instead of class.name = 'somename'
+
+        :param cls_object:
+        """
+        idx = 0
+        for attr in dir(cls_object):
+            if not attr.startswith('__'):
+                setattr(self, attr, idx)
+                idx += 1
+
+
+class KnPr(_DataTrimOption):
+    """ Knecht PR-Option """
+    pass
+
+
+class KnPackage(_DataTrimOption, _DataParent):
+    """ Knecht Package """
+    def __init__(self, parent=None, name=None, desc=None, family=None, family_desc=None, value=None):
+        _DataTrimOption.__init__(self, parent, name, desc, family, family_desc, value)
+        _DataParent.__init__(self)
+
+
+class KnTrim(_DataTrim):
+    pass
+
+
+class KnData:
+    def __init__(self):
+        self.models: List[KnTrim] = list()
+        self.fakom: FakomData = FakomData()
+
+        # Ui options - will be set by the excel dialog
+        # and be used by the excel-to-model module
+        # These options do not matter until model creation. We will
+        # keep the complete set of data.
+        self.read_trim = False
+        self.read_options = False
+        self.read_packages = False
+        self.read_fakom = False
+        self.pr_fam_filter_packages = False
+
+        self.selected_models = list()
+        self.selected_pr_families = list()

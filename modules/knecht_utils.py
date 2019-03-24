@@ -62,14 +62,15 @@ def list_class_values(obj) -> dict:
     if not hasattr(obj, '__dict__'):
         return []
 
-    attr = dict()
+    class_dict = dict()
 
-    for k, v in obj.__dict__.items():
+    for k in dir(obj):
+        v = getattr(obj, k)
         if k.startswith('__') or not isinstance(v, (int, str, float, bool, list, dict, tuple)):
             continue
-        attr[k] = v
+        class_dict[k] = v
 
-    return attr
+    return class_dict
 
 
 def time_string(time_f: float) -> str:

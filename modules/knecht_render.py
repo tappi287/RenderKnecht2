@@ -14,7 +14,7 @@ from modules.itemview.tree_view import KnechtTreeView
 from modules.knecht_deltagen import CommunicateDeltaGen, SendToDeltaGen
 from modules.knecht_image import KnechtImage
 from modules.knecht_utils import time_string
-from modules.knecht_variants import KnechtRenderPreset, KnechtVariantList
+from modules.knecht_objects import KnechtRenderPreset, KnechtVariantList
 from modules.language import get_translation
 from modules.log import init_logging
 from modules.settings import KnechtSettings

@@ -5,7 +5,7 @@ from PySide2.QtCore import QModelIndex, QUuid
 
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
-from modules.knecht_variants import KnechtRenderPreset, KnechtVariantList
+from modules.knecht_objects import KnechtRenderPreset, KnechtVariantList
 from modules.log import init_logging
 
 LOGGER = init_logging(__name__)

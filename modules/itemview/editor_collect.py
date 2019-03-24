@@ -7,7 +7,7 @@ from modules.settings import KnechtSettings
 from modules.itemview.item import KnechtItem
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
-from modules.knecht_variants import KnechtVariantList
+from modules.knecht_objects import KnechtVariantList
 from modules.language import get_translation
 from modules.log import init_logging
 
