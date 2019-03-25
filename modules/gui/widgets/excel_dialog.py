@@ -38,6 +38,7 @@ class ExcelImportDialog(QDialog):
         finished = Signal(KnData)
         error = Signal(list)
         progress_msg = Signal(str)
+        exception_sig = Signal(object)
 
     pr_root_item = KnechtItem(data=(
         '', _('PR-Familie'), _('Beschreibung'),))
@@ -73,7 +74,7 @@ class ExcelImportDialog(QDialog):
         # --- Attributes ---
         self.ui = ui
         self.file = file
-        self.data = None
+        self.data: KnData = None
         self.selected_models = list()
         self.selected_pr_families = list()
 
@@ -105,6 +106,7 @@ class ExcelImportDialog(QDialog):
         self.excel_thread.daemon = True
         thread_signals.finished.connect(self.read_finished)
         thread_signals.error.connect(self.read_failed)
+        thread_signals.exception_sig.connect(self._thread_exception)
         thread_signals.progress_msg.connect(self.show_progress)
 
         # --- Init Icons + Translations ---
@@ -151,6 +153,10 @@ class ExcelImportDialog(QDialog):
         self.buttonBox.setEnabled(False)
 
         QTimer.singleShot(100, self._start_load)
+
+    @Slot(object)
+    def _thread_exception(self, e: BaseException):
+        raise Exception(e)
 
     @staticmethod
     def excel_load_thread(signals: ThreadSignals, file: Path, pos_file: Path=None):

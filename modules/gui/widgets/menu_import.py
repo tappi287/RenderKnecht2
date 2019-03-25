@@ -9,7 +9,7 @@ from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.excel_dialog import ExcelImportDialog
 from modules.gui.widgets.fakom_dialog import FakomImportDialog
 from modules.gui.widgets.file_dialog import FileDialog
-from modules.itemview.excel_read import KnechtExcelDataThread
+from modules.itemview.data_read import KnechtDataThread
 from modules.itemview.item import KnechtItem
 from modules.itemview.model import KnechtModel
 from modules.itemview.xml import SaveLoadController
@@ -72,12 +72,12 @@ class ImportMenu(QMenu):
     def xlsx_result(self, xl: ExcelImportDialog):
         xl_queue = Queue()
 
-        # Start ExcelData to KnechtModel conversion thread
-        xl_thread = KnechtExcelDataThread(xl.file, xl_queue)
-        xl_thread.finished.connect(self.xlsx_conversion_finished)
-        xl_thread.error.connect(self.ui.msg)
-        xl_thread.progress_msg.connect(self.xlsx_progress_msg)
-        xl_thread.start()
+        # Start KnData to KnechtModel conversion thread
+        data_thread = KnechtDataThread(xl.file, xl_queue)
+        data_thread.finished.connect(self.xlsx_conversion_finished)
+        data_thread.error.connect(self.ui.msg)
+        data_thread.progress_msg.connect(self.xlsx_progress_msg)
+        data_thread.start()
         xl_queue.put(xl.data)
         xl.deleteLater()
 
@@ -94,6 +94,9 @@ class ImportMenu(QMenu):
     def xlsx_conversion_finished(self, file: Path, root_item: KnechtItem):
         # Move item to main thread
         _root_item = SaveLoadController.copy_item_to_main_thread(root_item)
+
+        # Clear progress
+        self.xlsx_progress_msg('')
 
         # Emit new model
         new_model = KnechtModel(_root_item)

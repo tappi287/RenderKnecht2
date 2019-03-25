@@ -22,6 +22,10 @@ class ExcelDataToKnechtData:
         return self.create_data()
 
     def update_pr_family_cache(self, data: KnData):
+        """
+            Keep a cached copy of which PR-Code belongs to which PR-Family since
+            we do not have this info in package sheet.
+        """
         if self.excel_data.pr_options.empty:
             return
 
@@ -30,6 +34,7 @@ class ExcelDataToKnechtData:
         family_desc_col = self.excel_data.pr_options.columns[self.excel_data.map.Pr.ColumnIdx.family_text]
 
         pr_codes = self.excel_data.pr_options[pr_col].unique()
+        pr_fam_set = set()
 
         for pr in pr_codes:
             pr_rows = self.excel_data.pr_options.loc[self.excel_data.pr_options[pr_col] == pr]
@@ -37,8 +42,10 @@ class ExcelDataToKnechtData:
             pr_fam_text = pr_rows[family_desc_col].unique()[0]
 
             # Update data PR-Families
-            pr_fam_item = KnPrFam(name=pr_fam, desc=pr_fam_text)
-            data.pr_families.append(pr_fam_item)
+            if pr_fam not in pr_fam_set:
+                pr_fam_item = KnPrFam(name=pr_fam, desc=pr_fam_text)
+                data.pr_families.append(pr_fam_item)
+                pr_fam_set.add(pr_fam)
 
             self.pr_family_cache[pr] = (pr_fam, pr_fam_text)
 
@@ -111,7 +118,7 @@ class ExcelDataToKnechtData:
 
             for pr, pr_text, pr_value in zip(pkg_content[pr_col], pkg_content[pr_text_col], pkg_content[model]):
                 # Get cached PR-Family data
-                pr_fam, pr_fam_text = self.pr_family_cache.get(pr)
+                pr_fam, pr_fam_text = self.pr_family_cache.get(pr, (None, None))
                 # Create PR Options inside Package
                 KnPr(pkg_item, pr, pr_text, pr_fam, pr_fam_text, pr_value)
 

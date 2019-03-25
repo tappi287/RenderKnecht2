@@ -2,15 +2,13 @@ import time
 from pathlib import Path
 from queue import Queue
 from threading import Thread
-from typing import List, Generator
+from typing import List
 
-import pandas as pd
 from PySide2.QtCore import QObject, Signal, Slot
 
 from modules.idgen import KnechtUuidGenerator
 from modules.itemview.item import KnechtItem
-from modules.knecht_excel import ExcelData
-from modules.knecht_objects import KnData, KnPr, KnTrim, KnPackage
+from modules.knecht_objects import KnData, KnPr, KnTrim
 from modules.knecht_utils import shorten_model_name
 from modules.language import get_translation
 from modules.log import init_logging
@@ -34,7 +32,7 @@ class KnechtDataThread(Thread):
     def __init__(self, file: Path, xl_queue: Queue):
         super(KnechtDataThread, self).__init__()
         self.file = file
-        self.xl_queue = xl_queue
+        self.data_queue = xl_queue
         self.daemon = True
 
         self.signals = KnechtDataThreadSignals()
@@ -47,12 +45,12 @@ class KnechtDataThread(Thread):
         LOGGER.debug('Excel data to KnechtModel thread started.')
         self.progress_msg.emit(_('Excel Daten werden konvertiert...'))
         time.sleep(0.01)
-        data = self.xl_queue.get()
+        kn_data = self.data_queue.get()
 
-        xl_reader = KnechtDataToModel(data)
-        xl_reader.progress_signal = self.worker_progress
+        kn_reader = KnechtDataToModel(kn_data)
+        kn_reader.progress_signal = self.worker_progress
         self.worker_progress.connect(self._work_progress)
-        root_item = xl_reader.create_root_item()
+        root_item = kn_reader.create_root_item()
 
         if not root_item.childCount():
             self.error.emit(_('Konnte keinen Baum aus Excel Daten erstellen.'))
@@ -68,12 +66,10 @@ class KnechtDataThread(Thread):
         time.sleep(0.02)
 
     def finish(self):
-        self.progress_msg.emit('')
         self.signals.deleteLater()
 
 
 class KnechtDataToModel:
-    pr_family_cache = dict(PR_Code='PR_Family_Code')
     progress_signal = None
 
     def __init__(self, data: KnData):
@@ -88,36 +84,25 @@ class KnechtDataToModel:
         self.progress_signal.emit(msg)
 
     def create_root_item(self):
-        self.update_pr_family_cache()
         self.create_items()
         LOGGER.debug('Created %s items from ExcelData.', self.root_item.childCount())
         return self.root_item
 
-    def update_pr_family_cache(self):
-        if not self.data.pr_families:
-            return
-
-        pr_codes: List[KnPr] = list()
-        for trim in self.data.models:
-            for pr in trim.iterate_children():
-                pr_codes.append(pr)
-
-        self._show_progress(_('Indiziere {} PR Codes').format(len(pr_codes)))
-
-        for pr in pr_codes:
-            self.pr_family_cache[pr.name] = pr.family
-
-        LOGGER.debug('Indexed %s PR-Codes to PR Families.', len(self.pr_family_cache))
-
     def create_items(self):
-        for idx, trim in enumerate(sorted(self.data.models)):
+        progress_idx = 0
+
+        for trim in self.data.models:
             model = trim.model
 
             if model not in self.data.selected_models:
                 continue
 
-            self._show_progress(_('Erstelle Model {} {:02d}/{:02d}...').format(
-                model, idx, len(self.data.selected_models)))
+            progress_idx += 1
+            self._show_progress(
+                _('Erstelle Model {} {:02d}/{:02d}...').format(
+                    model, progress_idx, len(self.data.selected_models)
+                    )
+                )
 
             # -- Create trimline --
             if self.data.read_trim:
@@ -142,9 +127,7 @@ class KnechtDataToModel:
                 self.create_packages(trim)
 
             if self.data.read_fakom:
-                # Filter rows ~not matching -
-                fakom_rows = self.data.pr_options.loc[~self.data.pr_options[model].isin(['-'])]
-                self.create_fakom(model, model_desc, fakom_rows)
+                self.create_fakom(trim)
 
     def create_packages(self, trim: KnTrim):
         for pkg in trim.iterate_packages():
@@ -177,7 +160,7 @@ class KnechtDataToModel:
                     # Create all packages and do not apply any filtering
                     self.root_item.append_item_child(pkg_item)
 
-    def create_pr_options(self, pr_iterator: Generator[KnPr], parent_item: KnechtItem):
+    def create_pr_options(self, pr_iterator: List[KnPr], parent_item: KnechtItem):
         for pr in pr_iterator:
             if pr.family not in self.data.selected_pr_families:
                 continue
@@ -188,27 +171,23 @@ class KnechtDataToModel:
             parent_item.append_item_child(pr_item)
 
     def create_fakom(self, trim: KnTrim):
-        model_desc = shorten_model_name(trim.model_text)
+        model_short_desc = shorten_model_name(trim.model_text)
 
-        sib_pr_ls: List[KnPr] = list()
-        lum_pr_ls: List[KnPr] = list()
-        vos_pr_ls: List[KnPr] = list()
+        # Create lists of List[KnPr] for SIB/VOS/LUM families
+        sib_pr_ls = [pr for pr in trim.iterate_available_pr() if pr.family.casefold() == 'sib']
+        sib_pr_codes = [pr.name for pr in sib_pr_ls]
+        lum_pr_ls = [pr for pr in trim.iterate_available_pr() if pr.family.casefold() == 'lum']
+        vos_pr_ls = [pr for pr in trim.iterate_available_pr() if pr.family.casefold() == 'vos']
 
-        # Limit Fakom rows to SIB/VOS/LUM families
-        sib_pr_ls = [pr for pr in trim.iterate_pr() if pr.family.casefold() == 'sib']
-        sib_pr_names = [pr.name for pr in sib_pr_ls]
-        lum_pr_ls = [pr for pr in trim.iterate_pr() if pr.family.casefold() == 'lum']
-        vos_pr_ls = [pr for pr in trim.iterate_pr() if pr.family.casefold() == 'vos']
-
-        # TODO: CHeck it
         for color, sib_set in self.data.fakom.iterate_colors():
-            valid_sib_set = sib_set.intersection(sib_pr_names)
+            valid_sib_set = sib_set.intersection(sib_pr_codes)
             if not valid_sib_set:
                 continue
 
             # --- Iterate SIB Codes ---
             for sib_pr in sib_pr_ls:
                 if sib_pr.name not in valid_sib_set:
+                    # Skip seat covers not matching
                     continue
 
                 # --- Iterate VOS Codes ---
@@ -217,13 +196,13 @@ class KnechtDataToModel:
                     # --- Iterate LUM Codes ---
                     for lum_pr in lum_pr_ls:
 
-                        # Determine if all options belong to standard equipment
+                        # Determine if all options belong to standard equipment L
                         fakom_type = 'fakom_option'
                         if not {sib_pr.value, vos_pr.value, lum_pr.value}.difference('L'):
                             fakom_type = 'fakom_setup'
 
                         self.create_fakom_item(
-                            trim.model, model_desc, color, sib_pr.name, vos_pr.name,
+                            trim.model, model_short_desc, color, sib_pr.name, vos_pr.name,
                             lum_pr.name, sib_pr.desc, vos_pr.desc, lum_pr.desc, fakom_type
                             )
 

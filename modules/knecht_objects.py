@@ -296,6 +296,11 @@ class _DataParent:
             if type(c) is KnPackage:
                 yield c
 
+    def iterate_available_pr(self):
+        for c in self.iterate_pr():
+            if c.value and c.value != '-':
+                yield c
+
     def iterate_trim_pr(self):
         for c in self.iterate_pr():
             if c.value == 'L':
