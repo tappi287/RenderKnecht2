@@ -170,62 +170,12 @@ class ExcelData:
         # Dummy data
         self.pr_options, self.packages, self.models = pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
 
-        # Fakom data
-        self.fakom = FakomData()
-
-        # Ui options - will be set by the excel dialog
-        # and be used by the excel-to-model module
-        # These options do not matter until model creation. We will
-        # keep the complete set of spreadsheet data.
-        self.read_trim = False
-        self.read_options = False
-        self.read_packages = False
-        self.read_fakom = False
-        self.pr_fam_filter_packages = False
-
-        self.selected_models = list()
-        self.selected_pr_families = list()
-
     def verify(self):
         if self.pr_options.empty or self.models.empty:
             return False
         return True
 
-    def get_models(self) -> List[Tuple[str, str, str, str]]:
-        """ Get list of tuples with model data: model code, market, description, gearbox """
-        model_data = list()
-        model_column = self.models.columns[self.map.Models.ColumnIdx.model]
-        model_desc_column = self.models.columns[self.map.Models.ColumnIdx.model_text]
-        market_column = self.models.columns[self.map.Models.ColumnIdx.market]
-        gearbox_column = self.models.columns[self.map.Models.ColumnIdx.gearbox]
-
-        for model in self.models[model_column]:
-            model_rows = self.models.loc[self.models[model_column] == model]
-            model_desc = model_rows[model_desc_column].unique()[0]
-            market = model_rows[market_column].unique()[0]
-            gearbox = model_rows[gearbox_column].unique()[0]
-
-            model_data.append(
-                (str(model), str(market), str(model_desc), str(gearbox))
-                )
-
-        return model_data
-
-    def get_pr_families(self) -> List[Tuple[str, str]]:
-        pr_family_data = list()
-        family_column = self.pr_options.columns[self.map.Pr.ColumnIdx.family]
-        family_text_column = self.pr_options.columns[self.map.Pr.ColumnIdx.family_text]
-
-        for pr_family in self.pr_options[family_column].unique():
-            pr_family_rows = self.pr_options.loc[self.pr_options[family_column] == pr_family]
-            pr_family_desc = pr_family_rows[family_text_column].unique()[0]
-
-            pr_family_data.append(
-                (str(pr_family), str(pr_family_desc))
-                )
-
-        return pr_family_data
-
+    """ Obsolete with KnData """
     def save_to_zip(self, file_path: Path=None) -> bool:
         if file_path is None:
             out_zip = Path(get_settings_dir()) / 'Excel_data.zip'
@@ -245,6 +195,7 @@ class ExcelData:
 
         return CreateZip.save_dir_to_zip(tmp_dir, out_zip)
 
+    """ Obsolete with KnData """
     def load_from_zip(self, file_path: Path=None) -> bool:
         if file_path is None:
             in_zip = Path(get_settings_dir()) / 'Excel_data.zip'

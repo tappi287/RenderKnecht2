@@ -1,5 +1,5 @@
 from modules.knecht_excel import ExcelData
-from modules.knecht_objects import KnData, KnPackage, KnPr, KnTrim
+from modules.knecht_objects import KnData, KnPackage, KnPr, KnTrim, KnPrFam
 from modules.knecht_utils import list_class_values
 from modules.language import get_translation
 from modules.log import init_logging
@@ -19,10 +19,9 @@ class ExcelDataToKnechtData:
         self.excel_data = data
 
     def convert(self) -> KnData:
-        self.update_pr_family_cache()
         return self.create_data()
 
-    def update_pr_family_cache(self):
+    def update_pr_family_cache(self, data: KnData):
         if self.excel_data.pr_options.empty:
             return
 
@@ -36,12 +35,18 @@ class ExcelDataToKnechtData:
             pr_rows = self.excel_data.pr_options.loc[self.excel_data.pr_options[pr_col] == pr]
             pr_fam = pr_rows[family_col].unique()[0]
             pr_fam_text = pr_rows[family_desc_col].unique()[0]
+
+            # Update data PR-Families
+            pr_fam_item = KnPrFam(name=pr_fam, desc=pr_fam_text)
+            data.pr_families.append(pr_fam_item)
+
             self.pr_family_cache[pr] = (pr_fam, pr_fam_text)
 
         LOGGER.debug('Indexed %s PR-Codes to PR Families.', len(self.pr_family_cache))
 
     def create_data(self) -> KnData:
         data = KnData()
+        self.update_pr_family_cache(data)
         model_column = self.excel_data.models.columns[self.excel_data.map.Models.ColumnIdx.model]
 
         for idx, model in enumerate(self.excel_data.models[model_column]):
@@ -54,17 +59,7 @@ class ExcelDataToKnechtData:
             # Append model/trim to data
             data.models.append(trim)
 
-        data.fakom = self.excel_data.fakom
-        self.update_data_attributes(data)
-
         return data
-
-    def update_data_attributes(self, data: KnData):
-        """ Transfer UI options like read_trim etc. """
-        for k, v in list_class_values(self.excel_data).items():
-            if hasattr(data, k):
-                if isinstance(v, (list, bool)):
-                    setattr(data, k, v)
 
     def update_trim_attributes(self, model: str, model_column: str, trim: KnTrim):
         """ Transfer Excel model sheet columns to KnTrim object """
@@ -117,7 +112,7 @@ class ExcelDataToKnechtData:
             for pr, pr_text, pr_value in zip(pkg_content[pr_col], pkg_content[pr_text_col], pkg_content[model]):
                 # Get cached PR-Family data
                 pr_fam, pr_fam_text = self.pr_family_cache.get(pr)
-                # Create PR Option inside Package
+                # Create PR Options inside Package
                 KnPr(pkg_item, pr, pr_text, pr_fam, pr_fam_text, pr_value)
 
     def create_pr_options(self, model: str, trim: KnTrim):

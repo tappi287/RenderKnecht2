@@ -15,7 +15,9 @@ from modules.itemview.model_update import UpdateModel
 from modules.itemview.tree_view import KnechtTreeView
 from modules.itemview.tree_view_utils import KnechtTreeViewShortcuts, setup_header_layout
 from modules.knecht_excel import ExcelData, ExcelReader
-from modules.knecht_fakom import FakomReader
+from modules.knecht_excel_data import ExcelDataToKnechtData
+from modules.knecht_fakom import FakomReader, FakomData
+from modules.knecht_objects import KnData
 from modules.language import get_translation
 from modules.log import init_logging
 from modules.settings import KnechtSettings, Settings
@@ -33,7 +35,7 @@ class ExcelImportDialog(QDialog):
 
     class ThreadSignals(QObject):
         """ The thread will use an instance of these """
-        finished = Signal(ExcelData)
+        finished = Signal(KnData)
         error = Signal(list)
         progress_msg = Signal(str)
 
@@ -157,15 +159,15 @@ class ExcelImportDialog(QDialog):
         signals.progress_msg.emit(_('Excel Datei wird gelesen...'))
 
         xl = ExcelReader()
+        fakom_data, knecht_data = FakomData(), KnData()
         fakom_result, xl_result = True, False
 
         # -- Read Fakom data if pos file provided --
         if pos_file and pos_file.exists():
             try:
                 fakom_data = FakomReader.read_pos_file(pos_file)
-                xl.data.fakom = fakom_data
 
-                if xl.data.fakom.empty():
+                if fakom_data.empty():
                     xl.errors.append(_('POS Xml enthält keine bekannten Farbkombinationsmuster.'))
                     fakom_result = False
             except Exception as e:
@@ -176,7 +178,13 @@ class ExcelImportDialog(QDialog):
         # -- Read Excel file --
         if fakom_result:
             try:
+                # --- Create data from excel file ---
                 xl_result = xl.read_file(file)
+
+                # --- Convert excel data to knecht data ---
+                converter = ExcelDataToKnechtData(xl.data)
+                knecht_data = converter.convert()
+                knecht_data.fakom = fakom_data
             except Exception as e:
                 LOGGER.error(e)
                 xl_result = False
@@ -184,8 +192,9 @@ class ExcelImportDialog(QDialog):
         # Transmit resulting data or report error
         if xl_result and fakom_result:
             signals.progress_msg.emit(_('Daten übertragen...'))
-            LOGGER.debug('Excel read succeded.')
-            signals.finished.emit(xl.data)
+            LOGGER.debug('Excel read succeded. Converting ExcelData to KnData.')
+
+            signals.finished.emit(knecht_data)
         else:
             LOGGER.debug('Excel read failed: %s', xl.errors)
             signals.error.emit(xl.errors)
@@ -226,8 +235,8 @@ class ExcelImportDialog(QDialog):
         self._asked_for_close = True
         self.close()
 
-    @Slot(ExcelData)
-    def read_finished(self, data):
+    @Slot(KnData)
+    def read_finished(self, data: KnData):
         if self._abort:
             return
 
@@ -236,14 +245,14 @@ class ExcelImportDialog(QDialog):
         pr_fam = self.pr_root_item.copy()
 
         # Populate models tree
-        for idx, d in enumerate(self.data.get_models()):
+        for idx, t in enumerate(self.data.models):
             models.insertChildren(
-                models.childCount(), 1, (f'{idx:01d}', d[0], d[1], d[2], '', '', d[3])
+                models.childCount(), 1, (f'{idx:01d}', t.model, t.market, t.model_text, '', '', t.gearbox)
                 )
         # Populate PR Family tree
-        for idx, d in enumerate(self.data.get_pr_families()):
+        for idx, p in enumerate(self.data.pr_families):
             pr_fam.insertChildren(
-                pr_fam.childCount(), 1, (f'{idx:01d}', d[0], d[1])
+                pr_fam.childCount(), 1, (f'{idx:01d}', p.name, p.desc)
                 )
 
         # Update View Models

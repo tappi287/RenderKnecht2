@@ -282,19 +282,28 @@ class _DataParent:
     def iterate_children(self):
         yield from self.children
 
-    def iterate_trim_pr(self):
+    def iterate_pr(self):
         for c in self.children:
-            if type(c) is KnPr and c.value == 'L':
-                yield c
-
-    def iterate_optional_pr(self):
-        for c in self.children:
-            if type(c) is KnPr and c.value != 'L':
+            if type(c) is KnPr:
                 yield c
 
     def iterate_packages(self):
+        """
+
+        :return: KnPackage
+        """
         for c in self.children:
-            if c.__class__ is KnPackage:
+            if type(c) is KnPackage:
+                yield c
+
+    def iterate_trim_pr(self):
+        for c in self.iterate_pr():
+            if c.value == 'L':
+                yield c
+
+    def iterate_optional_pr(self):
+        for c in self.iterate_pr():
+            if c.value != 'L':
                 yield c
 
     def child_count(self):
@@ -358,6 +367,13 @@ class KnPr(_DataTrimOption):
     pass
 
 
+class KnPrFam(_DataTrimOption, _DataParent):
+    """ Knecht PR-Family """
+    def __init__(self, parent=None, name=None, desc=None, family=None, family_desc=None, value=None):
+        _DataTrimOption.__init__(self, parent, name, desc, family, family_desc, value)
+        _DataParent.__init__(self)
+
+
 class KnPackage(_DataTrimOption, _DataParent):
     """ Knecht Package """
     def __init__(self, parent=None, name=None, desc=None, family=None, family_desc=None, value=None):
@@ -372,6 +388,7 @@ class KnTrim(_DataTrim):
 class KnData:
     def __init__(self):
         self.models: List[KnTrim] = list()
+        self.pr_families: List[KnPrFam] = list()
         self.fakom: FakomData = FakomData()
 
         # Ui options - will be set by the excel dialog
