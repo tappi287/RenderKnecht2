@@ -25,7 +25,7 @@ _ = lang.gettext
 
 
 class ImportMenu(QMenu):
-    new_model_ready = Signal(KnechtModel, Path)
+    new_model_ready = Signal(KnechtModel, Path, bool)
 
     def __init__(self, ui):
         """ Menu to import data
@@ -97,7 +97,7 @@ class ImportMenu(QMenu):
 
         # Emit new model
         new_model = KnechtModel(_root_item)
-        self.new_model_ready.emit(new_model, file.with_suffix('.xml'))
+        self.new_model_ready.emit(new_model, file.with_suffix('.xml'), True)
 
     @staticmethod
     def _report_destroyed(widget):

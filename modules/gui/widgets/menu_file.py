@@ -180,7 +180,8 @@ class FileMenu(QObject):
         self.enable_menus(True)
 
     @Slot(KnechtModel, Path)
-    def model_loaded(self, model: KnechtModel, file: Path):
+    @Slot(KnechtModel, Path, bool)
+    def model_loaded(self, model: KnechtModel, file: Path, reset_clean: bool=False):
         # Update progress
         view = self.view_mgr.current_view()
         view.progress_msg.hide_progress()
@@ -191,6 +192,8 @@ class FileMenu(QObject):
         # Refresh model data
         new_view.model().sourceModel().initial_item_id_connection()
         new_view.model().sourceModel().refreshData()
+        if reset_clean:
+            new_view.undo_stack.resetClean()
 
         self.ui.statusBar().showMessage(_('{0} in {1:.3}s geladen.'
                                           ).format(file.name, self.load_save_mgr.last_progress_time))

@@ -186,6 +186,7 @@ class ExcelImportDialog(QDialog):
             try:
                 # --- Create data from excel file ---
                 xl_result = xl.read_file(file)
+                signals.progress_msg.emit(_('Daten werden konvertiert...'))
 
                 # --- Convert excel data to knecht data ---
                 converter = ExcelDataToKnechtData(xl.data)

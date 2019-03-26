@@ -179,7 +179,7 @@ class ViewManager(QObject):
         if not current_view.undo_stack.isClean():
             return False
 
-        if not current_view.model().rowCount():
+        if not current_view.model().sourceModel().rowCount():
             if new_model:
                 update_model = UpdateModel(current_view)
                 update_model.update(new_model)
