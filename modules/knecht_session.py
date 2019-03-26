@@ -1,3 +1,4 @@
+from bisect import bisect
 from collections import OrderedDict
 from pathlib import Path
 from typing import List, Tuple
@@ -28,23 +29,56 @@ class KnechtSession(QObject):
 
     class FileNameStorage:
         def __init__(self):
-            self.store = OrderedDict()
+            self.store = {
+                'example_filename.xml': {'file': Path(), 'order': 0, 'clean_state': False}
+                }
+            self.store = dict()
 
-        def restore_file_order(self, load_dir: Path) -> list:
+            self.dupli_count = 0
+
+        def file_names(self) -> List[str]:
+            return [file_entry['file'].name for file_entry in self.store.values()]
+
+        def add_file(self, file: Path, tab_order: int, clean: bool) -> Path:
+            # Rename duplicate file names
+            if file.name in self.store:
+                self.dupli_count += 1
+                file = file.parent / Path(file.stem + f'_{self.dupli_count:01d}' + file.suffix)
+
+            # Add entry
+            self.store[file.name] = {
+                'file': file.as_posix(), 'order': tab_order, 'clean_state': clean
+                }
+
+            return file
+
+        def restore_file_order(self, load_dir: Path) -> List[Tuple[Path, bool]]:
             """ Restore the order in which the files have been saved """
             file_ls = list()
-            files_to_restore = [f for f in load_dir.glob('*.xml')]
+            files_names_to_restore = [f.name for f in load_dir.glob('*.xml')]
 
-            for file in reversed(list(self.store.values())):
-                for restore_file in files_to_restore:
-                    if Path(file).name == restore_file.name:
-                        file_ls.append(restore_file)
+            for file_entry in self.sort_storage_dict_entries(self.store):
+                file = Path(file_entry.get('file') or '')
+                if file.name in files_names_to_restore:
+                    file_ls.append(file)
 
-            for restore_file in files_to_restore:
-                if restore_file not in file_ls:
-                    file_ls.append(restore_file)
+            return file_ls[::-1]
 
-            return file_ls
+        @staticmethod
+        def sort_storage_dict_entries(d) -> List[dict]:
+            entry_list, order_list = list(), list()
+
+            for k, entry in d.items():
+                if not isinstance(entry, dict):
+                    continue
+
+                order = entry.get('order') or 0
+                order_list.append(order)
+                insert_idx = bisect(sorted(order_list), order) - 1
+
+                entry_list.insert(insert_idx, d[k])
+
+            return entry_list
 
     def __init__(self, ui, idle_save: bool=False):
         """ Save and restore user session of opened documents
@@ -118,10 +152,15 @@ class KnechtSession(QObject):
         # Update progress
         view = self.ui.view_mgr.current_view()
         view.progress_msg.hide_progress()
+        clean_state = True
 
         # Restore original save path
         if file.name in self.restore_files_storage.store:
-            file = Path(self.restore_files_storage.store[file.name])
+            if isinstance(self.restore_files_storage.store[file.name], dict):
+                file = Path(self.restore_files_storage.store[file.name].get('file') or '')
+                clean_state = self.restore_files_storage.store[file.name].get('clean_state')
+            else:
+                file = Path(self.restore_files_storage.store[file.name])
 
         if file.name == 'Variants_Tree.xml':
             # Update Variants Tree
@@ -136,6 +175,11 @@ class KnechtSession(QObject):
         new_view.model().sourceModel().initial_item_id_connection()
         new_view.model().sourceModel().refreshData()
 
+        # Mark document non-clean
+        if isinstance(clean_state, bool):
+            if not clean_state:
+                new_view.undo_stack.resetClean()
+
         self._load_next()
 
     def auto_save(self):
@@ -149,9 +193,8 @@ class KnechtSession(QObject):
 
     def save(self) -> bool:
         tmp_dir = CreateZip.create_tmp_dir()
-        file_names = self.FileNameStorage()
+        storage = self.FileNameStorage()
         result = True
-        count = 0
 
         documents_list = list()
         documents_list.append(
@@ -168,10 +211,9 @@ class KnechtSession(QObject):
             if not view.model().rowCount() or not file:
                 continue
 
-            # Rename duplicate file names
-            if file.name in file_names.store:
-                count += 1
-                file = file.parent / Path(file.stem + f'{count:02d}' + file.suffix)
+            tab_order_index = self.get_tab_order(file)
+
+            file = storage.add_file(file, tab_order_index, view.undo_stack.isClean())
 
             # Save document
             tmp_file = tmp_dir / file.name
@@ -179,18 +221,34 @@ class KnechtSession(QObject):
 
             if not r:
                 result = False
+                del storage.store[file.name]
             else:
-                file_names.store[file.name] = file.as_posix()
                 LOGGER.debug('Saved session document: %s', tmp_file.name)
 
         # Save original file paths stored in Files class
-        Settings.save(file_names, tmp_dir / self.files_list_name)
+        Settings.save(storage, tmp_dir / self.files_list_name)
 
         if not CreateZip.save_dir_to_zip(tmp_dir, self.session_zip):
             result = False
 
         CreateZip.remove_dir(tmp_dir)
         return result
+
+    def get_tab_order(self, file: Path):
+        """ Find the current file in the TabWidgets TabBar """
+        current_tab_text = ''
+        for tab_idx in range(0, self.ui.view_mgr.tab.count()):
+            tab_file = self.ui.view_mgr.file_mgr.get_file_from_widget(self.ui.view_mgr.tab.widget(tab_idx))
+            if tab_file == file:
+                current_tab_text = self.ui.view_mgr.tab.tabText(tab_idx)
+
+        for tab_bar_idx in range(0, self.ui.view_mgr.tab.tabBar().count()):
+            if self.ui.view_mgr.tab.tabBar().tabText(tab_bar_idx) == current_tab_text:
+                break
+        else:
+            tab_bar_idx = 0
+
+        return tab_bar_idx
 
     def restore(self) -> bool:
         """ Restore a user session asynchronous """

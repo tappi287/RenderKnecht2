@@ -146,6 +146,16 @@ class KnechtSettings:
                 if k not in settings_attr:
                     settings_attr[k] = v
 
+        # Clean up recent files
+        updated_recent_files = list()
+        for idx, entry in enumerate(cls.app.get('recent_files') or [('file.xml', 'xml')]):
+            entry_file, entry_type = entry
+
+            if Path(entry_file).exists():
+                updated_recent_files.append((entry_file, entry_type))
+
+        cls.app['recent_files'] = updated_recent_files
+
         cls.setup_lang()
         print('KnechtSettings successfully loaded from file.')
 
@@ -183,7 +193,7 @@ class KnechtSettings:
         return True
 
     @classmethod
-    def add_recent_file(cls, file: Union[Path, str], file_type: str='', list_length: int=10) -> None:
+    def add_recent_file(cls, file: Union[Path, str], file_type: str='') -> None:
         if 'recent_files' not in cls.app.keys():
             cls.app['recent_files'] = list()
 
@@ -196,12 +206,13 @@ class KnechtSettings:
 
             if file_str == entry_file and file_type == entry_type:
                 recent_files.pop(idx)
+                break
 
         recent_files.insert(0, (file_str, file_type))
 
         # Only keep the last [list_length] number of items
-        if len(recent_files) > list_length:
-            recent_files = recent_files[:list_length]
+        if len(recent_files) > 10:
+            cls.app['recent_files'] = recent_files[:10]
 
     @staticmethod
     def get_settings_path() -> str:

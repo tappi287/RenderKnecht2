@@ -24,7 +24,6 @@ VERSION = '0.751'
 #  eg. placed in preset will render preset to this directory, placed in render_preset will render presets not
 #  containing out_dir_item to that dir
 # TODO: Warn on close of dirty tabs/changes not saved to disk
-# TODO: Save dirty/clean tab status in session save
 # TODO: Check for empty document in sourceModel instead of ProxyModel, new document behaves unexpected when filtered
 #  with zero results
 # TODO: Rename, Renumber Images from different RenderPresets
