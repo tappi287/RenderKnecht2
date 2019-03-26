@@ -91,6 +91,12 @@ class KnechtTreeView(QTreeView):
         self.filter_expand_timer.setInterval(300)
         self.filter_expand_timer.timeout.connect(self.filter_expand_results)
 
+        # Filter typing time
+        self.filter_timer = QTimer()
+        self.filter_timer.setSingleShot(True)
+        self.filter_timer.setInterval(500)
+        self.filter_timer.timeout.connect(self._set_filter_from_timer)
+
         # Cache last applied filter
         self._cached_filter = str()
 
@@ -184,12 +190,17 @@ class KnechtTreeView(QTreeView):
             return
 
         self.filter_text_widget.setText(filter_text)
-        self.filter_bgr_animation.blink()
-        self._set_filter(filter_text)
+        self.filter_timer.start()
 
-    @Slot(str)
+    @Slot()
+    def _set_filter_from_timer(self):
+        self._set_filter(self.filter_text_widget.text())
+
     def _set_filter(self, txt: str):
-        self.model().setFilterWildcard(txt)
+        self.filter_bgr_animation.blink()
+        txt = txt.replace(' ', '|')
+        self.model().setFilterRegExp(txt)
+
         self._cached_filter = txt
         self.filter_expand_timer.start()
 

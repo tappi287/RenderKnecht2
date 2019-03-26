@@ -95,9 +95,6 @@ class ImportMenu(QMenu):
         # Move item to main thread
         _root_item = SaveLoadController.copy_item_to_main_thread(root_item)
 
-        # Clear progress
-        self.xlsx_progress_msg('')
-
         # Emit new model
         new_model = KnechtModel(_root_item)
         self.new_model_ready.emit(new_model, file.with_suffix('.xml'))

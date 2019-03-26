@@ -66,6 +66,7 @@ class KnechtDataThread(Thread):
         time.sleep(0.02)
 
     def finish(self):
+        self.progress_msg.emit('')
         self.signals.deleteLater()
 
 
