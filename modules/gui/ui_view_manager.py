@@ -21,6 +21,10 @@ _ = lang.gettext
 
 
 class UiViewManager(ViewManager):
+    close_file_title = _('Ungespeicherte Änderungen')
+    close_file_txt = _('Das Dokument enthält Änderungen die <b>nicht</b> gespeichert wurden!<br><br>'
+                       'Diese werden durch Schließen des Dokumentes endgültig <b>verloren</b> gehen.')
+    close_file_ok = _('Schließen')
     close_clip_title = _('Zwischenablage verwerfen?')
     close_clip_txt = _('Die Zwischenablage enthält <i>{}</i> Elemente aus<br><i>{}</i><br><br>'
                        'Diese werden durch Schließen des Dokumentes aus der Zwischenablage <b>entfernt</b>.')
@@ -155,6 +159,15 @@ class UiViewManager(ViewManager):
 
         :returns bool: False - Abort Close; True - Continue Close
         """
+        # Ask on unsaved changes
+        if not tab_view.undo_stack.isClean():
+            msg_box = AskToContinue(self.ui)
+            self.ui.play_hint_sound()
+
+            if not msg_box.ask(self.close_file_title, self.close_file_txt, self.close_file_ok):
+                # User wants to abort close action
+                return False
+
         # Ask to continue - clear clipboard
         if self.ui.clipboard.origin is not tab_view:
             return True
