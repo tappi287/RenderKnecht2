@@ -141,7 +141,7 @@ class KnechtWindow(QMainWindow):
 
         self.tree_focus_changed.emit(self.last_focus_tree)
 
-    def tree_with_focus(self) -> Union[QTreeView]:
+    def tree_with_focus(self) -> KnechtTreeView:
         """ Return the current or last known QTreeView in focus """
         widget_in_focus = self.focusWidget()
 

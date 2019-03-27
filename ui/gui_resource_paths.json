@@ -4,6 +4,7 @@
 		"knecht_fakom": "knecht_fakom.ui",
 		"knecht_history": "knecht_history.ui",
 		"knecht_model_gui": "knecht_model_gui.ui",
+		"knecht_search": "knecht_search.ui",
 		"knecht_welcome": "knecht_welcome.ui"
 	},
 	"icon_paths": {

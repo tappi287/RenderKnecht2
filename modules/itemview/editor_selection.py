@@ -139,7 +139,7 @@ class KnechtItemSelection(QObject):
 
     def clear_and_select_src_index_ls(self, src_index_ls):
         """ Clear selection and select and expand every item in the
-            provided list of proxy indices.
+            provided list of source indices.
         """
         selection = self.view.selectionModel()
         selection.clearSelection()

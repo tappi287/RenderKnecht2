@@ -1,6 +1,6 @@
-from typing import Tuple
+from typing import List, Tuple
 
-from PySide2.QtCore import Qt, QModelIndex
+from PySide2.QtCore import QModelIndex, Qt
 
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
@@ -36,7 +36,7 @@ class KnechtMatchItems:
         return self._match(value, column, -1, parent, match_flags)
 
     def _match(self, value: str, column: int=0, hits: int= -1,
-               parent: QModelIndex=QModelIndex(), match_flags=Qt.MatchExactly) -> list:
+               parent: QModelIndex=QModelIndex(), match_flags=Qt.MatchExactly) -> List[QModelIndex]:
         """
             Matches items in column starting at row 0 of the parent index
             hits defines hw many matches to return; -1 means all

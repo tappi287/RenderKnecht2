@@ -3,6 +3,7 @@ from PySide2.QtCore import Signal, QTimer, Slot
 from PySide2.QtGui import QKeySequence
 
 from modules.gui.ui_resource import IconRsc
+from modules.gui.widgets.search_dialog import SearchDialog
 from modules.log import init_logging
 from modules.language import get_translation
 from modules.gui.widgets.history import DocHistoryWidget
@@ -53,6 +54,15 @@ class EditMenu(QMenu):
         self.history_action.triggered.connect(self.toggle_history)
         self.history_action.setShortcut(QKeySequence('Ctrl+H'))
         self.addAction(self.history_action)
+
+        self.addSeparator()
+
+        self.search_action = QAction(IconRsc.get_icon('sort'), _('Suchen und Ersetzen\tStrg+F'), self)
+        self.search_action.triggered.connect(self.search)
+        self.search_action.setShortcut(QKeySequence('Ctrl+F'))
+        self.addAction(self.search_action)
+
+        self.search_dlg = SearchDialog(self.ui)
 
         self.addSeparator()
 
@@ -111,6 +121,10 @@ class EditMenu(QMenu):
             return
 
         self.undo_action_grp.setEnabled(True)
+
+    def search(self):
+        self.search_dlg.center_on_ui()
+        self.search_dlg.show()
 
     def select_references(self):
         self.view.editor.selection.select_references()

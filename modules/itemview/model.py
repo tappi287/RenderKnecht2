@@ -162,7 +162,11 @@ class KnechtModel(QAbstractItemModel):
         return item.userType
 
     def index(self, row, column, parent=QModelIndex(), *args, **kwargs):
-        if parent.isValid() and parent.column() != 0:
+        """
+            Changed from Qt Example Code because of match not finding child items with recursive match flag:
+            https://forum.qt.io/topic/41977/solved-how-to-find-a-child-in-a-qabstractitemmodel/10
+        """
+        if not self.hasIndex(row, column, parent):
             return QModelIndex()
 
         parent_item = self.get_item(parent)
