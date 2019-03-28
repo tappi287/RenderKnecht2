@@ -132,7 +132,7 @@ class SetDirectoryPath(QObject):
         if not self.line_edit:
             return
 
-        self.line_edit.setText(current_path.as_posix())
+        self.line_edit.setText(str(current_path))
 
     def path_text_changed(self):
         """ line edit text changed """

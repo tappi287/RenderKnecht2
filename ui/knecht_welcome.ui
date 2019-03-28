@@ -96,11 +96,18 @@ QPushButton:hover {color: rgb(85, 170, 255);
      <item>
       <widget class="QLabel" name="news">
        <property name="text">
-        <string>-FaKom import&lt;br&gt;
--Session save&lt;br&gt;
--this page&lt;br&gt;
--V Plus Import&lt;br&gt;
--all new all shiny&lt;br&gt;</string>
+        <string>enhance search dialog
+update translations
+create model code inside trim items from KnData
+find and replace for item views
+set imported documents unclean
+check empty documents from source model to avoid false positive thru filtering
+warn on document tab close
+restore document clean status and tab order in session save
+update view filtering behaviour
+first iteration of KnData model
+updated default pr-family filter
+update to PySide 5.12.2</string>
        </property>
       </widget>
      </item>
