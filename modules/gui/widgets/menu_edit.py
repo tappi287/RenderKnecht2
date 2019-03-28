@@ -57,7 +57,7 @@ class EditMenu(QMenu):
 
         self.addSeparator()
 
-        self.search_action = QAction(IconRsc.get_icon('sort'), _('Suchen und Ersetzen\tStrg+F'), self)
+        self.search_action = QAction(IconRsc.get_icon('search'), _('Suchen und Ersetzen\tStrg+F'), self)
         self.search_action.triggered.connect(self.search)
         self.search_action.setShortcut(QKeySequence('Ctrl+F'))
         self.addAction(self.search_action)

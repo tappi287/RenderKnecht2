@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>363</width>
-    <height>79</height>
+    <width>407</width>
+    <height>164</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,6 +24,23 @@
        <property name="text">
         <string>Replace</string>
        </property>
+       <property name="buddy">
+        <cstring>edit_replace</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="column_box"/>
+     </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="btn_replace">
+       <property name="text">
+        <string>Replace</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/gui_resource.qrc">
+         <normaloff>:/main/search_replace_dark.png</normaloff>:/main/search_replace_dark.png</iconset>
+       </property>
       </widget>
      </item>
      <item row="0" column="0">
@@ -31,25 +48,22 @@
        <property name="text">
         <string>Search</string>
        </property>
+       <property name="buddy">
+        <cstring>edit_search</cstring>
+       </property>
       </widget>
      </item>
      <item row="1" column="1">
       <widget class="QLineEdit" name="edit_replace"/>
-     </item>
-     <item row="2" column="1">
-      <widget class="QComboBox" name="column_box"/>
      </item>
      <item row="0" column="2">
       <widget class="QPushButton" name="btn_find">
        <property name="text">
         <string>Find</string>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QPushButton" name="btn_replace">
-       <property name="text">
-        <string>Replace</string>
+       <property name="icon">
+        <iconset resource="res/gui_resource.qrc">
+         <normaloff>:/main/search.png</normaloff>:/main/search.png</iconset>
        </property>
       </widget>
      </item>
@@ -58,6 +72,10 @@
        <property name="text">
         <string>Replace All</string>
        </property>
+       <property name="icon">
+        <iconset resource="res/gui_resource.qrc">
+         <normaloff>:/main/search_replace_dark.png</normaloff>:/main/search_replace_dark.png</iconset>
+       </property>
       </widget>
      </item>
      <item row="2" column="0">
@@ -65,12 +83,62 @@
        <property name="text">
         <string>Column</string>
        </property>
+       <property name="buddy">
+        <cstring>column_box</cstring>
+       </property>
       </widget>
+     </item>
+     <item row="3" column="0" colspan="3">
+      <widget class="QTreeView" name="search_view"/>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
- <resources/>
- <connections/>
+ <tabstops>
+  <tabstop>edit_search</tabstop>
+  <tabstop>edit_replace</tabstop>
+  <tabstop>column_box</tabstop>
+  <tabstop>btn_find</tabstop>
+  <tabstop>btn_replace</tabstop>
+  <tabstop>btn_replace_all</tabstop>
+  <tabstop>search_view</tabstop>
+ </tabstops>
+ <resources>
+  <include location="res/gui_resource.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>edit_search</sender>
+   <signal>returnPressed()</signal>
+   <receiver>btn_find</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>130</x>
+     <y>14</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>352</x>
+     <y>13</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>edit_replace</sender>
+   <signal>returnPressed()</signal>
+   <receiver>btn_replace</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>166</x>
+     <y>37</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>358</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

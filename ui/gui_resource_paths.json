@@ -8,6 +8,10 @@
 		"knecht_welcome": "knecht_welcome.ui"
 	},
 	"icon_paths": {
+		"search_replace": ":/main/search_replace.png",
+		"search_replace_dark": ":/main/search_replace_dark.png",
+		"search": ":/main/search.png",
+		"search_dark": ":/main/search_dark.png",
 		"check_box_dark": ":/main/check_box_dark.png",
 		"pr_data": ":/main/.private/pr_data.json",
 		"check_box_empty_dark": ":/main/check_box_empty_dark.png",

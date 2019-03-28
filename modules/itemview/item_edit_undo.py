@@ -77,6 +77,13 @@ class ItemEditUndoCommand(QUndoCommand):
                      .format(Kg.column_desc[self.index.column()], current_data[:15])
                      )
 
+        # Update parent cmd undo text
+        if isinstance(parent_cmd, QUndoCommand):
+            parent_cmd.setText(_("{0} für {1} ändern {2} ...").format(
+                Kg.column_desc[self.index.column()], parent_cmd.childCount(), current_data[:15]
+                )
+                )
+
     def redo(self):
         self._do_children(is_undo=False)
         self._set_reference_data(self.index, self.current_data)

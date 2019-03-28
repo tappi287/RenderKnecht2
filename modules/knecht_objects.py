@@ -252,10 +252,10 @@ class _DataTrimOption:
         """
         The base class for PR-Options and Packages.
         """
-        self.name = name
-        self.desc = desc
-        self.family = family
-        self.family_desc = family_desc
+        self.name = name or ''
+        self.desc = desc or ''
+        self.family = family or ''
+        self.family_desc = family_desc or ''
         self.value = value
 
         self.parent: Union[_DataParent, None] = parent

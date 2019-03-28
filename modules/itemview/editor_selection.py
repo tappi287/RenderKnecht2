@@ -130,8 +130,9 @@ class KnechtItemSelection(QObject):
         selection = self.view.selectionModel()
         selection.clearSelection()
 
+        LOGGER.debug('Selecting and expanding %s indices.', len(prx_index_ls))
+
         for proxy_index in prx_index_ls:
-            LOGGER.debug('Selecting and expanding prx idx: @%03dP%03d', proxy_index.row(), proxy_index.parent().row())
             selection.select(proxy_index, selection.Select | selection.Rows)
             self.scroll_to_index(proxy_index)
 
@@ -144,8 +145,9 @@ class KnechtItemSelection(QObject):
         selection = self.view.selectionModel()
         selection.clearSelection()
 
+        LOGGER.debug('Selecting and expanding %s indices.', len(src_index_ls))
+
         for src_index in src_index_ls:
-            LOGGER.debug('Selecting and expanding src idx: @%03dP%03d', src_index.row(), src_index.parent().row())
             prx_index = self.view.model().mapFromSource(src_index)
             selection.select(prx_index, selection.Select | selection.Rows)
             self.scroll_to_index(prx_index)
@@ -154,7 +156,6 @@ class KnechtItemSelection(QObject):
 
     @Slot(QModelIndex)
     def expand_parent_index(self, proxy_index: QModelIndex):
-        LOGGER.debug('Expanding row @%03d', proxy_index.parent().row())
         if not self.view.isExpanded(proxy_index.parent()):
             self.view.expand(proxy_index.parent())
 

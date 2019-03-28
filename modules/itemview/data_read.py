@@ -111,6 +111,8 @@ class KnechtDataToModel:
                         self.id_gen.create_id(), f'{trim.market} - {trim.gearbox}')
 
                 trim_item = KnechtItem(self.root_item, data)
+                trim_code_item = KnechtItem(trim_item, ('000', trim.model, 'on'))
+                trim_item.append_item_child(trim_code_item)
                 self.create_pr_options(trim.iterate_trim_pr(), trim_item)
                 self.root_item.append_item_child(trim_item)
 

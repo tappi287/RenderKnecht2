@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-19 23:38+0100\n"
+"POT-Creation-Date: 2019-03-27 21:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,128 +15,132 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: modules/gui/widgets\excel_dialog.py:41
+#: modules/gui/widgets\excel_dialog.py:44
 msgid "PR-Familie"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:41
-#: modules/gui/widgets\excel_dialog.py:43 modules/itemview\model_globals.py:22
+#: modules/gui/widgets\excel_dialog.py:44
+#: modules/gui/widgets\excel_dialog.py:46 modules/itemview\model_globals.py:22
 msgid "Beschreibung"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:43
+#: modules/gui/widgets\excel_dialog.py:46
 msgid "Getriebe"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:43
+#: modules/gui/widgets\excel_dialog.py:46
 msgid "Markt"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:43
+#: modules/gui/widgets\excel_dialog.py:46
 msgid "Model"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:110
+#: modules/gui/widgets\excel_dialog.py:114
 msgid "Optionen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:113
+#: modules/gui/widgets\excel_dialog.py:117
 msgid "Trimlines erstellen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:116
+#: modules/gui/widgets\excel_dialog.py:120
 msgid "Optionen erstellen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:119
+#: modules/gui/widgets\excel_dialog.py:123
 msgid "Pakete erstellen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:123
+#: modules/gui/widgets\excel_dialog.py:127
 msgid "PR-Familien Filter Vorlagen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:126
+#: modules/gui/widgets\excel_dialog.py:130
 msgid "Alle PR-Familien"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:128
+#: modules/gui/widgets\excel_dialog.py:132
 msgid "Interieur I/VX-13"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:130
+#: modules/gui/widgets\excel_dialog.py:134
 msgid "Exterieur I/VX-13"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:133
+#: modules/gui/widgets\excel_dialog.py:137
 msgid "PR-Familien Filter auf Pakete anwenden"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:136
+#: modules/gui/widgets\excel_dialog.py:140
 msgid "Zum filtern tippen ..."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:139
+#: modules/gui/widgets\excel_dialog.py:143
 msgid "Modellfilter"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:141
+#: modules/gui/widgets\excel_dialog.py:145
 msgid "PR-Familien-Filter"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:145
+#: modules/gui/widgets\excel_dialog.py:149
 msgid "PR Familien auswählen die ausgelesen werden sollen."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:147
+#: modules/gui/widgets\excel_dialog.py:151
 msgid "Modelle auswählen die ausgelesen werden sollen."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:157
+#: modules/gui/widgets\excel_dialog.py:165
 msgid "Excel Datei wird gelesen..."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:169
+#: modules/gui/widgets\excel_dialog.py:177
 msgid "POS Xml enthält keine bekannten Farbkombinationsmuster."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:173
+#: modules/gui/widgets\excel_dialog.py:181
 msgid "Konnte POS Xml Daten nicht lesen oder verarbeiten."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:186
+#: modules/gui/widgets\excel_dialog.py:189
+msgid "Daten werden konvertiert..."
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:201
 msgid "Daten übertragen..."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:211
+#: modules/gui/widgets\excel_dialog.py:227
 msgid "Excel Daten werden geladen..."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:224
+#: modules/gui/widgets\excel_dialog.py:240
 msgid "Excel Import Fehler"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:420
+#: modules/gui/widgets\excel_dialog.py:436
 msgid "Importvorgang"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:421
+#: modules/gui/widgets\excel_dialog.py:437
 msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:422
+#: modules/gui/widgets\excel_dialog.py:438
 msgid "Ja"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:423
+#: modules/gui/widgets\excel_dialog.py:439
 msgid "Nein"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:481
+#: modules/gui/widgets\excel_dialog.py:497
 msgid "Alle Einträge auswählen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:483
+#: modules/gui/widgets\excel_dialog.py:499
 msgid "Alle Einträge abwählen"
 msgstr ""
 
@@ -348,44 +352,48 @@ msgstr ""
 msgid "State Check im Baum anzeigen"
 msgstr ""
 
-#: modules/gui/widgets\menu_edit.py:22
+#: modules/gui/widgets\menu_edit.py:23
 msgid "Bearbeiten"
 msgstr ""
 
-#: modules/gui/widgets\menu_edit.py:43
+#: modules/gui/widgets\menu_edit.py:44
 msgid "Rückgängig:"
 msgstr ""
 
-#: modules/gui/widgets\menu_edit.py:47
+#: modules/gui/widgets\menu_edit.py:48
 msgid "Wiederherstellen:"
 msgstr ""
 
-#: modules/gui/widgets\menu_edit.py:52
+#: modules/gui/widgets\menu_edit.py:53
 msgid "Historie\tStrg+H"
 msgstr ""
 
-#: modules/gui/widgets\menu_edit.py:59
-msgid "Kopieren\tStrg+C"
-msgstr ""
-
-#: modules/gui/widgets\menu_edit.py:64
-msgid "Ausschneiden\tStrg+X"
+#: modules/gui/widgets\menu_edit.py:60
+msgid "Suchen und Ersetzen\tStrg+F"
 msgstr ""
 
 #: modules/gui/widgets\menu_edit.py:69
+msgid "Kopieren\tStrg+C"
+msgstr ""
+
+#: modules/gui/widgets\menu_edit.py:74
+msgid "Ausschneiden\tStrg+X"
+msgstr ""
+
+#: modules/gui/widgets\menu_edit.py:79
 msgid "Einfügen\tStrg+V"
 msgstr ""
 
-#: modules/gui/widgets\menu_edit.py:76
+#: modules/gui/widgets\menu_edit.py:86
 #: modules/gui/widgets\menu_tree_context.py:58
 msgid "Selektierte Zeilen entfernen\tEntf"
 msgstr ""
 
-#: modules/gui/widgets\menu_edit.py:83
+#: modules/gui/widgets\menu_edit.py:93
 msgid "Referenzen selektieren\tStrg+R"
 msgstr ""
 
-#: modules/gui/widgets\menu_edit.py:88
+#: modules/gui/widgets\menu_edit.py:98
 msgid "Selektion aufheben\tStrg+D"
 msgstr ""
 
@@ -421,23 +429,23 @@ msgstr ""
 msgid "Daten werden gelesen"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:195
+#: modules/gui/widgets\menu_file.py:198
 msgid "{0} in {1:.3}s geladen."
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:233
+#: modules/gui/widgets\menu_file.py:236
 msgid "Zieldatei zum Speichern festlegen?"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:234
+#: modules/gui/widgets\menu_file.py:237
 msgid "Die Datei: <i>{}</i><br>Pfad: <i>{}</i><br>wurde entfernt oder existiert nicht mehr.<br><br>Neue Zieldatei zum Speichern festlegen?"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:239
+#: modules/gui/widgets\menu_file.py:242
 msgid "Speichern unter.."
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:248
+#: modules/gui/widgets\menu_file.py:251
 msgid "Keine Einträge vorhanden"
 msgstr ""
 
@@ -549,6 +557,31 @@ msgstr ""
 
 #: modules/gui/widgets\path_util.py:153
 msgid "< Gültigen Pfad eingeben >"
+msgstr ""
+
+#: modules/gui/widgets\search_dialog.py:34
+msgid "Suchen und Ersetzen"
+msgstr ""
+
+#: modules/gui/widgets\search_dialog.py:39
+msgid "Finden"
+msgstr ""
+
+#: modules/gui/widgets\search_dialog.py:43
+#: modules/gui/widgets\search_dialog.py:54
+msgid "Ersetzen"
+msgstr ""
+
+#: modules/gui/widgets\search_dialog.py:47
+msgid "Alle Ersetzen"
+msgstr ""
+
+#: modules/gui/widgets\search_dialog.py:56
+msgid "Suchen"
+msgstr ""
+
+#: modules/gui/widgets\search_dialog.py:58
+msgid "Spalte"
 msgstr ""
 
 #: modules/gui/widgets\welcome_page.py:27
@@ -809,23 +842,43 @@ msgid "Den zu verwendenden Renderer wählen."
 msgstr ""
 
 #: modules/gui\ui_view_manager.py:24
-msgid "Zwischenablage verwerfen?"
+msgid "Ungespeicherte Änderungen"
 msgstr ""
 
 #: modules/gui\ui_view_manager.py:25
-msgid "Die Zwischenablage enthält <i>{}</i> Elemente aus<br><i>{}</i><br><br>Diese werden durch Schließen des Dokumentes aus der Zwischenablage <b>entfernt</b>."
+msgid "Das Dokument enthält Änderungen die <b>nicht</b> gespeichert wurden!<br><br>Diese werden durch Schließen des Dokumentes endgültig <b>verloren</b> gehen."
 msgstr ""
 
-#: modules/gui\ui_view_manager.py:27
+#: modules/gui\ui_view_manager.py:27 modules/gui\ui_view_manager.py:31
 msgid "Schließen"
 msgstr ""
 
-#: modules/gui\ui_view_manager.py:44
+#: modules/gui\ui_view_manager.py:28
+msgid "Zwischenablage verwerfen?"
+msgstr ""
+
+#: modules/gui\ui_view_manager.py:29
+msgid "Die Zwischenablage enthält <i>{}</i> Elemente aus<br><i>{}</i><br><br>Diese werden durch Schließen des Dokumentes aus der Zwischenablage <b>entfernt</b>."
+msgstr ""
+
+#: modules/gui\ui_view_manager.py:48
 msgid "Neues_Dokument.xml"
 msgstr ""
 
-#: modules/gui\ui_view_manager.py:137
+#: modules/gui\ui_view_manager.py:141
 msgid "Kann Beschäftigten nicht entlassen. Verstoß gegen Arbeitnehmerschutzgesetz festgestellt."
+msgstr ""
+
+#: modules/itemview\data_read.py:46
+msgid "Excel Daten werden konvertiert..."
+msgstr ""
+
+#: modules/itemview\data_read.py:56
+msgid "Konnte keinen Baum aus Excel Daten erstellen."
+msgstr ""
+
+#: modules/itemview\data_read.py:103
+msgid "Erstelle Model {} {:02d}/{:02d}..."
 msgstr ""
 
 #: modules/itemview\editor_undo.py:187
@@ -840,24 +893,12 @@ msgstr ""
 msgid "verschieben"
 msgstr ""
 
-#: modules/itemview\excel_read.py:46
-msgid "Excel Daten werden konvertiert..."
-msgstr ""
-
-#: modules/itemview\excel_read.py:56
-msgid "Konnte keinen Baum aus Excel Daten erstellen."
-msgstr ""
-
-#: modules/itemview\excel_read.py:102
-msgid "Indiziere {} PR Codes"
-msgstr ""
-
-#: modules/itemview\excel_read.py:119
-msgid "Erstelle Model {} {:02d}/{:02d}..."
-msgstr ""
-
 #: modules/itemview\item_edit_undo.py:76
 msgid "{0} ändern {1} ..."
+msgstr ""
+
+#: modules/itemview\item_edit_undo.py:82
+msgid "{0} für {1} ändern {2} ..."
 msgstr ""
 
 #: modules/itemview\model_globals.py:22
@@ -968,15 +1009,15 @@ msgstr ""
 msgid "{0} {1} gesendet"
 msgstr ""
 
-#: modules\knecht_excel.py:322
+#: modules\knecht_excel.py:273
 msgid "Datei exisitiert nicht: {}"
 msgstr ""
 
-#: modules\knecht_excel.py:338
+#: modules\knecht_excel.py:289
 msgid "Die Arbeitsblätter für PR-Optionen oder Modelle enthalten keine Daten oder konnten nicht gelesen werden."
 msgstr ""
 
-#: modules\knecht_excel.py:480
+#: modules\knecht_excel.py:431
 msgid "Es wurden nicht alle benötigten Arbeitsblätter gefunden {}. Es fehlen: {}"
 msgstr ""
 
@@ -1080,11 +1121,11 @@ msgstr ""
 msgid "{}px - Ext: "
 msgstr ""
 
-#: modules\knecht_session.py:148
+#: modules\knecht_session.py:192
 msgid "Sitzung während Leerlauf erfolgreich gespeichert"
 msgstr ""
 
-#: modules\knecht_session.py:225
+#: modules\knecht_session.py:283
 msgid "Sitzungswiederherstellung abgeschlossen"
 msgstr ""
 
