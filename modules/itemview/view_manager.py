@@ -279,7 +279,16 @@ class ViewManager(QObject):
         # Update view filtering
         current_view.set_filter_widget_text(current_view.current_filter_text())
 
-    def current_view(self):
+    def current_tab_is_document_tab(self):
+        if hasattr(self.current_tab(), 'none_document_tab'):
+            return False
+        return True
+
+    def current_tab(self) -> QWidget:
+        return self.tab.currentWidget()
+
+    def current_view(self) -> KnechtTreeView:
+        """ Guarantees to return a KnechtTreeView even if the current tab is a non-document widget """
         current_tab = self.tab.currentWidget()
 
         if not hasattr(current_tab, 'user_view'):
@@ -295,8 +304,9 @@ class ViewManager(QObject):
         return current_tab.user_view
 
     def current_file(self) -> Path:
-        current_widget = self.tab.currentWidget()
-        return self.file_mgr.get_file_from_widget(current_widget)
+        """ Guarantees to return the file of the current document view """
+        tab_idx = self.get_tab_index_by_view(self.current_view())
+        return self.file_mgr.get_file_from_widget(self.tab.widget(tab_idx))
 
     def setup_tree_view(self,
                         tree_view: KnechtTreeView, model: Union[KnechtModel, None] = None,

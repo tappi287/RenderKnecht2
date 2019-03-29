@@ -1,12 +1,12 @@
 import re
 
-from PySide2.QtCore import QAbstractAnimation, QEasingCurve, QModelIndex, QPoint, QPropertyAnimation, QRect, QSize, \
-    QSortFilterProxyModel, Qt, Slot
-from PySide2.QtWidgets import QCheckBox, QComboBox, QDialog, QLabel, QLineEdit, QPushButton, QTreeView, QUndoCommand, \
-    QAbstractItemView
+from PySide2.QtCore import QModelIndex, QPoint, QRect, QSortFilterProxyModel, Qt, Slot
+from PySide2.QtWidgets import QAbstractItemView, QCheckBox, QComboBox, QDialog, QLabel, QLineEdit, QPushButton, \
+    QTreeView, QUndoCommand
 
 from modules.globals import Resource
 from modules.gui.gui_utils import SetupWidget, replace_widget
+from modules.gui.widgets.expandable_widget import KnechtExpandableWidget
 from modules.itemview.item_edit_undo import ItemEditUndoCommand
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
@@ -26,6 +26,7 @@ _ = lang.gettext
 
 class SearchDialog(QDialog):
     default_width = 800
+    expand_height = 250
     last_view = None
     first_expand = True
     non_editable_columns = (Kg.ORDER, Kg.REF, Kg.ID)
@@ -44,22 +45,16 @@ class SearchDialog(QDialog):
         self.setWindowTitle(_('Suchen und Ersetzen'))
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
-        self.size_anim = QPropertyAnimation(self, b'size')
-        self.size_anim.setDuration(150)
-        self.size_anim.setEasingCurve(QEasingCurve.OutCurve)
-
         # --- Init Tree View ---
         self.search_view = self._init_tree_view(self.search_view)
-
-        # --- Collapse/Expand View ---
-        self.search_view.minimumSizeHint = self._search_view_min_size_hint
-        self.org_search_view_resize = self.search_view.resizeEvent
-        self.search_view.resizeEvent = self._search_view_resize
-        self.expand_btn.released.connect(self.expand_search_view)
-        self.lbl_expand.setText(_('Ansicht'))
-
         self._reset_view()
         self.ui.tree_focus_changed.connect(self._ui_tree_focus_changed)
+
+        # --- Collapse/Expand View ---
+        self.expand = KnechtExpandableWidget(self, self.expand_btn, self.search_view)
+        self.expand.expand_height = self.expand_height
+
+        self.lbl_expand.setText(_('Ansicht'))
 
         # --- Setup and translate Ui widgets ---
         self.btn_find: QPushButton
@@ -99,7 +94,7 @@ class SearchDialog(QDialog):
         self.column_box.setCurrentIndex(0)
 
     def center_on_ui(self):
-        self.toggle_expand_search_view(immediate=True)
+        self.expand.toggle_expand(immediate=True)
 
         r: QRect = self.ui.frameGeometry()
         width, height = self.default_width, self.size().height()
@@ -108,20 +103,6 @@ class SearchDialog(QDialog):
         self.setGeometry(QRect(top_left.x(), top_left.y(), width, height))
 
         self.first_expand = True
-
-    def _search_view_min_size_hint(self):
-        return QSize(self.search_view.sizeHint().width(), 0)
-
-    def _search_view_resize(self, event):
-        self.org_search_view_resize(event)
-
-        if self.size_anim.state() != QAbstractAnimation.Running:
-            if event.size().height() > 0:
-                self.expand_btn.setChecked(True)
-            else:
-                self.expand_btn.setChecked(False)
-
-        event.accept()
 
     @Slot(bool)
     def toggle_case_sensitivity(self, checked: bool):
@@ -133,31 +114,6 @@ class SearchDialog(QDialog):
             self.view_filter_case_sensitivity = Qt.CaseInsensitive
 
         self.search_view.model().setFilterCaseSensitivity(self.view_filter_case_sensitivity)
-
-    def toggle_expand_search_view(self, immediate: bool=False):
-        if self.expand_btn.isChecked():
-            self.expand_btn.setChecked(False)
-            self.expand_search_view(immediate=immediate)
-        else:
-            self.expand_btn.setChecked(True)
-            self.expand_search_view(immediate=immediate)
-
-    def expand_search_view(self, immediate: bool=False):
-        if self.expand_btn.isChecked():
-            height = self.search_view.size().height()
-            if height < 250:
-                height = 250
-        else:
-            height = 0
-
-        self.search_view.resize(QSize(self.search_view.sizeHint().width(), height))
-        self.size_anim.setStartValue(QSize(self.size().width(), self.size().height()))
-        self.size_anim.setEndValue(QSize(self.size().width(), self.minimumSizeHint().height() + height))
-
-        if immediate:
-            self.resize(QSize(self.size().width(), self.minimumSizeHint().height() + height))
-        else:
-            self.size_anim.start()
 
     def _ui_tree_focus_changed(self, focus_view):
         if focus_view is self.search_view or focus_view is self.last_view:
@@ -247,7 +203,8 @@ class SearchDialog(QDialog):
 
         if self.first_expand:
             self.first_expand = False
-            self.toggle_expand_search_view()
+            if not self.expand_btn.isChecked():
+                self.expand.toggle_expand()
 
         return proxy_index_list, view
 

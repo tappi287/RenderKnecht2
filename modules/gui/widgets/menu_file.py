@@ -111,6 +111,9 @@ class FileMenu(QObject):
         self.new_document_count += 1
 
     def save_xml(self):
+        if not self.view_mgr.current_tab_is_document_tab():
+            return
+
         self.enable_menus(False)
 
         file = self.view_mgr.current_file()
@@ -127,6 +130,9 @@ class FileMenu(QObject):
         self.save_as_xml(file)
 
     def save_as_xml(self, file: Path=None):
+        if not self.view_mgr.current_tab_is_document_tab():
+            return
+
         self.enable_menus(False)
 
         if not file:
