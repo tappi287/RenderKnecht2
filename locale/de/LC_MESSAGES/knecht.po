@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-27 21:01+0100\n"
+"POT-Creation-Date: 2019-03-29 01:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -482,7 +482,7 @@ msgstr ""
 msgid "Hide ID columns"
 msgstr ""
 
-#: modules/gui/widgets\menu_view.py:19
+#: modules/gui/widgets\menu_view.py:19 modules/gui/widgets\search_dialog.py:59
 msgid "Ansicht"
 msgstr ""
 
@@ -559,28 +559,32 @@ msgstr ""
 msgid "< G¸ltigen Pfad eingeben >"
 msgstr ""
 
-#: modules/gui/widgets\search_dialog.py:34
+#: modules/gui/widgets\search_dialog.py:44
 msgid "Suchen und Ersetzen"
 msgstr ""
 
-#: modules/gui/widgets\search_dialog.py:39
+#: modules/gui/widgets\search_dialog.py:66
 msgid "Finden"
 msgstr ""
 
-#: modules/gui/widgets\search_dialog.py:43
-#: modules/gui/widgets\search_dialog.py:54
+#: modules/gui/widgets\search_dialog.py:70
+#: modules/gui/widgets\search_dialog.py:85
 msgid "Ersetzen"
 msgstr ""
 
-#: modules/gui/widgets\search_dialog.py:47
+#: modules/gui/widgets\search_dialog.py:74
 msgid "Alle Ersetzen"
 msgstr ""
 
-#: modules/gui/widgets\search_dialog.py:56
+#: modules/gui/widgets\search_dialog.py:78
+msgid "Groﬂ-/Kleinschreibung beachten"
+msgstr ""
+
+#: modules/gui/widgets\search_dialog.py:87
 msgid "Suchen"
 msgstr ""
 
-#: modules/gui/widgets\search_dialog.py:58
+#: modules/gui/widgets\search_dialog.py:89
 msgid "Spalte"
 msgstr ""
 
