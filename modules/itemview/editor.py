@@ -1,6 +1,6 @@
 from typing import List
 
-from PySide2.QtCore import QItemSelectionModel, QModelIndex, QObject, QRegExp, Signal
+from PySide2.QtCore import QItemSelectionModel, QModelIndex, QObject
 
 from modules.itemview.editor_collect import KnechtCollectVariants
 from modules.itemview.editor_copypaste import KnechtEditorCopyPaste

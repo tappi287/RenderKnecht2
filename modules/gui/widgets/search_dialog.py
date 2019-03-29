@@ -1,12 +1,15 @@
-from PySide2.QtCore import Qt, QRect, QPoint, QModelIndex, QSortFilterProxyModel, QSize, QPropertyAnimation, \
-    QEasingCurve, QAbstractAnimation
-from PySide2.QtWidgets import QWidget, QPushButton, QComboBox, QLineEdit, QLabel, QDialog, QUndoCommand, QTreeView
+import re
 
-from modules.itemview.item_edit_undo import ItemEditUndoCommand
-from modules.itemview.model import KnechtModel, KnechtSortFilterProxyModel
-from modules.itemview.model_globals import KnechtModelGlobals as Kg
+from PySide2.QtCore import QAbstractAnimation, QEasingCurve, QModelIndex, QPoint, QPropertyAnimation, QRect, QSize, \
+    QSortFilterProxyModel, Qt, Slot
+from PySide2.QtWidgets import QCheckBox, QComboBox, QDialog, QLabel, QLineEdit, QPushButton, QTreeView, QUndoCommand, \
+    QAbstractItemView
+
 from modules.globals import Resource
 from modules.gui.gui_utils import SetupWidget, replace_widget
+from modules.itemview.item_edit_undo import ItemEditUndoCommand
+from modules.itemview.model import KnechtModel
+from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.model_update import UpdateModel
 from modules.itemview.tree_view import KnechtTreeView
 from modules.itemview.tree_view_utils import setup_header_layout
@@ -25,8 +28,9 @@ class SearchDialog(QDialog):
     default_width = 800
     last_view = None
     first_expand = True
-    non_editable_columns = (Kg.ORDER, Kg.TYPE, Kg.REF, Kg.ID)
+    non_editable_columns = (Kg.ORDER, Kg.REF, Kg.ID)
     default_match_flags = Qt.MatchRecursive | Qt.MatchContains | Qt.MatchCaseSensitive
+    view_filter_case_sensitivity = Qt.CaseSensitive
 
     def __init__(self, ui):
         """ Dialog to search and replace inside document views
@@ -69,6 +73,10 @@ class SearchDialog(QDialog):
         self.btn_replace_all: QPushButton
         self.btn_replace_all.setText(_('Alle Ersetzen'))
         self.btn_replace_all.released.connect(self.search_replace_all)
+
+        self.check_case: QCheckBox
+        self.check_case.setText(_('Groß-/Kleinschreibung beachten'))
+        self.check_case.toggled.connect(self.toggle_case_sensitivity)
 
         self.column_box: QComboBox
         self.edit_replace: QLineEdit
@@ -115,6 +123,17 @@ class SearchDialog(QDialog):
 
         event.accept()
 
+    @Slot(bool)
+    def toggle_case_sensitivity(self, checked: bool):
+        if checked:
+            self.default_match_flags = Qt.MatchRecursive | Qt.MatchContains | Qt.MatchCaseSensitive
+            self.view_filter_case_sensitivity = Qt.CaseSensitive
+        else:
+            self.default_match_flags = Qt.MatchRecursive | Qt.MatchContains
+            self.view_filter_case_sensitivity = Qt.CaseInsensitive
+
+        self.search_view.model().setFilterCaseSensitivity(self.view_filter_case_sensitivity)
+
     def toggle_expand_search_view(self, immediate: bool=False):
         if self.expand_btn.isChecked():
             self.expand_btn.setChecked(False)
@@ -145,24 +164,54 @@ class SearchDialog(QDialog):
             return
         self._reset_view()
 
-    @staticmethod
-    def _init_tree_view(tree_view: QTreeView) -> KnechtTreeView:
+    def _init_tree_view(self, tree_view: QTreeView) -> KnechtTreeView:
         """ Replace the UI Designer placeholder tree views """
         parent = tree_view.parent()
         new_view = KnechtTreeView(parent, None)
         replace_widget(tree_view, new_view)
+
+        new_view.pressed.connect(self._view_item_pressed)
+
         return new_view
+
+    @Slot(QModelIndex)
+    def _view_item_pressed(self, index: QModelIndex):
+        if not self.last_view:
+            return
+        LOGGER.debug(index.data(Qt.DisplayRole))
+
+        src_index = self.search_view.model().mapToSource(index)
+        proxy_index = self.last_view.model().mapFromSource(src_index)
+        self.last_view.scrollTo(proxy_index, QAbstractItemView.PositionAtCenter)
+
+    def _last_view_deleted(self, obj=None):
+        LOGGER.debug('Clearing deleted last view %s', obj)
+        self.last_view = None
 
     def _reset_view(self):
         UpdateModel(self.search_view).update(KnechtModel())
 
+    def _update_search_view(self, view, proxy_index_list, txt, column):
+        """ Mirror search results in search tree view """
+        self.search_view.model().setFilterFixedString(txt)
+        self.search_view.model().setFilterKeyColumn(column)
+
+        src_index_ls = list()
+        for index in proxy_index_list:
+            src_index_ls.append(view.model().mapToSource(index))
+
+        self.search_view.editor.selection.clear_and_select_src_index_ls(src_index_ls)
+        setup_header_layout(self.search_view)
+
     def _update_document_view(self) -> KnechtTreeView:
+        """ Update current view to search in and update search tree view accordingly """
         view = self.ui.tree_with_focus()
         self.last_view = view
+        self.last_view.destroyed.connect(self._last_view_deleted)
 
         if view.model().sourceModel() != self.search_view.model().sourceModel():
             proxy_model = QSortFilterProxyModel()
-            proxy_model.setFilterCaseSensitivity(Qt.CaseSensitive)
+            proxy_model.setFilterCaseSensitivity(self.view_filter_case_sensitivity)
             proxy_model.setSourceModel(view.model().sourceModel())
             proxy_model.setRecursiveFilteringEnabled(True)
             self.search_view.setModel(proxy_model)
@@ -187,14 +236,7 @@ class SearchDialog(QDialog):
         proxy_index_list = view.editor.match.indices(txt, column, match_flags=self.default_match_flags)
 
         if proxy_index_list:
-            # --- Update Search Tree View ---
-            self.search_view.model().setFilterFixedString(txt)
-            self.search_view.model().setFilterKeyColumn(column)
-            src_index_ls = list()
-            for index in proxy_index_list:
-                src_index_ls.append(view.model().mapToSource(index))
-            self.search_view.editor.selection.clear_and_select_src_index_ls(src_index_ls)
-            setup_header_layout(self.search_view)
+            self._update_search_view(view, proxy_index_list, txt, column)
 
             # --- Update Actual Tree View ---
             view.setCurrentIndex(proxy_index_list[0])
@@ -237,6 +279,19 @@ class SearchDialog(QDialog):
         search_txt = self.edit_search.text()
         replace_txt = self.edit_replace.text()
         item_text = index.data(role=Qt.DisplayRole)
-        new_text = item_text.replace(search_txt, replace_txt)
+
+        if self.check_case.isChecked():
+            flags = 0
+        else:
+            flags = re.IGNORECASE
+
+        try:
+            new_text = re.sub(search_txt, replace_txt, item_text, flags=flags)
+        except Exception as e:
+            LOGGER.error(e)
+            return
+
+        if new_text == item_text:
+            return
 
         return ItemEditUndoCommand(item_text, new_text, index, undo_parent, editing_done=False)

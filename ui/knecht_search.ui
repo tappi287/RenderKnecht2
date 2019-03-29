@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>421</width>
-    <height>157</height>
+    <height>175</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,26 +16,6 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="edit_search"/>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="edit_replace"/>
-     </item>
-     <item row="1" column="2">
-      <widget class="QPushButton" name="btn_replace">
-       <property name="text">
-        <string>Replace</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/main/search_replace_dark.png</normaloff>:/main/search_replace_dark.png</iconset>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QComboBox" name="column_box"/>
-     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="lbl_search">
        <property name="text">
@@ -43,6 +23,47 @@
        </property>
        <property name="buddy">
         <cstring>edit_search</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="btn_replace">
+       <property name="text">
+        <string>Replace</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/gui_resource.qrc">
+         <normaloff>:/main/search_replace_dark.png</normaloff>:/main/search_replace_dark.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="edit_search"/>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="edit_replace"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="column_box"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="lbl_column">
+       <property name="text">
+        <string>Column</string>
+       </property>
+       <property name="buddy">
+        <cstring>column_box</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QPushButton" name="btn_replace_all">
+       <property name="text">
+        <string>Replace All</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/gui_resource.qrc">
+         <normaloff>:/main/search_replace_dark.png</normaloff>:/main/search_replace_dark.png</iconset>
        </property>
       </widget>
      </item>
@@ -62,33 +83,22 @@
         <string>Find</string>
        </property>
        <property name="icon">
-        <iconset>
+        <iconset resource="res/gui_resource.qrc">
          <normaloff>:/main/search.png</normaloff>:/main/search.png</iconset>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="lbl_column">
+     <item row="4" column="0">
+      <widget class="QLabel" name="lbl_expand">
        <property name="text">
-        <string>Column</string>
+        <string>View</string>
        </property>
        <property name="buddy">
         <cstring>column_box</cstring>
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QPushButton" name="btn_replace_all">
-       <property name="text">
-        <string>Replace All</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/main/search_replace_dark.png</normaloff>:/main/search_replace_dark.png</iconset>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1" colspan="2">
+     <item row="4" column="1" colspan="2">
       <widget class="QPushButton" name="expand_btn">
        <property name="styleSheet">
         <string notr="true">background: rgba(100, 100, 100,0); border: 1px solid; border-radius: 3px; border-color: rgb(146, 146, 146);</string>
@@ -98,8 +108,8 @@
        </property>
        <property name="icon">
         <iconset resource="res/gui_resource.qrc">
-         <normaloff>:/main/arrow_up.png</normaloff>
-         <normalon>:/main/arrow.png</normalon>:/main/arrow_up.png</iconset>
+         <normaloff>:/main/arrow.png</normaloff>
+         <normalon>:/main/arrow_up.png</normalon>:/main/arrow.png</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -112,13 +122,13 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="lbl_expand">
+     <item row="3" column="1">
+      <widget class="QCheckBox" name="check_case">
        <property name="text">
-        <string>View</string>
+        <string>Case sensitive</string>
        </property>
-       <property name="buddy">
-        <cstring>column_box</cstring>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
