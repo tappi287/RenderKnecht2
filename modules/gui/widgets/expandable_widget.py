@@ -30,6 +30,7 @@ class KnechtExpandableWidget(QObject):
         self.size_animation = QPropertyAnimation(self.widget, b'size')
         self.size_animation.setDuration(150)
         self.size_animation.setEasingCurve(QEasingCurve.OutCurve)
+        self.size_animation.finished.connect(self.widget.updateGeometry)
 
         self.expand_toggle_btn = expand_btn or QPushButton(self)
         self.expand_toggle_btn.setCheckable(True)
@@ -68,7 +69,7 @@ class KnechtExpandableWidget(QObject):
 
     def expand_widget(self, immediate: bool=False):
         if self.expand_toggle_btn.isChecked():
-            expand_height = self.expand_height
+            expand_height = self.widget.size().height()
         else:
             expand_height = 0
 
@@ -79,5 +80,6 @@ class KnechtExpandableWidget(QObject):
 
         if immediate:
             self.widget.resize(expanded_size)
+            self.widget.updateGeometry()
         else:
             self.size_animation.start()

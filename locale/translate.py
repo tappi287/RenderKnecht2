@@ -7,7 +7,8 @@ from subprocess import call
 # App name for file name to create
 APP_NAME = 'knecht'
 # modules to translate
-MODULES = 'knechtapp.py modules/*.py modules/gui/*.py modules/gui/widgets/*.py modules/itemview/*.py'
+MODULES = 'knechtapp.py modules/*.py modules/gui/*.py modules/gui/widgets/*.py ' \
+          'modules/gui/wizard/*.py modules/itemview/*.py'
 
 ENCODING_VAL = 'cp1252'
 

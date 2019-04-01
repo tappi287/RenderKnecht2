@@ -1,3 +1,4 @@
+from PySide2.QtCore import QTimer
 from PySide2.QtWidgets import QWizard, QWizardPage
 
 from modules.globals import Resource
@@ -25,7 +26,8 @@ class WelcomeWizardPage(QWizardPage):
         SetupWidget.from_ui_file(self, Resource.ui_paths['wizard_start'])
 
         self.restore_btn.released.connect(self.wizard.restore_last_session)
-        self.expand = KnechtExpandableWidget(self, self.country_filter_expand_btn, self.country_filter_text_edit)
+
+        self.country_filter_expand_btn.released.connect(self.toggle_filter_edit)
 
     def initializePage(self):
         self.welcome_desc.setText(_('Dieser Assistent führt durch die Erstellung von Presets aus Importdaten. '
@@ -42,10 +44,13 @@ class WelcomeWizardPage(QWizardPage):
         self.save_btn.setStatusTip(_('Session in Datei sichern'))
         self.restore_btn.setText(_('Letzte Sitzung wiederherstellen'))
 
-        self.expand.expand_height = self.country_filter_text_edit.size().height()
-        self.expand.toggle_expand(immediate=True)
-
         self.reload_pkg_filter()
+
+    def toggle_filter_edit(self):
+        if self.country_filter_text_edit.isVisible():
+            self.country_filter_text_edit.hide()
+        else:
+            self.country_filter_text_edit.show()
 
     def reload_pkg_filter(self):
         # Prepare Filter Text Edit

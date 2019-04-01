@@ -130,8 +130,6 @@ class KnechtItemSelection(QObject):
         selection = self.view.selectionModel()
         selection.clearSelection()
 
-        LOGGER.debug('Selecting and expanding %s proxy indices.', len(prx_index_ls))
-
         for proxy_index in prx_index_ls:
             selection.select(proxy_index, selection.Select | selection.Rows)
             self.scroll_to_index(proxy_index)
@@ -144,8 +142,6 @@ class KnechtItemSelection(QObject):
         """
         selection = self.view.selectionModel()
         selection.clearSelection()
-
-        LOGGER.debug('Selecting and expanding %s source indices.', len(src_index_ls))
 
         for src_index in src_index_ls:
             prx_index = self.view.model().mapFromSource(src_index)
