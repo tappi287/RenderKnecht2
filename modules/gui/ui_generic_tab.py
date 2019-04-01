@@ -15,7 +15,7 @@ _ = lang.gettext
 class GenericTabWidget(QWidget):
     none_document_tab = True
 
-    def __init__(self, ui, widget: QWidget):
+    def __init__(self, ui, widget: QWidget, name: str=''):
         """ Creates a tab inside ui containing widget
 
         :param modules.gui.main_ui.KnechtWindow ui: Knecht main window
@@ -23,11 +23,9 @@ class GenericTabWidget(QWidget):
         """
         super(GenericTabWidget, self).__init__(ui)
         self.ui = ui
-
-        if widget.windowTitle():
-            self.name = widget.windowTitle()
-        else:
-            self.name = 'Tab Dialog'
+        self.name = widget.windowTitle()
+        if name:
+            self.name = name
 
         # Add widget to this tab widget
         self.widget = widget

@@ -88,7 +88,7 @@ class KnechtApp(QtWidgets.QApplication):
 
         self.session_handler = None
 
-        # Restore Session
+        # Restore SessionData
         QTimer.singleShot(50, self.init_session)
 
     def ui_close_event(self, close_event):

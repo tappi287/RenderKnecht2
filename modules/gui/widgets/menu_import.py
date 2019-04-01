@@ -9,6 +9,7 @@ from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.excel_dialog import ExcelImportDialog
 from modules.gui.widgets.fakom_dialog import FakomImportDialog
 from modules.gui.widgets.file_dialog import FileDialog
+from modules.gui.wizard.wizard import PresetWizard
 from modules.itemview.data_read import KnechtDataThread
 from modules.itemview.item import KnechtItem
 from modules.itemview.model import KnechtModel
@@ -39,8 +40,17 @@ class ImportMenu(QMenu):
         xl_action.triggered.connect(self.open_xlsx)
         fa_action = QAction(IconRsc.get_icon('fakom'), _('FaKom Lutscher'), self)
         fa_action.triggered.connect(self.open_fakom)
+        pw_action = QAction(IconRsc.get_icon('qub_button'), _('Preset Assistent'), self)
+        pw_action.triggered.connect(self.open_wizard)
 
-        self.addActions([xl_action, fa_action])
+        self.addActions([xl_action, fa_action, pw_action])
+
+    @Slot()
+    def open_wizard(self):
+        wizard = PresetWizard(self.ui)
+        wizard.destroyed.connect(self._report_destroyed)
+
+        GenericTabWidget(self.ui, wizard)
 
     @Slot()
     def open_fakom(self):

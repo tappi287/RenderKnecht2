@@ -3,6 +3,8 @@ import os
 from pathlib import Path
 from typing import Union, Any
 
+import jsonpickle
+
 from modules.globals import Resource, UI_PATH, UI_PATHS_FILE, SETTINGS_FILE
 from modules.globals import get_current_modules_dir, get_settings_dir
 from modules.language import setup_translation
@@ -73,6 +75,32 @@ class Settings:
             LOGGER.debug(e)
 
         return False
+
+    @staticmethod
+    def pickle_save(obj: object, file: Path) -> bool:
+        try:
+            with open(file.as_posix(), 'w') as f:
+                f.write(jsonpickle.encode(obj))
+
+            msg = 'Jsonpickled settings to file: {}'.format(file.absolute().as_posix())
+            LOGGER.info(msg)
+            print(msg)
+            return True
+        except Exception as e:
+            LOGGER.error('Could not save file!\n%s', e)
+            print('Could not save file!\n%s', e)
+        return False
+
+    @staticmethod
+    def pickle_load(obj: object, file: Path) -> object:
+        try:
+            with open(file.as_posix(), 'r') as f:
+                obj = jsonpickle.decode(f.read())
+            LOGGER.info('Pickle loaded object: %s', obj)
+        except Exception as e:
+            LOGGER.error('Error jsonpickeling object from file. %s', e)
+
+        return obj
 
 
 class KnechtSettings:

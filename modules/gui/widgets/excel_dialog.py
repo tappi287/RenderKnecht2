@@ -60,7 +60,7 @@ class ExcelImportDialog(QDialog):
         interior = list()
         exterior = list()
 
-    def __init__(self, ui, file: Path, pos_file: Path=None):
+    def __init__(self, ui, file: Path, pos_file: Path=None, fixed_options: bool=False):
         """ Dialog to set Excel V Plus import options
 
         :param modules.gui.main_ui.KnechtWindow ui: Main Window
@@ -87,6 +87,9 @@ class ExcelImportDialog(QDialog):
         self.read_fakom = False
         if pos_file:
             self.read_fakom = True
+
+        # --- Do not offer read options ---
+        self.fixed_options = fixed_options
 
         # --- Filter Buttons ---
         for a in (self.btn_filter_all, self.btn_filter_ext, self.btn_filter_int):
@@ -279,7 +282,8 @@ class ExcelImportDialog(QDialog):
         self._setup_tree_columns()
         self.buttonBox.setEnabled(True)
         self.family_box.setEnabled(True)
-        self.option_box.setEnabled(True)
+        if not self.fixed_options:
+            self.option_box.setEnabled(True)
 
         self._setup_header_width()
         self._load_default_pr_filter()

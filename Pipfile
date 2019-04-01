@@ -12,6 +12,7 @@ xlrd = "*"
 imageio = "*"
 requests = "*"
 bottleneck = "*"
+jsonpickle = "*"
 
 [dev-packages]
 jupyter = "*"

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>wizard_start</class>
+ <widget class="QWizardPage" name="wizard_start">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>797</width>
+    <height>605</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>WizardPage</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="welcome_desc">
+     <property name="text">
+      <string>Dieser Assistent führt durch die Erstellung von Presets aus VPlus und POS Varianten Daten. Gewünschte Modelle und Optionen können in nachfolgenden Schritten gewählt werden.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="filter_box">
+     <property name="title">
+      <string>Landespakete Filter</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <widget class="QLabel" name="country_filter_desc">
+        <property name="text">
+         <string>Dieser Filter ermöglicht den Ausschluß meist unbenötigter und redundanter Pakete für einzelne, länderspezifische Märkte. Die gefilterten Pakete bleiben sicht- und zuweisbar. Sie werden aber als verwendet markiert so dass die automagische Zuweisung sie ignoriert.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="filter_btn_layout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item alignment="Qt::AlignLeft|Qt::AlignVCenter">
+         <widget class="QCheckBox" name="checkbox_country_filter">
+          <property name="text">
+           <string>Landesspezifische Pakete als verwendet markieren</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="filter_icon">
+          <property name="maximumSize">
+           <size>
+            <width>35</width>
+            <height>35</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="res/gui_resource.qrc">:/type/pkg.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QPushButton" name="country_filter_expand_btn">
+        <property name="styleSheet">
+         <string notr="true">background: rgba(100, 100, 100,0); border: 1px solid; border-radius: 3px; border-color: rgb(146, 146, 146);</string>
+        </property>
+        <property name="text">
+         <string>Filter anzeigen/bearbeiten</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/gui_resource.qrc">
+          <normaloff>:/main/arrow.png</normaloff>
+          <normalon>:/main/arrow_up.png</normalon>:/main/arrow.png</iconset>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPlainTextEdit" name="country_filter_text_edit"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="btn_bar_layout">
+     <item>
+      <widget class="QPushButton" name="load_btn">
+       <property name="maximumSize">
+        <size>
+         <width>64</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="res/gui_resource.qrc">
+         <normaloff>:/main/folder.png</normaloff>:/main/folder.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="save_btn">
+       <property name="maximumSize">
+        <size>
+         <width>64</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="res/gui_resource.qrc">
+         <normaloff>:/main/disk.png</normaloff>:/main/disk.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="restore_btn">
+       <property name="text">
+        <string>Letzte Sitzung wiederherstellen</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res/gui_resource.qrc">
+         <normaloff>:/main/undo.png</normaloff>:/main/undo.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="res/gui_resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

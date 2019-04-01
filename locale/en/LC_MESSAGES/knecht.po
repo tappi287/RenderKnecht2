@@ -86,11 +86,11 @@ msgid "PR-Familien-Filter"
 msgstr "PR-Family Filter"
 
 #: modules/gui/widgets\excel_dialog.py:149
-msgid "PR Familien auswählen die ausgelesen werden sollen."
+msgid "PR Familien auswï¿½hlen die ausgelesen werden sollen."
 msgstr "Choose PR-Families that should be imported."
 
 #: modules/gui/widgets\excel_dialog.py:151
-msgid "Modelle auswählen die ausgelesen werden sollen."
+msgid "Modelle auswï¿½hlen die ausgelesen werden sollen."
 msgstr "Choose Models that should be imported."
 
 #: modules/gui/widgets\excel_dialog.py:165
@@ -98,7 +98,7 @@ msgid "Excel Datei wird gelesen..."
 msgstr "Reading Excel file..."
 
 #: modules/gui/widgets\excel_dialog.py:177
-msgid "POS Xml enthält keine bekannten Farbkombinationsmuster."
+msgid "POS Xml enthï¿½lt keine bekannten Farbkombinationsmuster."
 msgstr "POS Xml contains no known color combination patterns."
 
 #: modules/gui/widgets\excel_dialog.py:181
@@ -110,7 +110,7 @@ msgid "Daten werden konvertiert..."
 msgstr "Data is being converted..."
 
 #: modules/gui/widgets\excel_dialog.py:201
-msgid "Daten übertragen..."
+msgid "Daten ï¿½bertragen..."
 msgstr "Transmit data..."
 
 #: modules/gui/widgets\excel_dialog.py:227
@@ -138,11 +138,11 @@ msgid "Nein"
 msgstr "No"
 
 #: modules/gui/widgets\excel_dialog.py:497
-msgid "Alle Einträge auswählen"
+msgid "Alle Eintrï¿½ge auswï¿½hlen"
 msgstr "Check all items"
 
 #: modules/gui/widgets\excel_dialog.py:499
-msgid "Alle Einträge abwählen"
+msgid "Alle Eintrï¿½ge abwï¿½hlen"
 msgstr "Un-check all items"
 
 #: modules/gui/widgets\fakom_dialog.py:39 modules/gui\ui_translations.py:38
@@ -150,11 +150,11 @@ msgid "Pfad:"
 msgstr "Path:"
 
 #: modules/gui/widgets\fakom_dialog.py:40
-msgid "Pfad als Text in das Feld kopieren oder über den Dateidialog wählen."
+msgid "Pfad als Text in das Feld kopieren oder ï¿½ber den Dateidialog wï¿½hlen."
 msgstr "Copy path into the box as text or choose via file dialogue."
 
 #: modules/gui/widgets\fakom_dialog.py:41
-msgid "Dateidialog öffnen um Datei oder Verzeichnis auszuwählen."
+msgid "Dateidialog ï¿½ffnen um Datei oder Verzeichnis auszuwï¿½hlen."
 msgstr "Open file dialog to select file or directory."
 
 #: modules/gui/widgets\fakom_dialog.py:43
@@ -162,11 +162,11 @@ msgid "POS Xml Varianten"
 msgstr "POS Xml variants"
 
 #: modules/gui/widgets\fakom_dialog.py:45
-msgid "DeltaGen POS XML Datei eines Freigabemodells auswählen. Die Farbschlüssel und Sitzbezug Kombinatorik wird aus den Action Listen der Xml Struktur gelutscht."
+msgid "DeltaGen POS XML Datei eines Freigabemodells auswï¿½hlen. Die Farbschlï¿½ssel und Sitzbezug Kombinatorik wird aus den Action Listen der Xml Struktur gelutscht."
 msgstr "Select DeltaGen POS XML file of a DeltaGen model. The color key and seat cover combination is sucked from the action lists of the Xml structure."
 
 #: modules/gui/widgets\fakom_dialog.py:51
-msgid "POS Xml Variantendatei auswählen..."
+msgid "POS Xml Variantendatei auswï¿½hlen..."
 msgstr "Choose POS Xml variants file..."
 
 #: modules/gui/widgets\fakom_dialog.py:57
@@ -174,11 +174,11 @@ msgid "V Plus Browserauszug"
 msgstr "V Plus Browser file"
 
 #: modules/gui/widgets\fakom_dialog.py:59
-msgid "Pfad zum V Plus Browserauszug festlegen. Die verfügbaren Sitzbezüge(SIB), Vordersitze(VOS) und Lederumfänge(LUM) je Trimline werden ausgelesen.<br/><br/>Im nächsten Schritt können und sollten <b>Modelfilter</b> gesetzt werden."
+msgid "Pfad zum V Plus Browserauszug festlegen. Die verfï¿½gbaren Sitzbezï¿½ge(SIB), Vordersitze(VOS) und Lederumfï¿½nge(LUM) je Trimline werden ausgelesen.<br/><br/>Im nï¿½chsten Schritt kï¿½nnen und sollten <b>Modelfilter</b> gesetzt werden."
 msgstr "Set path to the V Plus browser document. The available seat covers (SIB), front seats (VOS) and leather trims (LUM) per trimline are read out.<br/><br/>In the next step, <b>model filter</b> can and should be set."
 
 #: modules/gui/widgets\fakom_dialog.py:66
-msgid "V Plus Browserauszug auswählen..."
+msgid "V Plus Browserauszug auswï¿½hlen..."
 msgstr "Choose V Plus Browser file..."
 
 #: modules/gui/widgets\fakom_dialog.py:72
@@ -186,11 +186,11 @@ msgid "Information zu Farbkombinationen"
 msgstr "Information on color combinations"
 
 #: modules/gui/widgets\fakom_dialog.py:74
-msgid "<span style=\" font-weight:600; color:#aa0000;\">ACHTUNG:</span> Die Farb- und Sitzbezugskombinationen werden aus den POS Varianten gelutscht und anschließend mit dem V Plus Browserauszug auf Sitzbezüge, Vordersitze und Lederumfänge abgeglichen. Sitzbezüge die im V Plus Dokument vorhanden sind, nicht aber in den POS Varianten, können nicht berücksichtigt werden.<br/><br/>Dieser Import garantiert keine Vollständigkeit oder Richtigkeit gegenüber der aktuellen FaKom. Er basiert ausschließlich auf der Datengrundlage der POS Varianten des DeltaGen Modells."
+msgid "<span style=\" font-weight:600; color:#aa0000;\">ACHTUNG:</span> Die Farb- und Sitzbezugskombinationen werden aus den POS Varianten gelutscht und anschlieï¿½end mit dem V Plus Browserauszug auf Sitzbezï¿½ge, Vordersitze und Lederumfï¿½nge abgeglichen. Sitzbezï¿½ge die im V Plus Dokument vorhanden sind, nicht aber in den POS Varianten, kï¿½nnen nicht berï¿½cksichtigt werden.<br/><br/>Dieser Import garantiert keine Vollstï¿½ndigkeit oder Richtigkeit gegenï¿½ber der aktuellen FaKom. Er basiert ausschlieï¿½lich auf der Datengrundlage der POS Varianten des DeltaGen Modells."
 msgstr "<span style=\\ font-weight:600; color:#aa0000;\\>ATTENTION:</span> The color and seat cover combinations are sucked from the POS variants and then matched against the V Plus browser seat covers, front seats and leather trim. Seat covers that are present in the V Plus document, but not in the POS variants, cannot be considered.<br/><br/>This import does not guarantee completeness or accuracy towards the current FaKom. It is based solely on the data of the POS variants of the DeltaGen model."
 
 #: modules/gui/widgets\fakom_dialog.py:88
-msgid "POS Varianten Xml auswählen ..."
+msgid "POS Varianten Xml auswï¿½hlen ..."
 msgstr "Choose POS Variants Xml ..."
 
 #: modules/gui/widgets\fakom_dialog.py:88 modules/gui/widgets\file_dialog.py:29
@@ -234,15 +234,15 @@ msgid "Historie"
 msgstr "History"
 
 #: modules/gui/widgets\history.py:114
-msgid "Zum gewählten Schritt springen"
+msgid "Zum gewï¿½hlten Schritt springen"
 msgstr "Jump to selected"
 
 #: modules/gui/widgets\history.py:122
-msgid "Schritt Vorwärts"
+msgid "Schritt Vorwï¿½rts"
 msgstr "Step forward"
 
 #: modules/gui/widgets\history.py:124
-msgid "Schritt Zurück"
+msgid "Schritt Zurï¿½ck"
 msgstr "Step back"
 
 #: modules/gui/widgets\history.py:175
@@ -254,7 +254,7 @@ msgid "Keine Datei"
 msgstr "No file"
 
 #: modules/gui/widgets\history.py:246
-msgid "Keine Historie Einträge"
+msgid "Keine Historie Eintrï¿½ge"
 msgstr "No history entries"
 
 #: modules/gui/widgets\history.py:290
@@ -266,15 +266,15 @@ msgid "  0: Aktueller Zustand des Dokuments"
 msgstr "  0: Current state of the document"
 
 #: modules/gui/widgets\main_ui_widgets.py:84
-msgid "Geschätzte Renderzeit ({} CPUs/GI)"
+msgid "Geschï¿½tzte Renderzeit ({} CPUs/GI)"
 msgstr "Estimated Render time ({} CPUs/GI)"
 
 #: modules/gui/widgets\main_ui_widgets.py:91
-msgid "Ausgabe Verzeichnis auswählen ..."
+msgid "Ausgabe Verzeichnis auswï¿½hlen ..."
 msgstr "Choose output directory ..."
 
 #: modules/gui/widgets\main_ui_widgets.py:122
-msgid "Es läuft bereits ein Render Vorgang."
+msgid "Es lï¿½uft bereits ein Render Vorgang."
 msgstr "Render process is already running."
 
 #: modules/gui/widgets\main_ui_widgets.py:147
@@ -294,23 +294,23 @@ msgid "Render Preset aus Selektion"
 msgstr "Render preset from selection"
 
 #: modules/gui/widgets\menu_create.py:50
-msgid "Render Preset\tEnthält User Presets, Viewsets und Rendereinstellungen"
+msgid "Render Preset\tEnthï¿½lt User Presets, Viewsets und Rendereinstellungen"
 msgstr "Render Preset\tContains User Presets, Viewsets and Render Settings"
 
 #: modules/gui/widgets\menu_create.py:52
-msgid "User Preset\tEnthält Varianten und/oder Referenzen"
+msgid "User Preset\tEnthï¿½lt Varianten und/oder Referenzen"
 msgstr "User Preset\tContains Variants and or References"
 
 #: modules/gui/widgets\menu_create.py:54
-msgid "Viewset\tEnthält **eine** Shot Variante"
+msgid "Viewset\tEnthï¿½lt **eine** Shot Variante"
 msgstr "Viewset\tContains **only one** Shot Variant"
 
 #: modules/gui/widgets\menu_create.py:56
-msgid "Reset\tVarianten für eine Resetschaltung"
+msgid "Reset\tVarianten fï¿½r eine Resetschaltung"
 msgstr "Reset\tVariants for reset switches"
 
 #: modules/gui/widgets\menu_create.py:58
-msgid "Trimline Preset\tVarianten für eine Serienschaltung"
+msgid "Trimline Preset\tVarianten fï¿½r eine Serienschaltung"
 msgstr "Trimline Preset\tVariants for standard equipment"
 
 #: modules/gui/widgets\menu_create.py:60
@@ -354,7 +354,7 @@ msgid "Bearbeiten"
 msgstr "Edit"
 
 #: modules/gui/widgets\menu_edit.py:44
-msgid "Rückgängig:"
+msgid "Rï¿½ckgï¿½ngig:"
 msgstr "Undo:"
 
 #: modules/gui/widgets\menu_edit.py:48
@@ -378,7 +378,7 @@ msgid "Ausschneiden\tStrg+X"
 msgstr "Cut\tCtrl+X"
 
 #: modules/gui/widgets\menu_edit.py:79
-msgid "Einfügen\tStrg+V"
+msgid "Einfï¿½gen\tStrg+V"
 msgstr "Paste\tCtrl+V"
 
 #: modules/gui/widgets\menu_edit.py:86
@@ -395,7 +395,7 @@ msgid "Selektion aufheben\tStrg+D"
 msgstr "Clear selection\tCtrl+D"
 
 #: modules/gui/widgets\menu_file.py:44
-msgid "Zuletzt geöffnet"
+msgid "Zuletzt geï¿½ffnet"
 msgstr "Recent files"
 
 #: modules/gui/widgets\menu_file.py:71
@@ -403,7 +403,7 @@ msgid "Neu\tStrg+N"
 msgstr "New\tCtrl+N"
 
 #: modules/gui/widgets\menu_file.py:77
-msgid "Öffnen\tStrg+O"
+msgid "ï¿½ffnen\tStrg+O"
 msgstr "Open\tCtrl+O"
 
 #: modules/gui/widgets\menu_file.py:87
@@ -443,7 +443,7 @@ msgid "Speichern unter.."
 msgstr "Save as.."
 
 #: modules/gui/widgets\menu_file.py:251
-msgid "Keine Einträge vorhanden"
+msgid "Keine Eintrï¿½ge vorhanden"
 msgstr "No entries"
 
 #: modules/gui/widgets\menu_import.py:35 modules/gui/widgets\welcome_page.py:44
@@ -467,7 +467,7 @@ msgid "Sprache"
 msgstr "Language"
 
 #: modules/gui/widgets\menu_tree_context.py:25
-msgid "Baum Kontextmenü"
+msgid "Baum Kontextmenï¿½"
 msgstr "Tree Contextmenu"
 
 #: modules/gui/widgets\menu_tree_context.py:38
@@ -495,7 +495,7 @@ msgid "Dunkel"
 msgstr "Dark"
 
 #: modules/gui/widgets\menu_view.py:37
-msgid "Schrifgröße"
+msgid "Schrifgrï¿½ï¿½e"
 msgstr "Font size"
 
 #: modules/gui/widgets\menu_view.py:39
@@ -503,11 +503,11 @@ msgid "Klein"
 msgstr "Small"
 
 #: modules/gui/widgets\menu_view.py:43
-msgid "Groß"
+msgid "Groï¿½"
 msgstr "Large"
 
 #: modules/gui/widgets\menu_view.py:99
-msgid "Anwendungstil geändert. Für eine vollständige Übernahme muss die Anwendung neu gestartet werden."
+msgid "Anwendungstil geï¿½ndert. Fï¿½r eine vollstï¿½ndige ï¿½bernahme muss die Anwendung neu gestartet werden."
 msgstr "Application style changed. For a complete update you need to restart the application."
 
 #: modules/gui/widgets\message_box.py:34
@@ -531,11 +531,11 @@ msgid "{}<br><br><b>Datei:</b> <i>{}</i><br><b>Pfad:</b> <i>{}</i>"
 msgstr "{}<br><br><b>File: </b><i>{}</i><br><b>Path: </b><i>{}</i>"
 
 #: modules/gui/widgets\message_box.py:64
-msgid "Aktion wirklich fortführen?"
+msgid "Aktion wirklich fortfï¿½hren?"
 msgstr "Really continue with this action?"
 
 #: modules/gui/widgets\message_box.py:66
-msgid "Soll diese Aktion wirklich ausgeführt werden?"
+msgid "Soll diese Aktion wirklich ausgefï¿½hrt werden?"
 msgstr "Do you really want to continue with this operation?"
 
 #: modules/gui/widgets\message_box.py:68
@@ -548,11 +548,11 @@ msgid "Abbrechen"
 msgstr "Cancel"
 
 #: modules/gui/widgets\path_util.py:88
-msgid "Verzeichnis auswählen"
+msgid "Verzeichnis auswï¿½hlen"
 msgstr "Choose directory"
 
 #: modules/gui/widgets\path_util.py:153
-msgid "< Gültigen Pfad eingeben >"
+msgid "< Gï¿½ltigen Pfad eingeben >"
 msgstr "< Enter valid path >"
 
 #: modules/gui/widgets\search_dialog.py:44
@@ -573,7 +573,7 @@ msgid "Alle Ersetzen"
 msgstr "Replace All"
 
 #: modules/gui/widgets\search_dialog.py:78
-msgid "Groß-/Kleinschreibung beachten"
+msgid "Groï¿½-/Kleinschreibung beachten"
 msgstr "Case sensitivity"
 
 #: modules/gui/widgets\search_dialog.py:87
@@ -593,7 +593,7 @@ msgid "RenderKnecht v{}"
 msgstr "RenderKnecht v{}"
 
 #: modules/gui/widgets\welcome_page.py:34
-msgid "Kürzlich verwendet"
+msgid "Kï¿½rzlich verwendet"
 msgstr "Recent documents"
 
 #: modules/gui/widgets\welcome_page.py:37
@@ -601,7 +601,7 @@ msgid "Neues Dokument"
 msgstr "New document"
 
 #: modules/gui/widgets\welcome_page.py:40
-msgid "Dokument öffnen"
+msgid "Dokument ï¿½ffnen"
 msgstr "Open document"
 
 #: modules/gui\main_app.py:104 modules/gui\main_app.py:123
@@ -609,7 +609,7 @@ msgid "Anwendung beenden"
 msgstr "Exit application"
 
 #: modules/gui\main_app.py:105
-msgid "Achtung! Ein Render Vorgang läuft.<br><br>Der Vorgang wird durch das Beenden abgebrochen.<br><br>Soll die Anwendung wirklich beendet werden?"
+msgid "Achtung! Ein Render Vorgang lï¿½uft.<br><br>Der Vorgang wird durch das Beenden abgebrochen.<br><br>Soll die Anwendung wirklich beendet werden?"
 msgstr "Attention! Render process is running.<br><br>The process will be canceled upon quitting.<br><br>Do you really want to exit the application?"
 
 #: modules/gui\main_app.py:109 modules/gui\main_app.py:126
@@ -642,7 +642,7 @@ msgid "Die Varianten enthalten keine Reset Schaltung! Die zu sendenden Varianten
 msgstr "The variants do not contain a reset circuit! The variants to be sent will collide with previous circuits."
 
 #: modules/gui\ui_resource.py:102 modules/gui\ui_translations.py:186
-msgid "Job übertragen"
+msgid "Job ï¿½bertragen"
 msgstr "Transfer job"
 
 #: modules/gui\ui_resource.py:114
@@ -662,7 +662,7 @@ msgid "Filtert Bauminhalt nach {}."
 msgstr "Applys filter for {}."
 
 #: modules/gui\ui_translations.py:36
-msgid "Im Baum tippen um Filter zu starten. 1x Escape löscht den Filter. 2x Escape klappt Bauminhalt ein."
+msgid "Im Baum tippen um Filter zu starten. 1x Escape lï¿½scht den Filter. 2x Escape klappt Bauminhalt ein."
 msgstr "Type inside the tree to start filtering. 1x Escape clears filter. 2x Escape also collapses all items."
 
 #: modules/gui\ui_translations.py:41
@@ -674,11 +674,11 @@ msgid "Beenden\tStrg+Q"
 msgstr "Quit\tCtrl+Q"
 
 #: modules/gui\ui_translations.py:46
-msgid "Auf Aktualisierungen prüfen..."
+msgid "Auf Aktualisierungen prï¿½fen..."
 msgstr "Check for updates..."
 
 #: modules/gui\ui_translations.py:48
-msgid "Einführung"
+msgid "Einfï¿½hrung"
 msgstr "Introduction"
 
 #: modules/gui\ui_translations.py:50
@@ -686,7 +686,7 @@ msgid "Dokumentation"
 msgstr "Documentation"
 
 #: modules/gui\ui_translations.py:67
-msgid "Passt die Spaltenbreite an verfügbare Baumbreite an."
+msgid "Passt die Spaltenbreite an verfï¿½gbare Baumbreite an."
 msgstr "Fits column widths to the available tree width."
 
 #: modules/gui\ui_translations.py:76
@@ -702,7 +702,7 @@ msgid "Variant Set oder String Liste"
 msgstr "Variant Set or list of strings"
 
 #: modules/gui\ui_translations.py:91
-msgid "Zeichenketten mit Zeilenumbruch/Leerzeichen/Semikolon erstellen mehrere Varianten. Copy und Paste aus PR String Liste, Excel Suche oder Varianten.cmd Files möglich."
+msgid "Zeichenketten mit Zeilenumbruch/Leerzeichen/Semikolon erstellen mehrere Varianten. Copy und Paste aus PR String Liste, Excel Suche oder Varianten.cmd Files mï¿½glich."
 msgstr "List of strings separated with line break/spaces/semicolon create multiple variants. Copy n Paste from PR String lists, Excel searches or Variant.cmd files possible."
 
 #: modules/gui\ui_translations.py:96
@@ -710,19 +710,19 @@ msgid "Variante bzw. der Variantenschalter. Text ohne Semikolon  oder Sonderzeic
 msgstr "Variant respectively Variant switch. Text without semicolon or special characters."
 
 #: modules/gui\ui_translations.py:99
-msgid "Fügt eingegebenen Text der Varianten Liste hinzu."
+msgid "Fï¿½gt eingegebenen Text der Varianten Liste hinzu."
 msgstr "Adds entered values to the variant tree."
 
 #: modules/gui\ui_translations.py:105
-msgid "Viewer Größe"
+msgid "Viewer Grï¿½ï¿½e"
 msgstr "Viewer Size"
 
 #: modules/gui\ui_translations.py:107
-msgid "Ändert die Viewer Größe der Szene der aktiven DeltaGen Instanz."
+msgid "ï¿½ndert die Viewer Grï¿½ï¿½e der Szene der aktiven DeltaGen Instanz."
 msgstr "Changes the viewer size for the active DeltaGen scenen."
 
 #: modules/gui\ui_translations.py:109
-msgid "Ändert die globale DeltaGen Viewer Hintergrund Farbe. Diese Einstellung wird optional auch für das Rendering verwendet."
+msgid "ï¿½ndert die globale DeltaGen Viewer Hintergrund Farbe. Diese Einstellung wird optional auch fï¿½r das Rendering verwendet."
 msgstr "Changes the global DeltaGen viewer background color. This setting will also, optionally, be used when rendering."
 
 #: modules/gui\ui_translations.py:112
@@ -734,7 +734,7 @@ msgid "Rendering"
 msgstr "Rendering"
 
 #: modules/gui\ui_translations.py:118
-msgid "Schätzt anhand horizontaler Auflösung, vorhandener CPU Kerne und Sampling die Renderzeit in Global Illumination."
+msgid "Schï¿½tzt anhand horizontaler Auflï¿½sung, vorhandener CPU Kerne und Sampling die Renderzeit in Global Illumination."
 msgstr "Estimates render time based on horizontal resolution, number of CPU cores and sampling in Global Illumination."
 
 #: modules/gui\ui_translations.py:123
@@ -750,7 +750,7 @@ msgid "Feedbackloop pro Variante"
 msgstr "Feedback loop per variant"
 
 #: modules/gui\ui_translations.py:130
-msgid "Verhindert unter Umständen das Ausbleiben von Variantenschaltungen wenn DeltaGen bei aktiviertem RT/GI lange Zeit nicht ansprechbereit ist."
+msgid "Verhindert unter Umstï¿½nden das Ausbleiben von Variantenschaltungen wenn DeltaGen bei aktiviertem RT/GI lange Zeit nicht ansprechbereit ist."
 msgstr "May lead to more reliable variant switching if the DeltaGen is unresponsive with activated RT/GI."
 
 #: modules/gui\ui_translations.py:133
@@ -758,7 +758,7 @@ msgid "Viewer Hintergrund einstellen"
 msgstr "Set viewer background color"
 
 #: modules/gui\ui_translations.py:134
-msgid "Verwendet die Viewer Hintergrundfarbe aus dem DeltaGen Einstellungsbereich für die Bildausgabe."
+msgid "Verwendet die Viewer Hintergrundfarbe aus dem DeltaGen Einstellungsbereich fï¿½r die Bildausgabe."
 msgstr "Uses the background color specified in DeltaGen settings for image creation."
 
 #: modules/gui\ui_translations.py:137
@@ -786,7 +786,7 @@ msgid "Startet den Render Vorgang."
 msgstr "Starts the render process."
 
 #: modules/gui\ui_translations.py:147
-msgid "Bricht laufenden Render Vorgang ab. DeltaGen wird den zuletzt erhaltenen Render Befehl unabhängig hiervon durchführen."
+msgid "Bricht laufenden Render Vorgang ab. DeltaGen wird den zuletzt erhaltenen Render Befehl unabhï¿½ngig hiervon durchfï¿½hren."
 msgstr "Cancels running render process. DeltaGen will continue to execute the last render command."
 
 #: modules/gui\ui_translations.py:152
@@ -818,11 +818,11 @@ msgid "Szenendatei - CSB Datei *.csb oder MayaBinary *.mb"
 msgstr "Scene file - CSB file *.csb or MayaBinary *.mb"
 
 #: modules/gui\ui_translations.py:172
-msgid "Maya versteckte Objekte löschen"
+msgid "Maya versteckte Objekte lï¿½schen"
 msgstr "Maya delete hidden objects"
 
 #: modules/gui\ui_translations.py:174
-msgid "Bei Problemen mit verschachtelten, versteckten Instanzen deaktivieren. Erhöht die Renderzeit bei großen Szenen auf TAGE!!!"
+msgid "Bei Problemen mit verschachtelten, versteckten Instanzen deaktivieren. Erhï¿½ht die Renderzeit bei groï¿½en Szenen auf TAGE!!!"
 msgstr "Deactivate if encountering problems with nested, hidden instances. Attention! Render time may increase to DAYS!!!"
 
 #: modules/gui\ui_translations.py:177
@@ -838,19 +838,19 @@ msgid "Renderer:"
 msgstr "Renderer:"
 
 #: modules/gui\ui_translations.py:184
-msgid "Den zu verwendenden Renderer wählen."
+msgid "Den zu verwendenden Renderer wï¿½hlen."
 msgstr "Choose a renderer to use."
 
 #: modules/gui\ui_view_manager.py:24
-msgid "Ungespeicherte Änderungen"
+msgid "Ungespeicherte ï¿½nderungen"
 msgstr "Unsaved Changes"
 
 #: modules/gui\ui_view_manager.py:25
-msgid "Das Dokument enthält Änderungen die <b>nicht</b> gespeichert wurden!<br><br>Diese werden durch Schließen des Dokumentes endgültig <b>verloren</b> gehen."
+msgid "Das Dokument enthï¿½lt ï¿½nderungen die <b>nicht</b> gespeichert wurden!<br><br>Diese werden durch Schlieï¿½en des Dokumentes endgï¿½ltig <b>verloren</b> gehen."
 msgstr "The Document contains changes that <b>have not</b> been saved!<br><br>These will be <b>lost</b> by closing the document."
 
 #: modules/gui\ui_view_manager.py:27 modules/gui\ui_view_manager.py:31
-msgid "Schließen"
+msgid "Schlieï¿½en"
 msgstr "Close"
 
 #: modules/gui\ui_view_manager.py:28
@@ -858,7 +858,7 @@ msgid "Zwischenablage verwerfen?"
 msgstr "Discard clipboard?"
 
 #: modules/gui\ui_view_manager.py:29
-msgid "Die Zwischenablage enthält <i>{}</i> Elemente aus<br><i>{}</i><br><br>Diese werden durch Schließen des Dokumentes aus der Zwischenablage <b>entfernt</b>."
+msgid "Die Zwischenablage enthï¿½lt <i>{}</i> Elemente aus<br><i>{}</i><br><br>Diese werden durch Schlieï¿½en des Dokumentes aus der Zwischenablage <b>entfernt</b>."
 msgstr "Clipboard contains <i>{}</i> elements from<br><i>{}</i><br><br>Those will be <b>deleted</b> from the clipboard upon close."
 
 #: modules/gui\ui_view_manager.py:48
@@ -866,7 +866,7 @@ msgid "Neues_Dokument.xml"
 msgstr "New_Document.xml"
 
 #: modules/gui\ui_view_manager.py:141
-msgid "Kann Beschäftigten nicht entlassen. Verstoß gegen Arbeitnehmerschutzgesetz festgestellt."
+msgid "Kann Beschï¿½ftigten nicht entlassen. Verstoï¿½ gegen Arbeitnehmerschutzgesetz festgestellt."
 msgstr "Can not delete widget that is busy."
 
 #: modules/itemview\data_read.py:46
@@ -882,7 +882,7 @@ msgid "Erstelle Model {} {:02d}/{:02d}..."
 msgstr "Create Model {} {: 02d}/{:02d}..."
 
 #: modules/itemview\editor_undo.py:187
-msgid "Elemente hinzufügen"
+msgid "Elemente hinzufï¿½gen"
 msgstr "Add elements"
 
 #: modules/itemview\editor_undo.py:189
@@ -894,11 +894,11 @@ msgid "verschieben"
 msgstr "move"
 
 #: modules/itemview\item_edit_undo.py:76
-msgid "{0} ändern {1} ..."
+msgid "{0} ï¿½ndern {1} ..."
 msgstr "{0} change to {1} ..."
 
 #: modules/itemview\item_edit_undo.py:82
-msgid "{0} für {1} ändern {2} ..."
+msgid "{0} fï¿½r {1} ï¿½ndern {2} ..."
 msgstr "Change {0} for {1} into {2} ..."
 
 #: modules/itemview\model_globals.py:22
@@ -938,15 +938,15 @@ msgid "Daten werden eingerichtet."
 msgstr "Data is being set up."
 
 #: modules/itemview\view_manager.py:105
-msgid "Fehler - Kann bereits geöffnete Datei nicht in Tabulatoren finden."
+msgid "Fehler - Kann bereits geï¿½ffnete Datei nicht in Tabulatoren finden."
 msgstr "Error - Can not find already opened file within document tabulators."
 
 #: modules/itemview\view_manager.py:109
-msgid "Datei ist bereits geöffnet."
+msgid "Datei ist bereits geï¿½ffnet."
 msgstr "File is already opened."
 
 #: modules/itemview\xml.py:85
-msgid "Kann nicht auf die gewählte Datei zugreifen."
+msgid "Kann nicht auf die gewï¿½hlte Datei zugreifen."
 msgstr "Can not access the chosen file."
 
 #: modules/itemview\xml.py:104
@@ -954,15 +954,15 @@ msgid "Allgemeiner Fehler beim laden der Daten."
 msgstr "General error while loading the data."
 
 #: modules/itemview\xml_read.py:137
-msgid "Das gewählte Xml Dokument ist kein gültiges Xml Dokument und konnte nicht gelesen werden."
+msgid "Das gewï¿½hlte Xml Dokument ist kein gï¿½ltiges Xml Dokument und konnte nicht gelesen werden."
 msgstr "The chosen Xml document is not a valid Xml document and could not be read."
 
 #: modules/itemview\xml_read.py:138
-msgid "Das gewählte Xml Dokument enthält nicht die erwarteten Daten. Es ist kein RenderKnecht kompatibles Xml Dokument."
+msgid "Das gewï¿½hlte Xml Dokument enthï¿½lt nicht die erwarteten Daten. Es ist kein RenderKnecht kompatibles Xml Dokument."
 msgstr "The chosen Xml document does not contain the expected data. It is not a RenderKnecht compatible document."
 
 #: modules/itemview\xml_read.py:140
-msgid "Das gewählte Xml Dokument ist gültig, enthält aber kein Daten."
+msgid "Das gewï¿½hlte Xml Dokument ist gï¿½ltig, enthï¿½lt aber kein Daten."
 msgstr "The chosen Xml document is valid but contains no data."
 
 #: modules/itemview\xml_save.py:61
@@ -978,7 +978,7 @@ msgid "DeltaGen Verbindungsversuch ({!s}/{!s}) in {!s} Sekunden..."
 msgstr "DeltaGen connection attempt ({!s}/{!s}) in {!s} seconds ..."
 
 #: modules\knecht_deltagen.py:202
-msgid "Prüfe Verbindung..."
+msgid "Prï¿½fe Verbindung..."
 msgstr "Checking connection..."
 
 #: modules\knecht_deltagen.py:210
@@ -986,7 +986,7 @@ msgid "Sperre Viewer Fenster"
 msgstr "Lock viewer window"
 
 #: modules\knecht_deltagen.py:381
-msgid "Es läuft bereits eine DeltaGen Sende Operation! Vorgang abwarten oder abbrechen und anschließend erneut versuchen."
+msgid "Es lï¿½uft bereits eine DeltaGen Sende Operation! Vorgang abwarten oder abbrechen und anschlieï¿½end erneut versuchen."
 msgstr "DeltaGen send operation already running! Wait or cancel the running operation."
 
 #: modules\knecht_deltagen.py:412
@@ -1014,11 +1014,11 @@ msgid "Datei exisitiert nicht: {}"
 msgstr "File does not exist: {}"
 
 #: modules\knecht_excel.py:289
-msgid "Die Arbeitsblätter für PR-Optionen oder Modelle enthalten keine Daten oder konnten nicht gelesen werden."
+msgid "Die Arbeitsblï¿½tter fï¿½r PR-Optionen oder Modelle enthalten keine Daten oder konnten nicht gelesen werden."
 msgstr "The worksheets for PR-Options or Models contained no data or could not be read."
 
 #: modules\knecht_excel.py:431
-msgid "Es wurden nicht alle benötigten Arbeitsblätter gefunden {}. Es fehlen: {}"
+msgid "Es wurden nicht alle benï¿½tigten Arbeitsblï¿½tter gefunden {}. Es fehlen: {}"
 msgstr "Not all necessary worksheets have been found {}. Missing: {}"
 
 #: modules\knecht_image.py:91
@@ -1058,7 +1058,7 @@ msgid "Die folgenden Ausgabepfade sind zu lang, Rendering wird abgebrochen. {}{}
 msgstr "The following output paths are too long, rendering will be canceled. {}{}"
 
 #: modules\knecht_render.py:186
-msgid "Die Render Presets enthalten einen ungültigen Ausgabepfad. Rendering wird abgebrochen."
+msgid "Die Render Presets enthalten einen ungï¿½ltigen Ausgabepfad. Rendering wird abgebrochen."
 msgstr "Render Presets contain invalid output directory. Render process will be canceled."
 
 #: modules\knecht_render.py:219
@@ -1078,7 +1078,7 @@ msgid "Sende Einstellungen..."
 msgstr "Send settings ..."
 
 #: modules\knecht_render.py:344 modules\knecht_render.py:345
-msgid "Prüfe Bilddaten..."
+msgid "Prï¿½fe Bilddaten..."
 msgstr "Checking image data..."
 
 #: modules\knecht_render.py:349 modules\knecht_render.py:350
@@ -1086,7 +1086,7 @@ msgid "Rendering erzeugt."
 msgstr "Rendering generated."
 
 #: modules\knecht_render.py:355
-msgid "Erzeuge nächstes Bild in {}..."
+msgid "Erzeuge nï¿½chstes Bild in {}..."
 msgstr "Creating next image in {}..."
 
 #: modules\knecht_render.py:392
@@ -1098,7 +1098,7 @@ msgid "Render Vorgang abgebrochen.{}Konnte keine Verbindung zu einer DeltaGen In
 msgstr "Render operation canceled.{}Could not connect to a DeltaGen instance."
 
 #: modules\knecht_render.py:438
-msgid "Bilddaten konnten nicht als gültiges Bild verifiziert werden.{}"
+msgid "Bilddaten konnten nicht als gï¿½ltiges Bild verifiziert werden.{}"
 msgstr "File could not be validated as a valid image file: {}"
 
 #: modules\knecht_render.py:450
@@ -1106,7 +1106,7 @@ msgid "Bilddaten wurden erfolgreich verifiziert: {}"
 msgstr "Image data has been successfully verified: {}"
 
 #: modules\knecht_render.py:460
-msgid "{0}Datei konnte nicht als gültige Bilddatei verfiziert werden: {1}{0}"
+msgid "{0}Datei konnte nicht als gï¿½ltige Bilddatei verfiziert werden: {1}{0}"
 msgstr "{0}File could not be verified as valid image file: {1}{0}"
 
 #: modules\knecht_render.py:524
@@ -1122,12 +1122,12 @@ msgid "{}px - Ext: "
 msgstr "{}px - Ext: "
 
 #: modules\knecht_session.py:192
-msgid "Sitzung während Leerlauf erfolgreich gespeichert"
-msgstr "Session successfully saved while idle"
+msgid "Sitzung wï¿½hrend Leerlauf erfolgreich gespeichert"
+msgstr "SessionData successfully saved while idle"
 
 #: modules\knecht_session.py:283
 msgid "Sitzungswiederherstellung abgeschlossen"
-msgstr "Session restore finished"
+msgstr "SessionData restore finished"
 
 #: modules\knecht_update.py:169
 msgid "Suche nach Anwendungs Updates gestartet."
@@ -1138,7 +1138,7 @@ msgid "Die Anwendung ist auf dem neusten Stand."
 msgstr "The application is up to date."
 
 #: modules\knecht_update.py:226
-msgid "Aktualisierung konnte nicht durchgeführt werden."
+msgid "Aktualisierung konnte nicht durchgefï¿½hrt werden."
 msgstr "Encountered errors during application update. Try again later."
 
 #: modules\knecht_update.py:235
@@ -1146,7 +1146,7 @@ msgid "App Update"
 msgstr "App update"
 
 #: modules\knecht_update.py:236
-msgid "Eine aktualisierte Version {} ist verfügbar.<br><br>Möchten Sie die Aktualisierung jetzt durchführen?<br><br>Die Anwendung muss für das Update beendet werden."
+msgid "Eine aktualisierte Version {} ist verfï¿½gbar.<br><br>Mï¿½chten Sie die Aktualisierung jetzt durchfï¿½hren?<br><br>Die Anwendung muss fï¿½r das Update beendet werden."
 msgstr "Updated version {} is available.<br><br>Do you want to update the application now?<br><br>The application has to exit to proceed with the update."
 
 #: modules\knecht_update.py:240
@@ -1154,7 +1154,7 @@ msgid "Jetzt aktualisieren"
 msgstr "Update now"
 
 #: modules\knecht_update.py:241
-msgid "Vielleicht später..."
+msgid "Vielleicht spï¿½ter..."
 msgstr "Maybe later..."
 
 #: modules\knecht_update.py:253

@@ -5,17 +5,15 @@
 		"knecht_history": "knecht_history.ui",
 		"knecht_model_gui": "knecht_model_gui.ui",
 		"knecht_search": "knecht_search.ui",
-		"knecht_welcome": "knecht_welcome.ui"
+		"knecht_welcome": "knecht_welcome.ui",
+		"wizard_import": "wizard_import.ui",
+		"wizard_start": "wizard_start.ui"
 	},
 	"icon_paths": {
-		"arrow": ":/main/arrow.png",
-		"arrow_dark": ":/main/arrow_dark.png",
 		"arrow_up": ":/main/arrow_up.png",
 		"arrow_up_dark": ":/main/arrow_up_dark.png",
-		"search_replace": ":/main/search_replace.png",
-		"search_replace_dark": ":/main/search_replace_dark.png",
-		"search": ":/main/search.png",
-		"search_dark": ":/main/search_dark.png",
+		"arrow": ":/main/arrow.png",
+		"arrow_dark": ":/main/arrow_dark.png",
 		"check_box_dark": ":/main/check_box_dark.png",
 		"pr_data": ":/main/.private/pr_data.json",
 		"check_box_empty_dark": ":/main/check_box_empty_dark.png",
