@@ -26,6 +26,7 @@ class WizardSession:
         def __init__(self):
             self.pkg_filter = list()
             self.import_data = KnData()
+            self.fakom_selection = dict()
 
     class PkgDefaultFilter:
         package_filter = list()

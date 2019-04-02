@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>421</width>
-    <height>175</height>
+    <height>336</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,7 +33,7 @@
        </property>
        <property name="icon">
         <iconset resource="res/gui_resource.qrc">
-         <normaloff>:/main/search_replace_dark.png</normaloff>:/main/search_replace_dark.png</iconset>
+         <normaloff>:/main/search_replace.png</normaloff>:/main/search_replace.png</iconset>
        </property>
       </widget>
      </item>
@@ -63,7 +63,7 @@
        </property>
        <property name="icon">
         <iconset resource="res/gui_resource.qrc">
-         <normaloff>:/main/search_replace_dark.png</normaloff>:/main/search_replace_dark.png</iconset>
+         <normaloff>:/main/search_replace.png</normaloff>:/main/search_replace.png</iconset>
        </property>
       </widget>
      </item>

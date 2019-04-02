@@ -3,8 +3,9 @@ from PySide2.QtWidgets import QWizard
 
 from modules.gui.widgets.message_box import AskToContinue
 from modules.gui.wizard.data_import import ImportWizardPage
+from modules.gui.wizard.fakom import FakomWizardPage
 from modules.gui.wizard.session import WizardSession
-from modules.gui.wizard.welcome import WelcomeWizardPage
+from modules.gui.wizard.start import WelcomeWizardPage
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -34,18 +35,27 @@ class PresetWizard(QWizard):
 
         self.page_welcome = WelcomeWizardPage(self)
         self.page_import = ImportWizardPage(self)
+        self.page_fakom = FakomWizardPage(self)
         self.addPage(self.page_welcome)
         self.addPage(self.page_import)
+        self.addPage(self.page_fakom)
 
     @Slot()
     def restore_last_session(self):
         self.session.load(self.session.last_session_file)
         self.session_loaded()
 
+    def save_last_session(self) -> bool:
+        """ Session auto save """
+        self.ui.msg(_('Wizard Session wird automatisch gespeichert.'))
+        return self.session.save()
+
     def session_loaded(self):
         """ Inform Wizard pages of new session data """
         self.page_welcome.reload_pkg_filter()
         self.page_import.completeChanged.emit()
+
+        self.ui.msg(_('Wizard Session geladen.'))
 
     def reject(self):
         self.close()

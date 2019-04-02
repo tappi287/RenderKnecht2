@@ -8,6 +8,7 @@ from PySide2.QtCore import QObject, Signal, Slot
 
 from modules.idgen import KnechtUuidGenerator
 from modules.itemview.item import KnechtItem
+from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.knecht_objects import KnData, KnPr, KnTrim
 from modules.knecht_utils import shorten_model_name
 from modules.language import get_translation
@@ -173,7 +174,7 @@ class KnechtDataToModel:
                                  )
             parent_item.append_item_child(pr_item)
 
-    def create_fakom(self, trim: KnTrim):
+    def create_fakom(self, trim: KnTrim, preset_wizard: bool=False, parent_item: KnechtItem=None):
         model_short_desc = shorten_model_name(trim.model_text)
 
         # Create lists of List[KnPr] for SIB/VOS/LUM families
@@ -182,16 +183,34 @@ class KnechtDataToModel:
         lum_pr_ls = [pr for pr in trim.iterate_available_pr() if pr.family.casefold() == 'lum']
         vos_pr_ls = [pr for pr in trim.iterate_available_pr() if pr.family.casefold() == 'vos']
 
+        if not parent_item:
+            parent_item = self.root_item
+
         for color, sib_set in self.data.fakom.iterate_colors():
             valid_sib_set = sib_set.intersection(sib_pr_codes)
             if not valid_sib_set:
                 continue
+
+            fa_parent, grp_item = parent_item, parent_item
+
+            if preset_wizard:
+                grp_item = KnechtItem(parent_item,
+                                      (f'{parent_item.childCount():03d}', color, '', 'fakom_option')
+                                      )
+                grp_item.fixed_userType = Kg.group_item
+                parent_item.append_item_child(grp_item)
 
             # --- Iterate SIB Codes ---
             for sib_pr in sib_pr_ls:
                 if sib_pr.name not in valid_sib_set:
                     # Skip seat covers not matching
                     continue
+
+                if preset_wizard:
+                    sib_grp_item = KnechtItem(grp_item, (f'{grp_item.childCount():03d}', sib_pr.name, '', 'options'))
+                    sib_grp_item.fixed_userType = Kg.group_item
+                    grp_item.append_item_child(sib_grp_item)
+                    fa_parent = sib_grp_item
 
                 # --- Iterate VOS Codes ---
                 for vos_pr in vos_pr_ls:
@@ -205,17 +224,29 @@ class KnechtDataToModel:
                             fakom_type = 'fakom_setup'
 
                         self.create_fakom_item(
-                            trim.model, model_short_desc, color, sib_pr.name, vos_pr.name,
-                            lum_pr.name, sib_pr.desc, vos_pr.desc, lum_pr.desc, fakom_type
+                            fa_parent, trim.model, model_short_desc, color, sib_pr.name, vos_pr.name,
+                            lum_pr.name, sib_pr.desc, vos_pr.desc, lum_pr.desc, fakom_type, preset_wizard
                             )
 
-    def create_fakom_item(self, model, model_desc, color, sib, vos, lum, sib_text, vos_text, lum_text, fakom_type):
-        # Create package parent item
-        data = (f'{self.root_item.childCount():03d}', f'{model_desc} {color}-{sib}-{vos}-{lum}',
-                model, fakom_type, '', self.id_gen.create_id())
+    def create_fakom_item(
+            self,
+            parent: KnechtItem, model, model_desc, color, sib, vos, lum,
+            sib_text, vos_text, lum_text, fakom_type, preset_wizard
+            ):
+        name = f'{model_desc} {color}-{sib}-{vos}-{lum}'
+        if preset_wizard:
+            name = f'{color}-{sib}-{vos}-{lum}'
+
+        data = (f'{parent.childCount():03d}', f'{name}', model, fakom_type, '', self.id_gen.create_id())
 
         # Create FaKom item
-        fa_item = KnechtItem(self.root_item, data)
+        fa_item = KnechtItem(parent, data)
+
+        if preset_wizard:
+            fa_item.fixed_userType = Kg.dialog_item
+            parent.append_item_child(fa_item)
+            return
+
         # Create FaKom item content
         color_item = KnechtItem(fa_item, (f'{fa_item.childCount():03d}', color, 'on'))
         sib_item = KnechtItem(fa_item, (f'{fa_item.childCount():03d}', sib, 'on', 'SIB', '', '', sib_text))
@@ -225,4 +256,4 @@ class KnechtDataToModel:
         for i in (color_item, sib_item, vos_item, lum_item):
             fa_item.append_item_child(i)
 
-        self.root_item.append_item_child(fa_item)
+        parent.append_item_child(fa_item)

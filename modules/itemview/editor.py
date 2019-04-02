@@ -1,6 +1,7 @@
 from typing import List
 
 from PySide2.QtCore import QItemSelectionModel, QModelIndex, QObject
+from PySide2.QtWidgets import QTreeView
 
 from modules.itemview.editor_collect import KnechtCollectVariants
 from modules.itemview.editor_copypaste import KnechtEditorCopyPaste
@@ -52,6 +53,11 @@ class KnechtEditor(QObject):
 
         # Change current index to the item matching order column after undo cmd finished
         self.change_current_to = None
+
+    def view_is_editable(self) -> bool:
+        if not self.view.editTriggers():
+            return False
+        return True
 
     def report_current(self):
         sorted_rows, src_model = self.get_selection()
@@ -115,7 +121,7 @@ class KnechtEditor(QObject):
 
     def remove_rows(self):
         """ Removes the currently selected rows (or entire model) - undoable """
-        if not self.enabled:
+        if not self.enabled or not self.view_is_editable():
             return
 
         index_ls, model = self.get_selection()

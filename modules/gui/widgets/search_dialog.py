@@ -210,18 +210,20 @@ class SearchDialog(QDialog):
 
     def search_replace(self):
         proxy_index_list, view = self.search()
+        if not proxy_index_list:
+            return
 
-        if proxy_index_list:
-            view.undo_stack.push(
-                self.replace_command(proxy_index_list[0])
-                )
+        first_index = proxy_index_list[0]
+
+        if first_index and first_index.flags() & Qt.ItemIsEditable:
+            view.undo_stack.push(self.replace_command(first_index))
 
     def search_replace_all(self):
         proxy_index_list, view = self.search()
         undo_parent_cmd = None
 
         for index in proxy_index_list:
-            if not view.model().flags(index) & Qt.ItemIsEditable:
+            if not index.flags() & Qt.ItemIsEditable:
                 continue
 
             if not undo_parent_cmd:
@@ -229,7 +231,7 @@ class SearchDialog(QDialog):
             else:
                 self.replace_command(index, undo_parent_cmd)
 
-        if proxy_index_list:
+        if undo_parent_cmd:
             view.undo_stack.push(undo_parent_cmd)
 
     def replace_command(self, index: QModelIndex, undo_parent: QUndoCommand=None):

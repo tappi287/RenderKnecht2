@@ -26,6 +26,7 @@ class KnechtModel(QAbstractItemModel):
                  Qt.ItemIsDropEnabled,
         editable=Qt.ItemIsEditable | Qt.ItemIsEnabled | Qt.ItemIsSelectable |
                  Qt.ItemIsDragEnabled | Qt.ItemIsDropEnabled,
+        group=Qt.ItemIsEnabled | Qt.ItemIsDragEnabled | Qt.ItemIsDropEnabled,
         )
 
     def __init__(self, root_item=None, silent: bool=False, checkable_columns: list=None):
@@ -141,11 +142,15 @@ class KnechtModel(QAbstractItemModel):
         if item.userType == Kg.render_setting and index.column() != Kg.VALUE:
             flags = self.itemflags['non_edit']
 
-        # --- Separator ---
-        if item.userType in [Kg.separator, Kg.sub_separator]:
+        # --- Non editable user types ---
+        if item.userType in [Kg.separator, Kg.sub_separator, Kg.dialog_item]:
             flags = self.itemflags['non_edit']
 
-        if index.column() == Kg.ORDER:
+        # --- Group Item ---
+        if item.userType == Kg.group_item:
+            flags = self.itemflags['group']
+
+        if index.column() == Kg.ORDER and item.userType != Kg.group_item:
             flags = self.itemflags['non_edit']
 
         if index.column() in self.checkable_columns:

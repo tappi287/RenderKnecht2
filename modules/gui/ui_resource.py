@@ -45,10 +45,16 @@ class IconRsc:
             if dark_icon_key in Resource.icon_paths.keys():
                 icon_path = Resource.icon_paths.get(dark_icon_key)
 
+        if not icon_path:
+            return QIcon()
+
         return QIcon(QPixmap(icon_path))
 
     @classmethod
     def get_pixmap(cls, icon_key: str):
+        if cls.darkstyle:
+            icon_key = icon_key + '_dark'
+
         if icon_key not in Resource.icon_paths.keys():
             return QPixmap()
 

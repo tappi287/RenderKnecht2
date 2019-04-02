@@ -257,12 +257,14 @@ class ExcelImportDialog(QDialog):
         # Populate models tree
         for idx, t in enumerate(self.data.models):
             models.insertChildren(
-                models.childCount(), 1, (f'{idx:01d}', t.model, t.market, t.model_text, '', '', t.gearbox)
+                models.childCount(), 1, (f'{idx:01d}', t.model, t.market, t.model_text, '', '', t.gearbox),
+                fixed_userType=Kg.dialog_item
                 )
         # Populate PR Family tree
         for idx, p in enumerate(self.data.pr_families):
             pr_fam.insertChildren(
-                pr_fam.childCount(), 1, (f'{idx:01d}', p.name, p.desc)
+                pr_fam.childCount(), 1, (f'{idx:01d}', p.name, p.desc),
+                fixed_userType=Kg.dialog_item
                 )
 
         # Update View Models
@@ -423,6 +425,9 @@ class ExcelImportDialog(QDialog):
         # Setup keyboard shortcuts
         new_view.shortcuts = KnechtTreeViewShortcuts(new_view)
         new_view.context = ExcelContextMenu(self, new_view)
+        # Uneditable
+        new_view.setEditTriggers(QTreeView.NoEditTriggers)
+        new_view.setDragDropMode(QTreeView.NoDragDrop)
 
         # Update with placeholder Model to avoid access to unset attributes
         UpdateModel(new_view).update(KnechtModel())

@@ -78,9 +78,13 @@ class KnechtItem(QObject):
         self._preset_id = None
         # --- View Origin attribute ---
         self.__origin = None
+        # --- User Type independent of type column ---
+        self.fixed_userType = 0
 
     @property
     def userType(self):
+        if self.fixed_userType:
+            return self.fixed_userType
         return self._userType
 
     @userType.setter
@@ -215,6 +219,8 @@ class KnechtItem(QObject):
             item = KnechtItem(self, data,
                               preset_id_method=kwargs.get('preset_id_method'),
                               reference_id_method=kwargs.get('reference_id_method'))
+            if kwargs.get('fixed_userType'):
+                item.fixed_userType = kwargs.get('fixed_userType')
 
             self.childItems.insert(position, item)
             self.num_children += 1

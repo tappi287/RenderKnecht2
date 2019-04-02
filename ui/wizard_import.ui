@@ -21,16 +21,6 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QLabel" name="label_data">
-        <property name="text">
-         <string>Für die Preseterstellung werden Farb- sowie Trimlinedaten benötigt. Nach dem Import kann dieser Dialog fortgesetzt werden.</string>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="btn_fakom">
         <property name="text">
          <string>FaKom Import</string>

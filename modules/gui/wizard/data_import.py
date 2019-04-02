@@ -6,6 +6,7 @@ from PySide2.QtWidgets import QWizardPage
 from modules.globals import Resource
 from modules.gui.gui_utils import SetupWidget
 from modules.gui.ui_generic_tab import GenericTabWidget
+from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.excel_dialog import ExcelImportDialog
 from modules.gui.widgets.fakom_dialog import FakomImportDialog
 from modules.language import get_translation
@@ -21,6 +22,7 @@ _ = lang.gettext
 
 class ImportWizardPage(QWizardPage):
     no_data = _('Keine Daten vorhanden.')
+    page_title = _('Daten Import')
 
     def __init__(self, wizard):
         """ Wizard Page to import data
@@ -31,15 +33,20 @@ class ImportWizardPage(QWizardPage):
         self.wizard = wizard
         SetupWidget.from_ui_file(self, Resource.ui_paths['wizard_import'])
 
+        self.setTitle(self.page_title)
+        self.setSubTitle(_('Für die Preseterstellung werden Farb- sowie Trimlinedaten benötigt. '
+                           'Im Anschluss an den Importvorgang kann dieser Dialog fortgesetzt werden.'))
+
+        # -- Setup Page Ui ---
+        self.box_data.setTitle(_('Import'))
+        self.btn_fakom.setText(_('FaKom Import starten'))
+        self.btn_fakom.setIcon(IconRsc.get_icon('fakom'))
+        self.result_box.setTitle(_('Ergebnis'))
+
         self.btn_fakom.released.connect(self.import_fakom)
         self.data = None
 
     def initializePage(self):
-        self.box_data.setTitle(_('Daten Import'))
-        self.label_data.setText(_('Für die Preseterstellung werden Farb- sowie Trimlinedaten benötigt. '
-                                  'Im Anschluss an den Importvorgang kann dieser Dialog fortgesetzt werden.'))
-        self.btn_fakom.setText(_('FaKom Import starten'))
-        self.result_box.setTitle(_('Ergebnis'))
         self.update_result()
 
     @Slot()
@@ -74,7 +81,7 @@ class ImportWizardPage(QWizardPage):
         self.result_label.setText(t)
 
     def validatePage(self):
-        self.wizard.session.save()
+        return self.wizard.save_last_session()
 
     def isComplete(self):
         self.update_result()
