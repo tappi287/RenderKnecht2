@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-04-01 14:11+0200\n"
+"POT-Creation-Date: 2019-04-03 01:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -120,27 +120,27 @@ msgstr ""
 msgid "Excel Import Fehler"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:440
+#: modules/gui/widgets\excel_dialog.py:445
 msgid "Importvorgang"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:441
+#: modules/gui/widgets\excel_dialog.py:446
 msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:442 modules/gui/wizard\wizard.py:66
+#: modules/gui/widgets\excel_dialog.py:447 modules/gui/wizard\wizard.py:76
 msgid "Ja"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:443 modules/gui/wizard\wizard.py:67
+#: modules/gui/widgets\excel_dialog.py:448 modules/gui/wizard\wizard.py:77
 msgid "Nein"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:501
+#: modules/gui/widgets\excel_dialog.py:506
 msgid "Alle Einträge auswählen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:503
+#: modules/gui/widgets\excel_dialog.py:508
 msgid "Alle Einträge abwählen"
 msgstr ""
 
@@ -450,7 +450,7 @@ msgid "Keine Einträge vorhanden"
 msgstr ""
 
 #: modules/gui/widgets\menu_import.py:36
-#: modules/gui/widgets\welcome_page.py:44
+#: modules/gui/widgets\welcome_page.py:44 modules/gui/wizard\data_import.py:41
 msgid "Import"
 msgstr ""
 
@@ -612,75 +612,95 @@ msgstr ""
 msgid "Dokument öffnen"
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:23
+#: modules/gui/wizard\data_import.py:24 modules/gui/wizard\fakom.py:27
 msgid "Keine Daten vorhanden."
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:38
+#: modules/gui/wizard\data_import.py:25
 msgid "Daten Import"
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:39
+#: modules/gui/wizard\data_import.py:37
 msgid "Für die Preseterstellung werden Farb- sowie Trimlinedaten benötigt. Im Anschluss an den Importvorgang kann dieser Dialog fortgesetzt werden."
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:41
+#: modules/gui/wizard\data_import.py:42
 msgid "FaKom Import starten"
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:42
+#: modules/gui/wizard\data_import.py:44
 msgid "Ergebnis"
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:49
+#: modules/gui/wizard\data_import.py:56
 msgid "Assistent FaKom Import"
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:55
+#: modules/gui/wizard\data_import.py:62
 msgid "Assistent V Plus Import"
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:70
+#: modules/gui/wizard\data_import.py:77
 msgid "Daten geladen. {}[{}] Modelle; {}[{}] PR-Familien"
 msgstr ""
 
-#: modules/gui/wizard\welcome.py:31
-msgid "Dieser Assistent führt durch die Erstellung von Presets aus Importdaten. Gewünschte Modelle und Optionen können in nachfolgenden Schritten gewählt werden."
+#: modules/gui/wizard\fakom.py:38
+msgid "Preset Selection"
 msgstr ""
 
-#: modules/gui/wizard\welcome.py:34
-msgid "Landespaket Filter"
+#: modules/gui/wizard\fakom.py:39
+msgid "Farbkombinationen auswählen aus denen Presets erstellt werden sollen."
 msgstr ""
 
-#: modules/gui/wizard\welcome.py:35
-msgid "Dieser Filter ermöglicht den Ausschluß meist unbenötigter und redundanter Pakete für einzelne, länderspezifische Märkte. Die gefilterten Pakete bleiben sicht- und zuweisbar. Sie werden aber als verwendet markiert so dass die automagische Zuweisung sie ignoriert."
+#: modules/gui/wizard\fakom.py:43
+msgid "Ausgewählte Presets"
 msgstr ""
 
-#: modules/gui/wizard\welcome.py:39
-msgid "Landesspezifische Pakete als verwendet markieren"
-msgstr ""
-
-#: modules/gui/wizard\welcome.py:40
-msgid "Filter anzeigen/bearbeiten"
-msgstr ""
-
-#: modules/gui/wizard\welcome.py:41
-msgid "Session aus Datei laden"
-msgstr ""
-
-#: modules/gui/wizard\welcome.py:42
-msgid "Session in Datei sichern"
-msgstr ""
-
-#: modules/gui/wizard\welcome.py:43
-msgid "Letzte Sitzung wiederherstellen"
-msgstr ""
-
-#: modules/gui/wizard\wizard.py:20
+#: modules/gui/wizard\start.py:30 modules/gui/wizard\wizard.py:21
 msgid "Preset Wizard"
 msgstr ""
 
-#: modules/gui/wizard\wizard.py:65
+#: modules/gui/wizard\start.py:31
+msgid "Dieser Assistent führt durch die Erstellung von Presets aus Importdaten. Gewünschte Modelle und Optionen können in nachfolgenden Schritten gewählt werden."
+msgstr ""
+
+#: modules/gui/wizard\start.py:36
+msgid "Landespaket Filter"
+msgstr ""
+
+#: modules/gui/wizard\start.py:38
+msgid "Dieser Filter ermöglicht den Ausschluß meist unbenötigter und redundanter Pakete für einzelne, länderspezifische Märkte. Die gefilterten Pakete bleiben sicht- und zuweisbar. Sie werden aber als verwendet markiert so dass die automagische Zuweisung sie ignoriert."
+msgstr ""
+
+#: modules/gui/wizard\start.py:42
+msgid "Landesspezifische Pakete als verwendet markieren"
+msgstr ""
+
+#: modules/gui/wizard\start.py:43
+msgid "Filter anzeigen/bearbeiten"
+msgstr ""
+
+#: modules/gui/wizard\start.py:47
+msgid "Session aus Datei laden"
+msgstr ""
+
+#: modules/gui/wizard\start.py:49
+msgid "Session in Datei sichern"
+msgstr ""
+
+#: modules/gui/wizard\start.py:51
+msgid "Letzte Sitzung wiederherstellen"
+msgstr ""
+
+#: modules/gui/wizard\wizard.py:50
+msgid "Wizard Session wird automatisch gespeichert."
+msgstr ""
+
+#: modules/gui/wizard\wizard.py:58
+msgid "Wizard Session geladen."
+msgstr ""
+
+#: modules/gui/wizard\wizard.py:75
 msgid "Soll der Assistent wirklich abgebrochen werden?"
 msgstr ""
 
@@ -712,7 +732,7 @@ msgstr ""
 msgid "Variantenbaum"
 msgstr ""
 
-#: modules/gui\main_ui.py:58 modules/gui\ui_resource.py:115
+#: modules/gui\main_ui.py:58 modules/gui\ui_resource.py:121
 #: modules\knecht_render.py:645
 msgid "Renderliste"
 msgstr ""
@@ -721,15 +741,15 @@ msgstr ""
 msgid "Die Varianten enthalten keine Reset Schaltung! Die zu sendenden Varianten werden mit vorangegangen Schaltungen kollidieren."
 msgstr ""
 
-#: modules/gui\ui_resource.py:102 modules/gui\ui_translations.py:186
+#: modules/gui\ui_resource.py:108 modules/gui\ui_translations.py:186
 msgid "Job übertragen"
 msgstr ""
 
-#: modules/gui\ui_resource.py:114
+#: modules/gui\ui_resource.py:120
 msgid "Variantenliste"
 msgstr ""
 
-#: modules/gui\ui_resource.py:116 modules/gui\ui_translations.py:154
+#: modules/gui\ui_resource.py:122 modules/gui\ui_translations.py:154
 msgid "Pfad Render Dienst"
 msgstr ""
 
@@ -949,15 +969,15 @@ msgstr ""
 msgid "Kann Beschäftigten nicht entlassen. Verstoß gegen Arbeitnehmerschutzgesetz festgestellt."
 msgstr ""
 
-#: modules/itemview\data_read.py:46
+#: modules/itemview\data_read.py:47
 msgid "Excel Daten werden konvertiert..."
 msgstr ""
 
-#: modules/itemview\data_read.py:56
+#: modules/itemview\data_read.py:57
 msgid "Konnte keinen Baum aus Excel Daten erstellen."
 msgstr ""
 
-#: modules/itemview\data_read.py:103
+#: modules/itemview\data_read.py:104
 msgid "Erstelle Model {} {:02d}/{:02d}..."
 msgstr ""
 
