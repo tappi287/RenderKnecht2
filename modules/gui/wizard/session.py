@@ -19,8 +19,7 @@ _ = lang.gettext
 
 class WizardSession:
     settings_dir = CreateZip.settings_dir
-    session_zip = CreateZip.settings_dir / 'LastPresetSession_data.zip'
-    last_session_file = Path(settings_dir, 'last_preset_session.json')
+    last_session_file = Path(settings_dir, 'last_preset_session.rksession')
 
     class SessionData:
         def __init__(self):
@@ -56,13 +55,22 @@ class WizardSession:
 
         self.data.pkg_filter = self.PkgDefaultFilter.package_filter[::]
 
+    def _clean_up_import_data(self):
+        new_models = list()
+        for trim in self.data.import_data.models:
+            if trim.model in self.data.import_data.selected_models:
+                new_models.append(trim)
+
+        self.data.import_data.models = new_models
+
     def load(self, file: Path=None):
         if not file:
             file = self.file
-        self.data = Settings.pickle_load(self.data, file)
+        self.data = Settings.pickle_load(self.data, file, compressed=True)
 
     def save(self, file: Path=None) -> bool:
         if not file:
             file = self.file
 
-        return Settings.pickle_save(self.data, file)
+        self._clean_up_import_data()
+        return Settings.pickle_save(self.data, file, compressed=True)

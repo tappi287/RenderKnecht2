@@ -13,6 +13,7 @@ imageio = "*"
 requests = "*"
 bottleneck = "*"
 jsonpickle = "*"
+ujson = "*"
 
 [dev-packages]
 jupyter = "*"

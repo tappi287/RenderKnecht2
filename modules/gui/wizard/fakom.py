@@ -128,10 +128,14 @@ class FakomWizardPage(QWizardPage):
             item.setData(0, Qt.UserRole, prx_index)
             item.setIcon(0, icon)
 
-            # Update Session selection data
+            # -- Update Session selection data --
             self.wizard.session.data.fakom_selection.update(
                 {model: (self.wizard.session.data.fakom_selection.get(model) or []) + [name]}
                 )
+
+        # -- Expand Results --
+        for trim_item in trim_items.values():
+            self.result_tree.expandItem(trim_item)
 
     @Slot(QTreeWidgetItem, int)
     def _result_item_pressed(self, item: QTreeWidgetItem, column: int):

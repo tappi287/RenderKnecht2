@@ -1,5 +1,7 @@
-import json
+import ujson
 import os
+import time
+import zlib
 from pathlib import Path
 from typing import Union, Any
 
@@ -16,6 +18,9 @@ def delayed_log_setup():
     LOGGER = init_logging(__name__)
 
 
+jsonpickle.set_preferred_backend('ujson')
+
+
 class Settings:
     """
         Load and save methods to save class attributes of setting classes
@@ -24,9 +29,9 @@ class Settings:
     def load(obj: object, file):
         try:
             with open(file, 'r') as f:
-                load_dict = json.load(f, encoding='utf-8')
+                load_dict = ujson.load(f)
         except Exception as e:
-            print('Could not load setting data:\n%s', e)
+            print('Could not load setting data:\n', e)
             return
 
         for key, attr in load_dict.items():
@@ -34,7 +39,7 @@ class Settings:
 
     @staticmethod
     def load_from_bytes(obj, data: bytes):
-        load_dict = json.loads(data, encoding='utf-8')
+        load_dict = ujson.loads(data)
 
         for key, attr in load_dict.items():
             setattr(obj, key, attr)
@@ -57,7 +62,7 @@ class Settings:
 
         try:
             with open(file, 'w') as f:
-                json.dump(save_dict, f, indent='\t')
+                ujson.dump(save_dict, f)
 
             msg = 'Saved settings to file: {}'.format(file.absolute().as_posix())
             LOGGER.info(msg)
@@ -68,19 +73,19 @@ class Settings:
 
     @staticmethod
     def is_serializable(data: Any) -> bool:
-        try:
-            json.dumps(data)
+        if isinstance(data, (int, str, float, bool, list, dict, tuple)):
             return True
-        except Exception as e:
-            LOGGER.debug(e)
-
         return False
 
     @staticmethod
-    def pickle_save(obj: object, file: Path) -> bool:
+    def pickle_save(obj: object, file: Path, compressed: bool=False) -> bool:
         try:
-            with open(file.as_posix(), 'w') as f:
-                f.write(jsonpickle.encode(obj))
+            w = 'wb' if compressed else 'w'
+            with open(file.as_posix(), w) as f:
+                if compressed:
+                    f.write(zlib.compress(jsonpickle.encode(obj).encode('UTF-8'), level=1))
+                else:
+                    f.write(jsonpickle.encode(obj))
 
             msg = 'Jsonpickled settings to file: {}'.format(file.absolute().as_posix())
             LOGGER.info(msg)
@@ -92,11 +97,18 @@ class Settings:
         return False
 
     @staticmethod
-    def pickle_load(obj: object, file: Path) -> object:
+    def pickle_load(obj: object, file: Path, compressed: bool=False) -> object:
         try:
-            with open(file.as_posix(), 'r') as f:
-                obj = jsonpickle.decode(f.read())
-            LOGGER.info('Pickle loaded object: %s', obj)
+            start = time.time()
+            r = 'rb' if compressed else 'r'
+
+            with open(file.as_posix(), r) as f:
+                if compressed:
+                    obj = jsonpickle.decode(zlib.decompress(f.read()))
+                else:
+                    obj = jsonpickle.decode(f.read())
+            LOGGER.info('Pickle loaded object in %.2f: %s', time.time() - start, obj)
+
         except Exception as e:
             LOGGER.error('Error jsonpickeling object from file. %s', e)
 
