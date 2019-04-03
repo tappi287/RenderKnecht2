@@ -89,7 +89,7 @@ class KnechtSession(QObject):
         super(KnechtSession, self).__init__(ui)
         self.restore_files_storage = self.FileNameStorage()
 
-        self.load_save_mgr = SaveLoadController(self)
+        self.load_save_mgr = SaveLoadController(self, create_recent_entries=False)
         # Load models into views and associate original save file path
         self.load_save_mgr.model_loaded.connect(self.model_loaded)
         # We will silently ignore load errors on session restore

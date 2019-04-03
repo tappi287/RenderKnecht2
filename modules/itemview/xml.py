@@ -58,11 +58,13 @@ class SaveLoadController(QObject):
     load_start_time = float()
     last_progress_time = float()
 
-    def __init__(self, parent: Union[None, QObject]):
+    def __init__(self, parent: Union[None, QObject], create_recent_entries: bool=True):
         super(SaveLoadController, self).__init__(parent)
 
         self.xml_worker = None
         self.xml_worker_queue = Queue()
+
+        self.create_recent_entries = create_recent_entries
 
     def save(self, file: Union[Path, str], view: KnechtTreeView):
         src_model = view.model().sourceModel()
@@ -71,8 +73,9 @@ class SaveLoadController(QObject):
         result, error = KnechtSaveXml.save_xml(file, src_model)
 
         if result:
-            KnechtSettings.add_recent_file(file.as_posix(), 'xml')
-            KnechtSettings.app['current_path'] = file.parent.as_posix()
+            if self.create_recent_entries:
+                KnechtSettings.add_recent_file(file.as_posix(), 'xml')
+                KnechtSettings.app['current_path'] = file.parent.as_posix()
             self.last_progress_time = time.time() - start_time
 
         return result, error
@@ -114,8 +117,9 @@ class SaveLoadController(QObject):
         new_model = KnechtModel(root_item)
 
         # Add recent file entry
-        KnechtSettings.add_recent_file(file.as_posix(), 'xml')
-        KnechtSettings.app['current_path'] = file.parent.as_posix()
+        if self.create_recent_entries:
+            KnechtSettings.add_recent_file(file.as_posix(), 'xml')
+            KnechtSettings.app['current_path'] = file.parent.as_posix()
 
         # Output load info
         self.last_progress_time = time.time() - self.load_start_time
