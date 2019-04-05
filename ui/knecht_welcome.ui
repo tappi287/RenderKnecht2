@@ -96,7 +96,8 @@ QPushButton:hover {color: rgb(85, 170, 255);
      <item>
       <widget class="QLabel" name="news">
        <property name="text">
-        <string>allow runtime change of log level
+        <string>enhanced handling of image files and path lenghts while rendering
+allow runtime change of log level
 fixed order of pasted items
 references can no longer be copied to top level
 enhance search dialog

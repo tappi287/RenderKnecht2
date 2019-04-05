@@ -1,4 +1,5 @@
 import re
+import time
 from pathlib import Path
 from typing import List, Tuple, Union
 
@@ -178,9 +179,10 @@ class KnechtRenderPreset:
 
         for (image, shot) in self.__render_images:
             img_file_name = f'{self.__image_name(image, shot)}{self.settings.get("file_extension")}'
-            img_path = self.path / img_file_name
+            out_dir_name = 'out_0123456789012345678'
+            img_path = self.path / out_dir_name / img_file_name
 
-            if len(str(img_path)) >= 259:
+            if len(img_path.as_posix()) >= 258:
                 self.too_long_paths.append(img_path)
 
         if self.too_long_paths:

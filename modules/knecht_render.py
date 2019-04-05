@@ -239,7 +239,10 @@ class KnechtRenderThread(Thread):
         self.current_img_render_time = calculate_render_time(render_preset)
 
         # Update Progress
-        self.progress_text.emit(f'{name} - {self.rendered_img_count + 1:02d}/{self.total_image_count():02d}')
+        progress_name = name
+        if len(progress_name) >= 60:
+            progress_name = progress_name[:50] + ' ~ ' + progress_name[-11:]
+        self.progress_text.emit(f'{progress_name} - {self.rendered_img_count + 1:02d}/{self.total_image_count():02d}')
 
         # --- Send image variants
         self.send_variants.emit(variant_ls)
@@ -426,13 +429,13 @@ class KnechtRenderThread(Thread):
 
             try:
                 # Try to read image
-                img = imread(img_path.as_posix())
+                with open(img_path.as_posix(), 'rb') as f:
+                    img = imread(f)
                 img = True
             except ValueError or OSError as exception_message:
                 """ Value error if format not found or file incomplete; OSError on non-existent file """
-                if time.time() - begin < 11:
-                    LOGGER.debug('Rendered image could not be verified. Verification loop %s sec.\n%s', timeout,
-                                 exception_message)
+                LOGGER.debug('Rendered image could not be verified. Verification loop %s sec.\n%s', timeout,
+                             exception_message)
 
                 # Display image verification in Overlay
                 self.status.emit(_('Bilddaten konnten nicht als gültiges Bild verifiziert werden.{}'
@@ -479,7 +482,7 @@ class KnechtRenderThread(Thread):
 
     @staticmethod
     def create_directory(render_dir):
-        out_dir_name = 'out_' + str(time.time())
+        out_dir_name = 'out_' + str(time.time())[:19]
 
         render_dir = Path(render_dir) / out_dir_name
 

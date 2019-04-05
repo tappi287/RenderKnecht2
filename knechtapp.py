@@ -16,7 +16,7 @@ if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     print('Using high dpi Pixmaps')
 
-VERSION = '0.824'
+VERSION = '0.825'
 
 # TODO: Item order when pasting to top level tree to tree
 # TODO: Add image output directory tree item to be placed anywhere
