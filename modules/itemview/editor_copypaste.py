@@ -182,7 +182,8 @@ class KnechtEditorCopyPaste(QObject):
                     if match:
                         item.update_name()
 
-        self.editor.create_top_level_rows(referenced_items + items, undo_cmd_chain_override=move_undo_chain)
+        ordered_item_ls = self.editor.util.reorder_item_order_data(referenced_items + items, current_src_index)
+        self.editor.create_top_level_rows(ordered_item_ls, undo_cmd_chain_override=move_undo_chain)
 
     def _paste_to_item(self, items: List[KnechtItem], current_src_index: QModelIndex,
                        src_model: KnechtModel, referenced_items: List[KnechtItem],

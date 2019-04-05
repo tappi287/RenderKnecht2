@@ -32,7 +32,7 @@ class GenericMsgBox(QMessageBox):
 
 class GenericErrorBox(GenericMsgBox):
     title = _('Fehler')
-    txt = _('Allgmeiner Fehler')
+    txt = _('Allgemeiner Fehler')
     icon_key = 'RK_Icon'
 
     def __init__(self, parent):
