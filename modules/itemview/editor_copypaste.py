@@ -163,6 +163,9 @@ class KnechtEditorCopyPaste(QObject):
                          src_model: KnechtModel, referenced_items: List[KnechtItem],
                          different_origin: bool, view_origin, move_undo_chain):
         """ Create top level items with new Id's and add referenced items as necessary """
+        # Remove references when pasting to top level
+        items = [i for i in items if i.userType != Kg.reference]
+
         for item in items:
             if move_undo_chain:
                 continue
@@ -190,7 +193,8 @@ class KnechtEditorCopyPaste(QObject):
         else:
             undo_cmd_chain = undo_cmd_chain_override
 
-        converted_items = self.editor.util.convert_clipboard(items, current_src_index, src_model, view_origin)
+        converted_items = self.editor.util.convert_clipboard(items + referenced_items,
+                                                             current_src_index, src_model, view_origin)
 
         for item in converted_items:
             TreeCommand(undo_cmd_chain, self.editor, current_src_index, src_model, item, add=True)
@@ -213,7 +217,8 @@ class KnechtEditorCopyPaste(QObject):
             undo_cmd_chain = undo_cmd_chain_override
 
         # Add clipboard items as children
-        for item in self.editor.util.convert_clipboard(items, current_src_index, src_model, view_origin):
+        for item in self.editor.util.convert_clipboard(items + referenced_items,
+                                                       current_src_index, src_model, view_origin):
             TreeCommand(undo_cmd_chain, self.editor, current_src_index, src_model,
                         item, add=True, parent_idx=current_src_index)
 

@@ -3,13 +3,13 @@ from typing import List, Union
 
 from PySide2.QtCore import QModelIndex, QObject, QUuid, Signal
 
-from modules.settings import KnechtSettings
 from modules.itemview.item import KnechtItem
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.knecht_objects import KnechtVariantList
 from modules.language import get_translation
 from modules.log import init_logging
+from modules.settings import KnechtSettings
 
 LOGGER = init_logging(__name__)
 
@@ -122,22 +122,26 @@ class KnechtCollectVariants(QObject):
 
             variants.add(index, item.data(Kg.NAME), item.data(Kg.VALUE))
 
-    @staticmethod
-    def _order_children(preset_item: KnechtItem) -> List[KnechtItem]:
+    @classmethod
+    def _order_children(cls, preset_item: KnechtItem) -> List[KnechtItem]:
         """ The children list of an item corresponds to the source indices which
             do not necessarily reflect the item order by order column.
-            We create a list ordered by the order column of each child.
+            We create a list ordered by the order column value of each child.
         """
-        child_order_ls, child_ls = list(), list()
+        return cls.order_items_by_order_column(preset_item.iter_children())
 
-        for child in preset_item.iter_children():
-            order = int(child.data(Kg.ORDER))
-            child_order_ls.append(order)
+    @staticmethod
+    def order_items_by_order_column(items: List[KnechtItem]):
+        item_order_ls, item_ls = list(), list()
 
-            insert_idx = bisect_left(sorted(child_order_ls), order)
-            child_ls.insert(insert_idx, child)
+        for item in items:
+            order = int(item.data(Kg.ORDER))
+            item_order_ls.append(order)
 
-        return child_ls
+            insert_idx = bisect_left(sorted(item_order_ls), order)
+            item_ls.insert(insert_idx, item)
+
+        return item_ls
 
     @staticmethod
     def _collect_single_reference(item, src_model) -> Union[KnechtItem, None]:

@@ -1,25 +1,24 @@
-import sys
 import logging
+import sys
+from multiprocessing import Queue
 
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QApplication
 
+from modules.globals import FROZEN, MAIN_LOGGER_NAME
 from modules.gui.gui_utils import KnechtExceptionHook
-from ui import gui_resource
-from ui import darkstyle
-from multiprocessing import Queue
+from modules.gui.main_app import KnechtApp
 from modules.log import init_logging, setup_log_queue_listener, setup_logging
 from modules.settings import KnechtSettings, delayed_log_setup
-from modules.globals import FROZEN
-from modules.gui.main_app import KnechtApp
-
+from ui import darkstyle, gui_resource
 
 if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     print('Using high dpi Pixmaps')
 
-VERSION = '0.822'
+VERSION = '0.824'
 
+# TODO: Item order when pasting to top level tree to tree
 # TODO: Add image output directory tree item to be placed anywhere
 #  eg. placed in preset will render preset to this directory, placed in render_preset will render presets not
 #  containing out_dir_item to that dir
@@ -28,7 +27,7 @@ VERSION = '0.822'
 
 def initialize_log_listener(logging_queue):
     global LOGGER
-    LOGGER = init_logging('knecht_main')
+    LOGGER = init_logging(MAIN_LOGGER_NAME)
 
     # This will move all handlers from LOGGER to the queue listener
     log_listener = setup_log_queue_listener(LOGGER, logging_queue)
@@ -81,7 +80,7 @@ def main():
     #
     #
     # ---- Start application ----
-    app = KnechtApp(VERSION)
+    app = KnechtApp(VERSION, logging_queue)
     app.setApplicationName('RenderKnecht')
     app.setApplicationDisplayName(app.applicationName())
     app.setApplicationVersion(VERSION)

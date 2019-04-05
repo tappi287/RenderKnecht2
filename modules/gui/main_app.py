@@ -1,21 +1,21 @@
+import logging
 import sys
-from pathlib import Path
 
 from PySide2 import QtWidgets
 from PySide2.QtCore import QFile, QTextStream, QTimer
 
+from modules.globals import MAIN_LOGGER_NAME, Resource
 from modules.gui.gui_utils import KnechtExceptionHook
-from modules.gui.widgets.message_box import AskToContinueCritical, GenericErrorBox
-from modules.knecht_render import KnechtRender
-from modules.knecht_session import KnechtSession
-from modules.settings import KnechtSettings
-from modules.globals import Resource
 from modules.gui.main_ui import KnechtWindow
 from modules.gui.ui_resource import FontRsc, IconRsc
-from modules.knecht_deltagen import SendToDeltaGen
 from modules.gui.ui_splash_screen import show_splash_screen_movie
-from modules.log import init_logging
+from modules.gui.widgets.message_box import AskToContinueCritical, GenericErrorBox
+from modules.knecht_deltagen import SendToDeltaGen
+from modules.knecht_render import KnechtRender
+from modules.knecht_session import KnechtSession
 from modules.language import get_translation
+from modules.log import init_logging, setup_logging
+from modules.settings import KnechtSettings
 
 LOGGER = init_logging(__name__)
 
@@ -47,12 +47,13 @@ def load_style(app):
 
 
 class KnechtApp(QtWidgets.QApplication):
-    def __init__(self, version):
+    def __init__(self, version, logging_queue):
         super(KnechtApp, self).__init__(sys.argv)
 
         splash = show_splash_screen_movie(self)
 
         self.version = version
+        self.logging_queue = logging_queue
 
         # History widget will set active Undo Stack on view change
         self.undo_grp = QtWidgets.QUndoGroup(self)
@@ -157,6 +158,17 @@ class KnechtApp(QtWidgets.QApplication):
     def produce_exception(self):
         """ Produce an exception to test exception handling """
         a = 1 / 0
+
+    def set_debug_log_level(self):
+        self.ui.msg('A group of highly trained monkeys has been dispatched to type more log messages. '
+                    'Large tree performance will be decreased significantly.', 10000)
+
+        LOGGER.warning('Current log level: %s', logging.getLevelName(LOGGER.getEffectiveLevel()))
+        setup_logging(self.logging_queue, overwrite_level='DEBUG')
+        main_logger = logging.getLogger(MAIN_LOGGER_NAME)
+        main_logger.setLevel(logging.DEBUG)
+        LOGGER.warning('This logger level: %s', logging.getLevelName(LOGGER.getEffectiveLevel()))
+        LOGGER.warning('Main logger level: %s', logging.getLevelName(main_logger.getEffectiveLevel()))
 
     def about_to_quit(self):
         LOGGER.debug('QApplication is about to quit.')

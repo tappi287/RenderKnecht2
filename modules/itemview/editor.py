@@ -39,7 +39,7 @@ class KnechtEditor(QObject):
         self.iterator = KnechtIterateView(self)
         self.selection = KnechtItemSelection(self)
         self.copypaste = KnechtEditorCopyPaste(self)
-        self.util = KnechtEditorUtilities()
+        self.util = KnechtEditorUtilities(self)
         self.collect = KnechtCollectVariants(self.view)
         self.render = KnechtEditorRenderPresets(self)
 
@@ -95,7 +95,7 @@ class KnechtEditor(QObject):
             current_src_index = current_src_index.parent()
 
         # -- Determine the order value behind current selection
-        new_order_value = self.util.get_order_data(current_src_index, src_model, at_row)
+        new_order_value = self.util.get_order_data(current_src_index, at_row)
 
         # -- Add UndoCmd's into provided override chain or create one
         if undo_cmd_chain_override:

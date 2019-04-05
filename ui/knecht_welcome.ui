@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>520</width>
-    <height>359</height>
+    <height>326</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -96,7 +96,10 @@ QPushButton:hover {color: rgb(85, 170, 255);
      <item>
       <widget class="QLabel" name="news">
        <property name="text">
-        <string>enhance search dialog
+        <string>allow runtime change of log level
+fixed order of pasted items
+references can no longer be copied to top level
+enhance search dialog
 update translations
 create model code inside trim items from KnData
 find and replace for item views

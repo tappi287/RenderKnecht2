@@ -7,6 +7,7 @@ UI_PATH = 'ui'
 UI_PATHS_FILE = 'gui_resource_paths.json'
 
 LOG_FILE_NAME = 'renderknecht2.log'
+MAIN_LOGGER_NAME = 'knecht_main'
 
 SETTINGS_FILE = 'settings.json'
 SETTINGS_DIR_NAME = 'RenderKnecht2'

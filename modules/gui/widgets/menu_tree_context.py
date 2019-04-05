@@ -9,7 +9,6 @@ from modules.globals import get_settings_dir
 from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.menu_create import CreateMenu
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
-from modules.knecht_update import KnechtUpdate
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -77,6 +76,9 @@ class TreeContextMenu(QMenu):
         report_action = QAction('Report Item attributes to log', self.dev_actions)
         report_action.setShortcut(QKeySequence('Ctrl+B'))
         report_action.triggered.connect(self.report_current)
+
+        log_level = QAction(IconRsc.get_icon('sort'), 'Enable DEBUG log level', self.dev_actions)
+        log_level.triggered.connect(self.ui.app.set_debug_log_level)
 
         produce_exception = QAction(IconRsc.get_icon('warn'), 'Produce Exception', self.dev_actions)
         produce_exception.triggered.connect(self.ui.app.produce_exception)

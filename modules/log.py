@@ -6,10 +6,10 @@ import logging.config
 from logging.handlers import QueueHandler, QueueListener
 from PySide2.QtCore import QObject, Signal
 
-from modules.globals import get_settings_dir, LOG_FILE_NAME, FROZEN
+from modules.globals import get_settings_dir, LOG_FILE_NAME, FROZEN, MAIN_LOGGER_NAME
 
 
-def setup_logging(logging_queue):
+def setup_logging(logging_queue, overwrite_level: str=None):
     # Track calls to this method
     print('Logging setup called: ',
           Path(sys._getframe().f_back.f_code.co_filename).name,
@@ -19,6 +19,8 @@ def setup_logging(logging_queue):
         log_level = 'INFO'
     else:
         log_level = 'DEBUG'
+    if overwrite_level:
+        log_level = overwrite_level
 
     log_file_path = Path(get_settings_dir()) / Path(LOG_FILE_NAME)
 
@@ -65,7 +67,7 @@ def setup_logging(logging_queue):
             },
         'loggers': {
             # Main logger, these handlers will be moved to the QueueListener
-            'knecht_main': {
+            MAIN_LOGGER_NAME: {
                 'handlers': ['file', 'guiHandler', 'console'], 'propagate': False, 'level': log_level,
                 },
             # Log Window Logger

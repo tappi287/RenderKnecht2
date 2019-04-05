@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from PySide2.QtCore import QModelIndex, QUuid
+from PySide2.QtCore import QModelIndex, QUuid, Qt
 
 from modules.itemview.item import KnechtItem
 from modules.itemview.model import KnechtModel
@@ -19,6 +19,13 @@ _ = lang.gettext
 
 class KnechtEditorUtilities:
     """ KnechtEditor static helper methods that need no access to the view property or other dynamic fields """
+    def __init__(self, editor):
+        """
+
+        :param modules.itemview.editor.KnechtEditor editor:
+        """
+        self.editor = editor
+
     @classmethod
     def insert_child_from_data(cls, model, parent, data):
         new_position = model.rowCount(parent)
@@ -59,15 +66,15 @@ class KnechtEditorUtilities:
             yield child
 
     @staticmethod
-    def get_order_data(index: QModelIndex, model: KnechtModel, order: int = 0) -> int:
+    def get_order_data(index: QModelIndex, order: int = 0) -> int:
         if not index.isValid():
             return 0
 
         if order == 0:
-            order_data = model.data_list(index)
+            order_data = index.siblingAtColumn(Kg.ORDER).data(Qt.DisplayRole)
 
-            if order_data and order_data[Kg.ORDER].isdigit():
-                order = int(order_data[Kg.ORDER])
+            if order_data and order_data.isdigit():
+                order = int(order_data)
 
         return order
 
@@ -205,24 +212,20 @@ class KnechtEditorUtilities:
         del copied_items
         return items
 
-    @classmethod
-    def convert_clipboard(cls, items: List[KnechtItem], src_index: QModelIndex,
+    def convert_clipboard(self, items: List[KnechtItem], src_index: QModelIndex,
                           src_model: KnechtModel, view_origin) -> List[KnechtItem]:
         """ When pasting to item level, convert top level items to references. """
         top_level_items = list()
         sub_level_items = list()
 
         origin_src_model = view_origin.model().sourceModel()
-        new_order_value = cls.get_order_data(src_index, src_model)
 
         # TODO: Convert top level Separator to Sub_Separator
 
         for item in items:
             new_item = item.copy(copy_children=False)
-            new_item.setData(Kg.ORDER, f'{new_order_value:03d}')
-            new_order_value += 1
 
-            if new_item.parent() is origin_src_model.root_item:
+            if new_item.parent() == origin_src_model.root_item:
                 # Convert top level items to references
                 if new_item.userType != Kg.variant:
                     new_item.convert_to_reference()
@@ -231,4 +234,22 @@ class KnechtEditorUtilities:
             else:
                 sub_level_items.append(new_item)
 
+        top_level_items = self.reorder_item_order_data(top_level_items, src_index)
+        sub_level_items = self.reorder_item_order_data(sub_level_items, src_index)
+
         return top_level_items + sub_level_items
+
+    def reorder_item_order_data(self, item_ls: List[KnechtItem], src_index: QModelIndex):
+        """ Re-write order column data based on the source_index to paste too and
+            return sorted item list
+        """
+        # Order item list by order column values
+        item_ls = self.editor.collect.order_items_by_order_column(item_ls)
+        # Value to start with at paste target index
+        new_order_value = self.get_order_data(src_index)
+
+        for item in item_ls:
+            item.setData(Kg.ORDER, f'{new_order_value:03d}')
+            new_order_value += 1
+
+        return item_ls
