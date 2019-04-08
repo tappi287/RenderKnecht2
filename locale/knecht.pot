@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-04-03 01:42+0200\n"
+"POT-Creation-Date: 2019-04-09 00:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -128,11 +128,11 @@ msgstr ""
 msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:447 modules/gui/wizard\wizard.py:76
+#: modules/gui/widgets\excel_dialog.py:447 modules/gui/wizard\wizard.py:130
 msgid "Ja"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:448 modules/gui/wizard\wizard.py:77
+#: modules/gui/widgets\excel_dialog.py:448 modules/gui/wizard\wizard.py:131
 msgid "Nein"
 msgstr ""
 
@@ -385,7 +385,7 @@ msgid "Einfügen\tStrg+V"
 msgstr ""
 
 #: modules/gui/widgets\menu_edit.py:86
-#: modules/gui/widgets\menu_tree_context.py:58
+#: modules/gui/widgets\menu_tree_context.py:57
 msgid "Selektierte Zeilen entfernen\tEntf"
 msgstr ""
 
@@ -474,15 +474,15 @@ msgstr ""
 msgid "Sprache"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:25
+#: modules/gui/widgets\menu_tree_context.py:24
 msgid "Baum Kontextmenü"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:38
+#: modules/gui/widgets\menu_tree_context.py:37
 msgid "Senden an DeltaGen"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:71
+#: modules/gui/widgets\menu_tree_context.py:70
 msgid "Hide ID columns"
 msgstr ""
 
@@ -523,7 +523,7 @@ msgid "Fehler"
 msgstr ""
 
 #: modules/gui/widgets\message_box.py:35
-msgid "Allgmeiner Fehler"
+msgid "Allgemeiner Fehler"
 msgstr ""
 
 #: modules/gui/widgets\message_box.py:47
@@ -550,8 +550,8 @@ msgstr ""
 msgid "Fortfahren"
 msgstr ""
 
-#: modules/gui/widgets\message_box.py:69 modules/gui\main_app.py:108
-#: modules/gui\main_app.py:127
+#: modules/gui/widgets\message_box.py:69 modules/gui/wizard\wizard.py:71
+#: modules/gui\main_app.py:109 modules/gui\main_app.py:128
 msgid "Abbrechen"
 msgstr ""
 
@@ -656,75 +656,103 @@ msgstr ""
 msgid "Ausgewählte Presets"
 msgstr ""
 
-#: modules/gui/wizard\start.py:30 modules/gui/wizard\wizard.py:21
+#: modules/gui/wizard\preset.py:43
+msgid "Preset auto&magisch befüllen"
+msgstr ""
+
+#: modules/gui/wizard\preset.py:45
+msgid "Aktuelles Preset automagisch mit nicht verwendeten Optionen befüllen. Bezugs-, Sitz-, Leder oder Fahrwerksoptionen werden ignoriert."
+msgstr ""
+
+#: modules/gui/wizard\preset.py:52
+msgid "Bereits verwendete Optionen ein- oder ausblenden"
+msgstr ""
+
+#: modules/gui/wizard\preset.py:58
+msgid "Bereits verwendete Optionen für die Bearbeitung sperren"
+msgstr ""
+
+#: modules/gui/wizard\start.py:28 modules/gui/wizard\wizard.py:22
 msgid "Preset Wizard"
 msgstr ""
 
-#: modules/gui/wizard\start.py:31
+#: modules/gui/wizard\start.py:29
 msgid "Dieser Assistent führt durch die Erstellung von Presets aus Importdaten. Gewünschte Modelle und Optionen können in nachfolgenden Schritten gewählt werden."
 msgstr ""
 
-#: modules/gui/wizard\start.py:36
+#: modules/gui/wizard\start.py:34
 msgid "Landespaket Filter"
 msgstr ""
 
-#: modules/gui/wizard\start.py:38
+#: modules/gui/wizard\start.py:36
 msgid "Dieser Filter ermöglicht den Ausschluß meist unbenötigter und redundanter Pakete für einzelne, länderspezifische Märkte. Die gefilterten Pakete bleiben sicht- und zuweisbar. Sie werden aber als verwendet markiert so dass die automagische Zuweisung sie ignoriert."
 msgstr ""
 
-#: modules/gui/wizard\start.py:42
+#: modules/gui/wizard\start.py:40
 msgid "Landesspezifische Pakete als verwendet markieren"
 msgstr ""
 
-#: modules/gui/wizard\start.py:43
+#: modules/gui/wizard\start.py:41
 msgid "Filter anzeigen/bearbeiten"
 msgstr ""
 
-#: modules/gui/wizard\start.py:47
+#: modules/gui/wizard\start.py:45
 msgid "Session aus Datei laden"
 msgstr ""
 
-#: modules/gui/wizard\start.py:49
+#: modules/gui/wizard\start.py:47
 msgid "Session in Datei sichern"
 msgstr ""
 
-#: modules/gui/wizard\start.py:51
+#: modules/gui/wizard\start.py:49
 msgid "Letzte Sitzung wiederherstellen"
 msgstr ""
 
-#: modules/gui/wizard\wizard.py:50
-msgid "Wizard Session wird automatisch gespeichert."
+#: modules/gui/wizard\wizard.py:68
+msgid "Zurück"
 msgstr ""
 
-#: modules/gui/wizard\wizard.py:58
+#: modules/gui/wizard\wizard.py:69
+msgid "Weiter"
+msgstr ""
+
+#: modules/gui/wizard\wizard.py:70
+msgid "Abschließen"
+msgstr ""
+
+#: modules/gui/wizard\wizard.py:89
+msgid "Wizard Session wurde automatisch gespeichert."
+msgstr ""
+
+#: modules/gui/wizard\wizard.py:97
 msgid "Wizard Session geladen."
 msgstr ""
 
-#: modules/gui/wizard\wizard.py:75
+#: modules/gui/wizard\wizard.py:129
 msgid "Soll der Assistent wirklich abgebrochen werden?"
 msgstr ""
 
-#: modules/gui\main_app.py:104 modules/gui\main_app.py:123
+#: modules/gui\main_app.py:105 modules/gui\main_app.py:124
 msgid "Anwendung beenden"
 msgstr ""
 
-#: modules/gui\main_app.py:105
+#: modules/gui\main_app.py:106
 msgid "Achtung! Ein Render Vorgang läuft.<br><br>Der Vorgang wird durch das Beenden abgebrochen.<br><br>Soll die Anwendung wirklich beendet werden?"
 msgstr ""
 
-#: modules/gui\main_app.py:109 modules/gui\main_app.py:126
+#: modules/gui\main_app.py:110 modules/gui\main_app.py:127
 msgid "Beenden erzwingen"
 msgstr ""
 
-#: modules/gui\main_app.py:124
+#: modules/gui\main_app.py:125
 msgid "Achtung! Ein laufender Prozess sendet Daten an DeltaGen.<br><br>Soll die Anwendung wirklich beendet werden?"
 msgstr ""
 
-#: modules/gui\main_app.py:147
+#: modules/gui\main_app.py:148
 msgid "<h3>Hoppla!</h3>Eine schwerwiegende Anwendungsausnahme ist aufgetreten. Speichern Sie Ihre Daten und starten Sie die Anwendung neu.<br><br>"
 msgstr ""
 
-#: modules/gui\main_app.py:150
+#: modules/gui\main_app.py:151
 msgid "Anwendungsausnahme"
 msgstr ""
 
@@ -733,7 +761,7 @@ msgid "Variantenbaum"
 msgstr ""
 
 #: modules/gui\main_ui.py:58 modules/gui\ui_resource.py:121
-#: modules\knecht_render.py:645
+#: modules\knecht_render.py:648
 msgid "Renderliste"
 msgstr ""
 
@@ -829,7 +857,7 @@ msgstr ""
 msgid "Bricht laufende Sendung an DeltaGen ab."
 msgstr ""
 
-#: modules/gui\ui_translations.py:116 modules\knecht_render.py:676
+#: modules/gui\ui_translations.py:116 modules\knecht_render.py:679
 msgid "Rendering"
 msgstr ""
 
@@ -877,7 +905,7 @@ msgstr ""
 msgid "Konvertiert die ausgegebenen Bilder nach dem Render Vorgang in PNG."
 msgstr ""
 
-#: modules/gui\ui_translations.py:143 modules\knecht_render.py:292
+#: modules/gui\ui_translations.py:143 modules\knecht_render.py:295
 msgid "Rendering starten"
 msgstr ""
 
@@ -1045,11 +1073,11 @@ msgstr ""
 msgid "Datei ist bereits geöffnet."
 msgstr ""
 
-#: modules/itemview\xml.py:85
+#: modules/itemview\xml.py:88
 msgid "Kann nicht auf die gewählte Datei zugreifen."
 msgstr ""
 
-#: modules/itemview\xml.py:104
+#: modules/itemview\xml.py:107
 msgid "Allgemeiner Fehler beim laden der Daten."
 msgstr ""
 
@@ -1169,55 +1197,55 @@ msgstr ""
 msgid "{} Rendering von {} Bildern abgeschlossen in {}"
 msgstr ""
 
-#: modules\knecht_render.py:246
+#: modules\knecht_render.py:249
 msgid "Sende Varianten..."
 msgstr ""
 
-#: modules\knecht_render.py:256
+#: modules\knecht_render.py:259
 msgid "Sende Einstellungen..."
 msgstr ""
 
-#: modules\knecht_render.py:344 modules\knecht_render.py:345
+#: modules\knecht_render.py:347 modules\knecht_render.py:348
 msgid "Prüfe Bilddaten..."
 msgstr ""
 
-#: modules\knecht_render.py:349 modules\knecht_render.py:350
+#: modules\knecht_render.py:352 modules\knecht_render.py:353
 msgid "Rendering erzeugt."
 msgstr ""
 
-#: modules\knecht_render.py:355
+#: modules\knecht_render.py:358
 msgid "Erzeuge nächstes Bild in {}..."
 msgstr ""
 
-#: modules\knecht_render.py:392
+#: modules\knecht_render.py:395
 msgid "{0}Bild Konvertierung:{0}{1}"
 msgstr ""
 
-#: modules\knecht_render.py:401
+#: modules\knecht_render.py:404
 msgid "Render Vorgang abgebrochen.{}Konnte keine Verbindung zu einer DeltaGen Instanz herstellen."
 msgstr ""
 
-#: modules\knecht_render.py:438
+#: modules\knecht_render.py:441
 msgid "Bilddaten konnten nicht als gültiges Bild verifiziert werden.{}"
 msgstr ""
 
-#: modules\knecht_render.py:450
+#: modules\knecht_render.py:453
 msgid "Bilddaten wurden erfolgreich verifiziert: {}"
 msgstr ""
 
-#: modules\knecht_render.py:460
+#: modules\knecht_render.py:463
 msgid "{0}Datei konnte nicht als gültige Bilddatei verfiziert werden: {1}{0}"
 msgstr ""
 
-#: modules\knecht_render.py:524
+#: modules\knecht_render.py:527
 msgid "{} Einstellungen - "
 msgstr ""
 
-#: modules\knecht_render.py:525
+#: modules\knecht_render.py:528
 msgid "Sampling: {} - Res: "
 msgstr ""
 
-#: modules\knecht_render.py:526
+#: modules\knecht_render.py:529
 msgid "{}px - Ext: "
 msgstr ""
 

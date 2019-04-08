@@ -1,9 +1,10 @@
 from pathlib import Path
+from typing import List
 
 from PySide2.QtCore import QFile, QIODevice, QByteArray
 
 from modules.globals import Resource
-from modules.knecht_objects import KnData
+from modules.knecht_objects import KnData, _DataTrimOption, _DataParent
 from modules.knecht_utils import CreateZip
 from modules.settings import Settings
 from modules.language import get_translation
@@ -21,11 +22,18 @@ class WizardSession:
     settings_dir = CreateZip.settings_dir
     last_session_file = Path(settings_dir, 'last_preset_session.rksession')
 
+    class _PresetPage(_DataParent):
+        def __init__(self):
+            super(WizardSession._PresetPage, self).__init__()
+
     class SessionData:
         def __init__(self):
             self.pkg_filter = list()
             self.import_data = KnData()
+            # Model: List[FA_SIB_LUM_on]
             self.fakom_selection = dict()
+            # PageId: PresetPage
+            self.preset_pages = dict()
 
     class PkgDefaultFilter:
         package_filter = list()

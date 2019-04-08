@@ -1,11 +1,9 @@
-from PySide2.QtCore import QTimer
 from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QWizard, QWizardPage, QLabel
+from PySide2.QtWidgets import QWizard, QWizardPage
 
 from modules.globals import Resource
 from modules.gui.gui_utils import SetupWidget
 from modules.gui.ui_resource import IconRsc
-from modules.gui.widgets.expandable_widget import KnechtExpandableWidget
 from modules.language import get_translation
 from modules.log import init_logging
 

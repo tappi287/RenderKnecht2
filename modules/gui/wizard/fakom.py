@@ -101,15 +101,13 @@ class FakomWizardPage(QWizardPage):
         if not index.flags() & Qt.ItemIsSelectable:
             return
 
-        proxy_index_ls = self.fakom_tree.selectionModel().selectedRows()
-        if proxy_index_ls:
-            # Reset saved selection
-            self.wizard.session.data.fakom_selection = dict()
+        # Reset saved selection
+        self.wizard.session.data.fakom_selection = dict()
 
         # -- Populate Selection TreeWidget ---
         self.result_tree.clear()
         trim_items = dict()
-        for prx_index in proxy_index_ls:
+        for prx_index in self.fakom_tree.selectionModel().selectedRows():
             trim_idx = self.get_index_group_parent(prx_index)
             trim_name = trim_idx.siblingAtColumn(Kg.NAME).data(Qt.DisplayRole)
             model = trim_idx.siblingAtColumn(Kg.VALUE).data(Qt.DisplayRole)
@@ -136,6 +134,8 @@ class FakomWizardPage(QWizardPage):
         # -- Expand Results --
         for trim_item in trim_items.values():
             self.result_tree.expandItem(trim_item)
+
+        self.completeChanged.emit()
 
     @Slot(QTreeWidgetItem, int)
     def _result_item_pressed(self, item: QTreeWidgetItem, column: int):
@@ -167,6 +167,8 @@ class FakomWizardPage(QWizardPage):
             prx_index = self.fakom_tree.model().mapFromSource(src_idx_selection_ls[0])
             self._fakom_item_pressed(prx_index)
 
+        self.completeChanged.emit()
+
     @staticmethod
     def get_index_group_parent(prx_index: QModelIndex) -> QModelIndex:
         """ Get the highest valid parent index """
@@ -178,7 +180,10 @@ class FakomWizardPage(QWizardPage):
         return parent_idx
 
     def validatePage(self):
-        return False
+        self.wizard.create_preset_pages()
+        return True
 
     def isComplete(self):
+        if self.wizard.session.data.fakom_selection:
+            return True
         return False
