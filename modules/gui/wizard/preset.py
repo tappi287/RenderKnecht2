@@ -1,3 +1,5 @@
+from typing import Any, Union
+
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QPushButton, QTreeView, QWizard, QWizardPage
 
@@ -22,7 +24,8 @@ _ = lang.gettext
 
 
 class PresetWizardPage(QWizardPage):
-    def __init__(self, wizard: QWizard, model: str, fakom: str):
+
+    def __init__(self, wizard, model: str, fakom: str):
         """ Wizard start page with session reload, save and package filter options.
 
         :param modules.gui.wizard.wizard.PresetWizard wizard: The parent wizard
@@ -30,13 +33,14 @@ class PresetWizardPage(QWizardPage):
         super(PresetWizardPage, self).__init__()
         self.wizard = wizard
         self.model = model
+        self.fakom = fakom
+
         self.trim = [x for x in wizard.session.data.import_data.models if x.model == model][0]
+
         self.setTitle(f'Preset - {self.trim.model_text}')
         self.setSubTitle(f'{model}_{fakom}')
 
         SetupWidget.from_ui_file(self, Resource.ui_paths['wizard_preset'])
-
-        self.uid = create_uuid().toString()
 
         # -- Setup Page Ui --
         self.option_auto_btn: QPushButton
@@ -58,11 +62,14 @@ class PresetWizardPage(QWizardPage):
         self.option_lock_btn.setStatusTip(_('Bereits verwendete Optionen für die Bearbeitung sperren'))
 
         # -- Replace Placeholder TreeViews --
-        self.pkg_tree = self._init_tree_view(self.pkg_tree)
-        self.option_tree = self._init_tree_view(self.option_tree)
-        self.preset_tree = self._init_tree_view(self.preset_tree)
+        self.pkg_tree = self._init_tree_view(self.pkg_tree, self.wizard.pkg_models.get(model))
+        self.option_tree = self._init_tree_view(self.option_tree, self.wizard.opt_models.get(model))
 
-    def _init_tree_view(self, tree_view: QTreeView) -> KnechtTreeView:
+    def setup_preset_tree_model(self, page_id: int):
+        preset_model = self.wizard.session.data.preset_page.get(page_id)
+        self.preset_tree = self._init_tree_view(self.preset_tree, preset_model)
+
+    def _init_tree_view(self, tree_view: QTreeView, model: KnechtModel) -> KnechtTreeView:
         """ Replace the UI Designer placeholder tree views """
         parent = tree_view.parent()
         new_view = KnechtTreeView(parent, None)
@@ -79,7 +86,7 @@ class PresetWizardPage(QWizardPage):
         # new_view.context =
 
         # Update with placeholder Model to avoid access to unset attributes
-        UpdateModel(new_view).update(KnechtModel())
+        UpdateModel(new_view).update(model or KnechtModel())
 
         for column in (Kg.VALUE, Kg.DESC, Kg.TYPE, Kg.REF, Kg.ID):
             new_view.hideColumn(column)

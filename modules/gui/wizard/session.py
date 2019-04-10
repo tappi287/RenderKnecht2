@@ -4,6 +4,8 @@ from typing import List
 from PySide2.QtCore import QFile, QIODevice, QByteArray
 
 from modules.globals import Resource
+from modules.gui.wizard.preset import PresetWizardPage
+from modules.itemview.model import KnechtModel
 from modules.knecht_objects import KnData, _DataTrimOption, _DataParent
 from modules.knecht_utils import CreateZip
 from modules.settings import Settings
@@ -22,21 +24,23 @@ class WizardSession:
     settings_dir = CreateZip.settings_dir
     last_session_file = Path(settings_dir, 'last_preset_session.rksession')
 
-    class _PresetPage(_DataParent):
-        def __init__(self):
-            super(WizardSession._PresetPage, self).__init__()
-
     class SessionData:
         def __init__(self):
             self.pkg_filter = list()
             self.import_data = KnData()
             # Model: List[FA_SIB_LUM_on]
             self.fakom_selection = dict()
-            # PageId: PresetPage
-            self.preset_pages = dict()
+            # PageId: PresetPage.preset_tree's KnechtModel
+            self.preset_page_models = dict()
+            # ModelCode: List[KnPr]
+            self.used_options = dict()
+            # ModelCode: List[KnPackage]
+            self.used_packages = dict()
 
     class PkgDefaultFilter:
         package_filter = list()
+
+    default_session = SessionData()
 
     def __init__(self, file: Path=None):
         self.file = file
@@ -71,10 +75,24 @@ class WizardSession:
 
         self.data.import_data.models = new_models
 
+    def _load_default_attributes(self):
+        """ Make sure that all attributes are present in SessionData after pickle load.
+            Previous version may had less attributes.
+        """
+        for k in dir(self.default_session):
+            v = getattr(self.default_session, k)
+            if k.startswith('__') or not isinstance(v, (int, str, float, bool, list, dict, tuple)):
+                continue
+
+            # Set missing attributes
+            if not hasattr(self.data, k):
+                setattr(self.data, k, v)
+
     def load(self, file: Path=None):
         if not file:
             file = self.file
         self.data = Settings.pickle_load(self.data, file, compressed=True)
+        self._load_default_attributes()
 
     def save(self, file: Path=None) -> bool:
         if not file:
@@ -82,3 +100,12 @@ class WizardSession:
 
         self._clean_up_import_data()
         return Settings.pickle_save(self.data, file, compressed=True)
+
+    def load_preset_page_options(self, page_id: int, model_code: str, preset_page: PresetWizardPage):
+        self.data.preset_page_models[page_id] = KnechtModel()
+        preset_page.setup_preset_tree_model(page_id)
+
+        if model_code not in self.data.used_options:
+            self.data.used_options[model_code] = list()
+        if model_code not in self.data.used_packages:
+            self.data.used_packages[model_code] = list()

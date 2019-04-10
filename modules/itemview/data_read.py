@@ -174,7 +174,7 @@ class KnechtDataToModel:
                                  )
             parent_item.append_item_child(pr_item)
 
-    def create_fakom(self, trim: KnTrim, preset_wizard: bool=False, parent_item: KnechtItem=None):
+    def create_fakom(self, trim: KnTrim, is_preset_wizard: bool=False, parent_item: KnechtItem=None):
         model_short_desc = shorten_model_name(trim.model_text)
 
         # Create lists of List[KnPr] for SIB/VOS/LUM families
@@ -193,7 +193,7 @@ class KnechtDataToModel:
 
             fa_parent, grp_item = parent_item, parent_item
 
-            if preset_wizard:
+            if is_preset_wizard:
                 grp_item = KnechtItem(parent_item,
                                       (f'{parent_item.childCount():03d}', color, '', 'fakom_option')
                                       )
@@ -206,7 +206,7 @@ class KnechtDataToModel:
                     # Skip seat covers not matching
                     continue
 
-                if preset_wizard:
+                if is_preset_wizard:
                     sib_grp_item = KnechtItem(grp_item, (f'{grp_item.childCount():03d}', sib_pr.name, '', 'options'))
                     sib_grp_item.fixed_userType = Kg.group_item
                     grp_item.append_item_child(sib_grp_item)
@@ -225,7 +225,7 @@ class KnechtDataToModel:
 
                         self.create_fakom_item(
                             fa_parent, trim.model, model_short_desc, color, sib_pr.name, vos_pr.name,
-                            lum_pr.name, sib_pr.desc, vos_pr.desc, lum_pr.desc, fakom_type, preset_wizard
+                            lum_pr.name, sib_pr.desc, vos_pr.desc, lum_pr.desc, fakom_type, is_preset_wizard
                             )
 
     def create_fakom_item(

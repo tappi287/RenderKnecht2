@@ -59,7 +59,7 @@ class FakomWizardPage(QWizardPage):
             item_data = (f'{item_creator.root_item.childCount():03d}', trim.model_text, trim.model, 'trim_setup')
             trim_item = KnechtItem(item_creator.root_item, item_data)
             trim_item.fixed_userType = Kg.group_item
-            item_creator.create_fakom(trim, preset_wizard=True, parent_item=trim_item)
+            item_creator.create_fakom(trim, is_preset_wizard=True, parent_item=trim_item)
             item_creator.root_item.append_item_child(trim_item)
 
         fakom_model = KnechtModel(item_creator.root_item)

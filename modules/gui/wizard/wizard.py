@@ -7,6 +7,7 @@ from modules.gui.wizard.fakom import FakomWizardPage
 from modules.gui.wizard.preset import PresetWizardPage
 from modules.gui.wizard.session import WizardSession
 from modules.gui.wizard.start import WelcomeWizardPage
+from modules.itemview.model import KnechtModel
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -20,36 +21,6 @@ _ = lang.gettext
 
 class PresetWizard(QWizard):
     title = _('Preset Wizard')
-
-    class PlaceholderPresetPage(QWizardPage):
-        def __init__(self, wizard):
-            """ We put a placeholder page in front of pages we need to dynamically create
-                and do not want the finish button to appear yet. It will be automatically skipped.
-                Also acts as a session save point.
-            """
-            super(PresetWizard.PlaceholderPresetPage, self).__init__()
-            self.wizard = wizard
-            self.wizard.currentIdChanged.connect(self.current_page_changed)
-            self.id: int = -1
-            self.previous_page_id: int = -1
-
-        def initializePage(self, *args, **kwargs):
-            self.id = self.wizard.currentId()
-            self.wizard.save_last_session()
-
-        def cleanupPage(self, *args, **kwargs):
-            self.wizard.save_last_session()
-
-        def current_page_changed(self, page_id: int):
-            """ Skip page visits automatically forward or backward """
-            if page_id == self.id:
-                if self.id > self.previous_page_id:
-                    self.wizard.next()
-                else:
-                    self.wizard.back()
-                LOGGER.debug('Skipping placeholder page %s Previous page: %s', self.id, self.previous_page_id)
-            else:
-                self.previous_page_id = page_id
 
     def __init__(self, ui):
         """ Wizard assisting the user to create presets from Vplus + FaKom data
@@ -73,11 +44,15 @@ class PresetWizard(QWizard):
         self.page_welcome = WelcomeWizardPage(self)
         self.page_import = ImportWizardPage(self)
         self.page_fakom = FakomWizardPage(self)
-        self.page_placeholder = self.PlaceholderPresetPage(self)
+        self.page_placeholder = PlaceholderPage(self)
         self.addPage(self.page_welcome)
         self.addPage(self.page_import)
         self.addPage(self.page_fakom)
         self.addPage(self.page_placeholder)
+
+        # -- Preset Page KnechtModels --
+        self.opt_models = dict()  # ModelCode: KnechtModel
+        self.pkg_models = dict()  # ModelCode: KnechtModel
 
     @Slot()
     def restore_last_session(self):
@@ -96,6 +71,12 @@ class PresetWizard(QWizard):
 
         self.ui.msg(_('Wizard Session geladen.'))
 
+    def _update_preset_page_models(self, model_code: str):
+        if model_code not in self.opt_models:
+            self.opt_models[model_code] = KnechtModel()
+        if model_code not in self.pkg_models:
+            self.pkg_models[model_code] = KnechtModel()
+
     def create_preset_pages(self):
         for old_page_id in self.preset_page_ids:
             self.removePage(old_page_id)
@@ -104,9 +85,13 @@ class PresetWizard(QWizard):
         self.preset_page_ids = set()
 
         for model, fakom_ls in self.session.data.fakom_selection.items():
+            self._update_preset_page_models(model)
+            # TODO: Populate page models with available pr options and packages
+
             for fakom in fakom_ls:
                 preset_page = PresetWizardPage(self, model, fakom)
                 page_id = self.addPage(preset_page)
+                self.session.load_preset_page_options(page_id, model, preset_page)
                 self.preset_page_ids.add(page_id)
 
         LOGGER.debug('Created %s preset pages.', len(self.preset_page_ids))
@@ -142,3 +127,34 @@ class PresetWizard(QWizard):
 
         LOGGER.info('Preset Wizard closed.')
         close_event.accept()
+
+
+class PlaceholderPage(QWizardPage):
+    def __init__(self, wizard):
+        """ We put a placeholder page in front of pages we need to dynamically create
+            and do not want the finish button to appear yet. It will be automatically skipped.
+            Also acts as a session save point.
+        """
+        super(PlaceholderPage, self).__init__()
+        self.wizard = wizard
+        self.wizard.currentIdChanged.connect(self.current_page_changed)
+        self.id: int = -1
+        self.previous_page_id: int = -1
+
+    def initializePage(self, *args, **kwargs):
+        self.id = self.wizard.currentId()
+        self.wizard.save_last_session()
+
+    def cleanupPage(self, *args, **kwargs):
+        self.wizard.save_last_session()
+
+    def current_page_changed(self, page_id: int):
+        """ Skip page visits automatically forward or backward """
+        if page_id == self.id:
+            if self.id > self.previous_page_id:
+                self.wizard.next()
+            else:
+                self.wizard.back()
+            LOGGER.debug('Skipping placeholder page %s Previous page: %s', self.id, self.previous_page_id)
+        else:
+            self.previous_page_id = page_id
