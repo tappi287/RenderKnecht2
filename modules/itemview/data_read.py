@@ -164,9 +164,9 @@ class KnechtDataToModel:
                     # Create all packages and do not apply any filtering
                     self.root_item.append_item_child(pkg_item)
 
-    def create_pr_options(self, pr_iterator: List[KnPr], parent_item: KnechtItem):
+    def create_pr_options(self, pr_iterator: List[KnPr], parent_item: KnechtItem, ignore_pr_family=False):
         for pr in pr_iterator:
-            if pr.family not in self.data.selected_pr_families:
+            if pr.family not in self.data.selected_pr_families or not ignore_pr_family:
                 continue
 
             pr_item = KnechtItem(parent_item,

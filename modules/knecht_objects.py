@@ -71,14 +71,14 @@ class KnechtVariantList:
         return len(self.variants)
 
 
-class RenderImage:
+class _RenderImage:
     def __init__(self, name: str, variants: KnechtVariantList):
         """ Holds information about the image name and variants to switch for this render image """
         self.name = create_file_safe_name(name)
         self.variants = variants
 
 
-class RenderShot:
+class _RenderShot:
     def __init__(self, name: str, variants: KnechtVariantList):
         """ Holds information about one shot setting.
 
@@ -126,7 +126,7 @@ class KnechtRenderPreset:
         :return: None
         """
         name, variants = val
-        new_image = RenderShot(name, variants)
+        new_image = _RenderShot(name, variants)
 
         self.__shots.append(new_image)
 
@@ -156,7 +156,7 @@ class KnechtRenderPreset:
         :return: None
         """
         name, variants = val
-        new_image = RenderImage(name, variants)
+        new_image = _RenderImage(name, variants)
 
         self.__images.append(new_image)
 
@@ -198,7 +198,7 @@ class KnechtRenderPreset:
 
         for image in self.images:
             if not self.shots:
-                dummy_shot = RenderShot('', KnechtVariantList())
+                dummy_shot = _RenderShot('', KnechtVariantList())
                 self.__render_images.append((image, dummy_shot))
 
             for shot in self.shots:
@@ -206,15 +206,15 @@ class KnechtRenderPreset:
         return
 
     def __create_render_image(self) -> Tuple[str, KnechtVariantList]:
-        __r: Tuple[RenderImage, RenderShot] = self.__render_images.pop(0)
-        image: RenderImage = __r[0]
-        shot: RenderShot = __r[1]
+        __r: Tuple[_RenderImage, _RenderShot] = self.__render_images.pop(0)
+        image: _RenderImage = __r[0]
+        shot: _RenderShot = __r[1]
 
         image_name = self.__image_name(image, shot)
 
         return image_name, image.variants + shot.variants
 
-    def __image_name(self, image: RenderImage, shot: RenderShot) -> str:
+    def __image_name(self, image: _RenderImage, shot: _RenderShot) -> str:
         """ Create the image name based on image name and shot name """
         image_name = f'{self.__image_count:03d}_{image.name}'
 

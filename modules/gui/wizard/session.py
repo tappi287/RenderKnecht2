@@ -1,12 +1,12 @@
 from pathlib import Path
-from typing import List
+from typing import List, Dict
 
 from PySide2.QtCore import QFile, QIODevice, QByteArray
 
 from modules.globals import Resource
 from modules.gui.wizard.preset import PresetWizardPage
 from modules.itemview.model import KnechtModel
-from modules.knecht_objects import KnData, _DataTrimOption, _DataParent
+from modules.knecht_objects import KnData, _DataTrimOption, _DataParent, KnPr
 from modules.knecht_utils import CreateZip
 from modules.settings import Settings
 from modules.language import get_translation
@@ -30,12 +30,13 @@ class WizardSession:
             self.import_data = KnData()
             # Model: List[FA_SIB_LUM_on]
             self.fakom_selection = dict()
+
             # PageId: PresetPage.preset_tree's KnechtModel
-            self.preset_page_models = dict()
-            # ModelCode: List[KnPr]
-            self.used_options = dict()
-            # ModelCode: List[KnPackage]
-            self.used_packages = dict()
+            self.preset_page_content: Dict[int, List[KnPr]] = dict()
+
+            # -- Preset Page KnechtModels --
+            self.opt_models = dict()  # ModelCode: KnechtModel
+            self.pkg_models = dict()  # ModelCode: KnechtModel
 
     class PkgDefaultFilter:
         package_filter = list()
@@ -102,10 +103,16 @@ class WizardSession:
         return Settings.pickle_save(self.data, file, compressed=True)
 
     def load_preset_page_options(self, page_id: int, model_code: str, preset_page: PresetWizardPage):
-        self.data.preset_page_models[page_id] = KnechtModel()
+        if page_id not in self.data.preset_page_content:
+            pr_ls = list()
+            for a in range(0, 10):
+                pr_ls.append(KnPr(None, 'Name', value=f'{a:02d}'))
+            self.data.preset_page_content[page_id] = pr_ls
         preset_page.setup_preset_tree_model(page_id)
 
-        if model_code not in self.data.used_options:
-            self.data.used_options[model_code] = list()
-        if model_code not in self.data.used_packages:
-            self.data.used_packages[model_code] = list()
+    def update_preset_page_models(self, model_code: str):
+        """ Populate preset page models with available pr options and packages """
+        if model_code not in self.data.opt_models:
+            self.data.opt_models[model_code] = KnechtModel()
+        if model_code not in self.data.pkg_models:
+            self.data.pkg_models[model_code] = KnechtModel()

@@ -50,10 +50,6 @@ class PresetWizard(QWizard):
         self.addPage(self.page_fakom)
         self.addPage(self.page_placeholder)
 
-        # -- Preset Page KnechtModels --
-        self.opt_models = dict()  # ModelCode: KnechtModel
-        self.pkg_models = dict()  # ModelCode: KnechtModel
-
     @Slot()
     def restore_last_session(self):
         self.session.load(self.session.last_session_file)
@@ -71,12 +67,6 @@ class PresetWizard(QWizard):
 
         self.ui.msg(_('Wizard Session geladen.'))
 
-    def _update_preset_page_models(self, model_code: str):
-        if model_code not in self.opt_models:
-            self.opt_models[model_code] = KnechtModel()
-        if model_code not in self.pkg_models:
-            self.pkg_models[model_code] = KnechtModel()
-
     def create_preset_pages(self):
         for old_page_id in self.preset_page_ids:
             self.removePage(old_page_id)
@@ -85,7 +75,7 @@ class PresetWizard(QWizard):
         self.preset_page_ids = set()
 
         for model, fakom_ls in self.session.data.fakom_selection.items():
-            self._update_preset_page_models(model)
+            self.session.update_preset_page_models(model)
             # TODO: Populate page models with available pr options and packages
 
             for fakom in fakom_ls:

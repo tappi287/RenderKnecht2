@@ -7,6 +7,7 @@ from modules.globals import Resource
 from modules.gui.gui_utils import SetupWidget, replace_widget
 from modules.gui.ui_resource import IconRsc
 from modules.idgen import create_uuid
+from modules.itemview.data_read import KnechtDataToModel
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.model_update import UpdateModel
@@ -64,10 +65,15 @@ class PresetWizardPage(QWizardPage):
         # -- Replace Placeholder TreeViews --
         self.pkg_tree = self._init_tree_view(self.pkg_tree, self.wizard.pkg_models.get(model))
         self.option_tree = self._init_tree_view(self.option_tree, self.wizard.opt_models.get(model))
+        self.preset_tree = self._init_tree_view(self.preset_tree, KnechtModel())
 
     def setup_preset_tree_model(self, page_id: int):
-        preset_model = self.wizard.session.data.preset_page.get(page_id)
-        self.preset_tree = self._init_tree_view(self.preset_tree, preset_model)
+        data_reader = KnechtDataToModel(self.wizard.session.data.import_data)
+        model = self.preset_tree.model().sourceModel()
+        data_reader.create_pr_options(self.wizard.session.data.preset_page_content.get(page_id),
+                                      model.root_item,
+                                      ignore_pr_family=True)
+        self.preset_tree.refresh()
 
     def _init_tree_view(self, tree_view: QTreeView, model: KnechtModel) -> KnechtTreeView:
         """ Replace the UI Designer placeholder tree views """
