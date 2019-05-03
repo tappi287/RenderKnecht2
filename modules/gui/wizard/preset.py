@@ -63,17 +63,9 @@ class PresetWizardPage(QWizardPage):
         self.option_lock_btn.setStatusTip(_('Bereits verwendete Optionen für die Bearbeitung sperren'))
 
         # -- Replace Placeholder TreeViews --
-        self.pkg_tree = self._init_tree_view(self.pkg_tree, self.wizard.pkg_models.get(model))
-        self.option_tree = self._init_tree_view(self.option_tree, self.wizard.opt_models.get(model))
+        self.pkg_tree = self._init_tree_view(self.pkg_tree, self.wizard.session.pkg_models.get(model))
+        self.option_tree = self._init_tree_view(self.option_tree, self.wizard.session.opt_models.get(model))
         self.preset_tree = self._init_tree_view(self.preset_tree, KnechtModel())
-
-    def setup_preset_tree_model(self, page_id: int):
-        data_reader = KnechtDataToModel(self.wizard.session.data.import_data)
-        model = self.preset_tree.model().sourceModel()
-        data_reader.create_pr_options(self.wizard.session.data.preset_page_content.get(page_id),
-                                      model.root_item,
-                                      ignore_pr_family=True)
-        self.preset_tree.refresh()
 
     def _init_tree_view(self, tree_view: QTreeView, model: KnechtModel) -> KnechtTreeView:
         """ Replace the UI Designer placeholder tree views """

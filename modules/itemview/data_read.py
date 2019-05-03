@@ -128,22 +128,22 @@ class KnechtDataToModel:
 
             # -- Create packages --
             if self.data.read_packages:
-                self.create_packages(trim)
+                self.create_packages(trim, self.root_item, self.data.pr_fam_filter_packages)
 
             if self.data.read_fakom:
                 self.create_fakom(trim)
 
-    def create_packages(self, trim: KnTrim):
+    def create_packages(self, trim: KnTrim, parent_item: KnechtItem, filter_pkg_by_pr_family: bool):
         for pkg in trim.iterate_packages():
             if not pkg.child_count():
                 continue
 
             # Create package parent item
-            data = (f'{self.root_item.childCount():03d}',
+            data = (f'{parent_item.childCount():03d}',
                     f'{pkg.name} {pkg.desc} {trim.model} {trim.market}', pkg.name, 'package', '',
                     self.id_gen.create_id()
                     )
-            pkg_item = KnechtItem(self.root_item, data)
+            pkg_item = KnechtItem(parent_item, data)
             keep_package = False
 
             for pr in pkg.iterate_pr():
@@ -157,16 +157,16 @@ class KnechtDataToModel:
                 pkg_item.append_item_child(pr_item)
 
             if pkg_item.childCount():
-                if self.data.pr_fam_filter_packages and keep_package:
-                    # Only create packages that contain PR Families in the filter
-                    self.root_item.append_item_child(pkg_item)
-                elif not self.data.pr_fam_filter_packages:
+                if filter_pkg_by_pr_family and keep_package:
+                    # Only create packages that contain at least one PR Family from pr family filter
+                    parent_item.append_item_child(pkg_item)
+                elif not filter_pkg_by_pr_family:
                     # Create all packages and do not apply any filtering
-                    self.root_item.append_item_child(pkg_item)
+                    parent_item.append_item_child(pkg_item)
 
     def create_pr_options(self, pr_iterator: List[KnPr], parent_item: KnechtItem, ignore_pr_family=False):
         for pr in pr_iterator:
-            if pr.family not in self.data.selected_pr_families or not ignore_pr_family:
+            if not ignore_pr_family and pr.family not in self.data.selected_pr_families:
                 continue
 
             pr_item = KnechtItem(parent_item,

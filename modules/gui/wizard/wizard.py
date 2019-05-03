@@ -75,13 +75,12 @@ class PresetWizard(QWizard):
         self.preset_page_ids = set()
 
         for model, fakom_ls in self.session.data.fakom_selection.items():
-            self.session.update_preset_page_models(model)
-            # TODO: Populate page models with available pr options and packages
+            # Create available PR-Options and Packages per model
+            self.session.prepare_preset_page_content(model)
 
             for fakom in fakom_ls:
                 preset_page = PresetWizardPage(self, model, fakom)
                 page_id = self.addPage(preset_page)
-                self.session.load_preset_page_options(page_id, model, preset_page)
                 self.preset_page_ids.add(page_id)
 
         LOGGER.debug('Created %s preset pages.', len(self.preset_page_ids))
