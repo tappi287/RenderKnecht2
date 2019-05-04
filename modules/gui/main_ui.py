@@ -58,7 +58,11 @@ class KnechtWindow(QMainWindow):
         tree_file_list = [_('Variantenbaum'), _('Renderliste')]
         tree_filter_widgets = [self.lineEdit_Var_filter, self.lineEdit_Ren_filter]
 
+        # View Mgr will replace placeholder presetTree
         self.view_mgr = UiViewManager(self, self.presetTree)
+        # Set presetTree to current View Mgr view to avoid accessing deleted object
+        self.presetTree = self.view_mgr.current_view()
+
         replaced_views = self.view_mgr.setup_default_views(tree_view_list, tree_file_list, tree_filter_widgets)
 
         self.variantTree, self.renderTree = replaced_views[0], replaced_views[1]
