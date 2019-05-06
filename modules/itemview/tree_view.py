@@ -5,7 +5,7 @@ from PySide2.QtWidgets import QAbstractItemView, QLineEdit, QMenu, QTreeView, QU
 
 from modules.globals import UNDO_LIMIT
 from modules.gui.animation import BgrAnimation
-from modules.gui.tree_dragdrop import KnechtDragDrop
+from modules.itemview.tree_dragdrop import KnechtDragDrop
 from modules.gui.ui_overlay import InfoOverlay
 from modules.gui.widgets.progress_overlay import ProgressOverlay, ShowTreeViewProgressMessage
 from modules.itemview.delegates import KnechtValueDelegate
@@ -60,6 +60,8 @@ class KnechtTreeView(QTreeView):
         # -- Drag n Drop
         self.setAcceptDrops(True)
         self.setDragDropMode(QTreeView.DragDrop)
+        self.supports_drop = True
+        self.supports_drag_move = True
 
         self.drag_drop = KnechtDragDrop(self)
 

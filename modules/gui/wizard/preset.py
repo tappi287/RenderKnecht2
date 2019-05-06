@@ -27,7 +27,7 @@ _ = lang.gettext
 class PresetWizardPage(QWizardPage):
 
     def __init__(self, wizard, model: str, fakom: str):
-        """ Wizard start page with session reload, save and package filter options.
+        """ Page for one Preset with available PR-Options and Packages tree's
 
         :param modules.gui.wizard.wizard.PresetWizard wizard: The parent wizard
         """
@@ -66,6 +66,7 @@ class PresetWizardPage(QWizardPage):
         self.pkg_tree = self._init_tree_view(self.pkg_tree, self.wizard.session.pkg_models.get(model))
         self.option_tree = self._init_tree_view(self.option_tree, self.wizard.session.opt_models.get(model))
         self.preset_tree = self._init_tree_view(self.preset_tree, KnechtModel())
+        self.preset_tree.supports_drop = True
 
     def _init_tree_view(self, tree_view: QTreeView, model: KnechtModel) -> KnechtTreeView:
         """ Replace the UI Designer placeholder tree views """
@@ -75,7 +76,9 @@ class PresetWizardPage(QWizardPage):
 
         # Preset wizard specific
         new_view.setEditTriggers(QTreeView.NoEditTriggers)
-        new_view.setDragDropMode(QTreeView.NoDragDrop)
+        new_view.supports_drag_move = False
+        new_view.supports_drop = False
+        # new_view.setDragDropMode(QTreeView.NoDragDrop)
 
         # Setup filter widget
         new_view.filter_text_widget = self.line_edit_preset
@@ -86,7 +89,7 @@ class PresetWizardPage(QWizardPage):
         # Update with placeholder Model to avoid access to unset attributes
         UpdateModel(new_view).update(model or KnechtModel())
 
-        for column in (Kg.VALUE, Kg.DESC, Kg.TYPE, Kg.REF, Kg.ID):
+        for column in (Kg.VALUE, Kg.TYPE, Kg.REF, Kg.ID):
             new_view.hideColumn(column)
 
         return new_view

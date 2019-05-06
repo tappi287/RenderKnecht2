@@ -31,9 +31,6 @@ class KnechtEditorCopyPaste(QObject):
         return self.editor.view
 
     def copy_items(self) -> Union[List[KnechtItem], None]:
-        if not self.editor.view_is_editable():
-            return
-
         src_index_ls, src_model = self.editor.get_selection()
 
         if not src_index_ls:
@@ -107,7 +104,7 @@ class KnechtEditorCopyPaste(QObject):
         :param TreeClipboard clipboard: tree clipboard
         :param TreeChainCommand move_undo_chain: Override creation of new chain and use this override chain instead
         """
-        if not self.editor.view_is_editable():
+        if not self.editor.view_is_editable() and not self.editor.view.supports_drop:
             return
 
         view_origin, items = clipboard.origin, list(map(lambda i: i.copy(), [i for i in clipboard.items]))

@@ -427,6 +427,8 @@ class ExcelImportDialog(QDialog):
         new_view.context = ExcelContextMenu(self, new_view)
         # Uneditable
         new_view.setEditTriggers(QTreeView.NoEditTriggers)
+        new_view.supports_drop = False
+        new_view.supports_drag_move = False
         new_view.setDragDropMode(QTreeView.NoDragDrop)
 
         # Update with placeholder Model to avoid access to unset attributes

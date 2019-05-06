@@ -29,8 +29,7 @@ class WizardSession:
         def __init__(self):
             self.pkg_filter = list()
             self.import_data = KnData()
-            # Model: List[FA_SIB_LUM_on]
-            self.fakom_selection = dict()
+            self.fakom_selection = dict()  # str(Model): List[FA_SIB_LUM_on]
 
     class PkgDefaultFilter:
         package_filter = list()

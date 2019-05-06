@@ -23,7 +23,7 @@ class KnechtDragDrop(QObject):
         """ KnechtTreeView Helper class to handle item drag and drop
 
         :param modules.gui.main_ui.KnechtWindow ui:
-        :param modules.itemview.treeview.self.view.__class__ view:
+        :param modules.itemview.tree_view.KnechtTreeView view:
         """
         super(KnechtDragDrop, self).__init__(view)
         self.view = view
@@ -71,6 +71,7 @@ class KnechtDragDrop(QObject):
             self.copy_drop(src, destination_index)
             e.accept()
 
+        # -- Drag move --
         if e.dropAction() is Qt.MoveAction:
             destination_index = self.view.indexAt(e.pos())
             self.move_drop(destination_index)
@@ -79,11 +80,15 @@ class KnechtDragDrop(QObject):
             e.ignore()
 
     def move_drop(self, destination_index: QModelIndex):
+        if not self.view.supports_drag_move:
+            return
         LOGGER.debug('Drop with MoveAction at Proxy @%sP%s', destination_index.row(), destination_index.parent().row())
-
         self.view.editor.move_rows(destination_index)
 
     def copy_drop(self, source_view, destination_index):
+        if not self.view.supports_drop:
+            return
+
         LOGGER.debug('Drop with CopyAction at @%sP%s', destination_index.row(), destination_index.parent().row())
 
         result = self._copy(source_view)
