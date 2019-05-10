@@ -119,7 +119,7 @@ class WizardSession:
     @staticmethod
     def _create_options_knecht_model(model_code, import_data: KnData, is_pr_options=True):
         """ Create Knecht Item Model with either available PR-Options or Packages """
-        converter = KnechtDataToModel(KnData())
+        converter = KnechtDataToModel(import_data)
         opt_item_model = KnechtModel()
 
         trim = [t for t in import_data.models if t.model == model_code]
@@ -129,7 +129,7 @@ class WizardSession:
             trim = trim[0]
 
         if is_pr_options:
-            converter.create_pr_options(trim.iterate_optional_pr(), opt_item_model.root_item, ignore_pr_family=True)
+            converter.create_pr_options(trim.iterate_optional_pr(), opt_item_model.root_item, ignore_pr_family=False)
         else:
             converter.create_packages(trim, opt_item_model.root_item, filter_pkg_by_pr_family=False)
 
