@@ -205,6 +205,9 @@ class ViewManager(QObject):
         return new_page
 
     def update_tab_title(self, tab_idx, file, clean: bool = True):
+        if file is None:
+            file = Path('New_Document.xml')
+
         title = file.name
         if not clean:
             title = f'*{file.name}*'
