@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>520</width>
-    <height>326</height>
+    <width>534</width>
+    <height>466</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -96,7 +96,8 @@ QPushButton:hover {color: rgb(85, 170, 255);
      <item>
       <widget class="QLabel" name="news">
        <property name="text">
-        <string>enhanced handling of image files and path lenghts while rendering
+        <string>added menu action to send variants without reset
+enhanced handling of image files and path lenghts while rendering
 allow runtime change of log level
 fixed order of pasted items
 references can no longer be copied to top level
@@ -106,12 +107,7 @@ create model code inside trim items from KnData
 find and replace for item views
 set imported documents unclean
 check empty documents from source model to avoid false positive thru filtering
-warn on document tab close
-restore document clean status and tab order in session save
-update view filtering behaviour
-first iteration of KnData model
-updated default pr-family filter
-update to PySide 5.12.2</string>
+warn on document tab close</string>
        </property>
       </widget>
      </item>

@@ -35,8 +35,19 @@ class TreeContextMenu(QMenu):
         self.create_menu = CreateMenu(self)
 
         self.send_dg_action = QAction(IconRsc.get_icon('paperplane'), _('Senden an DeltaGen'), self)
+        dg_tip_1 = _('Selektierte Bauminhalte als Variantenschaltung mit vorherigem Reset an DeltaGen senden.')
+        self.send_dg_action.setToolTip(dg_tip_1)
+        self.send_dg_action.setStatusTip(dg_tip_1)
         self.send_dg_action.triggered.connect(self.send_to_deltagen)
         self.addAction(self.send_dg_action)
+        self.addSeparator()
+
+        self.send_dg_short = QAction(IconRsc.get_icon('paperplane'), _('Ohne Reset an DeltaGen senden'), self)
+        dg_tip_2 = _('Selektierte Bauminhalte ohne einen Reset an DeltaGen senden.')
+        self.send_dg_short.setToolTip(dg_tip_2)
+        self.send_dg_short.setStatusTip(dg_tip_2)
+        self.send_dg_short.triggered.connect(self.send_to_deltagen_wo_reset)
+        self.addAction(self.send_dg_short)
 
         self.addSeparator()
         # ---- Create preset from selected actions ----
@@ -122,6 +133,10 @@ class TreeContextMenu(QMenu):
         variants = self.view.editor.collect.collect_current_index()
         self.ui.app.send_dg.send_variants(variants, self.view)
 
+    def send_to_deltagen_wo_reset(self):
+        variants = self.view.editor.collect.collect_current_index(collect_reset=False)
+        self.ui.app.send_dg.send_variants(variants, self.view)
+
     def hide_id_columns(self):
         self.view.hideColumn(Kg.REF)
         self.view.hideColumn(Kg.ID)
@@ -164,10 +179,13 @@ class TreeContextMenu(QMenu):
         src_model = self.view.model().sourceModel()
         if src_model.id_mgr.has_recursive_items():
             self.send_dg_action.setEnabled(False)
+            self.send_dg_short.setEnabled(False)
         else:
             self.send_dg_action.setEnabled(True)
+            self.send_dg_short.setEnabled(True)
 
         self.create_menu.update_current_view()
 
         if self.view.is_render_view:
             self.send_dg_action.setEnabled(False)
+            self.send_dg_short.setEnabled(False)

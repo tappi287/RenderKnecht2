@@ -64,6 +64,10 @@ class ImportWizardPage(QWizardPage):
     @Slot(ExcelImportDialog)
     def xl_result(self, xl: ExcelImportDialog):
         self.wizard.session.data.import_data = xl.data
+        # Clear FaKom Selections on new import
+        self.wizard.session.data.fakom_selection = dict()
+        self.wizard.page_fakom.result_tree.clear()
+
         self.completeChanged.emit()
         xl.deleteLater()
 
