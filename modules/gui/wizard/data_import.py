@@ -72,6 +72,7 @@ class ImportWizardPage(QWizardPage):
 
         if not data.models:
             self.result_label.setText(self.no_data)
+            self.result_icn.setPixmap(IconRsc.get_pixmap('check_box_empty'))
             return
 
         t = _('Daten geladen. {}[{}] Modelle; {}[{}] PR-Familien').format(
@@ -79,6 +80,7 @@ class ImportWizardPage(QWizardPage):
             len(data.selected_pr_families), len(data.pr_families)
             )
         self.result_label.setText(t)
+        self.result_icn.setPixmap(IconRsc.get_pixmap('check_box'))
 
     def validatePage(self):
         return self.wizard.save_last_session()
