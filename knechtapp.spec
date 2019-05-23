@@ -20,7 +20,7 @@ a = Analysis(['knechtapp.py'],
              hiddenimports=[],
              hookspath=local_hooks,
              runtime_hooks=[],
-             excludes=['zmq'],
+             excludes=['zmq', 'jupyter', 'tornado', 'paramiko', 'IPython', 'cryptography', 'tk', 'tkinter', 'lib2to3'],
              win_no_prefer_redirects=False,
              win_private_assemblies=False,
              cipher=block_cipher,
@@ -45,3 +45,13 @@ coll = COLLECT(exe,
                strip=False,
                upx=False,
                name='RenderKnecht2')
+
+try:
+    from pathlib import Path
+    import shutil
+
+    base_path = Path('.') / 'dist' / coll.name
+    base_path = base_path.absolute()
+    shutil.rmtree(Path(base_path / 'imageio'))
+except Exception as e:
+    print(e)
