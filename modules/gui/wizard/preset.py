@@ -68,7 +68,7 @@ class PresetWizardPage(QWizardPage):
         self.preset_tree = self._init_tree_view(self.preset_tree, KnechtModel())
         self.preset_tree.supports_drop = True
 
-    def _init_tree_view(self, tree_view: QTreeView, model: KnechtModel) -> KnechtTreeView:
+    def _init_tree_view(self, tree_view: QTreeView, item_model: KnechtModel) -> KnechtTreeView:
         """ Replace the UI Designer placeholder tree views """
         parent = tree_view.parent()
         new_view = KnechtTreeView(parent, None)
@@ -78,7 +78,6 @@ class PresetWizardPage(QWizardPage):
         new_view.setEditTriggers(QTreeView.NoEditTriggers)
         new_view.supports_drag_move = False
         new_view.supports_drop = False
-        # new_view.setDragDropMode(QTreeView.NoDragDrop)
 
         # Setup filter widget
         new_view.filter_text_widget = self.line_edit_preset
@@ -87,12 +86,15 @@ class PresetWizardPage(QWizardPage):
         # new_view.context =
 
         # Update with placeholder Model to avoid access to unset attributes
-        UpdateModel(new_view).update(model or KnechtModel())
+        UpdateModel(new_view).update(item_model or KnechtModel())
 
         for column in (Kg.VALUE, Kg.TYPE, Kg.REF, Kg.ID):
             new_view.hideColumn(column)
 
         return new_view
+
+    def load_model(self, item_model: KnechtModel):
+        UpdateModel(self.preset_tree).update(item_model)
 
     def initializePage(self):
         pass

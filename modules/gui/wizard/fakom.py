@@ -180,7 +180,7 @@ class FakomWizardPage(QWizardPage):
         return parent_idx
 
     def validatePage(self):
-        self.wizard.create_preset_pages()
+        self.wizard.session.create_preset_pages()
         return True
 
     def isComplete(self):

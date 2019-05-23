@@ -34,7 +34,7 @@ class PresetWizard(QWizard):
 
         self._asked_for_close = False
         self.preset_page_ids = set()
-        self.session = WizardSession()
+        self.session = WizardSession(self)
 
         self.setButtonText(QWizard.BackButton, _('Zurück'))
         self.setButtonText(QWizard.NextButton, _('Weiter'))
@@ -66,24 +66,6 @@ class PresetWizard(QWizard):
         self.page_import.completeChanged.emit()
 
         self.ui.msg(_('Wizard Session geladen.'))
-
-    def create_preset_pages(self):
-        for old_page_id in self.preset_page_ids:
-            self.removePage(old_page_id)
-
-        LOGGER.debug('Cleared %s preset pages.', len(self.preset_page_ids))
-        self.preset_page_ids = set()
-
-        for model, fakom_ls in self.session.data.fakom_selection.items():
-            # Create available PR-Options and Packages per model
-            self.session.prepare_preset_page_content(model)
-
-            for fakom in fakom_ls:
-                preset_page = PresetWizardPage(self, model, fakom)
-                page_id = self.addPage(preset_page)
-                self.preset_page_ids.add(page_id)
-
-        LOGGER.debug('Created %s preset pages.', len(self.preset_page_ids))
 
     def reject(self):
         self.close()
