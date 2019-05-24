@@ -48,8 +48,13 @@ class TreeContextMenu(QMenu):
         self.send_dg_short.setStatusTip(dg_tip_2)
         self.send_dg_short.triggered.connect(self.send_to_deltagen_wo_reset)
         self.addAction(self.send_dg_short)
-
         self.addSeparator()
+
+        copy_pr = QAction(IconRsc.get_icon('options'), _('PR String in Zwischenablage kopieren'), self)
+        copy_pr.triggered.connect(self.copy_strings_to_clipboard)
+        self.addAction(copy_pr)
+        self.addSeparator()
+
         # ---- Create preset from selected actions ----
         self.addActions([
             self.create_menu.user_preset_from_selected,
@@ -136,6 +141,15 @@ class TreeContextMenu(QMenu):
     def send_to_deltagen_wo_reset(self):
         variants = self.view.editor.collect.collect_current_index(collect_reset=False)
         self.ui.app.send_dg.send_variants(variants, self.view)
+
+    def copy_strings_to_clipboard(self):
+        variants = self.view.editor.collect.collect_current_index(collect_reset=False)
+
+        pr_string = ''
+        for variant in variants.variants:
+            pr_string += f'{variant.name} {variant.value};'
+
+        self.ui.app.clipboard().setText(pr_string)
 
     def hide_id_columns(self):
         self.view.hideColumn(Kg.REF)
