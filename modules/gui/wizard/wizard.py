@@ -33,7 +33,6 @@ class PresetWizard(QWizard):
         self.setWizardStyle(QWizard.ModernStyle)
 
         self._asked_for_close = False
-        self.preset_page_ids = set()
         self.session = WizardSession(self)
 
         self.setButtonText(QWizard.BackButton, _('Zurück'))

@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Union
 
 from lxml import etree as Et
 
@@ -14,6 +15,22 @@ LOGGER = init_logging(__name__)
 lang = get_translation()
 lang.install()
 _ = lang.gettext
+
+
+def path_is_xml_string(file: Union[Path, str]) -> bool:
+    if isinstance(file, Path):
+        return False
+
+    not_a_file = False
+
+    try:
+        if not Path(file).is_file():
+            not_a_file = True
+    except Exception as e:
+        LOGGER.debug('Provided file argument is not a file. %s', e)
+        not_a_file = True
+
+    return not_a_file
 
 
 class KnechtOpenXml:
@@ -43,22 +60,33 @@ class KnechtXmlReader:
         # Store error message
         self.error = str()
 
-    def read_xml(self, file: Path) -> KnechtItem:
+    def read_xml(self, file: Union[Path, str]) -> KnechtItem:
         """ Read RenderKnecht Xml and return list of KnechtItem's
 
             Stores Xml read errors in class attribute errors.
 
-            :param: file: Xml file to load
+            :param: file: Xml file to load or utf-8 encoded Xml string
             :type: file: Path
             :rtype: KnechtItem: KnechtItem Root Node
             :returns: tree root node
         """
-        try:
-            xml = Et.parse(file.as_posix())
-        except Exception as e:
-            LOGGER.error('Error parsing Xml document:\n%s', e)
-            self.set_error(0)
-            return self.root_item
+        xml = None
+
+        if path_is_xml_string(file):
+            try:
+                xml = Et.fromstring(file)
+            except Exception as e:
+                LOGGER.error('Error parsing Xml string data: %s', e)
+                self.set_error(0)
+                return self.root_item
+
+        if xml is None:
+            try:
+                xml = Et.parse(file.as_posix())
+            except Exception as e:
+                LOGGER.error('Error parsing Xml document:\n%s', e)
+                self.set_error(0)
+                return self.root_item
 
         if not self._validate_renderknecht_xml(xml):
             self.set_error(1)

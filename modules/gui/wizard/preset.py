@@ -30,6 +30,8 @@ class PresetWizardPage(QWizardPage):
         """ Page for one Preset with available PR-Options and Packages tree's
 
         :param modules.gui.wizard.wizard.PresetWizard wizard: The parent wizard
+        :param str model: model code
+        :param str fakom: fakom code
         """
         super(PresetWizardPage, self).__init__()
         self.wizard = wizard
@@ -95,6 +97,7 @@ class PresetWizardPage(QWizardPage):
 
     def load_model(self, item_model: KnechtModel):
         UpdateModel(self.preset_tree).update(item_model)
+        self.preset_tree.refresh()
 
     def initializePage(self):
         pass

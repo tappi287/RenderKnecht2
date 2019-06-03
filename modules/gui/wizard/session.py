@@ -7,6 +7,9 @@ from modules.globals import Resource
 from modules.gui.wizard.preset import PresetWizardPage
 from modules.itemview.data_read import KnechtDataToModel
 from modules.itemview.model import KnechtModel
+from modules.itemview.model_globals import KnechtModelGlobals as Kg
+from modules.itemview.xml_read import KnechtOpenXml
+from modules.itemview.xml_save import KnechtSaveXml
 from modules.knecht_objects import KnData, _DataTrimOption, _DataParent, KnPr
 from modules.knecht_utils import CreateZip
 from modules.settings import Settings
@@ -30,8 +33,25 @@ class WizardSession:
             self.pkg_filter = list()
             self.import_data = KnData()
             self.fakom_selection = dict()  # str(Model): List[FA_SIB_LUM_on]
-            self.preset_page_ids = list()
-            self.preset_page_models = dict()
+            self.preset_page_content = dict()
+
+        @staticmethod
+        def store_preset_page_content(item_model: KnechtModel) -> str:
+            xml_data, errors = KnechtSaveXml.save_xml('<not a file path>', item_model)
+
+            if isinstance(xml_data, bytes):
+                xml_data = xml_data.decode('UTF-8')
+            elif isinstance(xml_data, bool):
+                return ''
+            LOGGER.debug('Saved Preset Page content with %s items', item_model.root_item.childCount())
+            return xml_data
+
+        def load_preset_page_content(self, page_id: int) -> KnechtModel:
+            xml_data = self.preset_page_content.get(page_id)
+
+            root_item, error = KnechtOpenXml.read_xml(xml_data)
+            LOGGER.debug('Loading Preset Page content with %s items', root_item.childCount())
+            return KnechtModel(root_item)
 
     class PkgDefaultFilter:
         package_filter = list()
@@ -90,7 +110,7 @@ class WizardSession:
                 setattr(self.data, k, v)
 
         # Convert Id keys to int
-        self.data.preset_page_models = {int(k): v for k, v in self.data.preset_page_models.items()}
+        self.data.preset_page_content = {int(k): v for k, v in self.data.preset_page_content.items()}
 
     def load(self, file: Path=None):
         if not file:
@@ -102,46 +122,44 @@ class WizardSession:
         if not file:
             file = self.last_session_file
 
+        for page_id in self.data.preset_page_content.keys():
+            page: PresetWizardPage = self.wizard.page(page_id)
+
+            if not isinstance(page, PresetWizardPage):
+                LOGGER.warning('Skipping invalid page %s', page_id)
+                continue
+
+            LOGGER.debug('Saving preset page: %s', page_id)
+            src_item_model = page.preset_tree.model().sourceModel()
+            self.data.preset_page_content[page_id] = self.data.store_preset_page_content(src_item_model)
+
         self._clean_up_import_data()
         return Settings.pickle_save(self.data, file, compressed=True)
 
-    def create_preset_pages(self, clear_pages=False):
-        if clear_pages:
-            for old_page_id in self.data.preset_page_models.keys():
-                self.wizard.removePage(old_page_id)
+    def create_preset_pages(self):
+        for old_page_id in self.data.preset_page_content.keys():
+            self.wizard.removePage(old_page_id)
 
-            LOGGER.debug('Cleared %s preset pages.', len(self.data.preset_page_models.keys()))
-            self.data.preset_page_models = dict()
+        LOGGER.debug('Cleared %s preset pages.', len(self.data.preset_page_content.keys()))
 
-        preset_count, page_ids = 0, sorted(self.data.preset_page_models.keys())
-
-        for model, fakom_ls in self.data.fakom_selection.items():
+        for model_code, fakom_ls in self.data.fakom_selection.items():
             # Create available PR-Options and Packages per model
-            self._update_preset_pages_item_models(model)
+            self._update_preset_pages_item_models(model_code)
 
             for fakom in fakom_ls:
-                # Skip existing pages
-                if preset_count < len(page_ids):
-                    if page_ids[preset_count] in self.wizard.pageIds():
-                        preset_count += 1
-                        continue
-
-                preset_page = PresetWizardPage(self.wizard, model, fakom)
+                # TODO: First preset page content is not updated
+                preset_page = PresetWizardPage(self.wizard, model_code, fakom)
                 page_id = self.wizard.addPage(preset_page)
 
                 # --- Load preset page content if available ---
-                if page_id in self.data.preset_page_models:
-                    saved_model = self.data.preset_page_models[page_id]
-                    saved_model.__init__()
-                    # TODO: Loading a KnechtModel wont work, we need to
-                    #  store as KnData and translate back to item model :/
+                if page_id in self.data.preset_page_content:
+                    LOGGER.debug('Loading preset page: %s', page_id)
+                    saved_model = self.data.load_preset_page_content(page_id)
                     preset_page.load_model(saved_model)
                 else:
-                    self.data.preset_page_models[page_id] = preset_page.preset_tree.model().sourceModel()
+                    self.data.preset_page_content[page_id] = None
 
-                preset_count += 1
-
-        LOGGER.debug('Number of %s preset pages.', len(self.data.preset_page_models.keys()))
+        LOGGER.debug('Number of %s preset pages.', len(self.data.preset_page_content.keys()))
 
     def _update_preset_pages_item_models(self, model_code: str):
         """ Populate preset page models with available pr options and packages """
