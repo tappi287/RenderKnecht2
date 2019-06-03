@@ -315,7 +315,7 @@ class KnechtModel(QAbstractItemModel):
         for item in self.root_item.iter_children():
             self.refresh_item_data(item)
 
-        LOGGER.debug('Refreshed model IDs and item data.')
+        # LOGGER.debug('Refreshed model IDs and item data.')
         self.refreshIndexData()
 
     def refreshIndexData(self):
@@ -326,8 +326,8 @@ class KnechtModel(QAbstractItemModel):
         bottom_right = self.sibling(bottom_left.row(), column_count - 1, bottom_left)
 
         self.dataChanged.emit(top_left, bottom_right)
-        LOGGER.debug('Refreshed model indices r%sc%s, r%sc%s',
-                     top_left.row(), top_left.column(), bottom_right.row(), bottom_right.column())
+        # LOGGER.debug('Refreshed model indices r%sc%s, r%sc%s',
+        #             top_left.row(), top_left.column(), bottom_right.row(), bottom_right.column())
 
     def refresh_item_data(self, item: KnechtItem):
         """ Iterate item children and refresh data of the current item """

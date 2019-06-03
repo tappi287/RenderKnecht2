@@ -115,7 +115,7 @@ class UpdateModel(QObject):
         self.view.progress_msg.hide_progress()
         self.view.refresh()
 
-        LOGGER.debug('Model update finished for: %s', self.view.objectName())
+        # LOGGER.debug('Model update finished for: %s', self.view.objectName())
         self.finished.emit()
 
         self.setParent(None)

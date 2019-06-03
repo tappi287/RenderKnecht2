@@ -367,7 +367,7 @@ class InfoOverlay(_OverlayWidget):
     def delayed_setup(self):
         font_size = 'font-size: {}px;'.format(int(round(FontRsc.regular.pixelSize() * 1.1)))
         self.text_style = self.text_style + ' ' + font_size
-        LOGGER.debug('Preparing text style: %s', self.text_style)
+        # LOGGER.debug('Preparing text style: %s', self.text_style)
         bgr_style = self.bg_style + self.text_style
         self.txt_label.setStyleSheet(bgr_style)
 
