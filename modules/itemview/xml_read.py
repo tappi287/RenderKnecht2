@@ -21,6 +21,9 @@ def path_is_xml_string(file: Union[Path, str]) -> bool:
     if isinstance(file, Path):
         return False
 
+    # Skip additional checks for now
+    return True
+
     not_a_file = False
 
     try:
@@ -66,7 +69,7 @@ class KnechtXmlReader:
             Stores Xml read errors in class attribute errors.
 
             :param: file: Xml file to load or utf-8 encoded Xml string
-            :type: file: Path
+            :type: file: Path or str
             :rtype: KnechtItem: KnechtItem Root Node
             :returns: tree root node
         """

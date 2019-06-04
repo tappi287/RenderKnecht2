@@ -46,8 +46,9 @@ class ImportMenu(QMenu):
         self.addActions([xl_action, fa_action, pw_action])
 
     @Slot()
-    def open_wizard(self):
-        wizard = PresetWizard(self.ui)
+    @Slot(Path)
+    def open_wizard(self, file: Path=None):
+        wizard = PresetWizard(self.ui, file)
         wizard.destroyed.connect(self._report_destroyed)
 
         GenericTabWidget(self.ui, wizard)

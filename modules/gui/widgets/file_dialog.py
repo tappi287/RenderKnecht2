@@ -27,6 +27,7 @@ class FileDialog:
         cmd=dict(title=_('Variants *.CMD auswaehlen'), filter=_('Variant CMD Dateien (*.cmd);')),
         pos=dict(title=_('DeltaGen POS Varianten *.xml oder *.pos auswaehlen'),
                  filter=_('DeltaGen POS Datei (*.xml;*.pos);')),
+        rksession=dict(title=_('Session *.rksession auswaehlen'), filter=_('RK Session Dateien (*.rksession);')),
         dir=dict(title=_('Verzeichnis auswaehlen ...'), filter=None)
         )
 

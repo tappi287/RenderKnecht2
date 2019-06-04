@@ -49,6 +49,8 @@ class WelcomeWizardPage(QWizardPage):
         self.restore_btn.setText(_('Letzte Sitzung wiederherstellen'))
         self.restore_btn.setIcon(IconRsc.get_icon('undo'))
 
+        self.load_btn.released.connect(self.wizard.open_session_file)
+        self.save_btn.released.connect(self.wizard.save_session_file)
         self.restore_btn.released.connect(self.wizard.restore_last_session)
         self.country_filter_expand_btn.released.connect(self.toggle_filter_edit)
 

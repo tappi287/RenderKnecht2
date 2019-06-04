@@ -1,20 +1,18 @@
 from pathlib import Path
-from typing import List, Dict
 
-from PySide2.QtCore import QFile, QIODevice, QByteArray
+from PySide2.QtCore import QByteArray, QFile, QIODevice
 
 from modules.globals import Resource
 from modules.gui.wizard.preset import PresetWizardPage
 from modules.itemview.data_read import KnechtDataToModel
 from modules.itemview.model import KnechtModel
-from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.xml_read import KnechtOpenXml
 from modules.itemview.xml_save import KnechtSaveXml
-from modules.knecht_objects import KnData, _DataTrimOption, _DataParent, KnPr
+from modules.knecht_objects import KnData
 from modules.knecht_utils import CreateZip
-from modules.settings import Settings
 from modules.language import get_translation
 from modules.log import init_logging
+from modules.settings import Settings
 
 LOGGER = init_logging(__name__)
 
@@ -33,8 +31,8 @@ class WizardSession:
             self.pkg_filter = list()
             self.import_data = KnData()
             self.fakom_selection = dict()  # str(Model): List[FA_SIB_LUM_on]
-            self.preset_page_ids = set()
-            self.preset_page_content = dict()
+            self.preset_page_ids = set()   # Keep a set of created preset page id's
+            self.preset_page_content = dict()  # Key: model_code+fakom Value: preset tree xml data as string
 
         def store_preset_page_content(self, model_code: str, fakom: str, item_model: KnechtModel):
             xml_data, errors = KnechtSaveXml.save_xml('<not a file path>', item_model)
@@ -113,14 +111,18 @@ class WizardSession:
             if not hasattr(self.data, k):
                 setattr(self.data, k, v)
 
-        # Convert Id keys to int
-        # self.data.preset_page_content = {int(k): v for k, v in self.data.preset_page_content.items()}
-
-    def load(self, file: Path=None):
+    def load(self, file: Path=None) -> bool:
         if not file:
             file = self.last_session_file
-        self.data = Settings.pickle_load(self.data, file, compressed=True)
-        self._load_default_attributes()
+
+        try:
+            self.data = Settings.pickle_load(self.data, file, compressed=True)
+            self._load_default_attributes()
+        except Exception as e:
+            LOGGER.error('Error loading wizard session: %s', e)
+            return False
+
+        return True
 
     def save(self, file: Path=None) -> bool:
         if not file:

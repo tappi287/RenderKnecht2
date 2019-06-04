@@ -235,6 +235,10 @@ class FileMenu(QObject):
         recent_action = self.sender()
         self.import_menu.open_xlsx(recent_action.file)
 
+    def _open_recent_rksession(self):
+        recent_action = self.sender()
+        self.import_menu.open_wizard(recent_action.file)
+
     def _ask_save_as_file(self, file: Path):
         """ User hits save but file to save does not exist yet """
         msg_box = AskToContinue(self.ui)
@@ -263,7 +267,7 @@ class FileMenu(QObject):
                 break
 
             file, file_type = entry
-            file_name = Path(file).name
+            file_name = Path(file).stem
 
             if not Path(file).exists():
                 # Skip and remove non existing files
@@ -274,10 +278,16 @@ class FileMenu(QObject):
             recent_action.file = Path(file)
 
             if file_type == 'xml':
+                recent_action.setText(f'{file_name} - Xml Presets')
                 recent_action.setIcon(IconRsc.get_icon('document'))
                 recent_action.triggered.connect(self._open_recent_xml_file)
             elif file_type == 'xlsx':
+                recent_action.setText(f'{file_name} - Excel Import')
                 recent_action.setIcon(IconRsc.get_icon('excel'))
                 recent_action.triggered.connect(self._open_recent_xlsx_file)
+            elif file_type == 'rksession':
+                recent_action.setText(f'{file_name} - Preset Wizard Session')
+                recent_action.setIcon(IconRsc.get_icon('qub_button'))
+                recent_action.triggered.connect(self._open_recent_rksession)
 
             self.recent_menu.addAction(recent_action)

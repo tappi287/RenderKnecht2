@@ -1,13 +1,16 @@
+from pathlib import Path
+from typing import Union
+
 from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QWizard, QWizardPage
 
+from modules import KnechtSettings
+from modules.gui.widgets.file_dialog import FileDialog
 from modules.gui.widgets.message_box import AskToContinue
 from modules.gui.wizard.data_import import ImportWizardPage
 from modules.gui.wizard.fakom import FakomWizardPage
-from modules.gui.wizard.preset import PresetWizardPage
 from modules.gui.wizard.session import WizardSession
 from modules.gui.wizard.start import WelcomeWizardPage
-from modules.itemview.model import KnechtModel
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -22,7 +25,7 @@ _ = lang.gettext
 class PresetWizard(QWizard):
     title = _('Preset Wizard')
 
-    def __init__(self, ui):
+    def __init__(self, ui, file: Union[Path, str]=None):
         """ Wizard assisting the user to create presets from Vplus + FaKom data
 
         :param modules.gui.main_ui.KnechtWindow ui: Main Window
@@ -49,10 +52,48 @@ class PresetWizard(QWizard):
         self.addPage(self.page_fakom)
         self.addPage(self.page_placeholder)
 
+        # Load session file if provided
+        if file and Path(file).exists():
+            self.open_session_file(Path(file).as_posix())
+
     @Slot()
     def restore_last_session(self):
         self.session.load(self.session.last_session_file)
         self.session_loaded()
+
+    @Slot()
+    def open_session_file(self, file: str=None):
+        if not file:
+            file = FileDialog.open(self.ui, None, 'rksession')
+
+        if not file:
+            # File dialog canceled
+            return
+
+        result = self.session.load(Path(file))
+
+        if result:
+            self.ui.msg(_('Wizard Session geladen.'))
+        else:
+            self.ui.msg(_('Fehler beim Laden der Wizard Session Datei.'))
+
+    @Slot()
+    def save_session_file(self, file: str=None):
+        if not file:
+            file, file_type = FileDialog.save(self.ui, Path(KnechtSettings.app['current_path']), 'rksession')
+
+        if not file:
+            # File dialog canceled
+            return
+
+        result = self.session.save(Path(file))
+
+        if result:
+            self.ui.msg(_('Wizard Session gespeichert.'))
+            # Add recent file entry
+            KnechtSettings.add_recent_file(file, 'rksession')
+        else:
+            self.ui.msg(_('Fehler beim Speichern der Wizard Session.'))
 
     def save_last_session(self) -> bool:
         """ Session auto save """
