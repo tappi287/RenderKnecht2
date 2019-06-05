@@ -99,7 +99,7 @@ class KnechtCollectVariants(QObject):
             LOGGER.warning('Recursion limit reached while collecting references! Aborting further collections!')
             return
 
-        LOGGER.debug('Collecting from preset: %s', preset_item.data(Kg.NAME))
+        # LOGGER.debug('Collecting from preset: %s', preset_item.data(Kg.NAME))
 
         ordered_child_ls = self._order_children(preset_item)
 
@@ -118,8 +118,7 @@ class KnechtCollectVariants(QObject):
         if item.userType == Kg.variant:
             index = src_model.get_index_from_item(item)
 
-            LOGGER.debug('Adding variant: %s %s', item.data(Kg.NAME), item.data(Kg.VALUE))
-
+            # LOGGER.debug('Adding variant: %s %s', item.data(Kg.NAME), item.data(Kg.VALUE))
             variants.add(index, item.data(Kg.NAME), item.data(Kg.VALUE), item.data(Kg.TYPE))
 
     @classmethod

@@ -347,6 +347,12 @@ class KnechtItem(QObject):
         KnechtItemStyle.style_row(self, Qt.ForegroundRole, self.foreground[Kg.NAME])
         self.itemData[Qt.BackgroundRole] = self.empty[:]
 
+    def style_unlocked(self):
+        KnechtItemStyle.style_row(self, Qt.ForegroundRole, Defaults.black)
+
+    def style_locked(self):
+        KnechtItemStyle.style_row(self, Qt.ForegroundRole, Defaults.grey)
+
     def style_missing(self):
         KnechtItemStyle.style_row(self, Qt.ForegroundRole, Defaults.red)
 

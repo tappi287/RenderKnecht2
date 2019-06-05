@@ -57,6 +57,7 @@ class PresetWizardPage(QWizardPage):
         eye_icon.addPixmap(IconRsc.get_pixmap('eye-disabled'), QIcon.Normal, QIcon.On)
         self.option_hide_btn.setIcon(eye_icon)
         self.option_hide_btn.setStatusTip(_('Bereits verwendete Optionen ein- oder ausblenden'))
+        self.option_hide_btn.toggled.connect(self.update_available_options)
 
         self.option_lock_btn: QPushButton
         lock_icon = IconRsc.get_icon('lock_open')
@@ -106,20 +107,7 @@ class PresetWizardPage(QWizardPage):
 
     def update_available_options(self):
         """ Update PR-Options and Packages Trees based on Preset Tree Content """
-        used_pr_families = self._collect_tree_pr_families(self.preset_tree)
-        self.wizard.session.update_available_options(used_pr_families, self)
-
-    @staticmethod
-    def _collect_tree_pr_families(view: KnechtTreeView):
-        pr_families = set()
-
-        for index, item in view.editor.iterator.iterate_view():
-            variant_ls = view.editor.collect.collect_index(index)
-
-            for variant in variant_ls.variants:
-                pr_families.add(variant.item_type)
-
-        return pr_families
+        self.wizard.session.update_available_options(self)
 
     def initializePage(self):
         pass

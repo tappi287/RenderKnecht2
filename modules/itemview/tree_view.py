@@ -126,6 +126,18 @@ class KnechtTreeView(QTreeView):
     def permanent_type_filter(self, val: List[str]):
         self.__permanent_type_filter = val
 
+        if val:
+            # Apply filtering if filter has values
+            self.apply_permanent_type_filter(True, self.__permanent_type_filter)
+        else:
+            # Disable filtering if filter no values
+            self.apply_permanent_type_filter(False, self.__permanent_type_filter)
+
+    @permanent_type_filter.deleter
+    def permanent_type_filter(self):
+        self.__permanent_type_filter = list()
+        self.apply_permanent_type_filter(False, self.__permanent_type_filter)
+
     @property
     def filter_text_widget(self):
         return self._filter_text_widget
@@ -209,10 +221,13 @@ class KnechtTreeView(QTreeView):
         self.filter_expand_timer.start()
 
     def quick_view_filter(self, enabled: bool):
+        self.apply_permanent_type_filter(enabled, Kg.QUICK_VIEW_FILTER)
+
+    def apply_permanent_type_filter(self, enabled: bool, white_filter_list: list):
         prx_model = self.model()
 
         if enabled:
-            prx_model.set_type_filter(Kg.QUICK_VIEW_FILTER)
+            prx_model.set_type_filter(white_filter_list)
         else:
             prx_model.clear_type_filter()
 

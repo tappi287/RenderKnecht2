@@ -8,6 +8,7 @@ from modules.itemview.data_read import KnechtDataToModel
 from modules.itemview.item import KnechtItem
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
+from modules.itemview.tree_view import KnechtTreeView
 from modules.itemview.xml_read import KnechtOpenXml
 from modules.itemview.xml_save import KnechtSaveXml
 from modules.knecht_objects import KnData
@@ -169,30 +170,50 @@ class WizardSession:
                 saved_model = self.data.load_preset_page_content(model_code, fakom)
                 preset_page.load_model(saved_model)
 
-    def update_available_options(self, used_pr_familys: set, preset_page):
-        """ Update PR-Options and Packages Trees based on Preset Page Content
+    def update_available_options(self, current_page: PresetWizardPage):
+        """ Update PR-Options and Packages Trees based on Preset Page Content """
+        used_pr_families, available_pr_families = set(), set()
 
-        :param set used_pr_familys:
-        :param modules.gui.wizard.preset.PresetWizardPage preset_page:
-        :return:
-        """
-        opt: KnechtModel = self.opt_models.get(preset_page.model)
-        pkg: KnechtModel = self.pkg_models.get(preset_page.model)
+        # TODO: used pr families must be save per page, session wide used pr-options + packages
 
-        if opt is None or pkg is None:
-            return
+        for page_id in self.data.preset_page_ids:
+            preset_page: PresetWizardPage = self.wizard.page(page_id)
+            used_pr_families.update(self._collect_tree_pr_families(preset_page.preset_tree))
 
-        opt_item: KnechtItem
-
-        for opt_item in opt.root_item.iter_children():
-            # Clear userType
+        # --- Update available PR-Options ---
+        for opt_index, opt_item in current_page.option_tree.editor.iterator.iterate_view():
+            # Clear userType and locked style
             opt_item.fixed_userType = 0
-            opt_item.style_regular()
+            opt_item.style_unlocked()
 
-            if opt_item.data(Kg.TYPE) in used_pr_familys:
-                if preset_page.option_lock_btn.isChecked():
+            item_type = opt_item.data(Kg.TYPE)
+            available_pr_families.add(item_type)
+
+            if item_type in used_pr_families:
+                if current_page.option_lock_btn.isChecked():
                     opt_item.fixed_userType = Kg.group_item
-                    opt_item.style_italic()
+                    opt_item.style_locked()
+
+        # Show or Hide locked PR-Options
+        if current_page.option_hide_btn.isChecked():
+            current_page.option_tree.permanent_type_filter = list(available_pr_families.difference(used_pr_families))
+        else:
+            del current_page.option_tree.permanent_type_filter
+
+        # --- Update available Packages ---
+        pass
+
+    @staticmethod
+    def _collect_tree_pr_families(view: KnechtTreeView):
+        pr_families = set()
+
+        for index, item in view.editor.iterator.iterate_view():
+            variant_ls = view.editor.collect.collect_index(index)
+
+            for variant in variant_ls.variants:
+                pr_families.add(variant.item_type)
+
+        return pr_families
 
     def _update_preset_pages_item_models(self, model_code: str):
         """ Populate preset page models with available pr options and packages """
