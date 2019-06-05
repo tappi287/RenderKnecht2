@@ -111,6 +111,11 @@ class WizardSession:
             if not hasattr(self.data, k):
                 setattr(self.data, k, v)
 
+    def restore_default_session(self):
+        self.data = self.SessionData()
+        self._load_pkg_default_filter()
+        self.create_preset_pages()
+
     def load(self, file: Path=None) -> bool:
         if not file:
             file = self.last_session_file

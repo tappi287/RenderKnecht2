@@ -2,13 +2,15 @@ from pathlib import Path
 from typing import Union
 
 from PySide2.QtCore import Slot
-from PySide2.QtWidgets import QWizard, QWizardPage
+from PySide2.QtWidgets import QWizard, QWizardPage, QPushButton
 
 from modules import KnechtSettings
+from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.file_dialog import FileDialog
 from modules.gui.widgets.message_box import AskToContinue
 from modules.gui.wizard.data_import import ImportWizardPage
 from modules.gui.wizard.fakom import FakomWizardPage
+from modules.gui.wizard.session_menu import WizardSessionMenu
 from modules.gui.wizard.session import WizardSession
 from modules.gui.wizard.start import WelcomeWizardPage
 from modules.language import get_translation
@@ -43,6 +45,14 @@ class PresetWizard(QWizard):
         self.setButtonText(QWizard.FinishButton, _('Abschließen'))
         self.setButtonText(QWizard.CancelButton, _('Abbrechen'))
 
+        # --- Session Management ---
+        session_btn = QPushButton(self)
+        session_btn.setMinimumWidth(220)
+        session_btn.setText(_('Session Verwalten'))
+        session_btn.setMenu(WizardSessionMenu(self))
+        self.setButton(QWizard.CustomButton1, session_btn)
+        self.setOption(QWizard.HaveCustomButton1, True)
+
         self.page_welcome = WelcomeWizardPage(self)
         self.page_import = ImportWizardPage(self)
         self.page_fakom = FakomWizardPage(self)
@@ -58,6 +68,10 @@ class PresetWizard(QWizard):
 
     @Slot()
     def restore_last_session(self):
+        if not self.ask_restart():
+            return
+        self.restart_session()
+
         self.session.load(self.session.last_session_file)
         self.session_loaded()
 
@@ -69,6 +83,10 @@ class PresetWizard(QWizard):
         if not file:
             # File dialog canceled
             return
+
+        if not self.ask_restart():
+            return
+        self.restart_session()
 
         result = self.session.load(Path(file))
 
@@ -107,12 +125,36 @@ class PresetWizard(QWizard):
 
         self.ui.msg(_('Wizard Session geladen.'))
 
+    def restart_session(self):
+        while self.currentId() != self.startId() and self.currentId() != -1:
+            self.back()
+
+        self.session.restore_default_session()
+
     def reject(self):
         self.close()
 
     def accept(self):
         self._asked_for_close = True
         self.close()
+
+    def ask_restart(self):
+        if not self.currentId() > self.startId() + 1:
+            return True
+
+        msg_box = AskToContinue(self)
+
+        if not msg_box.ask(
+            title=self.title,
+            txt=_('Soll der Assistent neu gestartet werden? Die vorhandenen Sessiondaten gehen verloren.'),
+            ok_btn_txt=_('Ok'),
+            abort_btn_txt=_('Abbrechen'),
+                ):
+            # Do not restart
+            return False
+
+        # User Confirmed restart
+        return True
 
     def _ask_close(self):
         if self._asked_for_close:

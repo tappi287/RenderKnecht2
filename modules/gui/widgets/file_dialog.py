@@ -22,12 +22,12 @@ class FileDialog:
             file_key: see class attribute file_types
     """
     file_types = dict(
-        xml=dict(title=_('Variants *.XML auswaehlen'), filter=_('Variant Preset Dateien (*.xml);')),
-        xlsx=dict(title=_('Excel Dateien *.xlsx auswaehlen'), filter=_('Excel Dateien (*.xlsx);')),
-        cmd=dict(title=_('Variants *.CMD auswaehlen'), filter=_('Variant CMD Dateien (*.cmd);')),
+        xml=dict(title=_('Variants *.XML auswaehlen'), filter=_('Variant Preset Dateien (*.xml)')),
+        xlsx=dict(title=_('Excel Dateien *.xlsx auswaehlen'), filter=_('Excel Dateien (*.xlsx)')),
+        cmd=dict(title=_('Variants *.CMD auswaehlen'), filter=_('Variant CMD Dateien (*.cmd)')),
         pos=dict(title=_('DeltaGen POS Varianten *.xml oder *.pos auswaehlen'),
-                 filter=_('DeltaGen POS Datei (*.xml;*.pos);')),
-        rksession=dict(title=_('Session *.rksession auswaehlen'), filter=_('RK Session Dateien (*.rksession);')),
+                 filter=_('DeltaGen POS Datei (*.xml;*.pos)')),
+        rksession=dict(title=_('Session *.rksession auswaehlen'), filter=_('RK Session Dateien (*.rksession)')),
         dir=dict(title=_('Verzeichnis auswaehlen ...'), filter=None)
         )
 
