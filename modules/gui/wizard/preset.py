@@ -63,12 +63,17 @@ class PresetWizardPage(QWizardPage):
         lock_icon.addPixmap(IconRsc.get_pixmap('lock'), QIcon.Normal, QIcon.On)
         self.option_lock_btn.setIcon(lock_icon)
         self.option_lock_btn.setStatusTip(_('Bereits verwendete Optionen für die Bearbeitung sperren'))
+        self.option_lock_btn.toggled.connect(self.update_available_options)
 
         # -- Replace Placeholder TreeViews --
         self.pkg_tree = self._init_tree_view(self.pkg_tree, self.wizard.session.pkg_models.get(model))
         self.option_tree = self._init_tree_view(self.option_tree, self.wizard.session.opt_models.get(model))
+
+        # -- Setup Preset Tree --
         self.preset_tree = self._init_tree_view(self.preset_tree, KnechtModel())
         self.preset_tree.supports_drop = True
+        self.preset_tree.is_render_view = True
+        self.preset_tree.view_refreshed.connect(self.update_available_options)
 
     def _init_tree_view(self, tree_view: QTreeView, item_model: KnechtModel) -> KnechtTreeView:
         """ Replace the UI Designer placeholder tree views """
@@ -98,6 +103,23 @@ class PresetWizardPage(QWizardPage):
     def load_model(self, item_model: KnechtModel):
         UpdateModel(self.preset_tree).update(item_model)
         self.preset_tree.refresh()
+
+    def update_available_options(self):
+        """ Update PR-Options and Packages Trees based on Preset Tree Content """
+        used_pr_families = self._collect_tree_pr_families(self.preset_tree)
+        self.wizard.session.update_available_options(used_pr_families, self)
+
+    @staticmethod
+    def _collect_tree_pr_families(view: KnechtTreeView):
+        pr_families = set()
+
+        for index, item in view.editor.iterator.iterate_view():
+            variant_ls = view.editor.collect.collect_index(index)
+
+            for variant in variant_ls.variants:
+                pr_families.add(variant.item_type)
+
+        return pr_families
 
     def initializePage(self):
         pass

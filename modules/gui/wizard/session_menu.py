@@ -24,14 +24,14 @@ class WizardSessionMenu(QMenu):
         self.wizard = wizard
         self.ui = wizard.ui
 
+        load = QAction(IconRsc.get_icon('folder'), _('Öffnen'), self)
         save = QAction(IconRsc.get_icon('disk'), _('Speichern unter ...'), self)
-        load = QAction(IconRsc.get_icon('folder'), _('Session oeffnen ...'), self)
         restore = QAction(IconRsc.get_icon('undo'), _('Letzte Sitzung wiederherstellen'), self)
-        reset = QAction(IconRsc.get_icon('reset'), _('Session neustarten'), self)
+        reset = QAction(IconRsc.get_icon('reset'), _('Zurücksetzen'), self)
 
-        load.setStatusTip(_('Wizard Session aus Datei laden'))
-        save.setStatusTip(_('Wizard Session in Datei sichern'))
-        restore.setStatusTip(_('Letzte automatisch gesicherte Session wiederherstellen'))
+        load.setStatusTip(_('Wizard Sitzung aus Datei laden'))
+        save.setStatusTip(_('Wizard Sitzung in Datei sichern'))
+        restore.setStatusTip(_('Letzte automatisch gesicherte Sitzung wiederherstellen'))
         reset.setStatusTip(_('Preset Wizard neustarten und vorhandene Daten verwerfen'))
 
         load.triggered.connect(self._load_session)
@@ -39,7 +39,7 @@ class WizardSessionMenu(QMenu):
         restore.triggered.connect(self._restore_session)
         reset.triggered.connect(self._reset_session)
 
-        self.addActions((save, load, restore, reset))
+        self.addActions((load, save, restore, reset))
 
     def _load_session(self):
         self.wizard.open_session_file()

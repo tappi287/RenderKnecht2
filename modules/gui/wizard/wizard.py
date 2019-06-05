@@ -48,7 +48,7 @@ class PresetWizard(QWizard):
         # --- Session Management ---
         session_btn = QPushButton(self)
         session_btn.setMinimumWidth(220)
-        session_btn.setText(_('Session Verwalten'))
+        session_btn.setText(_('Sitzungsverwaltung'))
         session_btn.setMenu(WizardSessionMenu(self))
         self.setButton(QWizard.CustomButton1, session_btn)
         self.setOption(QWizard.HaveCustomButton1, True)
@@ -139,7 +139,8 @@ class PresetWizard(QWizard):
         self.close()
 
     def ask_restart(self):
-        if not self.currentId() > self.startId() + 1:
+        if not self.currentId() > self.startId():
+            # Already on start page
             return True
 
         msg_box = AskToContinue(self)

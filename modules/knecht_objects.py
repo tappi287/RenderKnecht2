@@ -14,7 +14,7 @@ def create_file_safe_name(filename: str) -> str:
 
 
 class KnechtVariant:
-    def __init__(self, index: QModelIndex, name: str, value: str):
+    def __init__(self, index: QModelIndex, name: str, value: str, item_type: str=''):
         """ DeltaGen Variant including the model index referred too
 
         :param QModelIndex index: The model index this Variant refers too
@@ -24,6 +24,7 @@ class KnechtVariant:
         self.index = index
         self.name = name
         self.value = value
+        self.item_type = item_type
 
         self.name_valid = False
         self.value_valid = False
@@ -43,17 +44,18 @@ class KnechtVariant:
 
 class KnechtVariantList:
     def __init__(self):
-        self.variants = list()
+        self.variants: List[KnechtVariant] = list()
 
-    def add(self, index: QModelIndex, name: str, value: str) -> None:
+    def add(self, index: QModelIndex, name: str, value: str, item_type: str='') -> None:
         """ Add a single variant to the list of variants
 
         :param index: The source model index of this variant
         :param name: The Variant Set name
         :param value: The Variant inside the Variant Set
+        :param item_type: Optional type description that refers to PR-Family for PR-Option items
         :return: None
         """
-        variant = KnechtVariant(index, name, value)
+        variant = KnechtVariant(index, name, value, item_type)
         self.variants.append(variant)
 
     def __add__(self, other_variant_list):

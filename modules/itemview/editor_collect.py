@@ -120,7 +120,7 @@ class KnechtCollectVariants(QObject):
 
             LOGGER.debug('Adding variant: %s %s', item.data(Kg.NAME), item.data(Kg.VALUE))
 
-            variants.add(index, item.data(Kg.NAME), item.data(Kg.VALUE))
+            variants.add(index, item.data(Kg.NAME), item.data(Kg.VALUE), item.data(Kg.TYPE))
 
     @classmethod
     def _order_children(cls, preset_item: KnechtItem) -> List[KnechtItem]:

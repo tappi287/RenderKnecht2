@@ -26,8 +26,8 @@ _ = lang.gettext
 
 
 class KnechtTreeView(QTreeView):
-    internalDrop = Signal(QTreeView, QModelIndex)
     view_cleared = Signal(object)
+    view_refreshed = Signal()
     clean_changed = Signal(bool, object)
     reset_missing = Signal()
 
@@ -163,6 +163,8 @@ class KnechtTreeView(QTreeView):
 
         if self.permanent_type_filter:
             self.model().set_type_filter(self.permanent_type_filter)
+
+        self.view_refreshed.emit()
 
     def clear_tree(self):
         if not self.model():

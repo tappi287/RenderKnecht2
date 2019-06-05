@@ -5,7 +5,9 @@ from PySide2.QtCore import QByteArray, QFile, QIODevice
 from modules.globals import Resource
 from modules.gui.wizard.preset import PresetWizardPage
 from modules.itemview.data_read import KnechtDataToModel
+from modules.itemview.item import KnechtItem
 from modules.itemview.model import KnechtModel
+from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.xml_read import KnechtOpenXml
 from modules.itemview.xml_save import KnechtSaveXml
 from modules.knecht_objects import KnData
@@ -166,6 +168,31 @@ class WizardSession:
                 # --- Load preset page content if available ---
                 saved_model = self.data.load_preset_page_content(model_code, fakom)
                 preset_page.load_model(saved_model)
+
+    def update_available_options(self, used_pr_familys: set, preset_page):
+        """ Update PR-Options and Packages Trees based on Preset Page Content
+
+        :param set used_pr_familys:
+        :param modules.gui.wizard.preset.PresetWizardPage preset_page:
+        :return:
+        """
+        opt: KnechtModel = self.opt_models.get(preset_page.model)
+        pkg: KnechtModel = self.pkg_models.get(preset_page.model)
+
+        if opt is None or pkg is None:
+            return
+
+        opt_item: KnechtItem
+
+        for opt_item in opt.root_item.iter_children():
+            # Clear userType
+            opt_item.fixed_userType = 0
+            opt_item.style_regular()
+
+            if opt_item.data(Kg.TYPE) in used_pr_familys:
+                if preset_page.option_lock_btn.isChecked():
+                    opt_item.fixed_userType = Kg.group_item
+                    opt_item.style_italic()
 
     def _update_preset_pages_item_models(self, model_code: str):
         """ Populate preset page models with available pr options and packages """
