@@ -417,6 +417,8 @@ class CustomTypeFilter:
         self._filter_item_types: List[str] = list()
         self.filter_item_types: property = None
 
+        self.type_filter_column = Kg.TYPE
+
     @property
     def filter_item_types(self):
         """ White filter by item type description """
@@ -452,7 +454,7 @@ class CustomTypeFilter:
             return False
 
         # Apply type white filter to top level items
-        if data_ls[Kg.TYPE] not in self.filter_item_types:
+        if data_ls[self.type_filter_column] not in self.filter_item_types:
             self._filtered_parent_rows_cache.add(source_row)
             return True
 

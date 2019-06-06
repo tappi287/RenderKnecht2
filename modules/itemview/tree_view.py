@@ -5,13 +5,13 @@ from PySide2.QtWidgets import QAbstractItemView, QLineEdit, QMenu, QTreeView, QU
 
 from modules.globals import UNDO_LIMIT
 from modules.gui.animation import BgrAnimation
-from modules.itemview.tree_dragdrop import KnechtDragDrop
 from modules.gui.ui_overlay import InfoOverlay
 from modules.gui.widgets.progress_overlay import ProgressOverlay, ShowTreeViewProgressMessage
 from modules.itemview.delegates import KnechtValueDelegate
 from modules.itemview.editor import KnechtEditor
 from modules.itemview.item_edit_undo import ViewItemEditUndo
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
+from modules.itemview.tree_dragdrop import KnechtDragDrop
 from modules.itemview.tree_view_utils import setup_header_layout
 from modules.language import get_translation
 from modules.log import init_logging
@@ -105,6 +105,7 @@ class KnechtTreeView(QTreeView):
         # Setup view properties
         # Permanent type filter for eg. renderTree
         self.__permanent_type_filter = []
+        self.__permanent_type_filter_column = Kg.TYPE
 
         # Render Tree
         self.__is_render_view = False
@@ -118,6 +119,14 @@ class KnechtTreeView(QTreeView):
         self.__is_render_view = val
 
     @property
+    def permanent_type_filter_column(self):
+        return self.__permanent_type_filter_column
+
+    @permanent_type_filter_column.setter
+    def permanent_type_filter_column(self, val: int):
+        self.__permanent_type_filter_column = val
+
+    @property
     def permanent_type_filter(self):
         """ Apply a permanent item type description white filter to this view """
         return self.__permanent_type_filter
@@ -125,6 +134,9 @@ class KnechtTreeView(QTreeView):
     @permanent_type_filter.setter
     def permanent_type_filter(self, val: List[str]):
         self.__permanent_type_filter = val
+
+        if self.model() is not None:
+            self.model().type_filter_column = self.__permanent_type_filter_column
 
         if val:
             # Apply filtering if filter has values

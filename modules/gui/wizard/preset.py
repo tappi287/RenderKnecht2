@@ -68,6 +68,7 @@ class PresetWizardPage(QWizardPage):
 
         # -- Replace Placeholder TreeViews --
         self.pkg_tree = self._init_tree_view(self.pkg_tree, self.wizard.session.pkg_models.get(model))
+        self.pkg_tree.permanent_type_filter_column = Kg.VALUE
         self.option_tree = self._init_tree_view(self.option_tree, self.wizard.session.opt_models.get(model))
 
         # -- Setup Preset Tree --
@@ -110,7 +111,7 @@ class PresetWizardPage(QWizardPage):
         self.wizard.session.update_available_options(self)
 
     def initializePage(self):
-        pass
+        self.update_available_options()
 
     def validatePage(self):
         """ Set wizard data upon page exit """

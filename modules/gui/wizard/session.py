@@ -172,13 +172,21 @@ class WizardSession:
 
     def update_available_options(self, current_page: PresetWizardPage):
         """ Update PR-Options and Packages Trees based on Preset Page Content """
-        used_pr_families, available_pr_families = set(), set()
+        used_pr_families, used_pr_options, available_pr_families = set(), set(), set()
+        visible_pkgs, used_pkgs = set(), set()
 
-        # TODO: used pr families must be save per page, session wide used pr-options + packages
+        # -- Update currently used PR-Families on current page --
+        used_pr_families = self._collect_tree_pr_data(current_page.preset_tree)[1]
 
+        # --- Update PR-Options in use by all pages ---
         for page_id in self.data.preset_page_ids:
             preset_page: PresetWizardPage = self.wizard.page(page_id)
-            used_pr_families.update(self._collect_tree_pr_families(preset_page.preset_tree))
+            pr_options = self._collect_tree_pr_data(preset_page.preset_tree)[0]
+            used_pr_options.update(pr_options)
+
+            for index, item in preset_page.preset_tree.editor.iterator.iterate_view():
+                if item.data(Kg.TYPE) == 'package':
+                    used_pkgs.add(item.data(Kg.VALUE))
 
         # --- Update available PR-Options ---
         for opt_index, opt_item in current_page.option_tree.editor.iterator.iterate_view():
@@ -189,31 +197,56 @@ class WizardSession:
             item_type = opt_item.data(Kg.TYPE)
             available_pr_families.add(item_type)
 
-            if item_type in used_pr_families:
+            if item_type in used_pr_families or opt_item.data(Kg.NAME) in used_pr_options:
                 if current_page.option_lock_btn.isChecked():
                     opt_item.fixed_userType = Kg.group_item
                     opt_item.style_locked()
-
-        # Show or Hide locked PR-Options
-        if current_page.option_hide_btn.isChecked():
-            current_page.option_tree.permanent_type_filter = list(available_pr_families.difference(used_pr_families))
-        else:
-            del current_page.option_tree.permanent_type_filter
+                else:
+                    opt_item.style_italic()
 
         # --- Update available Packages ---
-        pass
+        for pkg_index, pkg_item in current_page.pkg_tree.editor.iterator.iterate_view():
+            pkg_item.fixed_userType = 0
+            pkg_item.style_unlocked()
+            lock_pkg = False
+
+            if pkg_item.data(Kg.VALUE) in used_pkgs:
+                lock_pkg = True
+            else:
+                for pkg_variant in pkg_item.iter_children():
+                    if pkg_variant.data(Kg.TYPE) in used_pr_families or pkg_item.data(Kg.NAME) in used_pr_options:
+                        lock_pkg = True
+                        break
+
+            if lock_pkg:
+                if current_page.option_lock_btn.isChecked():
+                    pkg_item.fixed_userType = Kg.group_item
+                    pkg_item.style_locked()
+                else:
+                    pkg_item.style_italic()
+            else:
+                visible_pkgs.add(pkg_item.data(Kg.VALUE))
+
+        # Show or Hide locked PR-Options and Packages
+        if current_page.option_hide_btn.isChecked():
+            current_page.option_tree.permanent_type_filter = list(available_pr_families.difference(used_pr_families))
+            current_page.pkg_tree.permanent_type_filter = list(visible_pkgs)
+        else:
+            del current_page.option_tree.permanent_type_filter
+            del current_page.pkg_tree.permanent_type_filter
 
     @staticmethod
-    def _collect_tree_pr_families(view: KnechtTreeView):
-        pr_families = set()
+    def _collect_tree_pr_data(view: KnechtTreeView):
+        pr_options, pr_families = set(), set()
 
         for index, item in view.editor.iterator.iterate_view():
             variant_ls = view.editor.collect.collect_index(index)
 
             for variant in variant_ls.variants:
                 pr_families.add(variant.item_type)
+                pr_options.add(variant.name)
 
-        return pr_families
+        return pr_options, pr_families
 
     def _update_preset_pages_item_models(self, model_code: str):
         """ Populate preset page models with available pr options and packages """
