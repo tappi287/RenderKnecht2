@@ -1,13 +1,10 @@
-from typing import Any, Union
-
+from PySide2.QtCore import QTimer
 from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QPushButton, QTreeView, QWizard, QWizardPage
+from PySide2.QtWidgets import QPushButton, QTreeView, QWizardPage, QWizard, QLineEdit
 
 from modules.globals import Resource
 from modules.gui.gui_utils import SetupWidget, replace_widget
 from modules.gui.ui_resource import IconRsc
-from modules.idgen import create_uuid
-from modules.itemview.data_read import KnechtDataToModel
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.model_update import UpdateModel
@@ -40,10 +37,16 @@ class PresetWizardPage(QWizardPage):
 
         self.trim = [x for x in wizard.session.data.import_data.models if x.model == model][0]
 
-        self.setTitle(f'Preset - {self.trim.model_text}')
-        self.setSubTitle(f'{model}_{fakom}')
-
         SetupWidget.from_ui_file(self, Resource.ui_paths['wizard_preset'])
+
+        # -- Trigger filter update for all views ---
+        self.update_filter_timer = QTimer()
+        self.update_filter_timer.setInterval(5)
+        self.update_filter_timer.setSingleShot(True)
+        self.update_filter_timer.timeout.connect(self.update_filter_all_views)
+
+        self.line_edit_preset: QLineEdit
+        self.line_edit_preset.textChanged.connect(self.update_filter_timer.start)
 
         # -- Setup Page Ui --
         self.option_auto_btn: QPushButton
@@ -102,15 +105,29 @@ class PresetWizardPage(QWizardPage):
 
         return new_view
 
+    def update_filter_all_views(self):
+        for view in (self.preset_tree, self.pkg_tree, self.option_tree):
+            if not self.line_edit_preset.text():
+                view.clear_filter()
+            else:
+                view.filter_timer.start()
+
     def load_model(self, item_model: KnechtModel):
         UpdateModel(self.preset_tree).update(item_model)
         self.preset_tree.refresh()
 
     def update_available_options(self):
         """ Update PR-Options and Packages Trees based on Preset Tree Content """
-        self.wizard.session.update_available_options(self)
+        self.wizard.session.update_available_options()
+
+    def update_page_title(self):
+        page_num = self.wizard.currentId() - 3
+        num = len(self.wizard.session.data.preset_page_ids)
+        self.setTitle(f'{page_num:02d}/{num:02d} Preset - {self.trim.model_text}')
+        self.setSubTitle(f'{self.model}_{self.fakom}')
 
     def initializePage(self):
+        self.update_page_title()
         self.update_available_options()
 
     def validatePage(self):

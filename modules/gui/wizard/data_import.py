@@ -63,10 +63,8 @@ class ImportWizardPage(QWizardPage):
 
     @Slot(ExcelImportDialog)
     def xl_result(self, xl: ExcelImportDialog):
+        self.wizard.session.reset_session()
         self.wizard.session.data.import_data = xl.data
-        # Clear FaKom Selections on new import
-        self.wizard.session.data.fakom_selection = dict()
-        self.wizard.page_fakom.result_tree.clear()
 
         self.completeChanged.emit()
         xl.deleteLater()
@@ -87,6 +85,9 @@ class ImportWizardPage(QWizardPage):
         self.result_icn.setPixmap(IconRsc.get_pixmap('check_box'))
 
     def validatePage(self):
+        # Update Package filter
+        self.wizard.session.data.update_pkg_filter(self.wizard.page_welcome.read_pkg_filter())
+        # Save Session
         return self.wizard.save_last_session()
 
     def isComplete(self):

@@ -10,7 +10,7 @@ from modules.gui.widgets.file_dialog import FileDialog
 from modules.gui.widgets.message_box import AskToContinue
 from modules.gui.wizard.data_import import ImportWizardPage
 from modules.gui.wizard.fakom import FakomWizardPage
-from modules.gui.wizard.session_menu import WizardSessionMenu
+from modules.gui.wizard.menus import WizardSessionMenu, WizardNavMenu
 from modules.gui.wizard.session import WizardSession
 from modules.gui.wizard.start import WelcomeWizardPage
 from modules.language import get_translation
@@ -47,11 +47,18 @@ class PresetWizard(QWizard):
 
         # --- Session Management ---
         session_btn = QPushButton(self)
-        session_btn.setMinimumWidth(220)
-        session_btn.setText(_('Sitzungsverwaltung'))
+        session_btn.setMinimumWidth(150)
+        session_btn.setText(_('Sitzung'))
         session_btn.setMenu(WizardSessionMenu(self))
-        self.setButton(QWizard.CustomButton1, session_btn)
-        self.setOption(QWizard.HaveCustomButton1, True)
+        self.setButton(self.CustomButton1, session_btn)
+        self.setOption(self.HaveCustomButton1, True)
+
+        # --- Navigation Menu ---
+        nav_btn = QPushButton(self)
+        nav_btn.setMinimumWidth(150)
+        self.nav_menu = WizardNavMenu(self, nav_btn)
+        self.setButton(self.CustomButton2, nav_btn)
+        self.setOption(self.HaveCustomButton2, True)
 
         self.page_welcome = WelcomeWizardPage(self)
         self.page_import = ImportWizardPage(self)
@@ -129,7 +136,7 @@ class PresetWizard(QWizard):
         while self.currentId() != self.startId() and self.currentId() != -1:
             self.back()
 
-        self.session.restore_default_session()
+        self.session.reset_session()
 
     def reject(self):
         self.close()
@@ -201,6 +208,7 @@ class PlaceholderPage(QWizardPage):
 
     def cleanupPage(self, *args, **kwargs):
         self.wizard.save_last_session()
+        self.wizard.nav_menu.button.setEnabled(False)
 
     def current_page_changed(self, page_id: int):
         """ Skip page visits automatically forward or backward """

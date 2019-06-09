@@ -42,16 +42,6 @@ class WelcomeWizardPage(QWizardPage):
         arrow_icon = IconRsc.get_icon('arrow')
         arrow_icon.addPixmap(IconRsc.get_pixmap('arrow_up'), QIcon.Normal, QIcon.On)
         self.country_filter_expand_btn.setIcon(arrow_icon)
-        self.load_btn.setStatusTip(_('Session aus Datei laden'))
-        self.load_btn.setIcon(IconRsc.get_icon('folder'))
-        self.save_btn.setStatusTip(_('Session in Datei sichern'))
-        self.save_btn.setIcon(IconRsc.get_icon('disk'))
-        self.restore_btn.setText(_('Letzte Sitzung wiederherstellen'))
-        self.restore_btn.setIcon(IconRsc.get_icon('undo'))
-
-        self.load_btn.released.connect(self.wizard.open_session_file)
-        self.save_btn.released.connect(self.wizard.save_session_file)
-        self.restore_btn.released.connect(self.wizard.restore_last_session)
         self.country_filter_expand_btn.released.connect(self.toggle_filter_edit)
 
     def initializePage(self):
@@ -87,6 +77,4 @@ class WelcomeWizardPage(QWizardPage):
         return __filter_list
 
     def validatePage(self):
-        """ Set wizard data upon page exit """
-        self.wizard.session.data.pkg_filter = self.read_pkg_filter()
         return True

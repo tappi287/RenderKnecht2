@@ -1,6 +1,7 @@
+import re
 from pathlib import Path
 
-from PySide2.QtCore import QByteArray, QFile, QIODevice
+from PySide2.QtCore import QByteArray, QFile, QIODevice, QTimer
 
 from modules.globals import Resource
 from modules.gui.wizard.preset import PresetWizardPage
@@ -28,14 +29,28 @@ _ = lang.gettext
 class WizardSession:
     settings_dir = CreateZip.settings_dir
     last_session_file = Path(settings_dir, 'last_preset_session.rksession')
+    update_options_timer = QTimer()
+    update_options_timer.setInterval(15)
+    update_options_timer.setSingleShot(True)
+    update_options_current_page = None
 
     class SessionData:
         def __init__(self):
             self.pkg_filter = list()
+            self.pkg_filter_regex = str()
             self.import_data = KnData()
             self.fakom_selection = dict()  # str(Model): List[FA_SIB_LUM_on]
             self.preset_page_ids = set()   # Keep a set of created preset page id's
             self.preset_page_content = dict()  # Key: model_code+fakom Value: preset tree xml data as string
+
+        def update_pkg_filter(self, pkg_filter_list):
+            self.pkg_filter = pkg_filter_list
+            self.pkg_filter_regex = str()
+
+            for p in self.pkg_filter:
+                self.pkg_filter_regex += p + '|'
+            self.pkg_filter_regex = self.pkg_filter_regex[:-1]
+            LOGGER.debug('Setup Package filter regex: %s', self.pkg_filter_regex)
 
         def store_preset_page_content(self, model_code: str, fakom: str, item_model: KnechtModel):
             xml_data, errors = KnechtSaveXml.save_xml('<not a file path>', item_model)
@@ -71,6 +86,8 @@ class WizardSession:
         self.wizard = wizard
         self.data = self.SessionData()
 
+        self.update_options_timer.timeout.connect(self._update_available_options)
+
         # -- Preset Pages KnechtModels for available PR and Package options --
         self.opt_models = dict()  # ModelCode: KnechtModel
         self.pkg_models = dict()  # ModelCode: KnechtModel
@@ -93,6 +110,10 @@ class WizardSession:
 
         self.data.pkg_filter = self.PkgDefaultFilter.package_filter[::]
 
+        # Update Start Page Package Widget
+        if hasattr(self.wizard, 'page_welcome'):
+            self.wizard.page_welcome.reload_pkg_filter()
+
     def _clean_up_import_data(self):
         new_models = list()
         for trim in self.data.import_data.models:
@@ -114,10 +135,11 @@ class WizardSession:
             if not hasattr(self.data, k):
                 setattr(self.data, k, v)
 
-    def restore_default_session(self):
+    def reset_session(self):
         self.data = self.SessionData()
         self._load_pkg_default_filter()
-        self.create_preset_pages()
+        self.wizard.page_fakom.result_tree.clear()
+        self.clear_preset_pages()
 
     def load(self, file: Path=None) -> bool:
         if not file:
@@ -149,11 +171,26 @@ class WizardSession:
         self._clean_up_import_data()
         return Settings.pickle_save(self.data, file, compressed=True)
 
-    def create_preset_pages(self):
-        for old_page_id in self.data.preset_page_ids:
-            self.wizard.removePage(old_page_id)
+    def clear_preset_pages(self):
+        page_id, cleared_pages = self.wizard.page_placeholder.id, 0
 
-        LOGGER.debug('Cleared %s preset pages.', len(self.data.preset_page_ids))
+        if not page_id > 0:
+            return
+
+        while True:
+            page_id += 1
+
+            if isinstance(self.wizard.page(page_id), PresetWizardPage):
+                self.wizard.removePage(page_id)
+                cleared_pages += 1
+            else:
+                break
+
+        LOGGER.debug('Cleared %s preset pages.', cleared_pages)
+
+    def create_preset_pages(self):
+        """ Create a Wizard preset page for each selected FaKom item """
+        self.clear_preset_pages()
         self.data.preset_page_ids = set()
 
         for model_code, fakom_ls in self.data.fakom_selection.items():
@@ -170,10 +207,19 @@ class WizardSession:
                 saved_model = self.data.load_preset_page_content(model_code, fakom)
                 preset_page.load_model(saved_model)
 
-    def update_available_options(self, current_page: PresetWizardPage):
+        self.wizard.nav_menu.create_preset_page_entries()
+
+    def update_available_options(self):
+        self.update_options_timer.start()
+
+    def _update_available_options(self):
         """ Update PR-Options and Packages Trees based on Preset Page Content """
         used_pr_families, used_pr_options, available_pr_families = set(), set(), set()
         visible_pkgs, used_pkgs = set(), set()
+
+        current_page = self.wizard.page(self.wizard.currentId())
+        if not isinstance(current_page, PresetWizardPage):
+            return
 
         # -- Update currently used PR-Families on current page --
         used_pr_families = self._collect_tree_pr_data(current_page.preset_tree)[1]
@@ -206,17 +252,24 @@ class WizardSession:
 
         # --- Update available Packages ---
         for pkg_index, pkg_item in current_page.pkg_tree.editor.iterator.iterate_view():
+            # Clear userType and locked style
             pkg_item.fixed_userType = 0
             pkg_item.style_unlocked()
+            pkg_name = pkg_item.data(Kg.NAME)
             lock_pkg = False
 
             if pkg_item.data(Kg.VALUE) in used_pkgs:
                 lock_pkg = True
             else:
                 for pkg_variant in pkg_item.iter_children():
-                    if pkg_variant.data(Kg.TYPE) in used_pr_families or pkg_item.data(Kg.NAME) in used_pr_options:
+                    if pkg_variant.data(Kg.TYPE) in used_pr_families or pkg_name in used_pr_options:
                         lock_pkg = True
                         break
+
+            # Package Country Filter
+            if self.data.pkg_filter_regex and re.search(self.data.pkg_filter_regex, pkg_name):
+                LOGGER.debug('Filtering Pkg: %s', pkg_name)
+                lock_pkg = True
 
             if lock_pkg:
                 if current_page.option_lock_btn.isChecked():
