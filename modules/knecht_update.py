@@ -194,8 +194,10 @@ class KnechtUpdate(QObject):
         return False
 
     def _execute_update(self):
+        args = [self.installer_file.as_posix(), '/SILENT', '/CLOSEAPPLICATIONS', '/RESTARTAPPLICATIONS']
         try:
-            Popen(self.installer_file.as_posix())
+            Popen(args)
+            LOGGER.info('Running Update Installer: %s', args)
         except Exception as e:
             LOGGER.error('Could not run update installer. %s', e)
             return
