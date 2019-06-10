@@ -79,6 +79,9 @@ class KnechtXmlWriter:
         return element
 
     def _create_element_from_item(self, item) -> Et.Element:
+        if not item.userType:
+            item.refreshData()
+
         tag = Kg.xml_tag_by_user_type[item.userType]  # Tag from UserType
         attrib = dict()
 

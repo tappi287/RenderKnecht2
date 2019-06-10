@@ -69,3 +69,7 @@ class KnechtModelGlobals:
     checkable = 1007
     group_item = 1008
     dialog_item = 1009
+    locked_preset = 1100
+    xml_tag_by_user_type[locked_preset] = 'preset'
+    locked_variant = 1101
+    xml_tag_by_user_type[locked_variant] = 'variant'

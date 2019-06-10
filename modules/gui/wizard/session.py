@@ -6,7 +6,6 @@ from PySide2.QtCore import QByteArray, QFile, QIODevice, QTimer
 from modules.globals import Resource
 from modules.gui.wizard.preset import PresetWizardPage
 from modules.itemview.data_read import KnechtDataToModel
-from modules.itemview.item import KnechtItem
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.tree_view import KnechtTreeView
@@ -29,10 +28,7 @@ _ = lang.gettext
 class WizardSession:
     settings_dir = CreateZip.settings_dir
     last_session_file = Path(settings_dir, 'last_preset_session.rksession')
-    update_options_timer = QTimer()
-    update_options_timer.setInterval(15)
-    update_options_timer.setSingleShot(True)
-    update_options_current_page = None
+    automagic_filter = set()
 
     class SessionData:
         def __init__(self):
@@ -42,6 +38,9 @@ class WizardSession:
             self.fakom_selection = dict()  # str(Model): List[FA_SIB_LUM_on]
             self.preset_page_ids = set()   # Keep a set of created preset page id's
             self.preset_page_content = dict()  # Key: model_code+fakom Value: preset tree xml data as string
+
+            self.lock_btn = True    # Preset Page PR-Option Lock button state
+            self.hide_btn = False   # Preset Page PR-Option Hide button state
 
         def update_pkg_filter(self, pkg_filter_list):
             self.pkg_filter = pkg_filter_list
@@ -73,8 +72,9 @@ class WizardSession:
             LOGGER.debug('Loading Preset Page %s content with %s items', model_code + fakom, root_item.childCount())
             return KnechtModel(root_item)
 
-    class PkgDefaultFilter:
+    class PrJsonData:
         package_filter = list()
+        wizard_automagic_filter = list()
 
     default_session = SessionData()
 
@@ -86,15 +86,18 @@ class WizardSession:
         self.wizard = wizard
         self.data = self.SessionData()
 
+        self.update_options_timer = QTimer()
+        self.update_options_timer.setInterval(15)
+        self.update_options_timer.setSingleShot(True)
         self.update_options_timer.timeout.connect(self._update_available_options)
 
         # -- Preset Pages KnechtModels for available PR and Package options --
         self.opt_models = dict()  # ModelCode: KnechtModel
         self.pkg_models = dict()  # ModelCode: KnechtModel
 
-        self._load_pkg_default_filter()
+        self._load_default_filter()
 
-    def _load_pkg_default_filter(self):
+    def _load_default_filter(self):
         """ Read Package default filter from qt resources """
         f = QFile(Resource.icon_paths.get('pr_data'))
 
@@ -102,13 +105,14 @@ class WizardSession:
             f.open(QIODevice.ReadOnly)
             data: QByteArray = f.readAll()
             data: bytes = data.data()
-            Settings.load_from_bytes(self.PkgDefaultFilter, data)
+            Settings.load_from_bytes(self.PrJsonData, data)
         except Exception as e:
             LOGGER.error(e)
         finally:
             f.close()
 
-        self.data.pkg_filter = self.PkgDefaultFilter.package_filter[::]
+        self.data.pkg_filter = self.PrJsonData.package_filter[::]
+        self.automagic_filter = set(self.PrJsonData.wizard_automagic_filter)
 
         # Update Start Page Package Widget
         if hasattr(self.wizard, 'page_welcome'):
@@ -137,7 +141,7 @@ class WizardSession:
 
     def reset_session(self):
         self.data = self.SessionData()
-        self._load_pkg_default_filter()
+        self._load_default_filter()
         self.wizard.page_fakom.result_tree.clear()
         self.clear_preset_pages()
 
@@ -210,19 +214,19 @@ class WizardSession:
         self.wizard.nav_menu.create_preset_page_entries()
 
     def update_available_options(self):
+        """ This will be called from multiple views after a refresh so we delay the update with
+            a timer so that it will update only once.
+        """
         self.update_options_timer.start()
 
     def _update_available_options(self):
         """ Update PR-Options and Packages Trees based on Preset Page Content """
-        used_pr_families, used_pr_options, available_pr_families = set(), set(), set()
+        used_pr_families, used_pr_options, visible_pr_options = set(), set(), set()
         visible_pkgs, used_pkgs = set(), set()
 
         current_page = self.wizard.page(self.wizard.currentId())
         if not isinstance(current_page, PresetWizardPage):
             return
-
-        # -- Update currently used PR-Families on current page --
-        used_pr_families = self._collect_tree_pr_data(current_page.preset_tree)[1]
 
         # --- Update PR-Options in use by all pages ---
         for page_id in self.data.preset_page_ids:
@@ -234,6 +238,10 @@ class WizardSession:
                 if item.data(Kg.TYPE) == 'package':
                     used_pkgs.add(item.data(Kg.VALUE))
 
+        # -- Update currently used PR-Families on current page --
+        used_pr_families = self._collect_tree_pr_data(current_page.preset_tree)[1]
+        used_pr_families.update(self.automagic_filter)
+
         # --- Update available PR-Options ---
         for opt_index, opt_item in current_page.option_tree.editor.iterator.iterate_view():
             # Clear userType and locked style
@@ -241,14 +249,15 @@ class WizardSession:
             opt_item.style_unlocked()
 
             item_type = opt_item.data(Kg.TYPE)
-            available_pr_families.add(item_type)
 
             if item_type in used_pr_families or opt_item.data(Kg.NAME) in used_pr_options:
                 if current_page.option_lock_btn.isChecked():
-                    opt_item.fixed_userType = Kg.group_item
+                    opt_item.fixed_userType = Kg.locked_variant
                     opt_item.style_locked()
                 else:
                     opt_item.style_italic()
+            else:
+                visible_pr_options.add(opt_item.data(Kg.NAME))
 
         # --- Update available Packages ---
         for pkg_index, pkg_item in current_page.pkg_tree.editor.iterator.iterate_view():
@@ -268,12 +277,11 @@ class WizardSession:
 
             # Package Country Filter
             if self.data.pkg_filter_regex and re.search(self.data.pkg_filter_regex, pkg_name):
-                LOGGER.debug('Filtering Pkg: %s', pkg_name)
                 lock_pkg = True
 
             if lock_pkg:
                 if current_page.option_lock_btn.isChecked():
-                    pkg_item.fixed_userType = Kg.group_item
+                    pkg_item.fixed_userType = Kg.locked_preset
                     pkg_item.style_locked()
                 else:
                     pkg_item.style_italic()
@@ -282,7 +290,7 @@ class WizardSession:
 
         # Show or Hide locked PR-Options and Packages
         if current_page.option_hide_btn.isChecked():
-            current_page.option_tree.permanent_type_filter = list(available_pr_families.difference(used_pr_families))
+            current_page.option_tree.permanent_type_filter = list(visible_pr_options)
             current_page.pkg_tree.permanent_type_filter = list(visible_pkgs)
         else:
             del current_page.option_tree.permanent_type_filter

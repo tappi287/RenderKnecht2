@@ -111,14 +111,15 @@ class FakomWizardPage(QWizardPage):
             trim_idx = self.get_index_group_parent(prx_index)
             trim_name = trim_idx.siblingAtColumn(Kg.NAME).data(Qt.DisplayRole)
             model = trim_idx.siblingAtColumn(Kg.VALUE).data(Qt.DisplayRole)
+            item_name = f'{trim_name} {model}'
 
-            if trim_name not in trim_items:
-                trim_item = QTreeWidgetItem(self.result_tree, [trim_name])
+            if item_name not in trim_items:
+                trim_item = QTreeWidgetItem(self.result_tree, [item_name])
                 trim_item.setIcon(0, trim_idx.siblingAtColumn(Kg.style_column).data(Qt.DecorationRole) or QIcon())
                 trim_item.setData(0, Qt.UserRole, trim_idx)
-                trim_items[trim_name] = trim_item
+                trim_items[item_name] = trim_item
             else:
-                trim_item = trim_items.get(trim_name)
+                trim_item = trim_items.get(item_name)
 
             name = prx_index.siblingAtColumn(Kg.NAME).data(Qt.DisplayRole)
             icon = prx_index.siblingAtColumn(Kg.style_column).data(Qt.DecorationRole) or QIcon()

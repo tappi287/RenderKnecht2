@@ -24,17 +24,6 @@ def path_is_xml_string(file: Union[Path, str]) -> bool:
     # Skip additional checks for now
     return True
 
-    not_a_file = False
-
-    try:
-        if not Path(file).is_file():
-            not_a_file = True
-    except Exception as e:
-        LOGGER.debug('Provided file argument is not a file. %s', e)
-        not_a_file = True
-
-    return not_a_file
-
 
 class KnechtOpenXml:
     """
@@ -108,7 +97,7 @@ class KnechtXmlReader:
         for e in xml.iterfind('./*//'):
             self._read_node(e)
 
-    def _read_node(self, node):
+    def _read_node(self, node: Et.Element):
         # Re-write order with leading zeros
         if 'order' in node.attrib.keys():
             node.set('order', f'{int(node.attrib["order"]):03d}')
@@ -135,12 +124,12 @@ class KnechtXmlReader:
             self._create_tree_item(node, self.__preset_item)
 
         elif node.tag in ('variant', 'reference'):
-            if self.__preset_item is not None:
-                # Create variant / reference with parent: last preset_item
-                self._create_tree_item(node, self.__preset_item)
-            else:
+            if node.getparent().tag == Kg.xml_dom_tags['level_1']:
                 # Parse orphans aswell for session load / variants widget
                 self._create_tree_item(node)
+            else:
+                # Create variant / reference with parent: last preset_item
+                self._create_tree_item(node, self.__preset_item)
 
     def _create_tree_item(self, node, parent_item: KnechtItem=None) -> KnechtItem:
         data = self._data_from_element_attribute(node)

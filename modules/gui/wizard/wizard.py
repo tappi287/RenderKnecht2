@@ -32,7 +32,7 @@ class PresetWizard(QWizard):
 
         :param modules.gui.main_ui.KnechtWindow ui: Main Window
         """
-        super(PresetWizard, self).__init__(ui)
+        super(PresetWizard, self).__init__(parent=ui)
         self.ui = ui
         self.setWindowTitle(self.title)
         self.setWizardStyle(QWizard.ModernStyle)

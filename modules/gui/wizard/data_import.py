@@ -75,7 +75,14 @@ class ImportWizardPage(QWizardPage):
         if not data.models:
             self.result_label.setText(self.no_data)
             self.result_icn.setPixmap(IconRsc.get_pixmap('check_box_empty'))
-            return
+            return False
+
+        if not len(data.selected_models) or not len(data.selected_pr_families):
+            self.result_label.setText(self.no_data)
+            self.result_icn.setPixmap(IconRsc.get_pixmap('check_box_empty'))
+            self.wizard.ui.msg(_('Keine Modelle oder PR-Familien in den Import Daten ausgewählt. '
+                                 'Bitte beim Import mindestens ein Modell und eine PR-Familie wählen.'), 12000)
+            return False
 
         t = _('Daten geladen. {}[{}] Modelle; {}[{}] PR-Familien').format(
             len(data.selected_models), len(data.models),
@@ -83,6 +90,7 @@ class ImportWizardPage(QWizardPage):
             )
         self.result_label.setText(t)
         self.result_icn.setPixmap(IconRsc.get_pixmap('check_box'))
+        return True
 
     def validatePage(self):
         # Update Package filter
@@ -91,9 +99,7 @@ class ImportWizardPage(QWizardPage):
         return self.wizard.save_last_session()
 
     def isComplete(self):
-        self.update_result()
-
-        if not self.wizard.session.data.import_data.models:
+        if not self.update_result():
             return False
 
         return True

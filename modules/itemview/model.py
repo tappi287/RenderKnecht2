@@ -27,6 +27,7 @@ class KnechtModel(QAbstractItemModel):
         editable=Qt.ItemIsEditable | Qt.ItemIsEnabled | Qt.ItemIsSelectable |
                  Qt.ItemIsDragEnabled | Qt.ItemIsDropEnabled,
         group=Qt.ItemIsEnabled | Qt.ItemIsDragEnabled | Qt.ItemIsDropEnabled,
+        fixed_non_edit=Qt.ItemIsSelectable,
         )
 
     def __init__(self, root_item=None, silent: bool=False, checkable_columns: list=None):
@@ -131,8 +132,8 @@ class KnechtModel(QAbstractItemModel):
         item = self.get_item(index)
         flags = self.itemflags['editable']
 
-        if not item.userType:
-            return Qt.ItemIsSelectable
+        if item.userType in (Kg.locked_preset, Kg.locked_variant):
+            flags = self.itemflags['fixed_non_edit']
 
         # --- References ---
         if item.userType == Kg.reference and index.column() != Kg.NAME:

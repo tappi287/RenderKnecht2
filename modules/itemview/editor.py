@@ -119,10 +119,11 @@ class KnechtEditor(QObject):
             # Request UndoCmd item creation if no override chain present
             self.undo_push_to_stack(undo_cmd_chain)
 
-    def remove_rows(self):
+    def remove_rows(self, ignore_edit_triggers=False):
         """ Removes the currently selected rows (or entire model) - undoable """
         if not self.enabled or not self.view_is_editable():
-            return
+            if not ignore_edit_triggers:
+                return
 
         index_ls, model = self.get_selection()
 

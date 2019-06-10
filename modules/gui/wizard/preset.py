@@ -1,6 +1,6 @@
-from PySide2.QtCore import QTimer
-from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QPushButton, QTreeView, QWizardPage, QWizard, QLineEdit
+from PySide2.QtCore import QTimer, Qt, QEvent, QObject
+from PySide2.QtGui import QIcon, QKeySequence
+from PySide2.QtWidgets import QPushButton, QTreeView, QWizardPage, QWizard, QLineEdit, QMenu, QAction
 
 from modules.globals import Resource
 from modules.gui.gui_utils import SetupWidget, replace_widget
@@ -22,6 +22,8 @@ _ = lang.gettext
 
 
 class PresetWizardPage(QWizardPage):
+    hidden_columns_a = (Kg.VALUE, Kg.TYPE, Kg.REF, Kg.ID)
+    hidden_columns_b = (Kg.DESC, Kg.VALUE, Kg.TYPE, Kg.REF, Kg.ID)
 
     def __init__(self, wizard, model: str, fakom: str):
         """ Page for one Preset with available PR-Options and Packages tree's
@@ -69,21 +71,39 @@ class PresetWizardPage(QWizardPage):
         self.option_lock_btn.setStatusTip(_('Bereits verwendete Optionen für die Bearbeitung sperren'))
         self.option_lock_btn.toggled.connect(self.update_available_options)
 
+        self.option_tree_btn: QPushButton
+        opt_icon = IconRsc.get_icon('options')
+        opt_icon.addPixmap(IconRsc.get_pixmap('options-neg'), QIcon.Normal, QIcon.On)
+        self.option_tree_btn.setIcon(opt_icon)
+        self.option_tree_btn.setStatusTip(_('Spalte Beschreibung ein- oder ausblenden'))
+        self.option_tree_btn.toggled.connect(self.update_view_headers)
+
         # -- Replace Placeholder TreeViews --
         self.pkg_tree = self._init_tree_view(self.pkg_tree, self.wizard.session.pkg_models.get(model))
         self.pkg_tree.permanent_type_filter_column = Kg.VALUE
         self.option_tree = self._init_tree_view(self.option_tree, self.wizard.session.opt_models.get(model))
+        self.option_tree.permanent_type_filter_column = Kg.NAME
 
         # -- Setup Preset Tree --
         self.preset_tree = self._init_tree_view(self.preset_tree, KnechtModel())
         self.preset_tree.supports_drop = True
+        self.preset_tree.supports_drag_move = True
         self.preset_tree.is_render_view = True
+        self.preset_tree.context = PresetTreeContextMenu(self.preset_tree, self.wizard)
+        self.preset_tree.shortcut_override = PresetTreeViewShortcuts(self.preset_tree)
         self.preset_tree.view_refreshed.connect(self.update_available_options)
+
+        # Initial Tree sort
+        QTimer.singleShot(50, self.update_view_headers)
+
+    def remove_rows(self):
+        if self.preset_tree.hasFocus():
+            LOGGER.debug('Remove triggered in %s', self.title())
 
     def _init_tree_view(self, tree_view: QTreeView, item_model: KnechtModel) -> KnechtTreeView:
         """ Replace the UI Designer placeholder tree views """
         parent = tree_view.parent()
-        new_view = KnechtTreeView(parent, None)
+        new_view = KnechtTreeView(parent, self.wizard.ui.app.undo_grp)
         replace_widget(tree_view, new_view)
 
         # Preset wizard specific
@@ -95,18 +115,35 @@ class PresetWizardPage(QWizardPage):
         new_view.filter_text_widget = self.line_edit_preset
         # Setup keyboard shortcuts
         new_view.shortcuts = KnechtTreeViewShortcuts(new_view)
-        # new_view.context =
 
         # Update with placeholder Model to avoid access to unset attributes
         UpdateModel(new_view).update(item_model or KnechtModel())
 
-        for column in (Kg.VALUE, Kg.TYPE, Kg.REF, Kg.ID):
+        for column in self.hidden_columns_a:
             new_view.hideColumn(column)
 
         return new_view
 
-    def update_filter_all_views(self):
+    def _iterate_views(self):
         for view in (self.preset_tree, self.pkg_tree, self.option_tree):
+            yield view
+
+    def update_view_headers(self):
+        for view in self._iterate_views():
+            for column in range(0, Kg.column_count):
+                view.showColumn(column)
+
+                if self.option_tree_btn.isChecked():
+                    if column in self.hidden_columns_b:
+                        view.hideColumn(column)
+                else:
+                    if column in self.hidden_columns_a:
+                        view.hideColumn(column)
+
+            view.sort_tree()
+
+    def update_filter_all_views(self):
+        for view in self._iterate_views():
             if not self.line_edit_preset.text():
                 view.clear_filter()
             else:
@@ -114,22 +151,99 @@ class PresetWizardPage(QWizardPage):
 
     def load_model(self, item_model: KnechtModel):
         UpdateModel(self.preset_tree).update(item_model)
-        self.preset_tree.refresh()
 
     def update_available_options(self):
         """ Update PR-Options and Packages Trees based on Preset Tree Content """
         self.wizard.session.update_available_options()
 
-    def update_page_title(self):
+    def setup_page_title(self):
         page_num = self.wizard.currentId() - 3
         num = len(self.wizard.session.data.preset_page_ids)
         self.setTitle(f'{page_num:02d}/{num:02d} Preset - {self.trim.model_text}')
         self.setSubTitle(f'{self.model}_{self.fakom}')
 
+    def setup_button_state(self):
+        self.option_lock_btn.setChecked(self.wizard.session.data.lock_btn)
+        self.option_hide_btn.setChecked(self.wizard.session.data.hide_btn)
+
     def initializePage(self):
-        self.update_page_title()
+        self.setup_page_title()
+        self.setup_button_state()
         self.update_available_options()
+
+    def cleanupPage(self):
+        """ Call initPage of previous PresetWizardPage on back button """
+        self.validatePage()
+
+        previous_page = self.wizard.page(self.wizard.currentId() - 1)
+        if isinstance(previous_page, PresetWizardPage):
+            previous_page.initializePage()
 
     def validatePage(self):
         """ Set wizard data upon page exit """
+        self.wizard.session.data.lock_btn = self.option_lock_btn.isChecked()
+        self.wizard.session.data.hide_btn = self.option_hide_btn.isChecked()
+
         return True
+
+
+class PresetTreeContextMenu(QMenu):
+    def __init__(self, view, wizard):
+        """
+
+        :param modules.itemview.treeview.KnechtTreeView view: the view to manipulate
+        :param modules.gui.wizard.wizard.PresetWizard wizard: The parent wizard
+        """
+        super(PresetTreeContextMenu, self).__init__(parent=view)
+        self.view = view
+        self.view.installEventFilter(self)
+        self.wizard = wizard
+
+        clear = QAction(IconRsc.get_icon('delete_list'), _('Alle Optionen entfernen'), self)
+        clear.triggered.connect(self.view.clear_tree)
+
+        rem = QAction(IconRsc.get_icon('trash-a'), _('Selektierte Zeilen entfernen\tEntf'), self)
+        rem.triggered.connect(self.remove_rows)
+
+        self.addActions((clear, rem))
+
+    def eventFilter(self, obj, event):
+        if obj is not self.view:
+            return False
+
+        if event.type() == QEvent.ContextMenu:
+            self.popup(event.globalPos())
+            return True
+
+        return False
+
+    def remove_rows(self):
+        if self.view.hasFocus():
+            self.view.editor.remove_rows(ignore_edit_triggers=True)
+
+
+class PresetTreeViewShortcuts(QObject):
+    def __init__(self, view):
+        """
+
+        :param modules.itemview.tree_view.KnechtTreeView view: View to install shortcuts on
+        """
+        super(PresetTreeViewShortcuts, self).__init__(parent=view)
+        self.view = view
+        self.view.installEventFilter(self)
+
+    def eventFilter(self, obj, event):
+        """ Set Knecht Tree View keyboard Shortcuts """
+        if not obj or not event:
+            return False
+
+        if event.type() == QEvent.ShortcutOverride:
+            # Intercept Edit Menu Shortcuts eg. Ctrl+C, Ctrl+V
+            event.accept()
+
+            if event.key() == Qt.Key_Delete:
+                self.view.context.remove_rows()
+
+            return True
+
+        return False
