@@ -5,12 +5,14 @@ from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QWizard, QWizardPage, QPushButton
 
 from modules import KnechtSettings
+from modules.gui.clipboard import TreeClipboard
 from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.file_dialog import FileDialog
 from modules.gui.widgets.message_box import AskToContinue
 from modules.gui.wizard.data_import import ImportWizardPage
 from modules.gui.wizard.fakom import FakomWizardPage
 from modules.gui.wizard.menus import WizardSessionMenu, WizardNavMenu
+from modules.gui.wizard.result import ResultWizardPage
 from modules.gui.wizard.session import WizardSession
 from modules.gui.wizard.start import WelcomeWizardPage
 from modules.language import get_translation
@@ -45,6 +47,8 @@ class PresetWizard(QWizard):
         self.setButtonText(QWizard.FinishButton, _('Abschließen'))
         self.setButtonText(QWizard.CancelButton, _('Abbrechen'))
 
+        self.automagic_clipboard = TreeClipboard()
+
         # --- Session Management ---
         session_btn = QPushButton(self)
         session_btn.setMinimumWidth(150)
@@ -64,6 +68,7 @@ class PresetWizard(QWizard):
         self.page_import = ImportWizardPage(self)
         self.page_fakom = FakomWizardPage(self)
         self.page_placeholder = PlaceholderPage(self)
+        self.page_result = ResultWizardPage(self)
         self.addPage(self.page_welcome)
         self.addPage(self.page_import)
         self.addPage(self.page_fakom)

@@ -5,6 +5,7 @@ from PySide2.QtCore import QByteArray, QFile, QIODevice, QTimer
 
 from modules.globals import Resource
 from modules.gui.wizard.preset import PresetWizardPage
+from modules.gui.wizard.result import ResultWizardPage
 from modules.itemview.data_read import KnechtDataToModel
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
@@ -37,10 +38,12 @@ class WizardSession:
             self.import_data = KnData()
             self.fakom_selection = dict()  # str(Model): List[FA_SIB_LUM_on]
             self.preset_page_ids = set()   # Keep a set of created preset page id's
+            self.preset_page_num = 0
             self.preset_page_content = dict()  # Key: model_code+fakom Value: preset tree xml data as string
 
             self.lock_btn = True    # Preset Page PR-Option Lock button state
             self.hide_btn = False   # Preset Page PR-Option Hide button state
+            self.column_btn = False  # Preset Page show description column on/off
 
         def update_pkg_filter(self, pkg_filter_list):
             self.pkg_filter = pkg_filter_list
@@ -184,7 +187,7 @@ class WizardSession:
         while True:
             page_id += 1
 
-            if isinstance(self.wizard.page(page_id), PresetWizardPage):
+            if isinstance(self.wizard.page(page_id), (PresetWizardPage, ResultWizardPage)):
                 self.wizard.removePage(page_id)
                 cleared_pages += 1
             else:
@@ -196,6 +199,12 @@ class WizardSession:
         """ Create a Wizard preset page for each selected FaKom item """
         self.clear_preset_pages()
         self.data.preset_page_ids = set()
+
+        num_pages = 0
+        for fakom_ls in self.data.fakom_selection.values():
+            for _ in fakom_ls:
+                num_pages += 1
+        self.data.preset_page_num = num_pages
 
         for model_code, fakom_ls in self.data.fakom_selection.items():
             # Create available PR-Options and Packages per model
@@ -211,6 +220,9 @@ class WizardSession:
                 saved_model = self.data.load_preset_page_content(model_code, fakom)
                 preset_page.load_model(saved_model)
 
+        # Add Results Wizard Page
+        self.wizard.addPage(self.wizard.page_result)
+        # Populate Navigation Menu
         self.wizard.nav_menu.create_preset_page_entries()
 
     def update_available_options(self):
@@ -218,6 +230,10 @@ class WizardSession:
             a timer so that it will update only once.
         """
         self.update_options_timer.start()
+
+    def update_available_options_immediately(self):
+        """ Called from automagic routine for immediate updates """
+        self._update_available_options()
 
     def _update_available_options(self):
         """ Update PR-Options and Packages Trees based on Preset Page Content """

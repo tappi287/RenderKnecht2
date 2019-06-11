@@ -1,7 +1,9 @@
+import time
 from typing import List
 
 from PySide2.QtCore import QModelIndex, QTimer, Qt, Signal, Slot
-from PySide2.QtWidgets import QAbstractItemView, QLineEdit, QMenu, QTreeView, QUndoGroup, QUndoStack, QWidget
+from PySide2.QtWidgets import QAbstractItemView, QLineEdit, QMenu, QTreeView, QUndoGroup, QUndoStack, QWidget, \
+    QApplication
 
 from modules.globals import UNDO_LIMIT
 from modules.gui.animation import BgrAnimation
@@ -30,6 +32,8 @@ class KnechtTreeView(QTreeView):
     view_refreshed = Signal()
     clean_changed = Signal(bool, object)
     reset_missing = Signal()
+
+    block_timeout = 60000
 
     def __init__(self, parent: QWidget, undo_group: QUndoGroup):
         super(KnechtTreeView, self).__init__(parent)
@@ -294,3 +298,14 @@ class KnechtTreeView(QTreeView):
     def view_clean_changed(self, clean: bool):
         LOGGER.debug('Reporting changed Tree View Clean state')
         self.clean_changed.emit(clean, self)
+
+    def block_until_editor_finished(self):
+        """ When adding or removing items via undo_chain this method can block until
+            the editor returned from the undo chain.
+        """
+        start = time.time()
+
+        while not self.editor.enabled:
+            QApplication.processEvents()
+            if time.time() - start > self.block_timeout:
+                break

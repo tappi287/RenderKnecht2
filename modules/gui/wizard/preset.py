@@ -25,6 +25,10 @@ class PresetWizardPage(QWizardPage):
     hidden_columns_a = (Kg.VALUE, Kg.TYPE, Kg.REF, Kg.ID)
     hidden_columns_b = (Kg.DESC, Kg.VALUE, Kg.TYPE, Kg.REF, Kg.ID)
 
+    # Automagic Defaults
+    automagic_pr_num = 13
+    automagic_pkg_num = 3
+
     def __init__(self, wizard, model: str, fakom: str):
         """ Page for one Preset with available PR-Options and Packages tree's
 
@@ -41,6 +45,16 @@ class PresetWizardPage(QWizardPage):
 
         SetupWidget.from_ui_file(self, Resource.ui_paths['wizard_preset'])
 
+        # -- Title --
+        num = 1 + len(self.wizard.session.data.preset_page_ids)
+        self.setTitle(f'{num:02d}/{self.wizard.session.data.preset_page_num:02d} Preset - {self.trim.model_text}')
+
+        # -- Sub Title Update Timer --
+        self.update_title_timer = QTimer()
+        self.update_title_timer.setInterval(25)
+        self.update_title_timer.setSingleShot(True)
+        self.update_title_timer.timeout.connect(self.update_page_title)
+
         # -- Trigger filter update for all views ---
         self.update_filter_timer = QTimer()
         self.update_filter_timer.setInterval(5)
@@ -56,6 +70,7 @@ class PresetWizardPage(QWizardPage):
         self.option_auto_btn.setIcon(IconRsc.get_icon('qub_button'))
         self.option_auto_btn.setStatusTip(_('Aktuelles Preset automagisch mit nicht verwendeten Optionen befüllen. '
                                             'Bezugs-, Sitz-, Leder oder Fahrwerksoptionen werden ignoriert.'))
+        self.option_auto_btn.released.connect(self.fill_automagically)
 
         self.option_hide_btn: QPushButton
         eye_icon = IconRsc.get_icon('eye')
@@ -155,19 +170,58 @@ class PresetWizardPage(QWizardPage):
     def update_available_options(self):
         """ Update PR-Options and Packages Trees based on Preset Tree Content """
         self.wizard.session.update_available_options()
+        self.update_title_timer.start()
 
-    def setup_page_title(self):
-        page_num = self.wizard.currentId() - 3
-        num = len(self.wizard.session.data.preset_page_ids)
-        self.setTitle(f'{page_num:02d}/{num:02d} Preset - {self.trim.model_text}')
-        self.setSubTitle(f'{self.model}_{self.fakom}')
+    def _auto_fill_preset_tree(self, src_view: KnechtTreeView, num: int, limit: int):
+        # Create PR-Options or Packages
+        for _, item in src_view.editor.iterator.iterate_view():
+            if num > limit:
+                break
+
+            if not item.fixed_userType:  # Option is not locked
+                # Copy Package
+                self.wizard.automagic_clipboard.items = [item.copy()]
+                self.wizard.automagic_clipboard.origin = src_view
+                # Paste Package
+                self.preset_tree.editor.paste_items(self.wizard.automagic_clipboard)
+                # Update available PR-Options / Packages
+                self.wizard.session.update_available_options_immediately()
+                self.wizard.automagic_clipboard.clear()
+
+                num += 1
+
+    def fill_automagically(self):
+        LOGGER.debug('Automagic started on %s', self.title())
+        pr_num, pkg_num = 0, 0
+
+        # Count already existing PR-Options and Packages
+        for opt_index, opt_item in self.preset_tree.editor.iterator.iterate_view():
+            if opt_item.userType == Kg.variant:
+                pr_num += 1
+            else:
+                pkg_num += 1
+
+        # Auto fill available packages
+        self._auto_fill_preset_tree(self.pkg_tree, pkg_num, self.automagic_pkg_num)
+        # Auto fill available PR-Options
+        self._auto_fill_preset_tree(self.option_tree, pr_num, self.automagic_pr_num)
+
+    def update_page_title(self):
+        option_names = ''
+        for _, item in self.preset_tree.editor.iterator.iterate_view():
+            if item.userType == Kg.variant:
+                option_names += f'_{item.data(Kg.NAME)}'  # Add PR-Option to name
+            else:
+                option_names += f'_{item.data(Kg.VALUE)}'  # Add Package PR to name
+
+        self.setSubTitle(f'{self.model}_{self.fakom}{option_names}')
 
     def setup_button_state(self):
+        self.option_tree_btn.setChecked(self.wizard.session.data.column_btn)
         self.option_lock_btn.setChecked(self.wizard.session.data.lock_btn)
         self.option_hide_btn.setChecked(self.wizard.session.data.hide_btn)
 
     def initializePage(self):
-        self.setup_page_title()
         self.setup_button_state()
         self.update_available_options()
 
@@ -183,6 +237,7 @@ class PresetWizardPage(QWizardPage):
         """ Set wizard data upon page exit """
         self.wizard.session.data.lock_btn = self.option_lock_btn.isChecked()
         self.wizard.session.data.hide_btn = self.option_hide_btn.isChecked()
+        self.wizard.session.data.column_btn = self.option_tree_btn.isChecked()
 
         return True
 
