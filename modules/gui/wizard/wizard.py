@@ -137,6 +137,22 @@ class PresetWizard(QWizard):
 
         self.ui.msg(_('Wizard Session geladen.'))
 
+    def create_document(self):
+        new_file = Path('Preset_Wizard_Doc.xml')
+
+        try:
+            src_model = self.page_result.result_tree.model().sourceModel()
+            if not src_model.root_item.childCount():
+                return
+        except Exception as e:
+            LOGGER.error('Preset Wizard could not create document: %s', e)
+            return
+
+        LOGGER.debug('Creating Preset Wizard Document')
+        self.ui.view_mgr.create_view(
+            src_model, new_file
+            )
+
     def restart_session(self):
         while self.currentId() != self.startId() and self.currentId() != -1:
             self.back()
@@ -147,6 +163,7 @@ class PresetWizard(QWizard):
         self.close()
 
     def accept(self):
+        self.create_document()
         self._asked_for_close = True
         self.close()
 

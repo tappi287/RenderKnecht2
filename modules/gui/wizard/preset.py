@@ -10,6 +10,7 @@ from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.model_update import UpdateModel
 from modules.itemview.tree_view import KnechtTreeView
 from modules.itemview.tree_view_utils import KnechtTreeViewShortcuts
+from modules.knecht_objects import KnTrim
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -41,13 +42,12 @@ class PresetWizardPage(QWizardPage):
         self.model = model
         self.fakom = fakom
 
-        self.trim = [x for x in wizard.session.data.import_data.models if x.model == model][0]
-
+        trim = [x for x in wizard.session.data.import_data.models if x.model == model][0]
         SetupWidget.from_ui_file(self, Resource.ui_paths['wizard_preset'])
 
         # -- Title --
         num = 1 + len(self.wizard.session.data.preset_page_ids)
-        self.setTitle(f'{num:02d}/{self.wizard.session.data.preset_page_num:02d} Preset - {self.trim.model_text}')
+        self.setTitle(f'{num:02d}/{self.wizard.session.data.preset_page_num:02d} Preset - {trim.model_text}')
 
         # -- Sub Title Update Timer --
         self.update_title_timer = QTimer()
@@ -105,7 +105,7 @@ class PresetWizardPage(QWizardPage):
         self.preset_tree.supports_drag_move = True
         self.preset_tree.is_render_view = True
         self.preset_tree.context = PresetTreeContextMenu(self.preset_tree, self.wizard)
-        self.preset_tree.shortcut_override = PresetTreeViewShortcuts(self.preset_tree)
+        self.preset_tree.shortcut_override = PresetTreeViewShortcutOverrides(self.preset_tree)
         self.preset_tree.view_refreshed.connect(self.update_available_options)
 
         # Initial Tree sort
@@ -277,13 +277,13 @@ class PresetTreeContextMenu(QMenu):
             self.view.editor.remove_rows(ignore_edit_triggers=True)
 
 
-class PresetTreeViewShortcuts(QObject):
+class PresetTreeViewShortcutOverrides(QObject):
     def __init__(self, view):
-        """
+        """ Disable Ctrl+C; Ctrl+V Shortcuts
 
         :param modules.itemview.tree_view.KnechtTreeView view: View to install shortcuts on
         """
-        super(PresetTreeViewShortcuts, self).__init__(parent=view)
+        super(PresetTreeViewShortcutOverrides, self).__init__(parent=view)
         self.view = view
         self.view.installEventFilter(self)
 

@@ -2,7 +2,7 @@ import time
 from pathlib import Path
 from queue import Queue
 from threading import Thread
-from typing import List
+from typing import List, Union
 
 from PySide2.QtCore import QObject, Signal, Slot
 
@@ -246,28 +246,36 @@ class KnechtDataToModel:
                         if not {sib_pr.value, vos_pr.value, lum_pr.value}.difference('L'):
                             fakom_type = 'fakom_setup'
 
-                        self.create_fakom_item(
+                        fa_item = self.create_fakom_item(
                             fa_parent, trim.model, model_short_desc, color, sib_pr.name, vos_pr.name,
                             lum_pr.name, sib_pr.desc, vos_pr.desc, lum_pr.desc, fakom_type, is_preset_wizard
                             )
+                        if is_preset_wizard:
+                            continue
+                        fa_parent.append_item_child(fa_item)
 
     def create_fakom_item(
             self,
-            parent: KnechtItem, model, model_desc, color, sib, vos, lum,
-            sib_text, vos_text, lum_text, fakom_type, preset_wizard
+            parent: Union[KnechtItem, None], model, model_desc, color, sib, vos, lum,
+            sib_text, vos_text, lum_text, fakom_type, preset_wizard: bool=False
             ):
         name = f'{model_desc} {color}-{sib}-{vos}-{lum}'
         if preset_wizard:
             name = f'{color}-{sib}-{vos}-{lum}'
 
-        data = (f'{parent.childCount():03d}', f'{name}', model, fakom_type, '', self.id_gen.create_id())
+        order = 0
+        if parent:
+            order = parent.childCount()
+
+        data = (f'{order:03d}', f'{name}', model, fakom_type, '', self.id_gen.create_id())
 
         # Create FaKom item
         fa_item = KnechtItem(parent, data)
 
         if preset_wizard:
             fa_item.fixed_userType = Kg.dialog_item
-            parent.append_item_child(fa_item)
+            if parent:
+                parent.append_item_child(fa_item)
             return
 
         # Create FaKom item content
@@ -279,4 +287,4 @@ class KnechtDataToModel:
         for i in (color_item, sib_item, vos_item, lum_item):
             fa_item.append_item_child(i)
 
-        parent.append_item_child(fa_item)
+        return fa_item

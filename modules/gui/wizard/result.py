@@ -1,9 +1,12 @@
+from pathlib import Path
+from typing import List
+
 from PySide2.QtWidgets import QTabWidget, QTreeView, QWizardPage
 
 from modules.globals import Resource
 from modules.gui.gui_utils import SetupWidget, replace_widget
 from modules.gui.ui_resource import IconRsc
-from modules.gui.wizard.preset import PresetWizardPage
+from modules.gui.wizard.preset import PresetWizardPage, PresetTreeViewShortcutOverrides
 from modules.idgen import KnechtUuidGenerator as Kid
 from modules.itemview.data_read import KnechtDataToModel
 from modules.itemview.item import KnechtItem
@@ -12,6 +15,7 @@ from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.model_update import UpdateModel
 from modules.itemview.tree_view import KnechtTreeView
 from modules.itemview.tree_view_utils import KnechtTreeViewShortcuts
+from modules.knecht_objects import KnPr, KnTrim
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -50,27 +54,42 @@ class ResultWizardPage(QWizardPage):
         self.result_tree = self._init_tree_view(self.result_tree)
 
     def initializePage(self):
+        self.wizard.save_last_session()
+
         self.collect_result()
-        # self.collect_unused_options()
+        self.collect_unused_options()
         LOGGER.info('Result Wizard Page initialized.')
 
     def cleanupPage(self):
         self.result_tree.clear_tree()
         self.unused_tree.clear_tree()
 
+    @staticmethod
+    def _get_pr_from_list(pr_list: List[KnPr], pr_name: str) -> KnPr:
+        match = KnPr()
+        for pr in pr_list:
+            if pr.name == pr_name:
+                match = pr
+                break
+        return match
+
+    @staticmethod
+    def _get_trim_from_models(models, model_code) -> KnTrim:
+        matched_trim = KnTrim()
+        for trim in models:
+            if trim.model == model_code:
+                matched_trim = trim
+                break
+        return matched_trim
+
     def collect_result(self):
         kn_data = self.session.data.import_data
-        kn_data.selected_models = list(self.session.data.fakom_selection.keys())
-
         converter = KnechtDataToModel(kn_data)
         trim_items = dict()
 
         # --- Create Trim Setups ---
-        for model_code in kn_data.selected_models:
-            trim = [t for t in kn_data.models if t.model == model_code]
-            if not trim:
-                continue
-            trim = trim[0]
+        for model_code in self.session.data.fakom_selection.keys():
+            trim = self._get_trim_from_models(kn_data.models, model_code)
             trim_items[model_code] = dict()
             trim_item = converter.create_trim(trim)
             trim_item.refresh_id_data()
@@ -78,21 +97,53 @@ class ResultWizardPage(QWizardPage):
             trim_items[model_code]['trim_option'] = converter.create_trim_options(trim)
             trim_items[model_code]['packages'] = list()
 
+        # -- Create FaKom Items --
+        for preset_page in self.session.iterate_preset_pages():
+            fakom_ls = preset_page.fakom.split('-')
+            if len(fakom_ls) < 4:
+                continue
+            trim = self._get_trim_from_models(kn_data.models, preset_page.model)
+
+            # Create lists of List[KnPr] for SIB/VOS/LUM families
+            sib_pr_ls = [pr for pr in trim.iterate_available_pr() if pr.family.casefold() == 'sib']
+            lum_pr_ls = [pr for pr in trim.iterate_available_pr() if pr.family.casefold() == 'lum']
+            vos_pr_ls = [pr for pr in trim.iterate_available_pr() if pr.family.casefold() == 'vos']
+
+            fa, sib, vos, lum = fakom_ls
+            LOGGER.debug('Creating Fakom Item %s %s %s %s', fa, sib, vos, lum)
+            sib_pr = self._get_pr_from_list(sib_pr_ls, sib)
+            vos_pr = self._get_pr_from_list(vos_pr_ls, vos)
+            lum_pr = self._get_pr_from_list(lum_pr_ls, lum)
+
+            fakom_type = 'fakom_option'
+            if not {sib_pr.value, vos_pr.value, lum_pr.value}.difference('L'):
+                fakom_type = 'fakom_setup'
+
+            fa_item = converter.create_fakom_item(
+                None, trim.model, trim.model_text, fa, sib, vos, lum,
+                sib_pr.desc, vos_pr.desc, lum_pr.desc, fakom_type, False
+                )
+            fa_item.refresh_id_data()
+            trim_items[preset_page.model]['fakom'] = fa_item
+
         # --- Prepare presets ---
         preset_items = list()
-        for page_id in self.session.data.preset_page_ids:
-            preset_page: PresetWizardPage = self.wizard.page(page_id)
-            if not isinstance(preset_page, PresetWizardPage):
-                continue
-
-            # -- Create Preset item
+        for preset_page in self.session.iterate_preset_pages():
+            # -- Create Preset item --
             preset_item = KnechtItem(None,
                                      ('000', preset_page.subTitle(), '', Kg.type_keys[Kg.preset], '', Kid.create_id())
                                      )
+            # -- Add reference to trim setup --
             trim_ref = trim_items[preset_page.model]['trim_setup'].copy(copy_children=False)
             trim_ref.convert_to_reference()
             preset_item.append_item_child(trim_ref)
 
+            # -- Add reference to fakom item --
+            fa_ref = trim_items[preset_page.model]['fakom'].copy(copy_children=False)
+            fa_ref.convert_to_reference()
+            preset_item.append_item_child(fa_ref)
+
+            # -- Collect preset content --
             for _, pr_item in preset_page.preset_tree.editor.iterator.iterate_view():
                 if pr_item.userType == Kg.variant:
                     # --- Add PR-option ---
@@ -107,10 +158,10 @@ class ResultWizardPage(QWizardPage):
 
             preset_items.append(preset_item)
 
-        # --- Create trim items and packages ---
+        # --- Create trim, package and fakom items ---
         root_item = KnechtItem()
 
-        for model_code in kn_data.selected_models:
+        for model_code in self.session.data.fakom_selection.keys():
             # -- Add trim setup --
             trim_item = trim_items[model_code]['trim_setup']
             trim_item.setData(Kg.ORDER, f'{root_item.childCount():03d}')
@@ -126,82 +177,27 @@ class ResultWizardPage(QWizardPage):
                 pkg_item.setData(Kg.ORDER, f'{root_item.childCount():03d}')
                 root_item.append_item_child(pkg_item)
 
+            # -- Add FaKom --
+            fa_item = trim_items[model_code]['fakom']
+            fa_item.setData(Kg.ORDER, f'{root_item.childCount():03d}')
+            root_item.append_item_child(fa_item)
+
+            # -- Add separator --
+            root_item.append_item_child(
+                KnechtItem(None, (f'{root_item.childCount():03d}', '', '', 'separator'))
+                )
+
         for preset_item in preset_items:
             preset_item.setData(Kg.ORDER, f'{root_item.childCount():03d}')
             root_item.append_item_child(preset_item)
 
         UpdateModel(self.result_tree).update(KnechtModel(root_item))
-        self.result_tree.refresh()
-
-    def collect_result_old(self):
-        kn_data = self.session.data.import_data
-        kn_data.selected_models = list(self.session.data.fakom_selection.keys())
-        kn_data.read_trim, kn_data.read_options, kn_data.read_packages, kn_data.read_fakom = True, True, False, False
-
-        # --- Create a Model with Trim Setups and Options ---
-        converter = KnechtDataToModel(kn_data)
-        UpdateModel(self.result_tree).update(
-            KnechtModel(converter.create_root_item())
-            )
-        self.result_tree.refresh()
-        self.result_tree.block_until_editor_finished()
-
-        # --- Create pseudo FaKom Model and View ---
-        kn_data.read_trim, kn_data.read_options, kn_data.read_packages, kn_data.read_fakom = False, False, False, True
-        fakom_converter = KnechtDataToModel(kn_data)
-
-        for model_code in self.session.data.fakom_selection.keys():
-            trim = [t for t in kn_data.models if t.model == model_code]
-            if not trim:
-                continue
-            else:
-                trim = trim[0]
-
-            fakom_converter.create_fakom(trim)
-
-        # fakom_view = KnechtTreeView(None, None)
-        UpdateModel(self.unused_tree).update(KnechtModel(fakom_converter.root_item))
-
-        # -- Collect Trim Setups in dict by Model Code
-        trim_items = {'model': 'TrimItem'}
-        for _, item in self.result_tree.editor.iterator.iterate_view():
-            value = item.data(Kg.VALUE)
-            if value in self.session.data.fakom_selection.keys():
-                if item.data(Kg.TYPE) == 'trim_setup':
-                    trim_items[value] = item
-
-        # --- Create Presets ---
-        for page_id in self.session.data.preset_page_ids:
-            preset_page: PresetWizardPage = self.wizard.page(page_id)
-            if not isinstance(preset_page, PresetWizardPage):
-                continue
-
-            # -- Create Preset item
-            preset_item = KnechtItem(None,
-                                     ('000', preset_page.subTitle(), '', Kg.type_keys[Kg.preset], '', Kid.create_id())
-                                     )
-            self.result_tree.editor.create_top_level_rows([preset_item])
-            preset_idx = self.result_tree.editor.match.index(preset_item.data(Kg.NAME), Kg.NAME)
-            self.result_tree.editor.selection.clear_and_set_current(preset_idx)
-
-            # -- Collect Preset Content
-            pr_items = [pr_item.copy() for _, pr_item in preset_page.preset_tree.editor.iterator.iterate_view()]
-
-            # -- Paste Preset Trim Reference
-            self.wizard.automagic_clipboard.clear()
-            self.wizard.automagic_clipboard.items = [trim_items[preset_page.model]] + pr_items
-            self.wizard.automagic_clipboard.origin = self.result_tree
-            self.result_tree.editor.paste_items(self.wizard.automagic_clipboard)
-            self.result_tree.block_until_editor_finished()
-            self.result_tree.model().sourceModel().validate_references()
 
     def collect_unused_options(self):
         # Add Unused Packages
         pkg_items = self._collect_unused_from_modeldict(self.session.pkg_models)
         pr_items = self._collect_unused_from_modeldict(self.session.opt_models)
         self.unused_tree.editor.create_top_level_rows(pkg_items + pr_items, at_row=0)
-
-        # self.unused_tree.block_until_editor_finished()
 
     def _init_tree_view(self, tree_view: QTreeView) -> KnechtTreeView:
         """ Replace the UI Designer placeholder tree views """
@@ -210,7 +206,7 @@ class ResultWizardPage(QWizardPage):
         replace_widget(tree_view, new_view)
 
         # Result wizard specific
-        # new_view.setEditTriggers(QTreeView.NoEditTriggers)
+        new_view.setEditTriggers(QTreeView.NoEditTriggers)
         new_view.setDragDropMode(QTreeView.NoDragDrop)
         new_view.supports_drag_move = False
         new_view.supports_drop = False
@@ -219,12 +215,14 @@ class ResultWizardPage(QWizardPage):
         new_view.filter_text_widget = self.filter_edit
         # Setup keyboard shortcuts
         new_view.shortcuts = KnechtTreeViewShortcuts(new_view)
+        # Override Edit Shotcuts
+        new_view.shortcut_overrides = PresetTreeViewShortcutOverrides(new_view)
 
         # Update with placeholder Model to avoid access to unset attributes
         UpdateModel(new_view).update(KnechtModel())
 
-        # for column in (Kg.VALUE, Kg.TYPE, Kg.REF, Kg.ID):
-        #    new_view.hideColumn(column)
+        for column in (Kg.VALUE, Kg.TYPE, Kg.REF, Kg.ID):
+            new_view.hideColumn(column)
 
         return new_view
 

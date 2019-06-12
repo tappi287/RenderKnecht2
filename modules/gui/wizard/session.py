@@ -178,6 +178,13 @@ class WizardSession:
         self._clean_up_import_data()
         return Settings.pickle_save(self.data, file, compressed=True)
 
+    def iterate_preset_pages(self):
+        for page_id in self.data.preset_page_ids:
+            preset_page: PresetWizardPage = self.wizard.page(page_id)
+            if not isinstance(preset_page, PresetWizardPage):
+                continue
+            yield preset_page
+
     def clear_preset_pages(self):
         page_id, cleared_pages = self.wizard.page_placeholder.id, 0
 
@@ -245,8 +252,7 @@ class WizardSession:
             return
 
         # --- Update PR-Options in use by all pages ---
-        for page_id in self.data.preset_page_ids:
-            preset_page: PresetWizardPage = self.wizard.page(page_id)
+        for preset_page in self.iterate_preset_pages():
             pr_options = self._collect_tree_pr_data(preset_page.preset_tree)[0]
             used_pr_options.update(pr_options)
 

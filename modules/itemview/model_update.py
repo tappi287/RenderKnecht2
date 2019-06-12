@@ -92,6 +92,7 @@ class UpdateModel(QObject):
         self.view.progress_msg.show_progress()
 
         new_model.silent = False
+        new_model.initial_item_id_connection()
 
         proxy_model = KnechtSortFilterProxyModel(self.view)
         proxy_model.setSourceModel(new_model)

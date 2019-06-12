@@ -196,8 +196,6 @@ class FileMenu(QObject):
         new_view = self.view_mgr.create_view(model, file)
 
         # Refresh model data
-        new_view.model().sourceModel().initial_item_id_connection()
-        new_view.model().sourceModel().refreshData()
         if reset_clean:
             new_view.undo_stack.resetClean()
 
