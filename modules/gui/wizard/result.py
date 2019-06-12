@@ -96,6 +96,7 @@ class ResultWizardPage(QWizardPage):
             trim_items[model_code]['trim_setup'] = trim_item
             trim_items[model_code]['trim_option'] = converter.create_trim_options(trim)
             trim_items[model_code]['packages'] = list()
+            trim_items[model_code]['fakom'] = dict()
 
         # -- Create FaKom Items --
         for preset_page in self.session.iterate_preset_pages():
@@ -124,7 +125,7 @@ class ResultWizardPage(QWizardPage):
                 sib_pr.desc, vos_pr.desc, lum_pr.desc, fakom_type, False
                 )
             fa_item.refresh_id_data()
-            trim_items[preset_page.model]['fakom'] = fa_item
+            trim_items[preset_page.model]['fakom'][preset_page.fakom] = fa_item
 
         # --- Prepare presets ---
         preset_items = list()
@@ -139,7 +140,7 @@ class ResultWizardPage(QWizardPage):
             preset_item.append_item_child(trim_ref)
 
             # -- Add reference to fakom item --
-            fa_ref = trim_items[preset_page.model]['fakom'].copy(copy_children=False)
+            fa_ref = trim_items[preset_page.model]['fakom'][preset_page.fakom].copy(copy_children=False)
             fa_ref.convert_to_reference()
             preset_item.append_item_child(fa_ref)
 
@@ -177,10 +178,10 @@ class ResultWizardPage(QWizardPage):
                 pkg_item.setData(Kg.ORDER, f'{root_item.childCount():03d}')
                 root_item.append_item_child(pkg_item)
 
-            # -- Add FaKom --
-            fa_item = trim_items[model_code]['fakom']
-            fa_item.setData(Kg.ORDER, f'{root_item.childCount():03d}')
-            root_item.append_item_child(fa_item)
+            # -- Add FaKom Items --
+            for fa_item in trim_items[model_code]['fakom'].values():
+                fa_item.setData(Kg.ORDER, f'{root_item.childCount():03d}')
+                root_item.append_item_child(fa_item)
 
             # -- Add separator --
             root_item.append_item_child(

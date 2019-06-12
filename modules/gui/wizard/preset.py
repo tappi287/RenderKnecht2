@@ -87,7 +87,7 @@ class PresetWizardPage(QWizardPage):
         self.option_lock_btn.toggled.connect(self.update_available_options)
 
         self.option_tree_btn: QPushButton
-        opt_icon = IconRsc.get_icon('options')
+        opt_icon = QIcon(IconRsc.get_pixmap('options'))
         opt_icon.addPixmap(IconRsc.get_pixmap('options-neg'), QIcon.Normal, QIcon.On)
         self.option_tree_btn.setIcon(opt_icon)
         self.option_tree_btn.setStatusTip(_('Spalte Beschreibung ein- oder ausblenden'))
