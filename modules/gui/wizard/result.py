@@ -61,7 +61,6 @@ class ResultWizardPage(QWizardPage):
     def collect_result(self):
         kn_data = self.session.data.import_data
         kn_data.selected_models = list(self.session.data.fakom_selection.keys())
-        kn_data.read_trim, kn_data.read_options, kn_data.read_packages, kn_data.read_fakom = True, True, False, False
 
         converter = KnechtDataToModel(kn_data)
         trim_items = dict()
@@ -73,7 +72,9 @@ class ResultWizardPage(QWizardPage):
                 continue
             trim = trim[0]
             trim_items[model_code] = dict()
-            trim_items[model_code]['trim_setup'] = converter.create_trim(trim)
+            trim_item = converter.create_trim(trim)
+            trim_item.refresh_id_data()
+            trim_items[model_code]['trim_setup'] = trim_item
             trim_items[model_code]['trim_option'] = converter.create_trim_options(trim)
             trim_items[model_code]['packages'] = list()
 
@@ -107,27 +108,26 @@ class ResultWizardPage(QWizardPage):
             preset_items.append(preset_item)
 
         # --- Create trim items and packages ---
-        root_item, position = KnechtItem(), 0
+        root_item = KnechtItem()
 
         for model_code in kn_data.selected_models:
             # -- Add trim setup --
             trim_item = trim_items[model_code]['trim_setup']
-            trim_item.setData(Kg.ORDER, f'{position:03d}')
+            trim_item.setData(Kg.ORDER, f'{root_item.childCount():03d}')
             root_item.append_item_child(trim_item)
+
             # -- Add trim options --
-            position += 1
             trim_options = trim_items[model_code]['trim_option']
-            trim_options.setData(Kg.ORDER, f'{position:03d}')
+            trim_options.setData(Kg.ORDER, f'{root_item.childCount():03d}')
             root_item.append_item_child(trim_options)
+
             # -- Add Packages --
             for pkg_item in trim_items[model_code]['packages']:
-                position += 1
-                pkg_item.setData(Kg.ORDER, f'{position:03d}')
+                pkg_item.setData(Kg.ORDER, f'{root_item.childCount():03d}')
                 root_item.append_item_child(pkg_item)
 
         for preset_item in preset_items:
-            position += 1
-            preset_item.setData(Kg.ORDER, f'{position:03d}')
+            preset_item.setData(Kg.ORDER, f'{root_item.childCount():03d}')
             root_item.append_item_child(preset_item)
 
         UpdateModel(self.result_tree).update(KnechtModel(root_item))
