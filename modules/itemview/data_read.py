@@ -9,7 +9,7 @@ from PySide2.QtCore import QObject, Signal, Slot
 from modules.idgen import KnechtUuidGenerator
 from modules.itemview.item import KnechtItem
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
-from modules.knecht_objects import KnData, KnPr, KnTrim
+from modules.knecht_objects import KnData, KnPr, KnTrim, KnPackage
 from modules.knecht_utils import shorten_model_name
 from modules.language import get_translation
 from modules.log import init_logging
@@ -106,24 +106,15 @@ class KnechtDataToModel:
                     )
                 )
 
-            # -- Create trimline --
+            # -- Create Trim line item --
             if self.data.read_trim:
-                data = (f'{self.root_item.childCount():03d}', trim.model_text, model, 'trim_setup', '',
-                        self.id_gen.create_id(), f'{trim.market} - {trim.gearbox}')
-
-                trim_item = KnechtItem(self.root_item, data)
-                trim_code_item = KnechtItem(trim_item, ('000', trim.model, 'on'))
-                trim_item.append_item_child(trim_code_item)
-                self.create_pr_options(trim.iterate_trim_pr(), trim_item)
+                trim_item = self.create_trim(trim)
                 self.root_item.append_item_child(trim_item)
 
             # -- Create options --
             if self.data.read_options:
                 # Filter rows matching E
-                data = (f'{self.root_item.childCount():03d}', f'{trim.model_text} Options', model, 'options', '',
-                        self.id_gen.create_id(), f'{trim.market} - {trim.gearbox}')
-                options_item = KnechtItem(self.root_item, data)
-                self.create_pr_options(trim.iterate_optional_pr(), options_item)
+                options_item = self.create_trim_options(trim)
                 self.root_item.append_item_child(options_item)
 
             # -- Create packages --
@@ -133,28 +124,60 @@ class KnechtDataToModel:
             if self.data.read_fakom:
                 self.create_fakom(trim)
 
+    def create_trim(self, trim: KnTrim) -> KnechtItem:
+        # -- Create trim line item --
+        data = (
+                f'{self.root_item.childCount():03d}',  # Order
+                trim.model_text,                       # Name
+                trim.model,                            # Value
+                'trim_setup',                          # Type
+                '',                                    # Ref ID
+                self.id_gen.create_id(),               # ID
+                f'{trim.market} - {trim.gearbox}'      # Description
+                )
+
+        trim_item = KnechtItem(self.root_item, data)
+        trim_code_item = KnechtItem(trim_item, ('000', trim.model, 'on'))
+        trim_item.append_item_child(trim_code_item)
+        self.create_pr_options(trim.iterate_trim_pr(), trim_item)
+        return trim_item
+
+    def create_trim_options(self, trim):
+        # -- Create trim line options item --
+        data = (f'{self.root_item.childCount():03d}', f'{trim.model_text} Options', trim.model, 'options', '',
+                self.id_gen.create_id(), f'{trim.market} - {trim.gearbox}')
+        options_item = KnechtItem(self.root_item, data)
+        self.create_pr_options(trim.iterate_optional_pr(), options_item)
+        return options_item
+
+    def create_package(self, trim: KnTrim, pkg: KnPackage, order: int=0) -> KnechtItem:
+        data = (
+                f'{order:03d}',                                       # Order
+                f'{pkg.name} {pkg.desc} {trim.model} {trim.market}',  # Name
+                pkg.name,                                             # Value
+                'package',                                            # Type
+                '',                                                   # Ref ID
+                self.id_gen.create_id()                               # ID
+                )
+        pkg_item = KnechtItem(None, data)
+
+        for pr in pkg.iterate_pr():
+            pr_item = KnechtItem(pkg_item, (f'{pkg_item.childCount():03d}', pr.name, 'on', pr.family, '', '', pr.desc))
+            pkg_item.append_item_child(pr_item)
+
+        return pkg_item
+
     def create_packages(self, trim: KnTrim, parent_item: KnechtItem, filter_pkg_by_pr_family: bool):
         for pkg in trim.iterate_packages():
             if not pkg.child_count():
                 continue
 
-            # Create package parent item
-            data = (f'{parent_item.childCount():03d}',
-                    f'{pkg.name} {pkg.desc} {trim.model} {trim.market}', pkg.name, 'package', '',
-                    self.id_gen.create_id()
-                    )
-            pkg_item = KnechtItem(parent_item, data)
-            keep_package = False
+            pkg_item = self.create_package(trim, pkg, parent_item.childCount())
+            pkg_item.parentItem = parent_item
 
-            for pr in pkg.iterate_pr():
-                if pr.family in self.data.selected_pr_families:
-                    # Apply PR Family Filter to Packages
-                    # If it contains any chosen PR Family, keep the package
-                    keep_package = True
-
-                pr_item = KnechtItem(pkg_item,
-                                     (f'{pkg_item.childCount():03d}', pr.name, 'on', pr.family, '', '', pr.desc))
-                pkg_item.append_item_child(pr_item)
+            keep_package = True
+            if not [pr for pr in pkg.iterate_pr() if pr.family in self.data.selected_pr_families]:
+                keep_package = False
 
             if pkg_item.childCount():
                 if filter_pkg_by_pr_family and keep_package:
