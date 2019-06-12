@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-04-09 00:16+0200\n"
+"POT-Creation-Date: 2019-06-13 00:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -120,27 +120,27 @@ msgstr ""
 msgid "Excel Import Fehler"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:445
+#: modules/gui/widgets\excel_dialog.py:447
 msgid "Importvorgang"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:446
+#: modules/gui/widgets\excel_dialog.py:448
 msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:447 modules/gui/wizard\wizard.py:130
+#: modules/gui/widgets\excel_dialog.py:449 modules/gui/wizard\wizard.py:198
 msgid "Ja"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:448 modules/gui/wizard\wizard.py:131
+#: modules/gui/widgets\excel_dialog.py:450 modules/gui/wizard\wizard.py:199
 msgid "Nein"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:506
+#: modules/gui/widgets\excel_dialog.py:508
 msgid "Alle Einträge auswählen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:508
+#: modules/gui/widgets\excel_dialog.py:510
 msgid "Alle Einträge abwählen"
 msgstr ""
 
@@ -189,16 +189,14 @@ msgid "<span style=\" font-weight:600; color:#aa0000;\">ACHTUNG:</span> Die Farb
 msgstr ""
 
 #: modules/gui/widgets\fakom_dialog.py:88
-msgid "POS Varianten Xml auswählen ..."
-msgstr ""
-
-#: modules/gui/widgets\fakom_dialog.py:88
-#: modules/gui/widgets\file_dialog.py:29
 msgid "DeltaGen POS Datei (*.xml;*.pos);"
 msgstr ""
 
+#: modules/gui/widgets\fakom_dialog.py:88
+msgid "POS Varianten Xml auswählen ..."
+msgstr ""
+
 #: modules/gui/widgets\fakom_dialog.py:99
-#: modules/gui/widgets\file_dialog.py:26
 msgid "Excel Dateien (*.xlsx);"
 msgstr ""
 
@@ -208,15 +206,19 @@ msgid "Excel Dateien *.xlsx auswaehlen"
 msgstr ""
 
 #: modules/gui/widgets\file_dialog.py:25
-msgid "Variant Preset Dateien (*.xml);"
+msgid "Variant Preset Dateien (*.xml)"
 msgstr ""
 
 #: modules/gui/widgets\file_dialog.py:25
 msgid "Variants *.XML auswaehlen"
 msgstr ""
 
+#: modules/gui/widgets\file_dialog.py:26
+msgid "Excel Dateien (*.xlsx)"
+msgstr ""
+
 #: modules/gui/widgets\file_dialog.py:27
-msgid "Variant CMD Dateien (*.cmd);"
+msgid "Variant CMD Dateien (*.cmd)"
 msgstr ""
 
 #: modules/gui/widgets\file_dialog.py:27
@@ -227,7 +229,19 @@ msgstr ""
 msgid "DeltaGen POS Varianten *.xml oder *.pos auswaehlen"
 msgstr ""
 
+#: modules/gui/widgets\file_dialog.py:29
+msgid "DeltaGen POS Datei (*.xml;*.pos)"
+msgstr ""
+
 #: modules/gui/widgets\file_dialog.py:30
+msgid "RK Session Dateien (*.rksession)"
+msgstr ""
+
+#: modules/gui/widgets\file_dialog.py:30
+msgid "Session *.rksession auswaehlen"
+msgstr ""
+
+#: modules/gui/widgets\file_dialog.py:31
 msgid "Verzeichnis auswaehlen ..."
 msgstr ""
 
@@ -385,7 +399,8 @@ msgid "Einfügen\tStrg+V"
 msgstr ""
 
 #: modules/gui/widgets\menu_edit.py:86
-#: modules/gui/widgets\menu_tree_context.py:57
+#: modules/gui/widgets\menu_tree_context.py:73
+#: modules/gui/wizard\preset.py:260
 msgid "Selektierte Zeilen entfernen\tEntf"
 msgstr ""
 
@@ -429,23 +444,23 @@ msgstr ""
 msgid "Daten werden gelesen"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:204
+#: modules/gui/widgets\menu_file.py:202
 msgid "{0} in {1:.3}s geladen."
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:242
+#: modules/gui/widgets\menu_file.py:244
 msgid "Zieldatei zum Speichern festlegen?"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:243
+#: modules/gui/widgets\menu_file.py:245
 msgid "Die Datei: <i>{}</i><br>Pfad: <i>{}</i><br>wurde entfernt oder existiert nicht mehr.<br><br>Neue Zieldatei zum Speichern festlegen?"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:248
+#: modules/gui/widgets\menu_file.py:250
 msgid "Speichern unter.."
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:257
+#: modules/gui/widgets\menu_file.py:259 modules/gui/wizard\menus.py:80
 msgid "Keine Einträge vorhanden"
 msgstr ""
 
@@ -482,7 +497,23 @@ msgstr ""
 msgid "Senden an DeltaGen"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:70
+#: modules/gui/widgets\menu_tree_context.py:38
+msgid "Selektierte Bauminhalte als Variantenschaltung mit vorherigem Reset an DeltaGen senden."
+msgstr ""
+
+#: modules/gui/widgets\menu_tree_context.py:45
+msgid "Ohne Reset an DeltaGen senden"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree_context.py:46
+msgid "Selektierte Bauminhalte ohne einen Reset an DeltaGen senden."
+msgstr ""
+
+#: modules/gui/widgets\menu_tree_context.py:53
+msgid "PR String in Zwischenablage kopieren"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree_context.py:86
 msgid "Hide ID columns"
 msgstr ""
 
@@ -550,8 +581,9 @@ msgstr ""
 msgid "Fortfahren"
 msgstr ""
 
-#: modules/gui/widgets\message_box.py:69 modules/gui/wizard\wizard.py:71
-#: modules/gui\main_app.py:109 modules/gui\main_app.py:128
+#: modules/gui/widgets\message_box.py:69 modules/gui/wizard\wizard.py:48
+#: modules/gui/wizard\wizard.py:181 modules/gui\main_app.py:109
+#: modules/gui\main_app.py:128
 msgid "Abbrechen"
 msgstr ""
 
@@ -628,7 +660,7 @@ msgstr ""
 msgid "FaKom Import starten"
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:44
+#: modules/gui/wizard\data_import.py:44 modules/gui/wizard\result.py:47
 msgid "Ergebnis"
 msgstr ""
 
@@ -640,7 +672,11 @@ msgstr ""
 msgid "Assistent V Plus Import"
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:77
+#: modules/gui/wizard\data_import.py:83
+msgid "Keine Modelle oder PR-Familien in den Import Daten ausgewählt. Bitte beim Import mindestens ein Modell und eine PR-Familie wählen."
+msgstr ""
+
+#: modules/gui/wizard\data_import.py:87
 msgid "Daten geladen. {}[{}] Modelle; {}[{}] PR-Familien"
 msgstr ""
 
@@ -656,23 +692,79 @@ msgstr ""
 msgid "Ausgewählte Presets"
 msgstr ""
 
-#: modules/gui/wizard\preset.py:43
+#: modules/gui/wizard\menus.py:27
+msgid "Öffnen"
+msgstr ""
+
+#: modules/gui/wizard\menus.py:28
+msgid "Speichern unter ..."
+msgstr ""
+
+#: modules/gui/wizard\menus.py:29
+msgid "Letzte Sitzung wiederherstellen"
+msgstr ""
+
+#: modules/gui/wizard\menus.py:30
+msgid "Zurücksetzen"
+msgstr ""
+
+#: modules/gui/wizard\menus.py:32
+msgid "Wizard Sitzung aus Datei laden"
+msgstr ""
+
+#: modules/gui/wizard\menus.py:33
+msgid "Wizard Sitzung in Datei sichern"
+msgstr ""
+
+#: modules/gui/wizard\menus.py:34
+msgid "Letzte automatisch gesicherte Sitzung wiederherstellen"
+msgstr ""
+
+#: modules/gui/wizard\menus.py:35
+msgid "Preset Wizard neustarten und vorhandene Daten verwerfen"
+msgstr ""
+
+#: modules/gui/wizard\menus.py:72
+msgid "Navigation"
+msgstr ""
+
+#: modules/gui/wizard\preset.py:69
 msgid "Preset auto&magisch befüllen"
 msgstr ""
 
-#: modules/gui/wizard\preset.py:45
+#: modules/gui/wizard\preset.py:71
 msgid "Aktuelles Preset automagisch mit nicht verwendeten Optionen befüllen. Bezugs-, Sitz-, Leder oder Fahrwerksoptionen werden ignoriert."
 msgstr ""
 
-#: modules/gui/wizard\preset.py:52
+#: modules/gui/wizard\preset.py:79
 msgid "Bereits verwendete Optionen ein- oder ausblenden"
 msgstr ""
 
-#: modules/gui/wizard\preset.py:58
+#: modules/gui/wizard\preset.py:86
 msgid "Bereits verwendete Optionen für die Bearbeitung sperren"
 msgstr ""
 
-#: modules/gui/wizard\start.py:28 modules/gui/wizard\wizard.py:22
+#: modules/gui/wizard\preset.py:93
+msgid "Spalte Beschreibung ein- oder ausblenden"
+msgstr ""
+
+#: modules/gui/wizard\preset.py:257
+msgid "Alle Optionen entfernen"
+msgstr ""
+
+#: modules/gui/wizard\result.py:42
+msgid "Wizard Ergebnis"
+msgstr ""
+
+#: modules/gui/wizard\result.py:43
+msgid "Überblick über nicht verwendete Optionen und Pakete"
+msgstr ""
+
+#: modules/gui/wizard\result.py:49
+msgid "Nicht verwendete Optionen"
+msgstr ""
+
+#: modules/gui/wizard\start.py:28 modules/gui/wizard\wizard.py:30
 msgid "Preset Wizard"
 msgstr ""
 
@@ -696,39 +788,51 @@ msgstr ""
 msgid "Filter anzeigen/bearbeiten"
 msgstr ""
 
-#: modules/gui/wizard\start.py:45
-msgid "Session aus Datei laden"
-msgstr ""
-
-#: modules/gui/wizard\start.py:47
-msgid "Session in Datei sichern"
-msgstr ""
-
-#: modules/gui/wizard\start.py:49
-msgid "Letzte Sitzung wiederherstellen"
-msgstr ""
-
-#: modules/gui/wizard\wizard.py:68
+#: modules/gui/wizard\wizard.py:45
 msgid "Zurück"
 msgstr ""
 
-#: modules/gui/wizard\wizard.py:69
+#: modules/gui/wizard\wizard.py:46
 msgid "Weiter"
 msgstr ""
 
-#: modules/gui/wizard\wizard.py:70
+#: modules/gui/wizard\wizard.py:47
 msgid "Abschließen"
 msgstr ""
 
-#: modules/gui/wizard\wizard.py:89
-msgid "Wizard Session wurde automatisch gespeichert."
+#: modules/gui/wizard\wizard.py:55
+msgid "Sitzung"
 msgstr ""
 
-#: modules/gui/wizard\wizard.py:97
+#: modules/gui/wizard\wizard.py:106 modules/gui/wizard\wizard.py:138
 msgid "Wizard Session geladen."
 msgstr ""
 
-#: modules/gui/wizard\wizard.py:129
+#: modules/gui/wizard\wizard.py:108
+msgid "Fehler beim Laden der Wizard Session Datei."
+msgstr ""
+
+#: modules/gui/wizard\wizard.py:122
+msgid "Wizard Session gespeichert."
+msgstr ""
+
+#: modules/gui/wizard\wizard.py:126
+msgid "Fehler beim Speichern der Wizard Session."
+msgstr ""
+
+#: modules/gui/wizard\wizard.py:130
+msgid "Wizard Session wurde automatisch gespeichert."
+msgstr ""
+
+#: modules/gui/wizard\wizard.py:179
+msgid "Soll der Assistent neu gestartet werden? Die vorhandenen Sessiondaten gehen verloren."
+msgstr ""
+
+#: modules/gui/wizard\wizard.py:180
+msgid "Ok"
+msgstr ""
+
+#: modules/gui/wizard\wizard.py:197
 msgid "Soll der Assistent wirklich abgebrochen werden?"
 msgstr ""
 
@@ -765,7 +869,7 @@ msgstr ""
 msgid "Renderliste"
 msgstr ""
 
-#: modules/gui\main_ui.py:162
+#: modules/gui\main_ui.py:166
 msgid "Die Varianten enthalten keine Reset Schaltung! Die zu sendenden Varianten werden mit vorangegangen Schaltungen kollidieren."
 msgstr ""
 
@@ -1081,19 +1185,19 @@ msgstr ""
 msgid "Allgemeiner Fehler beim laden der Daten."
 msgstr ""
 
-#: modules/itemview\xml_read.py:137
+#: modules/itemview\xml_read.py:157
 msgid "Das gewählte Xml Dokument ist kein gültiges Xml Dokument und konnte nicht gelesen werden."
 msgstr ""
 
-#: modules/itemview\xml_read.py:138
+#: modules/itemview\xml_read.py:158
 msgid "Das gewählte Xml Dokument enthält nicht die erwarteten Daten. Es ist kein RenderKnecht kompatibles Xml Dokument."
 msgstr ""
 
-#: modules/itemview\xml_read.py:140
+#: modules/itemview\xml_read.py:160
 msgid "Das gewählte Xml Dokument ist gültig, enthält aber kein Daten."
 msgstr ""
 
-#: modules/itemview\xml_save.py:61
+#: modules/itemview\xml_save.py:66
 msgid "Fehler beim schreiben der Datei: {}"
 msgstr ""
 
@@ -1261,35 +1365,35 @@ msgstr ""
 msgid "Suche nach Anwendungs Updates gestartet."
 msgstr ""
 
-#: modules\knecht_update.py:221
+#: modules\knecht_update.py:223
 msgid "Die Anwendung ist auf dem neusten Stand."
 msgstr ""
 
-#: modules\knecht_update.py:226
+#: modules\knecht_update.py:228
 msgid "Aktualisierung konnte nicht durchgeführt werden."
 msgstr ""
 
-#: modules\knecht_update.py:235
+#: modules\knecht_update.py:237
 msgid "App Update"
 msgstr ""
 
-#: modules\knecht_update.py:236
+#: modules\knecht_update.py:238
 msgid "Eine aktualisierte Version {} ist verfügbar.<br><br>Möchten Sie die Aktualisierung jetzt durchführen?<br><br>Die Anwendung muss für das Update beendet werden."
 msgstr ""
 
-#: modules\knecht_update.py:240
+#: modules\knecht_update.py:242
 msgid "Jetzt aktualisieren"
 msgstr ""
 
-#: modules\knecht_update.py:241
+#: modules\knecht_update.py:243
 msgid "Vielleicht später..."
 msgstr ""
 
-#: modules\knecht_update.py:253
+#: modules\knecht_update.py:255
 msgid "Aktualisierung"
 msgstr ""
 
-#: modules\knecht_update.py:254
+#: modules\knecht_update.py:256
 msgid "Version {} ist bereit zur Installation."
 msgstr ""
 
