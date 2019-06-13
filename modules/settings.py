@@ -87,7 +87,7 @@ class Settings:
                 else:
                     f.write(jsonpickle.encode(obj))
 
-            msg = 'Jsonpickled settings to file: {}'.format(file.absolute().as_posix())
+            msg = 'Jsonpickled settings object: {} to file: {}'.format(type(obj), file.absolute().as_posix())
             LOGGER.info(msg)
             print(msg)
             return True
@@ -97,7 +97,9 @@ class Settings:
         return False
 
     @staticmethod
-    def pickle_load(obj: object, file: Path, compressed: bool=False) -> object:
+    def pickle_load(file: Path, compressed: bool=False) -> object:
+        obj = None
+
         try:
             start = time.time()
             r = 'rb' if compressed else 'r'
@@ -107,7 +109,7 @@ class Settings:
                     obj = jsonpickle.decode(zlib.decompress(f.read()))
                 else:
                     obj = jsonpickle.decode(f.read())
-            LOGGER.info('Pickle loaded object in %.2f: %s', time.time() - start, obj)
+            LOGGER.info('Pickle loaded object in %.2f: %s', time.time() - start, type(obj))
 
         except Exception as e:
             LOGGER.error('Error jsonpickeling object from file. %s', e)

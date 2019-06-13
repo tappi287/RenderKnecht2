@@ -23,6 +23,8 @@ _ = lang.gettext
 class ImportWizardPage(QWizardPage):
     no_data = _('Keine Daten vorhanden.')
     page_title = _('Daten Import')
+    fakom_import_txt = _('FaKom Import starten')
+    fakom_restart_txt = _('Daten vorhanden - FaKom Import neustarten')
 
     def __init__(self, wizard):
         """ Wizard Page to import data
@@ -39,8 +41,11 @@ class ImportWizardPage(QWizardPage):
 
         # -- Setup Page Ui ---
         self.box_data.setTitle(_('Import'))
-        self.btn_fakom.setText(_('FaKom Import starten'))
+        self.btn_fakom.setText(self.fakom_import_txt)
         self.btn_fakom.setIcon(IconRsc.get_icon('fakom'))
+        self.btn_reset_fakom.setIcon(IconRsc.get_icon('reset'))
+        self.btn_reset_fakom.hide()
+        self.btn_reset_fakom.released.connect(self.wizard.restart_session)
         self.result_box.setTitle(_('Ergebnis'))
 
         self.btn_fakom.released.connect(self.import_fakom)
@@ -71,26 +76,35 @@ class ImportWizardPage(QWizardPage):
 
     def update_result(self):
         data = self.wizard.session.data.import_data
+        result = True
 
         if not data.models:
-            self.result_label.setText(self.no_data)
-            self.result_icn.setPixmap(IconRsc.get_pixmap('check_box_empty'))
-            return False
+            result = False
 
         if not len(data.selected_models) or not len(data.selected_pr_families):
+            if result:
+                self.wizard.ui.msg(_('Keine Modelle oder PR-Familien in den Import Daten ausgewählt. '
+                                 'Bitte beim Import mindestens ein Modell und eine PR-Familie wählen.'), 12000)
+                result = False
+
+        if not result:
             self.result_label.setText(self.no_data)
             self.result_icn.setPixmap(IconRsc.get_pixmap('check_box_empty'))
-            self.wizard.ui.msg(_('Keine Modelle oder PR-Familien in den Import Daten ausgewählt. '
-                                 'Bitte beim Import mindestens ein Modell und eine PR-Familie wählen.'), 12000)
-            return False
+            self.btn_reset_fakom.hide()
+            self.btn_fakom.setEnabled(True)
+            self.btn_fakom.setText(self.fakom_import_txt)
+            return result
 
+        self.btn_reset_fakom.show()
         t = _('Daten geladen. {}[{}] Modelle; {}[{}] PR-Familien').format(
             len(data.selected_models), len(data.models),
             len(data.selected_pr_families), len(data.pr_families)
             )
+        self.btn_fakom.setEnabled(False)
+        self.btn_fakom.setText(self.fakom_restart_txt)
         self.result_label.setText(t)
         self.result_icn.setPixmap(IconRsc.get_pixmap('check_box'))
-        return True
+        return result
 
     def validatePage(self):
         # Update Package filter

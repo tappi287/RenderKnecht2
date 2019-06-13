@@ -26,60 +26,63 @@ lang.install()
 _ = lang.gettext
 
 
+class SessionData:
+    def __init__(self):
+        self.pkg_filter = list()
+        self.pkg_filter_regex = str()
+        self.import_data = KnData()
+        self.fakom_selection = dict()  # str(Model): List[FA_SIB_LUM_on]
+        self.preset_page_ids = set()   # Keep a set of created preset page id's
+        self.preset_page_num = 0
+        self.preset_page_content = dict()  # Key: model_code+fakom Value: preset tree xml data as string
+
+        self.lock_btn = True    # Preset Page PR-Option Lock button state
+        self.hide_btn = False   # Preset Page PR-Option Hide button state
+        self.column_btn = False  # Preset Page show description column on/off
+
+        self.user_locked_pr = set()   # PR-Options the user locked via menu
+        self.user_locked_pkg = set()  # Packages the user locked via menu
+
+    def update_pkg_filter(self, pkg_filter_list):
+        self.pkg_filter = pkg_filter_list
+        self.pkg_filter_regex = str()
+
+        for p in self.pkg_filter:
+            self.pkg_filter_regex += p + '|'
+        self.pkg_filter_regex = self.pkg_filter_regex[:-1]
+        LOGGER.debug('Setup Package filter regex: %s', self.pkg_filter_regex)
+
+    def store_preset_page_content(self, model_code: str, fakom: str, item_model: KnechtModel):
+        xml_data, errors = KnechtSaveXml.save_xml('<not a file path>', item_model)
+
+        if isinstance(xml_data, bytes):
+            xml_data = xml_data.decode('UTF-8')
+        elif isinstance(xml_data, bool):
+            return
+
+        LOGGER.debug('Saved Preset Page %s content with %s items', model_code + fakom,
+                     item_model.root_item.childCount())
+        self.preset_page_content[model_code + fakom] = xml_data
+
+    def load_preset_page_content(self, model_code: str, fakom: str) -> KnechtModel:
+        xml_data = self.preset_page_content.get(model_code + fakom)
+        if not xml_data:
+            return KnechtModel()
+
+        root_item, error = KnechtOpenXml.read_xml(xml_data)
+        LOGGER.debug('Loading Preset Page %s content with %s items', model_code + fakom, root_item.childCount())
+        return KnechtModel(root_item)
+
+
+class PrJsonData:
+    package_filter = list()
+    wizard_automagic_filter = list()
+
+
 class WizardSession:
     settings_dir = CreateZip.settings_dir
     last_session_file = Path(settings_dir, 'last_preset_session.rksession')
     automagic_filter = set()
-
-    class SessionData:
-        def __init__(self):
-            self.pkg_filter = list()
-            self.pkg_filter_regex = str()
-            self.import_data = KnData()
-            self.fakom_selection = dict()  # str(Model): List[FA_SIB_LUM_on]
-            self.preset_page_ids = set()   # Keep a set of created preset page id's
-            self.preset_page_num = 0
-            self.preset_page_content = dict()  # Key: model_code+fakom Value: preset tree xml data as string
-
-            self.lock_btn = True    # Preset Page PR-Option Lock button state
-            self.hide_btn = False   # Preset Page PR-Option Hide button state
-            self.column_btn = False  # Preset Page show description column on/off
-
-        def update_pkg_filter(self, pkg_filter_list):
-            self.pkg_filter = pkg_filter_list
-            self.pkg_filter_regex = str()
-
-            for p in self.pkg_filter:
-                self.pkg_filter_regex += p + '|'
-            self.pkg_filter_regex = self.pkg_filter_regex[:-1]
-            LOGGER.debug('Setup Package filter regex: %s', self.pkg_filter_regex)
-
-        def store_preset_page_content(self, model_code: str, fakom: str, item_model: KnechtModel):
-            xml_data, errors = KnechtSaveXml.save_xml('<not a file path>', item_model)
-
-            if isinstance(xml_data, bytes):
-                xml_data = xml_data.decode('UTF-8')
-            elif isinstance(xml_data, bool):
-                return
-
-            LOGGER.debug('Saved Preset Page %s content with %s items', model_code + fakom,
-                         item_model.root_item.childCount())
-            self.preset_page_content[model_code + fakom] = xml_data
-
-        def load_preset_page_content(self, model_code: str, fakom: str) -> KnechtModel:
-            xml_data = self.preset_page_content.get(model_code + fakom)
-            if not xml_data:
-                return KnechtModel()
-
-            root_item, error = KnechtOpenXml.read_xml(xml_data)
-            LOGGER.debug('Loading Preset Page %s content with %s items', model_code + fakom, root_item.childCount())
-            return KnechtModel(root_item)
-
-    class PrJsonData:
-        package_filter = list()
-        wizard_automagic_filter = list()
-
-    default_session = SessionData()
 
     def __init__(self, wizard):
         """ Saves and loads all data to the wizard
@@ -87,7 +90,7 @@ class WizardSession:
         :param modules.gui.wizard.wizard.PresetWizard wizard:
         """
         self.wizard = wizard
-        self.data = self.SessionData()
+        self.data = SessionData()
 
         self.update_options_timer = QTimer()
         self.update_options_timer.setInterval(15)
@@ -108,14 +111,14 @@ class WizardSession:
             f.open(QIODevice.ReadOnly)
             data: QByteArray = f.readAll()
             data: bytes = data.data()
-            Settings.load_from_bytes(self.PrJsonData, data)
+            Settings.load_from_bytes(PrJsonData, data)
         except Exception as e:
             LOGGER.error(e)
         finally:
             f.close()
 
-        self.data.pkg_filter = self.PrJsonData.package_filter[::]
-        self.automagic_filter = set(self.PrJsonData.wizard_automagic_filter)
+        self.data.pkg_filter = PrJsonData.package_filter[::]
+        self.automagic_filter = set(PrJsonData.wizard_automagic_filter)
 
         # Update Start Page Package Widget
         if hasattr(self.wizard, 'page_welcome'):
@@ -133,17 +136,21 @@ class WizardSession:
         """ Make sure that all attributes are present in SessionData after pickle load.
             Previous version may had less attributes.
         """
-        for k in dir(self.default_session):
-            v = getattr(self.default_session, k)
+        default_session = SessionData()
+
+        for k in dir(default_session):
+            v = getattr(default_session, k)
             if k.startswith('__') or not isinstance(v, (int, str, float, bool, list, dict, tuple)):
                 continue
 
+            LOGGER.debug('Checking default session attribute: %s', k)
             # Set missing attributes
             if not hasattr(self.data, k):
+                LOGGER.debug('Setting default session attribute: %s: %s', k, v)
                 setattr(self.data, k, v)
 
     def reset_session(self):
-        self.data = self.SessionData()
+        self.data = SessionData()
         self._load_default_filter()
         self.wizard.page_fakom.result_tree.clear()
         self.clear_preset_pages()
@@ -151,15 +158,26 @@ class WizardSession:
     def load(self, file: Path=None) -> bool:
         if not file:
             file = self.last_session_file
+        result = True
 
         try:
-            self.data = Settings.pickle_load(self.data, file, compressed=True)
-            self._load_default_attributes()
+            self.data = Settings.pickle_load(file, compressed=True)
         except Exception as e:
             LOGGER.error('Error loading wizard session: %s', e)
-            return False
+            result = False
 
-        return True
+        try:
+            self._load_default_attributes()
+        except Exception as e:
+            LOGGER.debug('Error setting default session attributes: %s', e)
+            result = False
+
+        if not result:
+            # Restore Default Session
+            self.data = SessionData()
+            self._load_default_filter()
+
+        return result
 
     def save(self, file: Path=None) -> bool:
         if not file:
@@ -240,9 +258,9 @@ class WizardSession:
 
     def update_available_options_immediately(self):
         """ Called from automagic routine for immediate updates """
-        self._update_available_options()
+        self._update_available_options(ignore_lock_btn=True)
 
-    def _update_available_options(self):
+    def _update_available_options(self, ignore_lock_btn: bool=False):
         """ Update PR-Options and Packages Trees based on Preset Page Content """
         used_pr_families, used_pr_options, visible_pr_options = set(), set(), set()
         visible_pkgs, used_pkgs = set(), set()
@@ -250,6 +268,10 @@ class WizardSession:
         current_page = self.wizard.page(self.wizard.currentId())
         if not isinstance(current_page, PresetWizardPage):
             return
+
+        # -- Add user locked options and packages
+        used_pr_options.update(self.data.user_locked_pr)
+        used_pkgs.update(self.data.user_locked_pkg)
 
         # --- Update PR-Options in use by all pages ---
         for preset_page in self.iterate_preset_pages():
@@ -273,7 +295,7 @@ class WizardSession:
             item_type = opt_item.data(Kg.TYPE)
 
             if item_type in used_pr_families or opt_item.data(Kg.NAME) in used_pr_options:
-                if current_page.option_lock_btn.isChecked():
+                if current_page.option_lock_btn.isChecked() or ignore_lock_btn:
                     opt_item.fixed_userType = Kg.locked_variant
                     opt_item.style_locked()
                 else:
@@ -302,7 +324,7 @@ class WizardSession:
                 lock_pkg = True
 
             if lock_pkg:
-                if current_page.option_lock_btn.isChecked():
+                if current_page.option_lock_btn.isChecked() or ignore_lock_btn:
                     pkg_item.fixed_userType = Kg.locked_preset
                     pkg_item.style_locked()
                 else:

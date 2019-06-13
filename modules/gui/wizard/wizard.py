@@ -80,12 +80,13 @@ class PresetWizard(QWizard):
 
     @Slot()
     def restore_last_session(self):
-        if not self.ask_restart():
+        if not self.restart_session():
             return
-        self.restart_session()
 
-        self.session.load(self.session.last_session_file)
-        self.session_loaded()
+        if self.session.load(self.session.last_session_file):
+            self.session_loaded()
+        else:
+            self.ui.msg(_('Wizard Session konnte nicht geladen werden!'))
 
     @Slot()
     def open_session_file(self, file: str=None):
@@ -96,9 +97,8 @@ class PresetWizard(QWizard):
             # File dialog canceled
             return
 
-        if not self.ask_restart():
+        if not self.restart_session():
             return
-        self.restart_session()
 
         result = self.session.load(Path(file))
 
@@ -127,8 +127,13 @@ class PresetWizard(QWizard):
 
     def save_last_session(self) -> bool:
         """ Session auto save """
-        self.ui.msg(_('Wizard Session wurde automatisch gespeichert.'))
-        return self.session.save()
+        result = self.session.save()
+        if result:
+            self.ui.msg(_('Wizard Session wurde automatisch gespeichert.'))
+        else:
+            self.ui.msg(_('Fehler! Wizard Session konnte nicht gespeichert werden.'))
+
+        return result
 
     def session_loaded(self):
         """ Inform Wizard pages of new session data """
@@ -153,11 +158,15 @@ class PresetWizard(QWizard):
             src_model, new_file
             )
 
-    def restart_session(self):
+    def restart_session(self) -> bool:
+        if not self.ask_restart():
+            return False
+
         while self.currentId() != self.startId() and self.currentId() != -1:
             self.back()
 
         self.session.reset_session()
+        return True
 
     def reject(self):
         self.close()

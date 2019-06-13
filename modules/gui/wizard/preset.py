@@ -96,8 +96,10 @@ class PresetWizardPage(QWizardPage):
         # -- Replace Placeholder TreeViews --
         self.pkg_tree = self._init_tree_view(self.pkg_tree, self.wizard.session.pkg_models.get(model))
         self.pkg_tree.permanent_type_filter_column = Kg.VALUE
+        self.pkg_tree.context = OptionTreeContextMenu(self.pkg_tree, self)
         self.option_tree = self._init_tree_view(self.option_tree, self.wizard.session.opt_models.get(model))
         self.option_tree.permanent_type_filter_column = Kg.NAME
+        self.option_tree.context = OptionTreeContextMenu(self.option_tree, self)
 
         # -- Setup Preset Tree --
         self.preset_tree = self._init_tree_view(self.preset_tree, KnechtModel())
@@ -178,7 +180,7 @@ class PresetWizardPage(QWizardPage):
             if num > limit:
                 break
 
-            if not item.fixed_userType:  # Option is not locked
+            if item.fixed_userType not in (Kg.locked_preset, Kg.locked_variant):  # Option is not locked
                 # Copy Package
                 self.wizard.automagic_clipboard.items = [item.copy()]
                 self.wizard.automagic_clipboard.origin = src_view
@@ -205,6 +207,37 @@ class PresetWizardPage(QWizardPage):
         self._auto_fill_preset_tree(self.pkg_tree, pkg_num, self.automagic_pkg_num)
         # Auto fill available PR-Options
         self._auto_fill_preset_tree(self.option_tree, pr_num, self.automagic_pr_num)
+        self.update_available_options()
+
+    def user_lock_options(self):
+        view = self.sender().view
+        self._set_user_lock(view, True)
+
+    def user_unlock_options(self):
+        view = self.sender().view
+        self._set_user_lock(view, False)
+
+    def _set_user_lock(self, view: KnechtTreeView, lock: bool):
+        """ Add PR-Options or Packages to user locked items """
+        selection, src_model = view.editor.selection.get_selection_top_level()
+
+        for index in selection:
+            item = src_model.get_item(index)
+
+            if item.userType == Kg.variant:
+                pr = item.data(Kg.NAME)
+                if lock:
+                    self.wizard.session.data.user_locked_pr.add(pr)
+                else:
+                    self.wizard.session.data.user_locked_pr.discard(pr)
+            else:
+                pkg = item.data(Kg.VALUE)
+                if lock:
+                    self.wizard.session.data.user_locked_pkg.add(pkg)
+                else:
+                    self.wizard.session.data.user_locked_pkg.discard(pkg)
+
+        self.update_available_options()
 
     def update_page_title(self):
         option_names = ''
@@ -275,6 +308,40 @@ class PresetTreeContextMenu(QMenu):
     def remove_rows(self):
         if self.view.hasFocus():
             self.view.editor.remove_rows(ignore_edit_triggers=True)
+
+
+class OptionTreeContextMenu(QMenu):
+    def __init__(self, view, preset_page):
+        """
+
+        :param modules.itemview.treeview.KnechtTreeView view: the view to manipulate
+        :param PresetWizardPage preset_page: The parent wizard
+        """
+        super(OptionTreeContextMenu, self).__init__(parent=view)
+        self.view = view
+        self.view.installEventFilter(self)
+
+        self.preset_page = preset_page
+
+        add = QAction(IconRsc.get_icon('lock'), _('Selektierte Optionen sperren'), self)
+        add.triggered.connect(self.preset_page.user_lock_options)
+        add.view = self.view
+
+        rem = QAction(IconRsc.get_icon('lock_open'), _('Selektierte Optionen entsperren'), self)
+        rem.triggered.connect(self.preset_page.user_unlock_options)
+        rem.view = self.view
+
+        self.addActions((add, rem))
+
+    def eventFilter(self, obj, event):
+        if obj is not self.view:
+            return False
+
+        if event.type() == QEvent.ContextMenu:
+            self.popup(event.globalPos())
+            return True
+
+        return False
 
 
 class PresetTreeViewShortcutOverrides(QObject):

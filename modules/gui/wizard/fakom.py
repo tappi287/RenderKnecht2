@@ -107,6 +107,7 @@ class FakomWizardPage(QWizardPage):
         # -- Populate Selection TreeWidget ---
         self.result_tree.clear()
         trim_items = dict()
+        selected_names = set()
         for prx_index in self.fakom_tree.selectionModel().selectedRows():
             trim_idx = self.get_index_group_parent(prx_index)
             trim_name = trim_idx.siblingAtColumn(Kg.NAME).data(Qt.DisplayRole)
@@ -127,16 +128,38 @@ class FakomWizardPage(QWizardPage):
             item.setData(0, Qt.UserRole, prx_index)
             item.setIcon(0, icon)
 
+            selected_names.add(name)
+
             # -- Update Session selection data --
             self.wizard.session.data.fakom_selection.update(
                 {model: (self.wizard.session.data.fakom_selection.get(model) or []) + [name]}
                 )
+
+        # -- Style item with checkmark
+        for fa_idx, fa_item in self.iter_all_fakom_items():
+            if fa_item.data(Kg.NAME) in selected_names:
+                icon = IconRsc.get_icon('checkmark')
+                self.fakom_tree.model().sourceModel().setData(fa_idx, icon, Qt.DecorationRole)
+            else:
+                if fa_item.data(Kg.NAME, Qt.DecorationRole):
+                    self.fakom_tree.model().sourceModel().setData(
+                        fa_idx, QIcon(), Qt.DecorationRole)
 
         # -- Expand Results --
         for trim_item in trim_items.values():
             self.result_tree.expandItem(trim_item)
 
         self.completeChanged.emit()
+
+    def iter_all_fakom_items(self):
+        def _iter_fakom_view(parent: QModelIndex = QModelIndex()):
+            return self.fakom_tree.editor.iterator.iterate_view(parent, Kg.NAME)
+
+        for a, _ in _iter_fakom_view():
+            for b, _ in _iter_fakom_view(a):
+                for c, _ in _iter_fakom_view(b):
+                    for fa_idx, fa_item in _iter_fakom_view(c):
+                        yield fa_idx, fa_item
 
     @Slot(QTreeWidgetItem, int)
     def _result_item_pressed(self, item: QTreeWidgetItem, column: int):

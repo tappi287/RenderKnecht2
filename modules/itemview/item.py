@@ -312,7 +312,7 @@ class KnechtItem(QObject):
     def _set_display_role_data(self, column, value):
         # --- Style by Type ---
         if column == Kg.TYPE:
-            KnechtItemStyle.style_column(self, column, item_type_key=value)
+            KnechtItemStyle.style_column(self, item_type_key=value)
 
         # --- Update Uuid ---
         if column in [Kg.REF, Kg.ID] and value:
@@ -348,6 +348,7 @@ class KnechtItem(QObject):
         self.itemData[Qt.BackgroundRole] = self.empty[:]
 
     def style_unlocked(self):
+        self.style_regular()
         KnechtItemStyle.style_row(self, Qt.ForegroundRole, Defaults.black)
 
     def style_locked(self):
@@ -428,7 +429,7 @@ class KnechtItemStyle:
         }
 
     @classmethod
-    def style_column(cls, item: KnechtItem, column: int, item_type_key: str=None) -> None:
+    def style_column(cls, item: KnechtItem, item_type_key: str=None) -> None:
         item_type_key = item_type_key or item.data(Kg.TYPE)
 
         if item_type_key not in cls.ICON_MAP.keys():

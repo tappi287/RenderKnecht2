@@ -51,9 +51,6 @@ class WizardSessionMenu(QMenu):
         self.wizard.restore_last_session()
 
     def _reset_session(self):
-        if not self.wizard.ask_restart():
-            return
-
         self.wizard.restart_session()
 
 

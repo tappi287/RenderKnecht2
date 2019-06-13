@@ -19,7 +19,7 @@
      <property name="title">
       <string>Daten Import</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QPushButton" name="btn_fakom">
         <property name="text">
@@ -28,6 +28,23 @@
         <property name="icon">
          <iconset resource="res/gui_resource.qrc">
           <normaloff>:/type/fakom.png</normaloff>:/type/fakom.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_reset_fakom">
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="res/gui_resource.qrc">
+          <normaloff>:/type/reset.png</normaloff>:/type/reset.png</iconset>
         </property>
        </widget>
       </item>
