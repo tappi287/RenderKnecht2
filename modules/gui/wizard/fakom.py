@@ -78,7 +78,7 @@ class FakomWizardPage(QWizardPage):
         replace_widget(tree_view, new_view)
 
         # Fakom wizard specific
-        new_view.setSelectionMode(QTreeView.MultiSelection)
+        new_view.setSelectionMode(QTreeView.NoSelection)
         new_view.setSelectionBehavior(QTreeView.SelectRows)
         new_view.setEditTriggers(QTreeView.NoEditTriggers)
         new_view.setDragDropMode(QTreeView.NoDragDrop)
@@ -88,108 +88,136 @@ class FakomWizardPage(QWizardPage):
         new_view.filter_text_widget = self.filter_edit
         # Setup keyboard shortcuts
         new_view.shortcuts = KnechtTreeViewShortcuts(new_view)
-        # new_view.context = ExcelContextMenu(self, new_view)
 
         # Update with placeholder Model to avoid access to unset attributes
         UpdateModel(new_view).update(KnechtModel())
-        new_view.pressed.connect(self._fakom_item_pressed)
+        new_view.clicked.connect(self._fakom_item_pressed)
 
         return new_view
 
     @Slot(QModelIndex)
-    def _fakom_item_pressed(self, index: QModelIndex):
-        if not index.flags() & Qt.ItemIsSelectable:
+    def _fakom_item_pressed(self, prx_index: QModelIndex):
+        if not prx_index.flags() & Qt.ItemIsSelectable:
             return
 
-        # Reset saved selection
-        self.wizard.session.data.fakom_selection = dict()
+        self.fakom_tree.model().clear_filter()
+        already_selected = False
 
-        # -- Populate Selection TreeWidget ---
-        self.result_tree.clear()
-        trim_items = dict()
-        selected_names = set()
-        for prx_index in self.fakom_tree.selectionModel().selectedRows():
-            trim_idx = self.get_index_group_parent(prx_index)
-            trim_name = trim_idx.siblingAtColumn(Kg.NAME).data(Qt.DisplayRole)
-            model = trim_idx.siblingAtColumn(Kg.VALUE).data(Qt.DisplayRole)
-            item_name = f'{trim_name} {model}'
+        current_fa_name = prx_index.siblingAtColumn(Kg.NAME).data(Qt.DisplayRole)
+        current_trim_idx = self.get_index_group_parent(prx_index)
+        current_model_code = current_trim_idx.siblingAtColumn(Kg.VALUE).data(Qt.DisplayRole)
 
-            if item_name not in trim_items:
-                trim_item = QTreeWidgetItem(self.result_tree, [item_name])
-                trim_item.setIcon(0, trim_idx.siblingAtColumn(Kg.style_column).data(Qt.DecorationRole) or QIcon())
-                trim_item.setData(0, Qt.UserRole, trim_idx)
-                trim_items[item_name] = trim_item
-            else:
-                trim_item = trim_items.get(item_name)
+        # -- Lookup if index is already selected
+        for model_code, fa_name_ls in self.wizard.session.data.fakom_selection.items():
+            if current_model_code == model_code:
+                if current_fa_name in fa_name_ls:
+                    already_selected = True
 
-            name = prx_index.siblingAtColumn(Kg.NAME).data(Qt.DisplayRole)
-            icon = prx_index.siblingAtColumn(Kg.style_column).data(Qt.DecorationRole) or QIcon()
-            item = QTreeWidgetItem(trim_item, [name])
-            item.setData(0, Qt.UserRole, prx_index)
-            item.setIcon(0, icon)
-
-            selected_names.add(name)
-
-            # -- Update Session selection data --
+        if already_selected:
+            # Remove entry
+            self.wizard.session.data.fakom_selection[current_model_code].remove(current_fa_name)
+            if not self.wizard.session.data.fakom_selection[current_model_code]:
+                self.wizard.session.data.fakom_selection.pop(current_model_code)
+        else:
+            # Add entry
             self.wizard.session.data.fakom_selection.update(
-                {model: (self.wizard.session.data.fakom_selection.get(model) or []) + [name]}
+                {current_model_code:
+                 (self.wizard.session.data.fakom_selection.get(current_model_code) or []) + [current_fa_name]
+                 }
                 )
 
-        # -- Style item with checkmark
-        for fa_idx, fa_item in self.iter_all_fakom_items():
-            if fa_item.data(Kg.NAME) in selected_names:
-                icon = IconRsc.get_icon('checkmark')
-                self.fakom_tree.model().sourceModel().setData(fa_idx, icon, Qt.DecorationRole)
+        # -- Style selected items with checkmark
+        src_idx_selection_ls = list()
+        for model_code, fa_src_idx, fa_item in self.iter_all_fakom_items():
+            if fa_src_idx.data(Qt.DisplayRole) in (self.wizard.session.data.fakom_selection.get(model_code) or []):
+                self._style_index_checked(fa_src_idx)
+                src_idx_selection_ls.append(fa_src_idx)
             else:
-                if fa_item.data(Kg.NAME, Qt.DecorationRole):
-                    self.fakom_tree.model().sourceModel().setData(
-                        fa_idx, QIcon(), Qt.DecorationRole)
+                if fa_src_idx.data(Qt.DecorationRole):
+                    self.fakom_tree.model().sourceModel().setData(fa_src_idx, QIcon(), Qt.DecorationRole)
 
-        # -- Expand Results --
-        for trim_item in trim_items.values():
-            self.result_tree.expandItem(trim_item)
+        self.fakom_tree.model().apply_last_filter()
+
+        # Empty selection
+        if not src_idx_selection_ls:
+            self.wizard.session.data.fakom_selection = dict()
+            self.completeChanged.emit()
+            self.result_tree.clear()
+            return
+
+        self.populate_result_tree(src_idx_selection_ls)
 
         self.completeChanged.emit()
+
+    def _style_index_checked(self, src_idx: QModelIndex):
+        self.fakom_tree.model().sourceModel().setData(src_idx, IconRsc.get_icon('checkmark'), Qt.DecorationRole)
+
+    def populate_result_tree(self, src_idx_selection_ls):
+        self.result_tree.clear()
+
+        # -- Populate Selection TreeWidget ---
+        trim_items = dict()
+        for model_code in self.wizard.session.data.fakom_selection.keys():
+            trim = [t for t in self.wizard.session.data.import_data.models if t.model == model_code][0]
+            trim_item_name = f'{trim.model_text} {model_code}'
+            trim_item = QTreeWidgetItem([trim_item_name])
+            trim_item.setIcon(0, IconRsc.get_icon('car'))
+            trim_items[trim_item_name] = trim_item
+
+        for src_index in src_idx_selection_ls:
+            trim_idx = self.get_index_group_parent(src_index)
+            model = trim_idx.siblingAtColumn(Kg.VALUE).data(Qt.DisplayRole)
+            trim_item_name = f'{trim_idx.siblingAtColumn(Kg.NAME).data(Qt.DisplayRole)} {model}'
+
+            trim_item = trim_items.get(trim_item_name)
+            trim_item.setData(0, Qt.UserRole, trim_idx)
+
+            name = src_index.siblingAtColumn(Kg.NAME).data(Qt.DisplayRole)
+            icon = src_index.siblingAtColumn(Kg.style_column).data(Qt.DecorationRole) or QIcon()
+            item = QTreeWidgetItem(trim_item, [name])
+            item.setData(0, Qt.UserRole, src_index)
+            item.setIcon(0, icon)
+
+        # -- Expand Result Tree --
+        for trim_item in trim_items.values():
+            self.result_tree.addTopLevelItem(trim_item)
+            self.result_tree.expandItem(trim_item)
 
     def iter_all_fakom_items(self):
         def _iter_fakom_view(parent: QModelIndex = QModelIndex()):
             return self.fakom_tree.editor.iterator.iterate_view(parent, Kg.NAME)
 
-        for a, _ in _iter_fakom_view():
-            for b, _ in _iter_fakom_view(a):
+        for m_idx, _ in _iter_fakom_view():
+            model_code = m_idx.siblingAtColumn(Kg.VALUE).data(Qt.DisplayRole)
+
+            for b, _ in _iter_fakom_view(m_idx):
                 for c, _ in _iter_fakom_view(b):
                     for fa_idx, fa_item in _iter_fakom_view(c):
-                        yield fa_idx, fa_item
+                        yield model_code, fa_idx, fa_item
 
     @Slot(QTreeWidgetItem, int)
     def _result_item_pressed(self, item: QTreeWidgetItem, column: int):
         if item.parent() is not self.result_tree:
-            prx_index = item.data(0, Qt.UserRole)
-            self.fakom_tree.scrollTo(prx_index, QAbstractItemView.PositionAtCenter)
+            prx_index = self.fakom_tree.model().mapFromSource(item.data(0, Qt.UserRole))
+            if prx_index.isValid():
+                self.fakom_tree.scrollTo(prx_index, QAbstractItemView.PositionAtCenter)
 
     def load_fakom_selection(self):
         selection_dict = self.wizard.session.data.fakom_selection
         src_idx_selection_ls = list()
-        view_iter = self.fakom_tree.editor.iterator
 
-        for (idx, _) in view_iter.iterate_view():
-            model = idx.siblingAtColumn(Kg.VALUE).data(Qt.DisplayRole)
-
-            for (fa_idx, _) in view_iter.iterate_view(idx):
-                for (sib_idx, _) in view_iter.iterate_view(fa_idx):
-                    for (src_idx, _) in view_iter.iterate_view(sib_idx):
-                        name = src_idx.siblingAtColumn(Kg.NAME).data(Qt.DisplayRole)
-
-                        if name in (selection_dict.get(model) or []):
-                            src_idx_selection_ls.append(src_idx)
+        for model_code, fa_src_idx, _ in self.iter_all_fakom_items():
+            if fa_src_idx.data(Qt.DisplayRole) in (selection_dict.get(model_code) or []):
+                self._style_index_checked(fa_src_idx)
+                src_idx_selection_ls.append(fa_src_idx)
 
         if src_idx_selection_ls:
             # Select saved selection
             self.fakom_tree.editor.selection.clear_and_select_src_index_ls(src_idx_selection_ls)
+            self.fakom_tree.editor.selection.clear_selection()
 
             # -- Trigger tree update
-            prx_index = self.fakom_tree.model().mapFromSource(src_idx_selection_ls[0])
-            self._fakom_item_pressed(prx_index)
+            self.populate_result_tree(src_idx_selection_ls)
 
         self.completeChanged.emit()
 

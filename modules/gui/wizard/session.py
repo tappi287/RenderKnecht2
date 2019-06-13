@@ -140,10 +140,9 @@ class WizardSession:
 
         for k in dir(default_session):
             v = getattr(default_session, k)
-            if k.startswith('__') or not isinstance(v, (int, str, float, bool, list, dict, tuple)):
+            if k.startswith('__') or not isinstance(v, (int, str, float, bool, list, dict, tuple, set)):
                 continue
 
-            LOGGER.debug('Checking default session attribute: %s', k)
             # Set missing attributes
             if not hasattr(self.data, k):
                 LOGGER.debug('Setting default session attribute: %s: %s', k, v)
@@ -225,11 +224,10 @@ class WizardSession:
         self.clear_preset_pages()
         self.data.preset_page_ids = set()
 
-        num_pages = 0
+        self.data.preset_page_num = 0
         for fakom_ls in self.data.fakom_selection.values():
             for _ in fakom_ls:
-                num_pages += 1
-        self.data.preset_page_num = num_pages
+                self.data.preset_page_num += 1
 
         for model_code, fakom_ls in self.data.fakom_selection.items():
             # Create available PR-Options and Packages per model
