@@ -96,7 +96,8 @@ QPushButton:hover {color: rgb(85, 170, 255);
      <item>
       <widget class="QLabel" name="news">
        <property name="text">
-        <string>added menu action to send variants without reset
+        <string>correctly parse Vplus with non-unique package descriptions eg. identical package names
+added menu action to send variants without reset
 enhanced handling of image files and path lenghts while rendering
 allow runtime change of log level
 fixed order of pasted items

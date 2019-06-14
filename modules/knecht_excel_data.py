@@ -103,9 +103,15 @@ class ExcelDataToKnechtData:
         # Extract rows not matching '-'
         pkg_rows = self.excel_data.packages.loc[~self.excel_data.packages[model].isin(['-'])]
 
-        for pkg, pkg_text in zip(
-                pkg_rows[pkg_col].unique(), pkg_rows[pkg_text_col].unique()
-                ):
+        # Create temporary dict of Package Code: Package text
+        # because package text can not be unique
+        _pkg_dict = dict()
+        for pkg, pkg_text in zip(pkg_rows[pkg_col], pkg_rows[pkg_text_col]):
+            if pkg in _pkg_dict:
+                continue
+            _pkg_dict[pkg] = pkg_text
+
+        for pkg, pkg_text in _pkg_dict.items():
             # Extract package content
             pkg_content = pkg_rows.loc[pkg_rows[pkg_col] == pkg]
 
