@@ -1,6 +1,7 @@
 from PySide2.QtCore import QObject, QTimer, Slot
 from PySide2.QtWidgets import QMenu
 
+from modules.gui.ui_resource import IconRsc
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -30,6 +31,11 @@ class InfoMenu(QObject):
         self.ui.actionVersionCheck.setEnabled(True)
 
         QTimer.singleShot(1, self.delayed_setup)
+
+    def update_ready(self):
+        update_icon = IconRsc.get_icon('update-ready')
+        self.menu.setIcon(update_icon)
+        self.ui.actionVersionCheck.setIcon(update_icon)
 
     def delayed_setup(self):
         self.ui.updater.update_available.connect(self.set_update_menu_entry)

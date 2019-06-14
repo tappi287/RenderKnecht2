@@ -101,6 +101,7 @@ class KnechtWindow(QMainWindow):
 
         # Updater
         self.updater = KnechtUpdate(self)
+        self.updater.update_available.connect(self.main_menu.info_menu.update_ready)
         QTimer.singleShot(20000, self.auto_update)  # Initial Update check
 
         self.app.focusChanged.connect(self.app_focus_changed)

@@ -5,7 +5,7 @@ from subprocess import Popen
 from threading import Thread
 
 import requests
-from PySide2.QtCore import QObject, QTimer, Signal, Slot
+from PySide2.QtCore import QObject, QTimer, Signal, Slot, Qt
 
 from modules.globals import UPDATE_DIR_URL, UPDATE_INSTALL_FILE, UPDATE_VERSION_FILE, get_settings_dir
 from modules.gui.widgets.message_box import AskToContinue
@@ -126,6 +126,22 @@ class KnechtUpdate(QObject):
         self.timeout.setSingleShot(True)
         self.timeout.setInterval(3000)
 
+        self.schedule_timer = QTimer()
+        self.schedule_timer.setInterval(8000000)
+        self.schedule_timer.setTimerType(Qt.VeryCoarseTimer)
+        self.schedule_timer.timeout.connect(self.schedule_update)
+        self.schedule_timer.start()
+
+        self.last_update_check = datetime.datetime.now()
+
+    def schedule_update(self):
+        """ Daily update check """
+        delta = datetime.datetime.now() - self.last_update_check
+
+        if delta > datetime.timedelta(days=1):
+            LOGGER.info('Running scheduled update check after: %s', delta)
+            self.run_update()
+
     def _init_thread(self):
         # Update check thread
         self.ut = _KnechtUpdateThread(self)
@@ -146,6 +162,7 @@ class KnechtUpdate(QObject):
             return
         self.timeout.start()
         self.first_run = False
+        self.last_update_check = datetime.datetime.now()
 
         # Exit on running thread
         if self.is_running():

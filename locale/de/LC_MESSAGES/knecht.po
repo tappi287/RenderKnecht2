@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-06-13 00:29+0200\n"
+"POT-Creation-Date: 2019-06-14 14:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -128,11 +128,11 @@ msgstr ""
 msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:449 modules/gui/wizard\wizard.py:198
+#: modules/gui/widgets\excel_dialog.py:449 modules/gui/wizard\wizard.py:207
 msgid "Ja"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:450 modules/gui/wizard\wizard.py:199
+#: modules/gui/widgets\excel_dialog.py:450 modules/gui/wizard\wizard.py:208
 msgid "Nein"
 msgstr ""
 
@@ -400,7 +400,7 @@ msgstr ""
 
 #: modules/gui/widgets\menu_edit.py:86
 #: modules/gui/widgets\menu_tree_context.py:73
-#: modules/gui/wizard\preset.py:260
+#: modules/gui/wizard\preset.py:293
 msgid "Selektierte Zeilen entfernen\tEntf"
 msgstr ""
 
@@ -460,12 +460,12 @@ msgstr ""
 msgid "Speichern unter.."
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:259 modules/gui/wizard\menus.py:80
+#: modules/gui/widgets\menu_file.py:259 modules/gui/wizard\menus.py:77
 msgid "Keine Einträge vorhanden"
 msgstr ""
 
 #: modules/gui/widgets\menu_import.py:36
-#: modules/gui/widgets\welcome_page.py:44 modules/gui/wizard\data_import.py:41
+#: modules/gui/widgets\welcome_page.py:44 modules/gui/wizard\data_import.py:43
 msgid "Import"
 msgstr ""
 
@@ -582,7 +582,7 @@ msgid "Fortfahren"
 msgstr ""
 
 #: modules/gui/widgets\message_box.py:69 modules/gui/wizard\wizard.py:48
-#: modules/gui/wizard\wizard.py:181 modules/gui\main_app.py:109
+#: modules/gui/wizard\wizard.py:190 modules/gui\main_app.py:109
 #: modules/gui\main_app.py:128
 msgid "Abbrechen"
 msgstr ""
@@ -652,31 +652,35 @@ msgstr ""
 msgid "Daten Import"
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:37
-msgid "Für die Preseterstellung werden Farb- sowie Trimlinedaten benötigt. Im Anschluss an den Importvorgang kann dieser Dialog fortgesetzt werden."
-msgstr ""
-
-#: modules/gui/wizard\data_import.py:42
+#: modules/gui/wizard\data_import.py:26
 msgid "FaKom Import starten"
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:44 modules/gui/wizard\result.py:47
+#: modules/gui/wizard\data_import.py:27
+msgid "Daten vorhanden - FaKom Import neustarten"
+msgstr ""
+
+#: modules/gui/wizard\data_import.py:39
+msgid "Für die Preseterstellung werden Farb- sowie Trimlinedaten benötigt. Im Anschluss an den Importvorgang kann dieser Dialog fortgesetzt werden."
+msgstr ""
+
+#: modules/gui/wizard\data_import.py:49 modules/gui/wizard\result.py:47
 msgid "Ergebnis"
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:56
+#: modules/gui/wizard\data_import.py:61
 msgid "Assistent FaKom Import"
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:62
+#: modules/gui/wizard\data_import.py:67
 msgid "Assistent V Plus Import"
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:83
+#: modules/gui/wizard\data_import.py:86
 msgid "Keine Modelle oder PR-Familien in den Import Daten ausgewählt. Bitte beim Import mindestens ein Modell und eine PR-Familie wählen."
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:87
+#: modules/gui/wizard\data_import.py:99
 msgid "Daten geladen. {}[{}] Modelle; {}[{}] PR-Familien"
 msgstr ""
 
@@ -724,7 +728,7 @@ msgstr ""
 msgid "Preset Wizard neustarten und vorhandene Daten verwerfen"
 msgstr ""
 
-#: modules/gui/wizard\menus.py:72
+#: modules/gui/wizard\menus.py:69
 msgid "Navigation"
 msgstr ""
 
@@ -748,8 +752,16 @@ msgstr ""
 msgid "Spalte Beschreibung ein- oder ausblenden"
 msgstr ""
 
-#: modules/gui/wizard\preset.py:257
+#: modules/gui/wizard\preset.py:290
 msgid "Alle Optionen entfernen"
+msgstr ""
+
+#: modules/gui/wizard\preset.py:326
+msgid "Selektierte Optionen sperren"
+msgstr ""
+
+#: modules/gui/wizard\preset.py:330
+msgid "Selektierte Optionen entsperren"
 msgstr ""
 
 #: modules/gui/wizard\result.py:42
@@ -804,7 +816,11 @@ msgstr ""
 msgid "Sitzung"
 msgstr ""
 
-#: modules/gui/wizard\wizard.py:106 modules/gui/wizard\wizard.py:138
+#: modules/gui/wizard\wizard.py:89
+msgid "Wizard Session konnte nicht geladen werden!"
+msgstr ""
+
+#: modules/gui/wizard\wizard.py:106 modules/gui/wizard\wizard.py:143
 msgid "Wizard Session geladen."
 msgstr ""
 
@@ -820,19 +836,23 @@ msgstr ""
 msgid "Fehler beim Speichern der Wizard Session."
 msgstr ""
 
-#: modules/gui/wizard\wizard.py:130
+#: modules/gui/wizard\wizard.py:132
 msgid "Wizard Session wurde automatisch gespeichert."
 msgstr ""
 
-#: modules/gui/wizard\wizard.py:179
+#: modules/gui/wizard\wizard.py:134
+msgid "Fehler! Wizard Session konnte nicht gespeichert werden."
+msgstr ""
+
+#: modules/gui/wizard\wizard.py:188
 msgid "Soll der Assistent neu gestartet werden? Die vorhandenen Sessiondaten gehen verloren."
 msgstr ""
 
-#: modules/gui/wizard\wizard.py:180
+#: modules/gui/wizard\wizard.py:189
 msgid "Ok"
 msgstr ""
 
-#: modules/gui/wizard\wizard.py:197
+#: modules/gui/wizard\wizard.py:206
 msgid "Soll der Assistent wirklich abgebrochen werden?"
 msgstr ""
 
