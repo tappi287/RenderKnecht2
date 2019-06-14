@@ -31,6 +31,8 @@ class _OverlayWidget(QtWidgets.QWidget):
             # Parent has no header
             height = parent.frameGeometry().height()
 
+        self.header_height = 0
+
         # Add the QMovie object to the label
         self.movie_screen = QtWidgets.QLabel(self)
         self.movie_screen.setSizePolicy(QtWidgets.QSizePolicy.Expanding,

@@ -5,6 +5,7 @@ from PySide2.QtCore import QObject, QTimer, Slot
 from PySide2.QtWidgets import QPushButton
 
 from modules.gui.gui_utils import MouseDblClickFilter
+from modules.gui.path_render_service import PathRenderService
 from modules.gui.ui_generic_tab import GenericTabWidget
 from modules.gui.widgets.path_util import SetDirectoryPath
 from modules.gui.widgets.variants_field import VariantInputFields
@@ -35,10 +36,6 @@ class MainWindowWidgets(QObject):
         """
         super(MainWindowWidgets, self).__init__(ui)
         self.ui = ui
-
-        # -- Path Rendering Widget --
-        # Not yet
-        self.ui.Pfad_Rendering.setEnabled(False)
 
         # --- Welcome Page ---
         welcome_page = KnechtWelcome(self.ui)
@@ -96,6 +93,9 @@ class MainWindowWidgets(QObject):
 
         # ---- Variant UI functionality ----
         VariantInputFields(ui)
+
+        # ---- Path Render Service ----
+        self.path_render_service = PathRenderService(ui.app, ui)
 
     @Slot()
     def clear_document_view(self):

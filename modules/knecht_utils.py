@@ -1,10 +1,14 @@
 import re
+import time
 import shutil
 from pathlib import Path
+from socket import AF_INET, SOCK_DGRAM, socket, timeout
 from tempfile import mkdtemp
 from zipfile import ZIP_LZMA, ZipFile
 
-from modules.globals import get_settings_dir
+from PySide2.QtCore import QThread, Signal
+
+from modules.globals import get_settings_dir, SocketAddress
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -134,3 +138,51 @@ def shorten_model_name(model_name, num_words: int = 6, shorten: bool = False):
     short_name = re.sub(r'(Advan\s)', 'Adv ', short_name, flags=re.I)
 
     return short_name
+
+
+def get_service_address():
+    search_timeout = 20  # Search for x seconds
+    socket_timeout = 2
+    service_address, data = None, None
+
+    s = socket(AF_INET, SOCK_DGRAM)  # create UDP socket
+    s.settimeout(socket_timeout)
+    s.bind(('', SocketAddress.service_port))
+    LOGGER.debug('Listening to service announcement on %s', SocketAddress.service_port)
+
+    s_time = time.time()
+
+    while 1:
+        try:
+            data, addr = s.recvfrom(1024)  # wait for a packet
+            data = data.decode(encoding='utf-8')
+            LOGGER.debug('Service listener received: %s', data)
+        except timeout:
+            pass
+
+        if data:
+            if data.startswith(SocketAddress.service_magic):
+                service_address = data[len(SocketAddress.service_magic):]
+                LOGGER.debug('Received service announcement from %s', service_address)
+
+        if (time.time() - s_time) > search_timeout or service_address:
+            break
+
+    s.close()
+    return service_address
+
+
+class GetPfadAeffchenService(QThread):
+    result = Signal(object)
+    service_address = None
+
+    def __init__(self):
+        super(GetPfadAeffchenService, self).__init__()
+
+    def run(self):
+        self.service_address = get_service_address()
+
+        if self.service_address:
+            self.result.emit(self.service_address)
+        else:
+            self.result.emit(False)

@@ -61,6 +61,20 @@ def get_settings_dir() -> str:
     return _knecht_settings_dir
 
 
+class SocketAddress:
+    """ Pfad Aeffchen socket addresses """
+    main = ('localhost', 9005)
+    watcher = ('localhost', 9006)
+    time_out = 20
+
+    # Service broadcast
+    service_magic = 'paln3s'
+    service_port = 52121
+
+    # List of valid IP subnet's
+    valid_subnet_patterns = ['192.168.178', '192.168.13']
+
+
 class Resource:
     """
         Qt resource paths for ui files and icons.
