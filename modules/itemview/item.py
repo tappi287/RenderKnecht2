@@ -177,7 +177,8 @@ class KnechtItem(QObject):
 
     def childNumber(self):
         if self.parentItem is not None:
-            return self.parentItem.childItems.index(self)
+            if self in self.parentItem.childItems:
+                return self.parentItem.childItems.index(self)
         return 0
 
     def columnCount(self):

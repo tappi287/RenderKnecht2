@@ -9,15 +9,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1500</width>
-    <height>1080</height>
+    <width>1600</width>
+    <height>920</height>
    </rect>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>16777215</width>
-    <height>16777215</height>
-   </size>
   </property>
   <property name="windowTitle">
    <string>RenderKnecht</string>
@@ -39,7 +33,7 @@
       <widget class="QWidget" name="widgetPresets" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-         <horstretch>120</horstretch>
+         <horstretch>80</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
@@ -284,10 +278,16 @@
       </widget>
       <widget class="QWidget" name="widgetVariants" native="true">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>20</horstretch>
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <horstretch>24</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>250</width>
+         <height>0</height>
+        </size>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_5">
         <property name="spacing">
@@ -332,12 +332,6 @@
         </item>
         <item>
          <widget class="QTabWidget" name="tabWidget">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>5</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
           <property name="tabPosition">
            <enum>QTabWidget::North</enum>
           </property>
@@ -1378,12 +1372,6 @@
             </item>
             <item>
              <widget class="QWidget" name="jobStatusWidget" native="true">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>150</height>
-               </size>
-              </property>
               <layout class="QVBoxLayout" name="verticalLayout_6">
                <property name="spacing">
                 <number>0</number>
@@ -1409,6 +1397,12 @@
                   <number>10</number>
                  </property>
                  <widget class="QTreeWidget" name="widgetJobManager">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="font">
                    <font>
                     <family>Inconsolata</family>
@@ -1471,6 +1465,12 @@
                   </column>
                  </widget>
                  <widget class="QTextBrowser" name="renderServiceBrowser">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="font">
                    <font>
                     <family>Inconsolata</family>
@@ -1840,7 +1840,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1500</width>
+     <width>1600</width>
      <height>18</height>
     </rect>
    </property>

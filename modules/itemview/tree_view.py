@@ -203,9 +203,6 @@ class KnechtTreeView(QTreeView):
             # Replace with empty tree model undoable
             self.editor.clear_tree()
 
-            # Remove render presets from render tab on clear view
-            self.view_cleared.emit(self)
-
             # Make sure we have focus after model update
             self.setFocus(Qt.OtherFocusReason)
 

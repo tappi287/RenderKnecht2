@@ -27,6 +27,8 @@ class KnechtEditorRenderPresets:
         if not self.view.model() or not self.view.is_render_view:
             return
 
+        self.editor.view.model().clear_filter()
+
         indices_to_remove = list()
 
         # Iterate all render presets
@@ -48,26 +50,25 @@ class KnechtEditorRenderPresets:
         view.undo_stack.setActive(True)
 
     @staticmethod
-    def _collect_referenced_preset_variants(reference: QUuid, view_origin) -> KnechtVariantList:
+    def _collect_referenced_preset_variants(reference: QUuid, view_origin, collect_reset=True) -> KnechtVariantList:
         """ Generic variants collection from a referenced preset from the originating view
 
         :param QUuid reference: Unique Id of the preset to collect
         :param modules.itemview.tree_view.KnechtTreeView view_origin: TreeView the render presets originates from
         :return:
         """
-        collect_reset = True
         origin_model: KnechtModel = view_origin.model().sourceModel()
 
         preset_item = origin_model.id_mgr.get_preset_from_id(reference)
 
-        if preset_item.data(Kg.TYPE) == 'viewset':
+        if preset_item and preset_item.data(Kg.TYPE) == 'viewset':
             collect_reset = False
 
         preset_index = origin_model.get_index_from_item(preset_item)
 
         return view_origin.editor.collect.collect_index(preset_index, collect_reset=collect_reset)
 
-    def _collect_references(self, render_preset_idx: QModelIndex, view_origin
+    def _collect_references(self, render_preset_idx: QModelIndex, view_origin, collect_reset=True
                             ) -> Generator[Tuple[QModelIndex, Any], Tuple[bool, str, KnechtVariantList], None]:
         """ Collect referenced Presets inside render preset
 
@@ -85,7 +86,7 @@ class KnechtEditorRenderPresets:
             if not name:
                 name = 'Render_Image_Name_Not_Set'
 
-            variants = self._collect_referenced_preset_variants(ref_id, view_origin)
+            variants = self._collect_referenced_preset_variants(ref_id, view_origin, collect_reset)
 
             if item.data(Kg.TYPE) == 'viewset':
                 if not len(variants):
@@ -116,12 +117,12 @@ class KnechtEditorRenderPresets:
             elif child_item.data(Kg.TYPE) == 'file_extension':
                 render_preset.settings['file_extension'] = child_item.data(Kg.VALUE)
 
-    def collect_render_presets(self):
+    def collect_render_presets(self, collect_reset=True):
         """ Collect variants and settings of the render presets in the renderTree """
         if not self.view.model() or not self.view.is_render_view:
             return
 
-        render_presets = list()
+        render_presets, result = list(), True
 
         for render_preset_index, item in self.view.editor.iterator.iterate_view():
             if not item.userType == Kg.render_preset:
@@ -132,10 +133,15 @@ class KnechtEditorRenderPresets:
             if not item.origin:
                 # TODO: Handle errors when collecting render presets
                 # Skip render presets that have no origin set
+                LOGGER.debug('Render Preset Item %s has no origin set!', item.data(Kg.NAME))
+                result = False
                 continue
 
             # Collect referenced presets
-            for is_viewset, name, variants in self._collect_references(render_preset_index, item.origin):
+            for is_viewset, name, variants in self._collect_references(render_preset_index, item.origin, collect_reset):
+                if not variants:
+                    result = False
+
                 if is_viewset:
                     render_preset.add_shot(name, variants)
                 else:
@@ -146,4 +152,5 @@ class KnechtEditorRenderPresets:
 
             render_presets.append(render_preset)
 
-        return render_presets
+        if result:
+            return render_presets

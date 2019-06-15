@@ -49,10 +49,6 @@ class PathRenderService(QtCore.QObject):
     update_job_manager_timer.setTimerType(QtCore.Qt.VeryCoarseTimer)
     update_job_manager_timer.setInterval(20000)
 
-    update_job_alive_timer = QtCore.QTimer()
-    update_job_alive_timer.setTimerType(QtCore.Qt.VeryCoarseTimer)
-    update_job_alive_timer.setInterval(10000)
-
     keep_alive_timer = QtCore.QTimer()
     keep_alive_timer.setTimerType(QtCore.Qt.VeryCoarseTimer)
     keep_alive_timer.setInterval(150000)
@@ -75,6 +71,7 @@ class PathRenderService(QtCore.QObject):
 
         # --------- Refresh button ------------
         self.ui.pathRefreshBtn.pressed.connect(self.request_job_queue)
+        self.ui.pathRefreshBtn.animation = AnimatedButton(self.ui.pathRefreshBtn, 2000)
         self.refresh_btn_timer.timeout.connect(self.refresh_btn_timeout)
 
         # --------- Validate Job Name ---------
@@ -135,7 +132,6 @@ class PathRenderService(QtCore.QObject):
 
         # Update job Manager
         self.update_job_manager_timer.timeout.connect(self.request_job_queue)
-        self.update_job_alive_timer.timeout.connect(self.alive_blink)
 
         self.ui.widgetJobManager.overlay = InfoOverlay(self.ui.widgetJobManager)
         self.first_update = True
@@ -161,9 +157,6 @@ class PathRenderService(QtCore.QObject):
 
     def quit_app(self):
         self.end_send_thread()
-
-    def alive_blink(self):
-        self.ui.led_ovr.led(2, 2, blink_count=2)
 
     def tab_bar_clicked(self, tab_index: int=0):
         if tab_index == 2:  # Path Render Service tab index
@@ -203,11 +196,11 @@ class PathRenderService(QtCore.QObject):
         if self.service_host:
             self.send_message('GET_STATUS')
             return
-
+        """
         self.ui.led_ovr.led(1, 2)
         self.ui.led_ovr.led(2, 2, timer=100)
         self.ui.led_ovr.yellow_on()
-
+        """
         if not self.search_thread.isRunning():
             self.ui.pathJobSendBtn.setEnabled(False)
             self.update_status('Suche nach Dienst im lokalen Netzwerk.', 2)
@@ -223,16 +216,15 @@ class PathRenderService(QtCore.QObject):
         LOGGER.info('Render path service search result: %s', result)
         self.text_browser.ovr.load_finished()
 
-        self.ui.led_ovr.yellow_off()
+        # self.ui.led_ovr.yellow_off()
 
         if result:
             self.update_status(f'Pfad Äffchen Render Dienst gefunden<br>IP: <i>{result}</i>', 2)
             self.enable_job_btn()
             self.update_job_manager_timer.start()
-            self.update_job_alive_timer.start()
         else:
-            self.ui.led_ovr.led(2, 2)
-            self.ui.led_ovr.led(1, 2, timer=100)
+            # self.ui.led_ovr.led(2, 2)
+            # self.ui.led_ovr.led(1, 2, timer=100)
             self.update_status(f'Kein Pfad Äffchen Render Dienst im lokalen Netzwerk gefunden', 2)
             self.service_unavailable()
             return
@@ -330,7 +322,6 @@ class PathRenderService(QtCore.QObject):
 
         self.request_job_queue()
         self.update_job_manager_timer.start()
-        self.update_job_alive_timer.start()
 
     def get_job_from_item_index(self, item):
         idx = self.ui.widgetJobManager.indexOfTopLevelItem(item)
@@ -449,6 +440,8 @@ class PathRenderService(QtCore.QObject):
 
     def request_job_queue(self):
         """ Request the remote job queue as pickled data """
+        self.ui.pathRefreshBtn.animation.play_highlight()
+
         if not self.service_host:
             self.switch_service_on_off()
             return
@@ -457,7 +450,6 @@ class PathRenderService(QtCore.QObject):
         self.refresh_btn_timer.start()
 
         self.send_message('GET_JOB_DATA', job_data=True, silent=True)
-        self.ovr.display('Aktualisiere Job Daten ...', 1400)
 
     def legacy_pickle(self, data):
         try:
@@ -470,15 +462,14 @@ class PathRenderService(QtCore.QObject):
         """ Receives pickled job data """
         if data is None:
             self.update_job_manager_timer.stop()
-            self.update_job_alive_timer.stop()
         elif b'Queue-Finished' in data:
             self.ovr.display('<b>Render Service Warteschlange fertiggestellt.</b><br>'
                              '<i>Automatische Job Manager Updates wurden ausgeschaltet.</i>', 12000)
             self.update_job_manager_timer.stop()
-            self.update_job_alive_timer.stop()
             # Remove Queue finished data
             data = data[:data.find(b'Queue-Finished')]
 
+        self.ui.pathRefreshBtn.animation.play_off()
         try:
             load_dict = json.loads(data, encoding='utf-8')
         except Exception as e:
@@ -522,7 +513,6 @@ class PathRenderService(QtCore.QObject):
 
         # Clear Job Manager
         self.update_job_manager_timer.stop()
-        self.update_job_alive_timer.stop()
         self.ui.widgetJobManager.clear()
 
         # Clear renderer
@@ -549,10 +539,10 @@ class PathRenderService(QtCore.QObject):
             self.send_thread.enable_send_btn.connect(self.enable_job_btn)
             self.send_thread.not_responding.connect(self.service_unavailable)
 
-            self.send_thread.green_on.connect(self.ui.led_ovr.green_on)
-            self.send_thread.green_off.connect(self.ui.led_ovr.green_off)
-            self.send_thread.yellow_on.connect(self.ui.led_ovr.yellow_on)
-            self.send_thread.yellow_off.connect(self.ui.led_ovr.yellow_off)
+            # self.send_thread.green_on.connect(self.ui.led_ovr.green_on)
+            # self.send_thread.green_off.connect(self.ui.led_ovr.green_off)
+            # self.send_thread.yellow_on.connect(self.ui.led_ovr.yellow_on)
+            # self.send_thread.yellow_off.connect(self.ui.led_ovr.yellow_off)
 
             # Start send thread
             self.send_thread.start()

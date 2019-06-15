@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import List
 
+from PySide2.QtCore import QTimer
 from PySide2.QtWidgets import QTabWidget, QTreeView, QWizardPage
 
 from modules.globals import Resource
@@ -52,6 +53,12 @@ class ResultWizardPage(QWizardPage):
         # --- Tree Views ---
         self.unused_tree = self._init_tree_view(self.unused_tree)
         self.result_tree = self._init_tree_view(self.result_tree)
+        self.unused_tree.view_refreshed.connect(self.completeChanged)
+        self.result_tree.view_refreshed.connect(self.completeChanged)
+
+        self.check_complete_timer = QTimer()
+        self.check_complete_timer.setInterval(1000)
+        self.check_complete_timer.timeout.connect(self.completeChanged)
 
     def initializePage(self):
         self.wizard.save_last_session()
@@ -59,6 +66,7 @@ class ResultWizardPage(QWizardPage):
         self.collect_result()
         self.collect_unused_options()
         LOGGER.info('Result Wizard Page initialized.')
+        self.check_complete_timer.start()
 
     def cleanupPage(self):
         self.result_tree.clear_tree()
@@ -227,8 +235,17 @@ class ResultWizardPage(QWizardPage):
 
         return new_view
 
+    def isComplete(self):
+        if self.result_tree.model().sourceModel().rowCount() and self.unused_tree.editor.enabled:
+            self.check_complete_timer.stop()
+            return True
+
+        return False
+
     def validatePage(self):
-        return True
+        if self.unused_tree.editor.enabled and self.result_tree.editor.enabled:
+            return True
+        return False
 
     @staticmethod
     def _collect_unused_from_modeldict(model_dict):

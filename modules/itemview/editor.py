@@ -150,6 +150,9 @@ class KnechtEditor(QObject):
         if not self.enabled:
             return
 
+        # Remove render presets from render tab on clear view
+        self.view.view_cleared.emit(self.view)
+
         self.util.new_empty_model(self.view)
 
     def move_rows(self, destination_idx: QModelIndex):

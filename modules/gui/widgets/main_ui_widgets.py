@@ -114,7 +114,16 @@ class MainWindowWidgets(QObject):
 
     @Slot()
     def start_render_btn(self):
+        # Validate render preset content by collecting variants without reset
+        # if no variants collected, deny rendering
+        validation_presets = self.ui.renderTree.editor.render.collect_render_presets(collect_reset=False)
         render_presets = self.ui.renderTree.editor.render.collect_render_presets()
+
+        if not render_presets or not validation_presets:
+            self.ui.msg(_('Fehler beim sammeln der Preset Varianten. Einige Inhalte der Render Presets '
+                          'existieren nicht mehr.'), 8000)
+            return
+        del validation_presets
 
         if not self.ui.app.render_dg.is_running():
             self.ui.app.render_dg.start_rendering(render_presets)

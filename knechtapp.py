@@ -18,6 +18,7 @@ if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
 
 VERSION = '0.98'
 
+# TODO: Add MDS PR-Family
 # TODO: Add image output directory tree item to be placed anywhere
 #  eg. placed in preset will render preset to this directory, placed in render_preset will render presets not
 #  containing out_dir_item to that dir
