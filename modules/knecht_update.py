@@ -1,5 +1,7 @@
 import os
 import datetime
+import time
+from multiprocessing import Process
 from pathlib import Path
 from subprocess import Popen
 from threading import Thread
@@ -7,7 +9,8 @@ from threading import Thread
 import requests
 from PySide2.QtCore import QObject, QTimer, Signal, Slot, Qt
 
-from modules.globals import UPDATE_DIR_URL, UPDATE_INSTALL_FILE, UPDATE_VERSION_FILE, get_settings_dir
+from modules.globals import UPDATE_DIR_URL, UPDATE_INSTALL_FILE, UPDATE_VERSION_FILE
+from modules.globals import get_settings_dir, get_current_modules_dir, FROZEN
 from modules.gui.widgets.message_box import AskToContinue
 from modules.language import get_translation
 from modules.log import init_logging
@@ -19,6 +22,28 @@ LOGGER = init_logging(__name__)
 lang = get_translation()
 lang.install()
 _ = lang.gettext
+
+
+def _start_knecht_app():
+    app_path = Path(os.path.join(get_current_modules_dir(), 'RenderKnecht.exe'))
+    if app_path.is_file() and app_path.exists():
+        time.sleep(2)
+        Popen(app_path.as_posix())
+
+
+def restart_knecht_app(ui):
+    """
+
+    :param modules.gui.main_ui.KnechtWindow ui:
+    :return:
+    """
+    if not FROZEN:
+        print('Can not restart in Debug environment.')
+        return
+
+    p = Process(target=_start_knecht_app)
+    p.start()
+    ui.close()
 
 
 class _KnechtUpdateThreadSignals(QObject):

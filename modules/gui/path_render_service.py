@@ -33,8 +33,8 @@ _ = lang.gettext
 
 class PathRenderService(QtCore.QObject):
     job_idx = 0
-    btn_connected = 'Status prüfen'
-    btn_disconnected = 'Render Dienst im lokalen Netzwerk suchen'
+    btn_connected = _('Status prüfen')
+    btn_disconnected = _('Render Dienst im lokalen Netzwerk suchen')
     add_message = QtCore.Signal((str, bool))
 
     switch_btn_timer = QtCore.QTimer()
@@ -81,6 +81,9 @@ class PathRenderService(QtCore.QObject):
         self.ui.checkBoxCsbIgnoreHidden.toggled.connect(self.update_csb_import_option)
         self.ui.checkBoxMayaDeleteHidden.toggled.connect(self.update_maya_delete_hidden_option)
         self.ui.checkBoxUseSceneSettings.toggled.connect(self.update_use_scene_settings)
+        self.ui.checkBoxUseSceneSettings.setStatusTip(
+            _('Benutze die Szeneneinstellung der Maya Binary Szene. Crypto Material AOV muss vorhanden sein!')
+            )
         self.csb_ignore_hidden = '1'
         self.maya_delete_hidden = '1'
         self.use_scene_settings = '0'
@@ -100,7 +103,7 @@ class PathRenderService(QtCore.QObject):
 
         # --------- Set output dir ---------
         self.output_dir = Path('.')
-        args = ('Ausgabe Verzeichnis auswählen',)
+        args = (_('Ausgabe Verzeichnis auswählen'),)
         self.dir_dialog = SetDirectoryPath(
             ui,
             line_edit=self.ui.pathOutputLineEdit, tool_button=self.ui.pathOutputBtn,
@@ -116,6 +119,11 @@ class PathRenderService(QtCore.QObject):
         self.ui.pathBtnHelp.pressed.connect(self.open_help)
 
         # --------- Job Manager Tree Widget ------------
+        header_item = QtWidgets.QTreeWidgetItem(
+            ['#', _('Job Titel'), _('Szenendatei'), _('Ausgabeverzeichnis'), _('Fortschritt'),
+             _('Erstellt'), _('Läuft ab'), _('Klient'), _('Remote Index')]
+            )
+        self.ui.widgetJobManager.setHeaderItem(header_item)
         self.ui.widgetJobManager.manager_open_item = self.manager_open_item
         self.ui.widgetJobManager.itemDoubleClicked.connect(self.manager_open_item)
         self.ui.widgetJobManager.manager_open_scene_btn = self.manager_open_scene_btn
@@ -203,7 +211,7 @@ class PathRenderService(QtCore.QObject):
         """
         if not self.search_thread.isRunning():
             self.ui.pathJobSendBtn.setEnabled(False)
-            self.update_status('Suche nach Dienst im lokalen Netzwerk.', 2)
+            self.update_status(_('Suche nach Dienst im lokalen Netzwerk.'), 2)
             self.search_thread.start()
 
             self.text_browser.ovr.load_start()
@@ -219,45 +227,45 @@ class PathRenderService(QtCore.QObject):
         # self.ui.led_ovr.yellow_off()
 
         if result:
-            self.update_status(f'Pfad Äffchen Render Dienst gefunden<br>IP: <i>{result}</i>', 2)
+            self.update_status(_('Pfad Äffchen Render Dienst gefunden<br>IP: <i>{}</i>').format(result), 2)
             self.enable_job_btn()
             self.update_job_manager_timer.start()
         else:
             # self.ui.led_ovr.led(2, 2)
             # self.ui.led_ovr.led(1, 2, timer=100)
-            self.update_status(f'Kein Pfad Äffchen Render Dienst im lokalen Netzwerk gefunden', 2)
+            self.update_status(_('Kein Pfad Äffchen Render Dienst im lokalen Netzwerk gefunden'), 2)
             self.service_unavailable()
             return
 
         self.service_host = result
-        self.ovr.display('Render Service erfolgreich verbunden.', 2000)
+        self.ovr.display(_('Render Service erfolgreich verbunden.<br>'), 2000)
         self.send_message('GREETINGS_2')
         self.send_message('GET_RENDERER')
 
     def update_scene_file(self, scene_path: Path):
         self.scene_file = scene_path
-        self.update_status(f'Szenen Datei gesetzt:<br><i>{scene_path.as_posix()}</i>', 2)
+        self.update_status(_('Szenen Datei gesetzt:<br><i>{}</i>').format(scene_path.as_posix()), 2)
         LOGGER.debug('Path service scene: %s', self.scene_file)
 
     def invalid_scene_path_entered(self):
         """ User entered non-existent path into line widget """
-        msg = 'Ungültiger / Nicht existenter Szenen-Pfad angegeben.'
+        msg = _('Ungültiger / Nicht existenter Szenen-Pfad angegeben.')
         scene_file_error = self.validate_scene_file_type(self.scene_file.as_posix())
 
         if not scene_file_error:
             # Restore last valid scene file
             self.ui.pathSceneLineEdit.setText(self.scene_file.as_posix())
-            msg += ' Setze vorherigen Szenenpfad.'
-            self.update_status(f'Vorherigen Szenenpfad gesetzt:<br><i>{self.scene_file.as_posix()}</i>', 2)
+            msg += _(' Setze vorherigen Szenenpfad.')
+            self.update_status(_('Vorherigen Szenenpfad gesetzt:<br><i>{}</i>').format(self.scene_file.as_posix()), 2)
         else:
             # No path to restore
-            self.update_status('Ungültigen Szenenpfad verworfen. Kein Szenen-Pfad gesetzt.', 2)
+            self.update_status(_('Ungültigen Szenenpfad verworfen. Kein Szenen-Pfad gesetzt.'), 2)
 
         self.ovr.display(msg, 5000)
 
     def update_output_dir(self, output_path):
         self.output_dir = output_path
-        self.update_status(f'Ausgabeverzeichnis gesetzt:<br><i>{output_path.as_posix()}</i>', 2)
+        self.update_status(_('Ausgabeverzeichnis gesetzt:<br><i>{}</i>').format(output_path.as_posix()), 2)
         LOGGER.debug('Path service output dir: %s', self.output_dir)
 
     def update_csb_import_option(self, ignore_hidden):
@@ -266,7 +274,8 @@ class PathRenderService(QtCore.QObject):
             self.csb_ignore_hidden = '1'
         else:
             self.csb_ignore_hidden = '0'
-        self.update_status(f'CSB Import Option gesetzt: <i>ignoreHiddenObject={self.csb_ignore_hidden}</i>', 2)
+        self.update_status(_('CSB Import Option gesetzt: <i>ignoreHiddenObject={}</i>').format(self.csb_ignore_hidden),
+                           2)
         LOGGER.debug('Toggled CSB import option: %s, set value to %s', ignore_hidden, self.csb_ignore_hidden)
 
     def update_maya_delete_hidden_option(self, maya_delete_hidden):
@@ -275,7 +284,8 @@ class PathRenderService(QtCore.QObject):
             self.maya_delete_hidden = '1'
         else:
             self.maya_delete_hidden = '0'
-        self.update_status(f'Maya Prozess Option gesetzt: <i>maya_delete_hidden={self.maya_delete_hidden}</i>', 2)
+        self.update_status(_('Maya Prozess Option gesetzt: <i>maya_delete_hidden={}</i>')
+                           .format(self.maya_delete_hidden), 2)
         LOGGER.debug('Toggled Maya delete hidden option: %s, set value to %s',
                      maya_delete_hidden, self.maya_delete_hidden)
 
@@ -284,7 +294,8 @@ class PathRenderService(QtCore.QObject):
             self.use_scene_settings = '1'
         else:
             self.use_scene_settings = '0'
-        self.update_status(f'Maya Prozess Option gesetzt: <i>use_scene_settings={self.use_scene_settings}</i>', 2)
+        self.update_status(_('Maya Prozess Option gesetzt: <i>use_scene_settings={}</i>')
+                           .format(self.use_scene_settings), 2)
         LOGGER.debug('Toggled Maya use scene settings option: %s, set value to %s',
                      use_scene_settings, self.use_scene_settings)
 
@@ -300,14 +311,20 @@ class PathRenderService(QtCore.QObject):
         validation_error = self.validate_settings(scene_file, render_dir, renderer)
         if validation_error:
             self.job_idx -= 1
-            msg = '<b>Ungültige Job Daten:</b><br>' + validation_error
+            msg = _('<b>Ungültige Job Daten:</b><br>') + validation_error
             self.ovr.display(msg, 2000)
             self.update_status(msg, 2)
             self.ui.pathJobSendBtn.setEnabled(True)
             return
 
+        # -- Disable use scene setting if CSB file --
+        if self.scene_file.suffix.casefold() == '.csb' and self.use_scene_settings == '1':
+            self.ui.checkBoxUseSceneSettings.toggle()
+
         # Change to Job Manager tab
-        self.ovr.display(f'{job_title} übertragen für {self.scene_file.stem}', 4000)
+        self.ovr.display(
+            _('{} übertragen für {}<br>').format(job_title, self.scene_file.stem)
+            , 4000)
 
         msg = 'ADD_JOB '
 
@@ -339,7 +356,7 @@ class PathRenderService(QtCore.QObject):
             q = QtCore.QUrl.fromLocalFile(directory.as_posix())
             QDesktopServices.openUrl(q)
         else:
-            self.ovr.display(f'Verzeichnis existiert nicht.<br>{directory.as_posix()}', 5000)
+            self.ovr.display(_('Verzeichnis existiert nicht.<br>{}<br>').format(directory.as_posix()), 5000)
 
     def manager_open_item(self, item, column=None):
         """ Open Render directory on item double click """
@@ -377,14 +394,16 @@ class PathRenderService(QtCore.QObject):
             except Exception as e:
                 LOGGER.error('Error deleting render file %s', e)
                 self.ovr.display(
-                    f'Fehler: Datei {render_file.name} konnte nicht entfernt werden.\n{e}', 7500)
+                    _('Fehler: Datei {} konnte nicht entfernt werden.<br>{}<br>').format(render_file.name, e), 7500
+                    )
                 return
         else:
             self.ovr.display(
-                f'Datei {render_file.name} <b>existiert nicht mehr oder kann nicht gefunden werden.</b>', 7500)
+                _('Datei {} <b>existiert nicht mehr oder kann nicht gefunden werden.</b><br>').format(render_file.name),
+                7500)
             return
 
-        self.ovr.display(f'Datei {render_file.name} wurde entfernt.', 7500)
+        self.ovr.display(_('Datei {} wurde entfernt.').format(render_file.name), 7500)
 
     def manager_sort_header(self, click_event=None):
         """ Setup item column widths """
@@ -434,9 +453,10 @@ class PathRenderService(QtCore.QObject):
         msg = f'FORCE_PSD_CREATION {job.remote_index}'
 
         self.send_message(msg)
-        self.ovr.display(f'<b>{job.title}</b><br>'
+        self.ovr.display(_('<b>{}</b><br>'
                          '<i>Die bereits ausgegebenen Bilddaten werden in einem PSD zusammengestellt '
-                         'und der Job wird abgeschlossen. Dies kann wenige Minuten dauern.</i>', 7500)
+                         'und der Job wird abgeschlossen. Dies kann wenige Minuten dauern.</i><br>').format(job.title),
+                         7500)
 
     def request_job_queue(self):
         """ Request the remote job queue as pickled data """
@@ -463,8 +483,8 @@ class PathRenderService(QtCore.QObject):
         if data is None:
             self.update_job_manager_timer.stop()
         elif b'Queue-Finished' in data:
-            self.ovr.display('<b>Render Service Warteschlange fertiggestellt.</b><br>'
-                             '<i>Automatische Job Manager Updates wurden ausgeschaltet.</i>', 12000)
+            self.ovr.display(_('<b>Render Service Warteschlange fertiggestellt.</b><br>'
+                             '<i>Automatische Job Manager Updates wurden ausgeschaltet.</i><br>'), 12000)
             self.update_job_manager_timer.stop()
             # Remove Queue finished data
             data = data[:data.find(b'Queue-Finished')]
@@ -519,7 +539,7 @@ class PathRenderService(QtCore.QObject):
         self.ui.rendererBox.clear()
 
         # Change to status tab
-        msg = '<span style="color:red;"><b>Verbindung zum Render Dienst getrennt.</b></span>'
+        msg = _('<span style="color:red;"><b>Verbindung zum Render Dienst getrennt.</b></span><br>')
         self.ovr.display(msg, 6000)
         self.update_status(msg, 2)
         self.service_host = None
@@ -567,9 +587,9 @@ class PathRenderService(QtCore.QObject):
 
         current_time = datetime.now().strftime('(%H:%M:%S) ')
         if is_response == 0:
-            is_response = 'Empfange: '
+            is_response = _('Empfange: ')
         elif is_response == 1:
-            is_response = 'Sende   : '
+            is_response = _('Sende   : ')
         elif is_response == 2:
             is_response = ''
 
@@ -581,7 +601,7 @@ class PathRenderService(QtCore.QObject):
         if not bool(re.compile(r'^[A-Za-z0-9-_]+\Z').match(job_name_text)):
             self.ui.pathJobNameLineEdit.clear()
             self.ui.pathJobNameLineEdit.setPlaceholderText(
-                'Job Titel darf nur Buchstaben, Zahlen, Binde- oder _strich enthalten.'
+                _('Job Titel darf nur Buchstaben, Zahlen, Binde- oder _strich enthalten.')
                 )
 
     @staticmethod
@@ -688,7 +708,7 @@ def update_job_manager_widget(job, widget):
     if expire_date > datetime.now():
         expires = f'{h:02d}h:{m:02d}min'
     else:
-        expires = 'Abgelaufen.'
+        expires = _('Abgelaufen.')
 
     # Creation time string
     creation_date = datetime.fromtimestamp(job.created)
@@ -704,13 +724,13 @@ def update_job_manager_widget(job, widget):
     progress_bar.setAlignment(QtCore.Qt.AlignCenter)
 
     # Open scene directory button
-    scene_btn = QtWidgets.QPushButton('Pfad öffnen', widget)
+    scene_btn = QtWidgets.QPushButton(_('Pfad öffnen'), widget)
     scene_btn.setContentsMargins(2, 2, 2, 2)
     scene_btn.pressed.connect(partial(widget.manager_open_scene_btn, item))
     widget.setItemWidget(item, 2, scene_btn)
 
     # Open output directory button
-    dir_btn = QtWidgets.QPushButton('Ausgabe öffnen', widget)
+    dir_btn = QtWidgets.QPushButton(_('Ausgabe öffnen'), widget)
     dir_btn.setContentsMargins(2, 2, 2, 2)
     dir_btn.pressed.connect(partial(widget.manager_open_item, item))
     widget.setItemWidget(item, 3, dir_btn)

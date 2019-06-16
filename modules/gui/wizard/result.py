@@ -1,4 +1,3 @@
-from pathlib import Path
 from typing import List
 
 from PySide2.QtCore import QTimer
@@ -7,7 +6,7 @@ from PySide2.QtWidgets import QTabWidget, QTreeView, QWizardPage
 from modules.globals import Resource
 from modules.gui.gui_utils import SetupWidget, replace_widget
 from modules.gui.ui_resource import IconRsc
-from modules.gui.wizard.preset import PresetWizardPage, PresetTreeViewShortcutOverrides
+from modules.gui.wizard.preset import PresetTreeViewShortcutOverrides
 from modules.idgen import KnechtUuidGenerator as Kid
 from modules.itemview.data_read import KnechtDataToModel
 from modules.itemview.item import KnechtItem
@@ -26,6 +25,22 @@ LOGGER = init_logging(__name__)
 lang = get_translation()
 lang.install()
 _ = lang.gettext
+
+
+def create_reset_item(order: int=0) -> KnechtItem:
+    reset_item = KnechtItem(None, (f'{order:03d}', 'Reset', '', 'reset'))
+
+    child_data = [('000', 'reset', 'on', '', '', '', 'Sollte einen im Modell vorhanden Reset Schalter betätigen'),
+                  ('001', 'reset', 'off', '', '', '', 'Sollte einen im Modell vorhanden Reset Schalter betätigen'),
+                  ('002', 'RTTOGLRT', 'on', '', '', '',
+                   'Benötigte Optionen müssen nach dem Reset erneut geschaltet werden.'),
+                  ]
+
+    for data in child_data:
+        i = KnechtItem(reset_item, data)
+        reset_item.append_item_child(i)
+
+    return reset_item
 
 
 class ResultWizardPage(QWizardPage):
@@ -196,6 +211,14 @@ class ResultWizardPage(QWizardPage):
                 KnechtItem(None, (f'{root_item.childCount():03d}', '', '', 'separator'))
                 )
 
+        # -- Create default Reset --
+        reset_item = create_reset_item(root_item.childCount())
+        root_item.append_item_child(reset_item)
+
+        # -- Add separator --
+        root_item.append_item_child(KnechtItem(None, (f'{root_item.childCount():03d}', '', '', 'separator')))
+
+        # --- Create Preset items ---
         for preset_item in preset_items:
             preset_item.setData(Kg.ORDER, f'{root_item.childCount():03d}')
             root_item.append_item_child(preset_item)

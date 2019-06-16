@@ -1,5 +1,6 @@
 import logging
 import sys
+import multiprocessing
 from multiprocessing import Queue
 
 from PySide2.QtCore import Qt
@@ -18,7 +19,6 @@ if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
 
 VERSION = '0.98'
 
-# TODO: Add MDS PR-Family
 # TODO: Add image output directory tree item to be placed anywhere
 #  eg. placed in preset will render preset to this directory, placed in render_preset will render presets not
 #  containing out_dir_item to that dir
@@ -50,6 +50,7 @@ def shutdown(log_listener):
 
 
 def main():
+    multiprocessing.freeze_support()
     if FROZEN:
         # Set Exception hook
         sys.excepthook = KnechtExceptionHook.exception_hook

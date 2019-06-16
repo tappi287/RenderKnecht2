@@ -1,7 +1,9 @@
 from PySide2.QtWidgets import QMenu, QAction, QActionGroup
 
+from modules.gui.widgets.message_box import AskToContinue
+from modules.knecht_update import restart_knecht_app
 from modules.settings import KnechtSettings
-from modules.gui.ui_resource import FontRsc
+from modules.gui.ui_resource import FontRsc, IconRsc
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -96,8 +98,14 @@ class ViewMenu(QMenu):
 
         KnechtSettings.app['font_size'] = font_size
 
-        self.ui.msg(_('Anwendungstil geändert. Für eine vollständige Übernahme muss die Anwendung neu gestartet '
-                      'werden.'), 5000)
-
         FontRsc.init(font_size)
         self.ui.app.setFont(FontRsc.regular)
+        title = _('Neustart')
+        msg = _('Anwendungstil geändert. Für eine vollständige Übernahme muss die Anwendung neu gestartet werden.<br>'
+                'Anwendung jetzt neustarten?')
+        ok_btn = _('Neustarten')
+        no_btn = _('Später neustarten..')
+
+        msg_box = AskToContinue(self.ui)
+        if msg_box.ask(title, msg, ok_btn, no_btn):
+            restart_knecht_app(self.ui)

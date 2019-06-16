@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from PySide2.QtCore import QTimer, QObject, Slot
+from PySide2.QtCore import QTimer, QObject, Slot, Signal
 from PySide2.QtGui import QKeySequence
 from PySide2.QtWidgets import QAction, QMenu
 
@@ -25,6 +25,7 @@ _ = lang.gettext
 
 
 class FileMenu(QObject):
+    recent_files_changed = Signal()
     new_document_count = 0
     current_progress_obj = ShowTreeViewProgressMessage(None)
     load_save_mgr = None
@@ -289,3 +290,5 @@ class FileMenu(QObject):
                 recent_action.triggered.connect(self._open_recent_rksession)
 
             self.recent_menu.addAction(recent_action)
+
+        self.recent_files_changed.emit()

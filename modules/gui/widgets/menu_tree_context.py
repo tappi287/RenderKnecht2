@@ -9,6 +9,7 @@ from modules.globals import get_settings_dir
 from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.menu_create import CreateMenu
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
+from modules.knecht_update import restart_knecht_app
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -108,6 +109,9 @@ class TreeContextMenu(QMenu):
         notify_click = QAction(IconRsc.get_icon('eye'), 'Show click tray notification', self.dev_actions)
         notify_click.triggered.connect(self.click_tray_notification)
 
+        restart = QAction(IconRsc.get_icon('reset'), 'Restart', self.dev_actions)
+        restart.triggered.connect(self.restart_app)
+
         self.addActions(self.dev_actions.actions())
         self.dev_actions.setVisible(False)
 
@@ -188,6 +192,9 @@ class TreeContextMenu(QMenu):
             message='Clicking the message should trigger a overlay message.',
             clicked_callback=test_callback
             )
+
+    def restart_app(self):
+        restart_knecht_app(self.ui)
 
     def update_actions(self):
         src_model = self.view.model().sourceModel()

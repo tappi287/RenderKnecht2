@@ -1,19 +1,17 @@
 from bisect import bisect
-from collections import OrderedDict
 from pathlib import Path
 from typing import List, Tuple
 from zipfile import ZipFile
 
-from PySide2.QtCore import Slot, QObject, QTimer, Qt, QEvent
-from PySide2.QtWidgets import QWidget
+from PySide2.QtCore import QEvent, QObject, QTimer, Qt, Slot
 
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_update import UpdateModel
 from modules.itemview.xml import SaveLoadController
 from modules.knecht_utils import CreateZip
-from modules.settings import Settings
 from modules.language import get_translation
 from modules.log import init_logging
+from modules.settings import Settings
 
 LOGGER = init_logging(__name__)
 
@@ -281,3 +279,4 @@ class KnechtSession(QObject):
         LOGGER.debug('Session restored.')
 
         self.ui.statusBar().showMessage(_('Sitzungswiederherstellung abgeschlossen'), 8000)
+        self.ui.view_mgr.tab.setCurrentIndex(0)

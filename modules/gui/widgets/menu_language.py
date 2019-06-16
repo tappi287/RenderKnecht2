@@ -1,8 +1,10 @@
 from PySide2 import QtWidgets
 
+from modules.gui.ui_resource import IconRsc
+from modules.knecht_update import restart_knecht_app
 from modules.settings import KnechtSettings
 from modules.gui.gui_utils import ConnectCall
-from modules.gui.widgets.message_box import GenericMsgBox
+from modules.gui.widgets.message_box import GenericMsgBox, AskToContinue
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -42,17 +44,21 @@ class LanguageMenu(QtWidgets.QMenu):
         if 'de' == l:
             title = 'Sprache auswählen'
             msg = 'Die Anwendung muss neu gestartet werden um die Sprache auf Deutsch zu aendern.<br>' \
-                  'Bitte File > Exit waehlen und Anwendung anschließend erneut starten.'
+                  'Anwendung jetzt neustarten?'
+            ok_btn = 'Neustarten'
+            no_btn = 'Später neustarten..'
         else:
             title = 'Change Language'
             msg = 'The Application needs to be restarted to change the language to English.<br>' \
-                  'Please choose Datei > Beenden to exit and then start the application again.'
+                  'Restart app now?'
+            ok_btn = 'Restart'
+            no_btn = 'Restar later..'
 
         KnechtSettings.language = l
 
-        msg_box = GenericMsgBox(self.ui, title, msg,
-                                icon_key='reset')
-        msg_box.exec()
+        msg_box = AskToContinue(self.ui)
+        if msg_box.ask(title, msg, ok_btn, no_btn):
+            restart_knecht_app(self.ui)
 
     def update_menu(self):
         self.de.setChecked(False)

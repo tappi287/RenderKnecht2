@@ -1,5 +1,5 @@
 from PySide2.QtCore import QEvent, Qt
-from PySide2.QtWidgets import QPushButton, QVBoxLayout, QWidget
+from PySide2.QtWidgets import QPushButton, QVBoxLayout, QWidget, QGroupBox
 
 from modules import KnechtSettings
 from modules.globals import Resource
@@ -16,6 +16,8 @@ _ = lang.gettext
 
 
 class KnechtWelcome(QWidget):
+    max_recent_entries = 5
+
     def __init__(self, ui):
         """ Generic welcome page
 
@@ -29,10 +31,9 @@ class KnechtWelcome(QWidget):
         self.title_label.setText(_('RenderKnecht v{}').format(KnechtSettings.app['version']))
         self.news_title.setText('Updates:')
         self.news_title.setStyleSheet('font-weight: 800;')
-        self.create_label.setText(_('Erstellen'))
-        self.create_label.setStyleSheet('font-weight: 800;')
-        self.recent_label.setText(_('Kürzlich verwendet'))
-        self.recent_label.setStyleSheet('font-weight: 800;')
+        self.create_box: QGroupBox
+        self.create_box.setTitle(_('Erstellen'))
+        self.recent_box.setTitle(_('Kürzlich verwendet'))
 
         self.new_btn.setText(_('Neues Dokument'))
         self.new_btn.released.connect(self.ui.main_menu.file_menu.new_document)
@@ -49,8 +50,8 @@ class KnechtWelcome(QWidget):
 
         # --- Update recent files ---
         self.ui.main_menu.file_menu.update_recent_files_menu()
-        # TODO: Update on tab focus
-        self.update()
+        self.ui.main_menu.file_menu.recent_files_changed.connect(self.update_recent_entries)
+        self.update_recent_entries()
 
     def _open(self):
         self.ui.main_menu.file_menu.open_xml()
@@ -58,7 +59,8 @@ class KnechtWelcome(QWidget):
     def _import(self):
         self.ui.main_menu.file_menu.import_menu.popup(self.import_btn.pos())
 
-    def update(self):
+    def update_recent_entries(self):
+        LOGGER.debug('Updating Welcome page recent entries.')
         self.setUpdatesEnabled(False)
 
         while self.recent_btns:
@@ -75,7 +77,7 @@ class KnechtWelcome(QWidget):
             self.recent_btns.append(btn)
             self.recent_layout.addWidget(btn, alignment=Qt.AlignLeft)
 
-            if len(self.recent_btns) > 5:
+            if len(self.recent_btns) > self.max_recent_entries:
                 break
 
         self.recent_layout.addSpacerItem(spacer)

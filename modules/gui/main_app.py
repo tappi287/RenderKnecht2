@@ -128,8 +128,6 @@ class KnechtApp(QtWidgets.QApplication):
                 abort_btn_txt=_('Abbrechen')
                 )
 
-        # TODO: Ask on unsaved documents
-
         close_event.ignore()
 
         if confirm_close:

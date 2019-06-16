@@ -1815,9 +1815,6 @@ p, li { white-space: pre-wrap; }
                     <iconset resource="res/gui_resource.qrc">
                      <normaloff>:/main/forward.png</normaloff>:/main/forward.png</iconset>
                    </property>
-                   <property name="flat">
-                    <bool>true</bool>
-                   </property>
                   </widget>
                  </item>
                 </layout>

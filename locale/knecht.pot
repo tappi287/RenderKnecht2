@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-06-14 14:26+0200\n"
+"POT-Creation-Date: 2019-06-17 01:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -281,24 +281,28 @@ msgstr ""
 msgid "  0: Aktueller Zustand des Dokuments"
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:84
+#: modules/gui/widgets\main_ui_widgets.py:81
 msgid "Geschätzte Renderzeit ({} CPUs/GI)"
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:91
+#: modules/gui/widgets\main_ui_widgets.py:88
 msgid "Ausgabe Verzeichnis auswählen ..."
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:122
+#: modules/gui/widgets\main_ui_widgets.py:123
+msgid "Fehler beim sammeln der Preset Varianten. Einige Inhalte der Render Presets existieren nicht mehr."
+msgstr ""
+
+#: modules/gui/widgets\main_ui_widgets.py:131
 msgid "Es läuft bereits ein Render Vorgang."
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:147
+#: modules/gui/widgets\main_ui_widgets.py:156
 msgid "abgeschlossen am: "
 msgstr ""
 
 #: modules/gui/widgets\menu_create.py:23
-#: modules/gui/widgets\welcome_page.py:32
+#: modules/gui/widgets\welcome_page.py:35
 msgid "Erstellen"
 msgstr ""
 
@@ -399,7 +403,7 @@ msgid "Einfügen\tStrg+V"
 msgstr ""
 
 #: modules/gui/widgets\menu_edit.py:86
-#: modules/gui/widgets\menu_tree_context.py:73
+#: modules/gui/widgets\menu_tree_context.py:74
 #: modules/gui/wizard\preset.py:293
 msgid "Selektierte Zeilen entfernen\tEntf"
 msgstr ""
@@ -412,60 +416,60 @@ msgstr ""
 msgid "Selektion aufheben\tStrg+D"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:44
+#: modules/gui/widgets\menu_file.py:45
 msgid "Zuletzt geöffnet"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:71
+#: modules/gui/widgets\menu_file.py:72
 msgid "Neu\tStrg+N"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:77
+#: modules/gui/widgets\menu_file.py:78
 msgid "Öffnen\tStrg+O"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:87
+#: modules/gui/widgets\menu_file.py:88
 msgid "Speichern\tStrg+S"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:93
+#: modules/gui/widgets\menu_file.py:94
 msgid "Speichern unter ...\tStrg+Shift+S"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:108
+#: modules/gui/widgets\menu_file.py:109
 msgid "Neues_Dokument_{:02d}.xml"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:155
+#: modules/gui/widgets\menu_file.py:156
 msgid "Datei gespeichert:{0}{1:.3}s"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:182
+#: modules/gui/widgets\menu_file.py:183
 msgid "Daten werden gelesen"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:202
+#: modules/gui/widgets\menu_file.py:203
 msgid "{0} in {1:.3}s geladen."
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:244
+#: modules/gui/widgets\menu_file.py:245
 msgid "Zieldatei zum Speichern festlegen?"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:245
+#: modules/gui/widgets\menu_file.py:246
 msgid "Die Datei: <i>{}</i><br>Pfad: <i>{}</i><br>wurde entfernt oder existiert nicht mehr.<br><br>Neue Zieldatei zum Speichern festlegen?"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:250
+#: modules/gui/widgets\menu_file.py:251
 msgid "Speichern unter.."
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:259 modules/gui/wizard\menus.py:77
+#: modules/gui/widgets\menu_file.py:260 modules/gui/wizard\menus.py:77
 msgid "Keine Einträge vorhanden"
 msgstr ""
 
 #: modules/gui/widgets\menu_import.py:36
-#: modules/gui/widgets\welcome_page.py:44 modules/gui/wizard\data_import.py:43
+#: modules/gui/widgets\welcome_page.py:45 modules/gui/wizard\data_import.py:43
 msgid "Import"
 msgstr ""
 
@@ -481,72 +485,108 @@ msgstr ""
 msgid "Preset Assistent"
 msgstr ""
 
-#: modules/gui/widgets\menu_info.py:43
+#: modules/gui/widgets\menu_info.py:49
 msgid "Aktualisierung auf Version {}..."
 msgstr ""
 
-#: modules/gui/widgets\menu_language.py:19
+#: modules/gui/widgets\menu_job_mgr_context.py:55
+msgid "Job abbrechen"
+msgstr ""
+
+#: modules/gui/widgets\menu_job_mgr_context.py:57
+msgid "PSD Erstellung erzwingen."
+msgstr ""
+
+#: modules/gui/widgets\menu_job_mgr_context.py:59
+msgid "Ausgabe Verzeichnis öffnen"
+msgstr ""
+
+#: modules/gui/widgets\menu_job_mgr_context.py:61
+msgid "Maya Rendering Szene löschen"
+msgstr ""
+
+#: modules/gui/widgets\menu_job_mgr_context.py:63
+msgid "An den Anfang der Warteschlange"
+msgstr ""
+
+#: modules/gui/widgets\menu_job_mgr_context.py:65
+msgid "An das Ende der Warteschlange"
+msgstr ""
+
+#: modules/gui/widgets\menu_language.py:21
 msgid "Sprache"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:24
+#: modules/gui/widgets\menu_tree_context.py:25
 msgid "Baum Kontextmenü"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:37
+#: modules/gui/widgets\menu_tree_context.py:38
 msgid "Senden an DeltaGen"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:38
+#: modules/gui/widgets\menu_tree_context.py:39
 msgid "Selektierte Bauminhalte als Variantenschaltung mit vorherigem Reset an DeltaGen senden."
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:45
+#: modules/gui/widgets\menu_tree_context.py:46
 msgid "Ohne Reset an DeltaGen senden"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:46
+#: modules/gui/widgets\menu_tree_context.py:47
 msgid "Selektierte Bauminhalte ohne einen Reset an DeltaGen senden."
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:53
+#: modules/gui/widgets\menu_tree_context.py:54
 msgid "PR String in Zwischenablage kopieren"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:86
+#: modules/gui/widgets\menu_tree_context.py:87
 msgid "Hide ID columns"
 msgstr ""
 
-#: modules/gui/widgets\menu_view.py:19 modules/gui/widgets\search_dialog.py:57
+#: modules/gui/widgets\menu_view.py:21 modules/gui/widgets\search_dialog.py:57
 msgid "Ansicht"
 msgstr ""
 
-#: modules/gui/widgets\menu_view.py:24
+#: modules/gui/widgets\menu_view.py:26
 msgid "Anwendungs-Stil"
 msgstr ""
 
-#: modules/gui/widgets\menu_view.py:26 modules/gui/widgets\menu_view.py:41
+#: modules/gui/widgets\menu_view.py:28 modules/gui/widgets\menu_view.py:43
 msgid "Standard"
 msgstr ""
 
-#: modules/gui/widgets\menu_view.py:30
+#: modules/gui/widgets\menu_view.py:32
 msgid "Dunkel"
 msgstr ""
 
-#: modules/gui/widgets\menu_view.py:37
+#: modules/gui/widgets\menu_view.py:39
 msgid "Schrifgröße"
 msgstr ""
 
-#: modules/gui/widgets\menu_view.py:39
+#: modules/gui/widgets\menu_view.py:41
 msgid "Klein"
 msgstr ""
 
-#: modules/gui/widgets\menu_view.py:43
+#: modules/gui/widgets\menu_view.py:45
 msgid "Groß"
 msgstr ""
 
-#: modules/gui/widgets\menu_view.py:99
-msgid "Anwendungstil geändert. Für eine vollständige Übernahme muss die Anwendung neu gestartet werden."
+#: modules/gui/widgets\menu_view.py:103
+msgid "Neustart"
+msgstr ""
+
+#: modules/gui/widgets\menu_view.py:104
+msgid "Anwendungstil geändert. Für eine vollständige Übernahme muss die Anwendung neu gestartet werden.<br>Anwendung jetzt neustarten?"
+msgstr ""
+
+#: modules/gui/widgets\menu_view.py:106
+msgid "Neustarten"
+msgstr ""
+
+#: modules/gui/widgets\menu_view.py:107
+msgid "Später neustarten.."
 msgstr ""
 
 #: modules/gui/widgets\message_box.py:34
@@ -624,23 +664,23 @@ msgstr ""
 msgid "Spalte"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:27
+#: modules/gui/widgets\welcome_page.py:29
 msgid "Willkommen"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:29
+#: modules/gui/widgets\welcome_page.py:31
 msgid "RenderKnecht v{}"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:34
+#: modules/gui/widgets\welcome_page.py:36
 msgid "Kürzlich verwendet"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:37
+#: modules/gui/widgets\welcome_page.py:38
 msgid "Neues Dokument"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:40
+#: modules/gui/widgets\welcome_page.py:41
 msgid "Dokument öffnen"
 msgstr ""
 
@@ -664,7 +704,7 @@ msgstr ""
 msgid "Für die Preseterstellung werden Farb- sowie Trimlinedaten benötigt. Im Anschluss an den Importvorgang kann dieser Dialog fortgesetzt werden."
 msgstr ""
 
-#: modules/gui/wizard\data_import.py:49 modules/gui/wizard\result.py:47
+#: modules/gui/wizard\data_import.py:49 modules/gui/wizard\result.py:63
 msgid "Ergebnis"
 msgstr ""
 
@@ -764,15 +804,15 @@ msgstr ""
 msgid "Selektierte Optionen entsperren"
 msgstr ""
 
-#: modules/gui/wizard\result.py:42
+#: modules/gui/wizard\result.py:58
 msgid "Wizard Ergebnis"
 msgstr ""
 
-#: modules/gui/wizard\result.py:43
+#: modules/gui/wizard\result.py:59
 msgid "Überblick über nicht verwendete Optionen und Pakete"
 msgstr ""
 
-#: modules/gui/wizard\result.py:49
+#: modules/gui/wizard\result.py:65
 msgid "Nicht verwendete Optionen"
 msgstr ""
 
@@ -872,11 +912,11 @@ msgstr ""
 msgid "Achtung! Ein laufender Prozess sendet Daten an DeltaGen.<br><br>Soll die Anwendung wirklich beendet werden?"
 msgstr ""
 
-#: modules/gui\main_app.py:148
+#: modules/gui\main_app.py:146
 msgid "<h3>Hoppla!</h3>Eine schwerwiegende Anwendungsausnahme ist aufgetreten. Speichern Sie Ihre Daten und starten Sie die Anwendung neu.<br><br>"
 msgstr ""
 
-#: modules/gui\main_app.py:151
+#: modules/gui\main_app.py:149
 msgid "Anwendungsausnahme"
 msgstr ""
 
@@ -889,8 +929,168 @@ msgstr ""
 msgid "Renderliste"
 msgstr ""
 
-#: modules/gui\main_ui.py:166
+#: modules/gui\main_ui.py:167
 msgid "Die Varianten enthalten keine Reset Schaltung! Die zu sendenden Varianten werden mit vorangegangen Schaltungen kollidieren."
+msgstr ""
+
+#: modules/gui\path_render_service.py:36
+msgid "Status prüfen"
+msgstr ""
+
+#: modules/gui\path_render_service.py:37
+msgid "Render Dienst im lokalen Netzwerk suchen"
+msgstr ""
+
+#: modules/gui\path_render_service.py:85
+msgid "Benutze die Szeneneinstellung der Maya Binary Szene. Crypto Material AOV muss vorhanden sein!"
+msgstr ""
+
+#: modules/gui\path_render_service.py:106
+msgid "Ausgabe Verzeichnis auswählen"
+msgstr ""
+
+#: modules/gui\path_render_service.py:123
+msgid "Ausgabeverzeichnis"
+msgstr ""
+
+#: modules/gui\path_render_service.py:123
+msgid "Fortschritt"
+msgstr ""
+
+#: modules/gui\path_render_service.py:123
+msgid "Job Titel"
+msgstr ""
+
+#: modules/gui\path_render_service.py:123
+msgid "Szenendatei"
+msgstr ""
+
+#: modules/gui\path_render_service.py:124
+msgid "Erstellt"
+msgstr ""
+
+#: modules/gui\path_render_service.py:124
+msgid "Klient"
+msgstr ""
+
+#: modules/gui\path_render_service.py:124
+msgid "Läuft ab"
+msgstr ""
+
+#: modules/gui\path_render_service.py:124
+msgid "Remote Index"
+msgstr ""
+
+#: modules/gui\path_render_service.py:214
+msgid "Suche nach Dienst im lokalen Netzwerk."
+msgstr ""
+
+#: modules/gui\path_render_service.py:230
+msgid "Pfad Äffchen Render Dienst gefunden<br>IP: <i>{}</i>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:236
+msgid "Kein Pfad Äffchen Render Dienst im lokalen Netzwerk gefunden"
+msgstr ""
+
+#: modules/gui\path_render_service.py:241
+msgid "Render Service erfolgreich verbunden.<br>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:247
+msgid "Szenen Datei gesetzt:<br><i>{}</i>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:252
+msgid "Ungültiger / Nicht existenter Szenen-Pfad angegeben."
+msgstr ""
+
+#: modules/gui\path_render_service.py:258
+msgid " Setze vorherigen Szenenpfad."
+msgstr ""
+
+#: modules/gui\path_render_service.py:259
+msgid "Vorherigen Szenenpfad gesetzt:<br><i>{}</i>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:262
+msgid "Ungültigen Szenenpfad verworfen. Kein Szenen-Pfad gesetzt."
+msgstr ""
+
+#: modules/gui\path_render_service.py:268
+msgid "Ausgabeverzeichnis gesetzt:<br><i>{}</i>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:277
+msgid "CSB Import Option gesetzt: <i>ignoreHiddenObject={}</i>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:287
+msgid "Maya Prozess Option gesetzt: <i>maya_delete_hidden={}</i>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:297
+msgid "Maya Prozess Option gesetzt: <i>use_scene_settings={}</i>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:314
+msgid "<b>Ungültige Job Daten:</b><br>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:326
+msgid "{} übertragen für {}<br>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:359
+msgid "Verzeichnis existiert nicht.<br>{}<br>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:397
+msgid "Fehler: Datei {} konnte nicht entfernt werden.<br>{}<br>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:402
+msgid "Datei {} <b>existiert nicht mehr oder kann nicht gefunden werden.</b><br>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:406
+msgid "Datei {} wurde entfernt."
+msgstr ""
+
+#: modules/gui\path_render_service.py:456
+msgid "<b>{}</b><br><i>Die bereits ausgegebenen Bilddaten werden in einem PSD zusammengestellt und der Job wird abgeschlossen. Dies kann wenige Minuten dauern.</i><br>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:486
+msgid "<b>Render Service Warteschlange fertiggestellt.</b><br><i>Automatische Job Manager Updates wurden ausgeschaltet.</i><br>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:542
+msgid "<span style=\"color:red;\"><b>Verbindung zum Render Dienst getrennt.</b></span><br>"
+msgstr ""
+
+#: modules/gui\path_render_service.py:590
+msgid "Empfange: "
+msgstr ""
+
+#: modules/gui\path_render_service.py:592
+msgid "Sende   : "
+msgstr ""
+
+#: modules/gui\path_render_service.py:604
+msgid "Job Titel darf nur Buchstaben, Zahlen, Binde- oder _strich enthalten."
+msgstr ""
+
+#: modules/gui\path_render_service.py:711
+msgid "Abgelaufen."
+msgstr ""
+
+#: modules/gui\path_render_service.py:727
+msgid "Pfad öffnen"
+msgstr ""
+
+#: modules/gui\path_render_service.py:733
+msgid "Ausgabe öffnen"
 msgstr ""
 
 #: modules/gui\ui_resource.py:108 modules/gui\ui_translations.py:186
@@ -1373,47 +1573,47 @@ msgstr ""
 msgid "{}px - Ext: "
 msgstr ""
 
-#: modules\knecht_session.py:192
+#: modules\knecht_session.py:190
 msgid "Sitzung während Leerlauf erfolgreich gespeichert"
 msgstr ""
 
-#: modules\knecht_session.py:283
+#: modules\knecht_session.py:281
 msgid "Sitzungswiederherstellung abgeschlossen"
 msgstr ""
 
-#: modules\knecht_update.py:169
+#: modules\knecht_update.py:211
 msgid "Suche nach Anwendungs Updates gestartet."
 msgstr ""
 
-#: modules\knecht_update.py:223
+#: modules\knecht_update.py:265
 msgid "Die Anwendung ist auf dem neusten Stand."
 msgstr ""
 
-#: modules\knecht_update.py:228
+#: modules\knecht_update.py:270
 msgid "Aktualisierung konnte nicht durchgeführt werden."
 msgstr ""
 
-#: modules\knecht_update.py:237
+#: modules\knecht_update.py:279
 msgid "App Update"
 msgstr ""
 
-#: modules\knecht_update.py:238
+#: modules\knecht_update.py:280
 msgid "Eine aktualisierte Version {} ist verfügbar.<br><br>Möchten Sie die Aktualisierung jetzt durchführen?<br><br>Die Anwendung muss für das Update beendet werden."
 msgstr ""
 
-#: modules\knecht_update.py:242
+#: modules\knecht_update.py:284
 msgid "Jetzt aktualisieren"
 msgstr ""
 
-#: modules\knecht_update.py:243
+#: modules\knecht_update.py:285
 msgid "Vielleicht später..."
 msgstr ""
 
-#: modules\knecht_update.py:255
+#: modules\knecht_update.py:297
 msgid "Aktualisierung"
 msgstr ""
 
-#: modules\knecht_update.py:256
+#: modules\knecht_update.py:298
 msgid "Version {} ist bereit zur Installation."
 msgstr ""
 

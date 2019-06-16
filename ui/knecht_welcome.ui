@@ -21,29 +21,29 @@ QPushButton:hover {color: rgb(85, 170, 255);
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
-    <number>0</number>
+    <number>8</number>
    </property>
    <property name="leftMargin">
-    <number>12</number>
+    <number>24</number>
    </property>
    <property name="topMargin">
-    <number>12</number>
+    <number>24</number>
    </property>
    <property name="rightMargin">
-    <number>12</number>
+    <number>24</number>
    </property>
    <property name="bottomMargin">
-    <number>12</number>
+    <number>24</number>
    </property>
    <item>
     <layout class="QHBoxLayout" name="top_layout">
      <property name="spacing">
-      <number>8</number>
+      <number>0</number>
      </property>
      <item alignment="Qt::AlignVCenter">
       <widget class="QLabel" name="title_label">
        <property name="styleSheet">
-        <string notr="true">font-size: 24px;</string>
+        <string notr="true">font-size: 36px;</string>
        </property>
        <property name="text">
         <string>RenderKnecht v0.75</string>
@@ -86,36 +86,9 @@ QPushButton:hover {color: rgb(85, 170, 255);
    </item>
    <item>
     <layout class="QVBoxLayout" name="update_layout">
-     <item>
-      <widget class="QLabel" name="news_title">
-       <property name="text">
-        <string>latest Updates:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="news">
-       <property name="text">
-        <string>correctly parse Vplus with non-unique package descriptions eg. identical package names
-added menu action to send variants without reset
-enhanced handling of image files and path lenghts while rendering
-allow runtime change of log level
-fixed order of pasted items
-references can no longer be copied to top level
-enhance search dialog
-update translations
-create model code inside trim items from KnData
-find and replace for item views
-set imported documents unclean
-check empty documents from source model to avoid false positive thru filtering
-warn on document tab close</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QGridLayout" name="gridLayout" columnstretch="50,50">
+     <property name="spacing">
+      <number>8</number>
+     </property>
      <property name="leftMargin">
       <number>0</number>
      </property>
@@ -128,125 +101,235 @@ warn on document tab close</string>
      <property name="bottomMargin">
       <number>0</number>
      </property>
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <item row="0" column="1">
-      <widget class="QLabel" name="recent_label">
+     <item>
+      <widget class="QLabel" name="news_title">
        <property name="text">
-        <string>Recent</string>
+        <string>latest Updates:</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="create_label">
+     <item>
+      <widget class="QLabel" name="news">
        <property name="text">
-        <string>Create</string>
+        <string>integrate network render service functionality&lt;br&gt;
+validate RenderPreset content and dismiss render start without variants&lt;br&gt;
+correctly parse Vplus with non-unique package descriptions eg. identical package names&lt;br&gt;
+added menu action to send variants without reset&lt;br&gt;
+enhanced handling of image files and path lenghts while rendering&lt;br&gt;</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <layout class="QVBoxLayout" name="btn_layout">
-       <property name="spacing">
-        <number>0</number>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
-       <property name="leftMargin">
-        <number>0</number>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
        </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item alignment="Qt::AlignLeft">
-        <widget class="QPushButton" name="new_btn">
-         <property name="text">
-          <string>New Document</string>
-         </property>
-        </widget>
-       </item>
-       <item alignment="Qt::AlignLeft">
-        <widget class="QPushButton" name="open_btn">
-         <property name="text">
-          <string>Öffnen</string>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item alignment="Qt::AlignLeft">
-        <widget class="QPushButton" name="import_btn">
-         <property name="text">
-          <string>Import</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="btn_spacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
-     <item row="1" column="1">
-      <layout class="QVBoxLayout" name="recent_layout">
-       <property name="spacing">
-        <number>4</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <spacer name="recent_btn_spacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+      </spacer>
      </item>
     </layout>
    </item>
    <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+    <widget class="QWidget" name="toolWidget" native="true">
+     <property name="styleSheet">
+      <string notr="true">QGroupBox {
+    border: 1px solid lightgray;
+    border-radius: 6px;
+    margin: 18px 0;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left; /* position at the top center */
+    top: 2px;
+    left: 15px;
+}</string>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QGridLayout" name="gridLayout" columnstretch="50,50">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="horizontalSpacing">
+         <number>16</number>
+        </property>
+        <property name="verticalSpacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="1">
+         <widget class="QGroupBox" name="recent_box">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>10</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="title">
+           <string>Recent</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>9</number>
+           </property>
+           <property name="topMargin">
+            <number>16</number>
+           </property>
+           <property name="rightMargin">
+            <number>9</number>
+           </property>
+           <property name="bottomMargin">
+            <number>9</number>
+           </property>
+           <item>
+            <layout class="QVBoxLayout" name="recent_layout">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <spacer name="recent_btn_spacer">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>42</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QGroupBox" name="create_box">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>10</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="title">
+           <string>Create</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <property name="spacing">
+            <number>4</number>
+           </property>
+           <property name="leftMargin">
+            <number>9</number>
+           </property>
+           <property name="topMargin">
+            <number>16</number>
+           </property>
+           <property name="rightMargin">
+            <number>9</number>
+           </property>
+           <property name="bottomMargin">
+            <number>9</number>
+           </property>
+           <item alignment="Qt::AlignLeft">
+            <widget class="QPushButton" name="open_btn">
+             <property name="text">
+              <string>Öffnen</string>
+             </property>
+             <property name="icon">
+              <iconset resource="res/gui_resource.qrc">
+               <normaloff>:/main/folder.png</normaloff>:/main/folder.png</iconset>
+             </property>
+             <property name="flat">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignLeft">
+            <widget class="QPushButton" name="new_btn">
+             <property name="text">
+              <string>New Document</string>
+             </property>
+             <property name="icon">
+              <iconset resource="res/gui_resource.qrc">
+               <normaloff>:/type/document.png</normaloff>:/type/document.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignLeft">
+            <widget class="QPushButton" name="import_btn">
+             <property name="text">
+              <string>Import</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="btn_spacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
