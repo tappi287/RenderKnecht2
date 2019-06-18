@@ -249,8 +249,8 @@ class KnechtModel(QAbstractItemModel):
 
         return True
 
-    def setData(self, index, value, role=Qt.EditRole):
-        if role not in self.supported_roles or value is None:
+    def setData(self, index: QModelIndex, value, role=Qt.EditRole):
+        if role not in self.supported_roles or value is None or not index.isValid():
             return False
 
         item = self.get_item(index)

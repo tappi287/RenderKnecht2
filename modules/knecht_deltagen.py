@@ -2,13 +2,16 @@ import time
 from threading import Event, Thread
 from typing import Union
 
-from PySide2.QtCore import QObject, QTimer, Signal, Slot
+from PySide2.QtCore import QObject, QTimer, Signal, Slot, Qt
 from PySide2.QtGui import QColor
 from PySide2.QtWidgets import QComboBox, QPushButton
 
 from modules.globals import DG_TCP_IP, DG_TCP_PORT
 from modules.gui.widgets.button_color import QColorButton
+from modules.itemview.item import ItemStyleDefaults
+from modules.itemview.model import KnechtModel
 from modules.itemview.tree_view import KnechtTreeView
+from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.knecht_socket import Ncat
 from modules.knecht_objects import KnechtVariant, KnechtVariantList
 from modules.language import get_translation
@@ -186,7 +189,7 @@ class CommunicateDeltaGen(Thread):
         if self.rendering_mode:
             timeout, num_tries = 20, 5
 
-        if not self._connect_to_deltagen(timeout=1, num_tries=1):
+        if not self._connect_to_deltagen(timeout, num_tries):
             self.no_connection.emit()
             self.exit_send_operation(self.Result.cmd_failed, skip_viewer=True)
             return
@@ -431,6 +434,8 @@ class SendToDeltaGen(QObject):
         msg = _('{0} {1} gesendet').format(variant.name, variant.value)
         self._update_status(msg)
 
+        self._update_tree_view_variant_state(variant)
+
     def end_thread(self) -> None:
         """ Join the DeltaGen communication thread if active """
         if self.dg.is_alive():
@@ -473,3 +478,24 @@ class SendToDeltaGen(QObject):
 
     def _size_viewer_combo_box_start(self):
         self.size_box_timeout.start()
+
+    def _update_tree_view_variant_state(self, variant: KnechtVariant):
+        src_model: KnechtModel = self.display_view.model().sourceModel()
+        name_idx = variant.index.siblingAtColumn(Kg.NAME)
+        value_idx = variant.index.siblingAtColumn(Kg.VALUE)
+
+        src_model.setData(name_idx, ItemStyleDefaults.variant_default_color, Qt.BackgroundRole)
+        src_model.setData(value_idx, ItemStyleDefaults.variant_default_color, Qt.BackgroundRole)
+
+        if not KnechtSettings.dg.get('display_variant_check'):
+            return
+
+        name_color, value_color = ItemStyleDefaults.variant_invalid_color, ItemStyleDefaults.variant_invalid_color
+
+        if variant.name_valid:
+            name_color = ItemStyleDefaults.variant_valid_color
+        if variant.value_valid:
+            value_color = ItemStyleDefaults.variant_valid_color
+
+        src_model.setData(name_idx, name_color, Qt.BackgroundRole)
+        src_model.setData(value_idx, value_color, Qt.BackgroundRole)

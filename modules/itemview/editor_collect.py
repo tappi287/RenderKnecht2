@@ -99,8 +99,6 @@ class KnechtCollectVariants(QObject):
             LOGGER.warning('Recursion limit reached while collecting references! Aborting further collections!')
             return
 
-        # LOGGER.debug('Collecting from preset: %s', preset_item.data(Kg.NAME))
-
         ordered_child_ls = self._order_children(preset_item)
 
         for child in ordered_child_ls:

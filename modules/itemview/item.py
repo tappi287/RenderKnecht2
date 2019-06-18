@@ -12,7 +12,7 @@ from modules.log import init_logging
 LOGGER = init_logging(__name__)
 
 
-class Defaults:
+class ItemStyleDefaults:
     black = QBrush(QColor(15, 15, 15))
     grey = QBrush(QColor(150, 150, 150))
     red = QBrush(QColor(190, 90, 90))
@@ -21,6 +21,10 @@ class Defaults:
 
     bg_white = QBrush(QColor(255, 255, 255), Qt.SolidPattern)
     bg_red = QBrush(QColor(231, 80, 80, 50), Qt.SolidPattern)
+
+    variant_invalid_color = QBrush(QColor(255, 229, 229, 120), Qt.SolidPattern)
+    variant_valid_color = QBrush(QColor(232, 255, 229, 120), Qt.SolidPattern)
+    variant_default_color = QBrush(QColor(255, 255, 255, 0), Qt.SolidPattern)
 
 
 class KnechtItem(QObject):
@@ -32,7 +36,7 @@ class KnechtItem(QObject):
     # Default font color
     foreground = [None for x in Kg.column_range]
     # Default order column font color
-    foreground[Kg.ORDER] = Defaults.grey
+    foreground[Kg.ORDER] = ItemStyleDefaults.grey
     # Default background
     background = [None for x in Kg.column_range]
 
@@ -350,16 +354,16 @@ class KnechtItem(QObject):
 
     def style_unlocked(self):
         self.style_regular()
-        KnechtItemStyle.style_row(self, Qt.ForegroundRole, Defaults.black)
+        KnechtItemStyle.style_row(self, Qt.ForegroundRole, ItemStyleDefaults.black)
 
     def style_locked(self):
-        KnechtItemStyle.style_row(self, Qt.ForegroundRole, Defaults.grey)
+        KnechtItemStyle.style_row(self, Qt.ForegroundRole, ItemStyleDefaults.grey)
 
     def style_missing(self):
-        KnechtItemStyle.style_row(self, Qt.ForegroundRole, Defaults.red)
+        KnechtItemStyle.style_row(self, Qt.ForegroundRole, ItemStyleDefaults.red)
 
     def style_recursive(self):
-        KnechtItemStyle.style_row(self, Qt.BackgroundRole, Defaults.bg_red)
+        KnechtItemStyle.style_row(self, Qt.BackgroundRole, ItemStyleDefaults.bg_red)
 
 
 class ItemRename:
