@@ -430,7 +430,8 @@ class KnechtItemStyle:
         'file_extension': 'render',
         'resolution': 'render',
         'copy': 'copy',
-        'checkmark': 'checkmark'
+        'checkmark': 'checkmark',
+        'output_item': 'folder',
         }
 
     @classmethod

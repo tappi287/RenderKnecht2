@@ -1,8 +1,13 @@
+import os
+
 from PySide2.QtCore import Qt, QModelIndex, QRegExp
 from PySide2.QtGui import QRegExpValidator
-from PySide2.QtWidgets import QStyledItemDelegate, QComboBox
+from PySide2.QtWidgets import QStyledItemDelegate, QComboBox, QPushButton
 
+from modules.gui.ui_resource import IconRsc
+from modules.gui.widgets.file_dialog import FileDialog
 from modules.itemview.item import KnechtItem
+from modules.itemview.item_edit_undo import ItemEditUndoCommand
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.language import get_translation
 from modules.log import init_logging
@@ -30,7 +35,7 @@ class KnechtValueDelegate(QStyledItemDelegate):
 
     def createEditor(self, parent, option, index):
         # ---- Default behaviour ----
-        if not self._index_is_render_setting(index):
+        if not self._index_is_custom_setting(index):
             return self.default_delegate.createEditor(parent, option, index)
 
         # ---- Custom behaviour ----
@@ -38,7 +43,7 @@ class KnechtValueDelegate(QStyledItemDelegate):
 
     def setEditorData(self, editor, index):
         # ---- Default behaviour ----
-        if not self._index_is_render_setting(index):
+        if not self._index_is_custom_setting(index):
             return self.default_delegate.setEditorData(editor, index)
 
         # ---- Custom behaviour ---
@@ -46,7 +51,7 @@ class KnechtValueDelegate(QStyledItemDelegate):
 
     def setModelData(self, editor, model, index):
         # ---- Default behaviour ----
-        if not self._index_is_render_setting(index):
+        if not self._index_is_custom_setting(index):
             return self.default_delegate.setModelData(editor, model, index)
 
         # ---- Custom behaviour ---
@@ -54,16 +59,20 @@ class KnechtValueDelegate(QStyledItemDelegate):
 
     def updateEditorGeometry(self, editor, option, index):
         # ---- Default behaviour ----
-        if not self._index_is_render_setting(index):
+        if not self._index_is_custom_setting(index):
             return self.default_delegate.updateEditorGeometry(editor, option, index)
 
         # ---- Custom behaviour ---
         editor.setGeometry(option.rect)
 
-    def _index_is_render_setting(self, index: QModelIndex):
+    def _index_is_custom_setting(self, index: QModelIndex):
         src_index = index.model().mapToSource(index)
         item: KnechtItem = index.model().sourceModel().get_item(src_index)
         setting_type = item.data(Kg.TYPE)
+
+        if item.userType == Kg.output_item:
+            self.setting_delegate = OutputDirButton(self.view)
+            return True
 
         if item.userType == Kg.render_setting and setting_type in RENDER_SETTING_MAP.keys():
             self.setting_delegate = RENDER_SETTING_MAP[setting_type](self.view)
@@ -71,7 +80,7 @@ class KnechtValueDelegate(QStyledItemDelegate):
         return False
 
 
-class ComboBoxDelegate:
+class ComboBoxDelegate(KnechtValueDelegate):
     @staticmethod
     def set_editor_data(editor: QComboBox, index):
         current_value = index.model().data(index, Qt.EditRole)
@@ -85,14 +94,12 @@ class ComboBoxDelegate:
 
         editor.setCurrentIndex(current_index)
 
-    @staticmethod
-    def set_model_data(editor: QComboBox, model, index):
+    def set_model_data(self, editor: QComboBox, model, index):
         value = editor.currentText()
-
         model.setData(index, value, Qt.EditRole)
 
 
-class SamplingComboBox(KnechtValueDelegate, ComboBoxDelegate):
+class SamplingComboBox(ComboBoxDelegate):
     sampling_values = list()
 
     for s in range(0, 12+1):
@@ -115,7 +122,7 @@ class SamplingComboBox(KnechtValueDelegate, ComboBoxDelegate):
         return editor
 
 
-class ResolutionComboBox(KnechtValueDelegate, ComboBoxDelegate):
+class ResolutionComboBox(ComboBoxDelegate):
     resolution_values = ['1080 1080', '1280 720', '1280 960', '1920 1080', '1920 1440', '2560 1920',
                          '2880 1620', '3840 2160', '4096 2160']
 
@@ -144,7 +151,7 @@ class ResolutionComboBox(KnechtValueDelegate, ComboBoxDelegate):
         return editor
 
 
-class FileExtensionComboBox(KnechtValueDelegate, ComboBoxDelegate):
+class FileExtensionComboBox(ComboBoxDelegate):
     ext_values = ['.exr', '.hdr', '.png', '.jpg', '.bmp', '.tif']
 
     def create_editor(self, parent, option, index):
@@ -160,6 +167,42 @@ class FileExtensionComboBox(KnechtValueDelegate, ComboBoxDelegate):
         editor.setCurrentIndex(current_index)
 
         return editor
+
+
+class OutputDirButton(KnechtValueDelegate):
+    file_dlg = FileDialog()
+
+    def create_editor(self, parent, option, index):
+        editor = QPushButton(parent)
+        editor.setIcon(IconRsc.get_icon('folder'))
+        editor.index = index
+        editor.output_dir = ''
+        editor.pressed.connect(self.set_file_path)
+        return editor
+
+    def set_file_path(self):
+        editor = self.sender()
+        current_dir = editor.index.siblingAtColumn(Kg.VALUE).data(Qt.DisplayRole)
+        if not os.path.exists(current_dir):
+            current_dir = None
+
+        output_dir = self.file_dlg.open_existing_directory(directory=current_dir)
+
+        if output_dir:
+            """
+            We do not call the setModelData method and therefore need to create our undo command ourself
+            """
+            undo_cmd = ItemEditUndoCommand(current_dir, output_dir, editor.index, editing_done=False)
+            self.view.undo_stack.push(undo_cmd)
+            self.view.undo_stack.setActive(True)
+
+    @staticmethod
+    def set_editor_data(editor, index):
+        pass
+
+    @staticmethod
+    def set_model_data(editor, model, index):
+        pass
 
 
 RENDER_SETTING_MAP = {

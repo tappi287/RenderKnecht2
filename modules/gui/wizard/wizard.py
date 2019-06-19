@@ -2,16 +2,15 @@ from pathlib import Path
 from typing import Union
 
 from PySide2.QtCore import Slot
-from PySide2.QtWidgets import QWizard, QWizardPage, QPushButton
+from PySide2.QtWidgets import QPushButton, QWizard, QWizardPage
 
 from modules import KnechtSettings
 from modules.gui.clipboard import TreeClipboard
-from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.file_dialog import FileDialog
 from modules.gui.widgets.message_box import AskToContinue
 from modules.gui.wizard.data_import import ImportWizardPage
 from modules.gui.wizard.fakom import FakomWizardPage
-from modules.gui.wizard.menus import WizardSessionMenu, WizardNavMenu
+from modules.gui.wizard.menus import WizardNavMenu, WizardSessionMenu
 from modules.gui.wizard.result import ResultWizardPage
 from modules.gui.wizard.session import WizardSession
 from modules.gui.wizard.start import WelcomeWizardPage
@@ -154,9 +153,8 @@ class PresetWizard(QWizard):
             return
 
         LOGGER.debug('Creating Preset Wizard Document')
-        self.ui.view_mgr.create_view(
-            src_model, new_file
-            )
+        new_view = self.ui.view_mgr.create_view(src_model, new_file, new_page=True)
+        new_view.undo_stack.resetClean()
 
     def restart_session(self) -> bool:
         if not self.ask_restart():

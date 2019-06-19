@@ -63,6 +63,8 @@ class CreateMenu(QMenu):
                        i.get_icon('fakom_trim'), self._create_fakom_trim),
                        (_("FaKom Option\tVarianten einer Farbkombination"),
                        i.get_icon('fakom'), self._create_fakom_option),
+                       (_('Ausgabe Objekt\tDefiniert einen Ausgabepfad'),
+                        i.get_icon('folder'), self._create_output_item),
                        (_("Separator\tNicht-interagierbares Ordnungselement"),
                        i.get_icon('navicon'), self._create_separator)]
 
@@ -152,6 +154,9 @@ class CreateMenu(QMenu):
     def _create_fakom_option(self):
         children = self._fakom_children()
         self._add_item('FaKom Modell PR_SIB_VOS_LUM Option', ('', 'fakom_option'), children, _id=True)
+
+    def _create_output_item(self):
+        self._add_item(_('Ausgabe Pfad'), (_('<Kein Pfad gesetzt>'), 'output_item'), None, _id=True)
 
     def _create_separator(self):
         self._add_item('', ('', 'separator'))

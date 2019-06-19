@@ -20,13 +20,13 @@ class KnechtModelGlobals:
     column_range = range(0, 7)
     column_count = 7
     column_desc = [_('Order'), _('Name'), _('Wert'), _('Typ'), _('Referenz'), _('Id'), _('Beschreibung')]
-    column_type_keys = ('preset', 'trim_setup', 'options', 'package', 'reset', 'viewset', 'fakom_setup', 'fakom_option')
 
     TYPE_MAPPING = dict(trim_setup='preset', fakom_setup='preset', fakom_option='preset', options='preset',
                         package='preset', viewset='preset', viewset_mask='preset', reset='preset',
                         render_preset='render_preset', sampling='render_setting', file_extension='render_setting',
                         resolution='render_setting', separator='separator', sub_separator='sub_separator',
-                        seperator='separator', sub_seperator='Sub_separator')
+                        seperator='separator', sub_seperator='Sub_separator',
+                        output_item='output_item')
 
     # White Filter to apply on quick filtering
     QUICK_VIEW_FILTER = ['preset', 'separator', 'render_preset']
@@ -40,22 +40,19 @@ class KnechtModelGlobals:
 
     xml_tag_user_type = {
         'preset'   : 1000, 'variant': 1001, 'reference': 1002, 'render_preset': 1003, 'render_setting': 1004,
-        'separator': 1005, 'seperator': 1005, 'sub_seperator': 1006, 'sub_separator': 1006}
+        'separator': 1005, 'seperator': 1005, 'sub_seperator': 1006, 'sub_separator': 1006,
+        'output_item': 1010
+        }
 
     xml_tag_by_user_type = dict()
     for k, v in xml_tag_user_type.items():
         xml_tag_by_user_type[v] = k
-
-    # Default, read from source presets, do not search for references in them
-    # if they are in source widget(for performance)
-    column_type_default_keys = ('trim_setup', 'options', 'package', 'reset', 'viewset', 'fakom_setup', 'fakom_option')
-
     # --- Item userType ---
     type_num, type_keys = dict(), dict()
 
     for idx, desc in enumerate(
             ['preset', 'variant', 'reference', 'render_preset', 'render_setting', 'separator', 'sub_separator',
-             'checkable', 'group_item', 'dialog_item']):
+             'checkable', 'group_item', 'dialog_item', 'output_item']):
         type_keys[1000 + idx] = desc
 
     # Qt UserTypes will be in 1000s
@@ -69,6 +66,7 @@ class KnechtModelGlobals:
     checkable = 1007
     group_item = 1008
     dialog_item = 1009
+    output_item = 1010
     locked_preset = 1100
     xml_tag_by_user_type[locked_preset] = 'preset'
     locked_variant = 1101

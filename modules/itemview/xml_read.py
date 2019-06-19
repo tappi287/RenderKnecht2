@@ -123,7 +123,7 @@ class KnechtXmlReader:
         elif node.tag in ('render_setting'):
             self._create_tree_item(node, self.__preset_item)
 
-        elif node.tag in ('variant', 'reference'):
+        elif node.tag in ('variant', 'reference', 'output_item'):
             if node.getparent().tag == Kg.xml_dom_tags['level_1']:
                 # Parse orphans aswell for session load / variants widget
                 self._create_tree_item(node)
