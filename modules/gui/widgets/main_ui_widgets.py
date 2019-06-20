@@ -117,7 +117,8 @@ class MainWindowWidgets(QObject):
         # Validate render preset content by collecting variants without reset
         # if no variants collected, deny rendering
         validation_presets = self.ui.renderTree.editor.render.collect_render_presets(collect_reset=False)
-        render_presets = self.ui.renderTree.editor.render.collect_render_presets()
+        ui_path = Path(self.ui.lineEdit_currentRenderPath.text())
+        render_presets = self.ui.renderTree.editor.render.collect_render_presets(global_render_path=ui_path)
 
         if not render_presets or not validation_presets:
             self.ui.msg(_('Fehler beim sammeln der Preset Varianten. Einige Inhalte der Render Presets '

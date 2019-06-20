@@ -51,14 +51,14 @@ class KnechtEditorRenderPresets:
 
     @staticmethod
     def _collect_referenced_preset_variants(reference: QUuid, view_origin, collect_reset=True) -> KnechtVariantList:
-        """ Generic variants collection from a referenced preset from the originating view
+        """
+        Generic variants collection from a referenced preset from the originating view
 
         :param QUuid reference: Unique Id of the preset to collect
         :param modules.itemview.tree_view.KnechtTreeView view_origin: TreeView the render presets originates from
         :return:
         """
         origin_model: KnechtModel = view_origin.model().sourceModel()
-
         preset_item = origin_model.id_mgr.get_preset_from_id(reference)
 
         if preset_item and preset_item.data(Kg.TYPE) == 'viewset':
@@ -70,7 +70,8 @@ class KnechtEditorRenderPresets:
 
     def _collect_references(self, render_preset_idx: QModelIndex, view_origin, collect_reset=True
                             ) -> Generator[Tuple[QModelIndex, Any], Tuple[bool, str, KnechtVariantList], None]:
-        """ Collect referenced Presets inside render preset
+        """
+        Collect referenced Presets inside render preset
 
         :param QModelIndex render_preset_idx: source model index of the current render preset
         :param modules.itemview.tree_view.KnechtTreeView view_origin: TreeView the render presets originates from
@@ -99,8 +100,10 @@ class KnechtEditorRenderPresets:
 
             yield is_viewset, name, variants
 
-    def _collect_settings(self, render_preset_item, render_preset: KnechtRenderPreset):
-        """ Collect Render Settings from Render Preset Item
+    @staticmethod
+    def _collect_settings(render_preset_item, render_preset: KnechtRenderPreset):
+        """
+        Collect Render Settings from Render Preset Item
 
         :param modules.itemview.item.KnechtItem render_preset_item: the KnechtItem to read settings from
         :param KnechtRenderPreset render_preset: the RenderPreset to update the settings of
@@ -117,7 +120,7 @@ class KnechtEditorRenderPresets:
             elif child_item.data(Kg.TYPE) == 'file_extension':
                 render_preset.settings['file_extension'] = child_item.data(Kg.VALUE)
 
-    def collect_render_presets(self, collect_reset=True):
+    def collect_render_presets(self, collect_reset=True, global_render_path: Path=Path('.')):
         """ Collect variants and settings of the render presets in the renderTree """
         if not self.view.model() or not self.view.is_render_view:
             return
@@ -128,10 +131,9 @@ class KnechtEditorRenderPresets:
             if not item.userType == Kg.render_preset:
                 continue
 
-            render_preset = KnechtRenderPreset(item.data(Kg.NAME))
+            render_preset = KnechtRenderPreset(item.data(Kg.NAME), global_render_path)
 
             if not item.origin:
-                # TODO: Handle errors when collecting render presets
                 # Skip render presets that have no origin set
                 LOGGER.debug('Render Preset Item %s has no origin set!', item.data(Kg.NAME))
                 result = False

@@ -45,6 +45,7 @@ class KnechtVariant:
 class KnechtVariantList:
     def __init__(self):
         self.variants: List[KnechtVariant] = list()
+        self.output_path = None
 
     def add(self, index: QModelIndex, name: str, value: str, item_type: str='') -> None:
         """ Add a single variant to the list of variants
@@ -55,6 +56,10 @@ class KnechtVariantList:
         :param item_type: Optional type description that refers to PR-Family for PR-Option items
         :return: None
         """
+        if item_type == 'output_item':
+            self.output_path = value
+            return
+
         variant = KnechtVariant(index, name, value, item_type)
         self.variants.append(variant)
 
@@ -78,6 +83,7 @@ class _RenderImage:
         """ Holds information about the image name and variants to switch for this render image """
         self.name = create_file_safe_name(name)
         self.variants = variants
+        self.path = Path('.')
 
 
 class _RenderShot:
@@ -92,7 +98,7 @@ class _RenderShot:
 
 
 class KnechtRenderPreset:
-    def __init__(self, name: str = 'Render_Preset'):
+    def __init__(self, name: str = 'Render_Preset', ui_path: Path=Path('.')):
         self.name = create_file_safe_name(name)
 
         self.settings = dict(
@@ -101,7 +107,7 @@ class KnechtRenderPreset:
             resolution='2560 1920'
             )
 
-        self.path = Path('.')
+        self.path = ui_path
 
         # Keep a list of rendering paths above the 256 chrs limit
         self.too_long_paths = list()
@@ -182,7 +188,7 @@ class KnechtRenderPreset:
         for (image, shot) in self.__render_images:
             img_file_name = f'{self.__image_name(image, shot)}{self.settings.get("file_extension")}'
             out_dir_name = 'out_0123456789012345678'
-            img_path = self.path / out_dir_name / img_file_name
+            img_path = self._get_output_dir(image, shot) / out_dir_name / img_file_name
 
             if len(img_path.as_posix()) >= 258:
                 self.too_long_paths.append(img_path)
@@ -190,6 +196,16 @@ class KnechtRenderPreset:
         if self.too_long_paths:
             return False
         return True
+
+    def _get_output_dir(self, image: _RenderImage, shot: _RenderShot) -> Path:
+        out_dir = self.path
+
+        if shot.variants.output_path:
+            out_dir = shot.variants.output_path
+        if image.variants.output_path:
+            out_dir = image.variants.output_path
+
+        return out_dir
 
     def __create_render_images_list(self):
         """
@@ -207,14 +223,14 @@ class KnechtRenderPreset:
                 self.__render_images.append((image, shot))
         return
 
-    def __create_render_image(self) -> Tuple[str, KnechtVariantList]:
+    def __create_render_image(self) -> Tuple[str, KnechtVariantList, Path]:
         __r: Tuple[_RenderImage, _RenderShot] = self.__render_images.pop(0)
         image: _RenderImage = __r[0]
         shot: _RenderShot = __r[1]
 
         image_name = self.__image_name(image, shot)
 
-        return image_name, image.variants + shot.variants
+        return image_name, image.variants + shot.variants, self._get_output_dir(image, shot)
 
     def __image_name(self, image: _RenderImage, shot: _RenderShot) -> str:
         """ Create the image name based on image name and shot name """
@@ -236,19 +252,19 @@ class KnechtRenderPreset:
     def current_image_number(self) -> int:
         return self.__image_count
 
-    def get_next_render_image(self) -> Tuple[str, KnechtVariantList]:
+    def get_next_render_image(self) -> Tuple[str, KnechtVariantList, Path]:
         """
         Get the next render image name and variants.
 
         :return Tuple[str, KnechtVariantList]: (name, variants list)
         """
         if not self.remaining_images():
-            return '', KnechtVariantList()
+            return '', KnechtVariantList(), self.path
 
-        image_name, image_variants = self.__create_render_image()
+        image_name, image_variants, out_dir = self.__create_render_image()
         self.__image_count += 1
 
-        return image_name, image_variants
+        return image_name, image_variants, out_dir
 
 
 class _DataTrimOption:

@@ -120,13 +120,9 @@ class KnechtRenderThread(Thread):
         rendering_failed = 2
         not_set = -1
 
-    def __init__(self, render_presets: List[KnechtRenderPreset], output_path: Path):
+    def __init__(self, render_presets: List[KnechtRenderPreset]):
         super(KnechtRenderThread, self).__init__()
         self.render_presets = render_presets[::]
-
-        # Set output path
-        for rp in self.render_presets:
-            rp.path = output_path
 
         self.render_log = str()
         self.render_log_name = 'RenderKnecht_Log_'
@@ -154,8 +150,6 @@ class KnechtRenderThread(Thread):
         self.dg_operation_result = -1
 
     def run(self):
-        self.update_preset_dirs()
-
         if self.verify_render_settings():
             self.render_loop()
         else:
@@ -170,6 +164,8 @@ class KnechtRenderThread(Thread):
         too_long_paths, invalid_paths = list(), False
 
         for render_preset in self.render_presets:
+            render_preset.preset_dir = self.create_preset_dirs
+
             if render_preset.path.as_posix() == '.':
                 invalid_paths = True
             if not render_preset.verify_path_lengths():
@@ -197,10 +193,6 @@ class KnechtRenderThread(Thread):
         self.render_start_time = time.time()
 
         for render_preset in self.render_presets:
-            # Create Render Preset output directory
-            output_dir = self.create_directory(render_preset.path)
-            render_preset.path = output_dir
-
             self._init_render_log(render_preset)
 
             # Render images
@@ -208,8 +200,8 @@ class KnechtRenderThread(Thread):
                 if self.abort_rendering:
                     return
 
-                name, variant_ls = render_preset.get_next_render_image()
-                self.render_image(name, variant_ls, render_preset)
+                name, variant_ls, out_dir = render_preset.get_next_render_image()
+                self.render_image(name, variant_ls, render_preset, out_dir)
 
                 if self.abort_rendering:
                     return
@@ -233,7 +225,7 @@ class KnechtRenderThread(Thread):
                 datetime.now().strftime('%A %H:%M -'), self.total_image_count(), duration))
             self.render_result = self.Result.rendering_completed
 
-    def render_image(self, name: str, variant_ls: KnechtVariantList, render_preset: KnechtRenderPreset):
+    def render_image(self, name: str, variant_ls: KnechtVariantList, render_preset: KnechtRenderPreset, out_dir: Path):
         """ perform rendering for the current image """
         self.current_img_start_time = time.time()
         self.current_img_render_time = calculate_render_time(render_preset)
@@ -472,7 +464,7 @@ class KnechtRenderThread(Thread):
 
                 break
 
-    def update_preset_dirs(self):
+    def update_preset_dirs(self, out_dir):
         """ Update render preset output directorys """
         if not self.create_preset_dirs:
             return
@@ -620,11 +612,8 @@ class KnechtRender(QObject):
         self.send_dg.set_rendering_mode(True)
         self.ui.pushButton_abortRender.setEnabled(True)
 
-        # UI output path
-        output_path = Path(self.ui.lineEdit_currentRenderPath.text())
-
         # Render Thread
-        self.rt = KnechtRenderThread(render_presets, output_path)
+        self.rt = KnechtRenderThread(render_presets)
 
         # Prepare thread inbound signals
         self._abort_rendering.connect(self.rt.abort)

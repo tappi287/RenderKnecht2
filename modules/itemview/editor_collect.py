@@ -107,15 +107,18 @@ class KnechtCollectVariants(QObject):
             if child.userType == Kg.reference:
                 ref_preset = self._collect_single_reference(child, src_model)
 
+                if ref_preset.userType == Kg.output_item:
+                    self._add_variant(ref_preset, variants_ls, src_model)
+                    continue
+
                 if ref_preset:
                     self.recursion_depth += 1
                     self._collect_preset_variants(ref_preset, variants_ls, src_model)
 
     @staticmethod
     def _add_variant(item: KnechtItem, variants: KnechtVariantList, src_model: KnechtModel) -> None:
-        if item.userType == Kg.variant:
+        if item.userType in (Kg.variant, Kg.output_item):
             index = src_model.get_index_from_item(item)
-
             # LOGGER.debug('Adding variant: %s %s', item.data(Kg.NAME), item.data(Kg.VALUE))
             variants.add(index, item.data(Kg.NAME), item.data(Kg.VALUE), item.data(Kg.TYPE))
 
