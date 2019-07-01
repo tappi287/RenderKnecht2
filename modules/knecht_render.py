@@ -120,10 +120,10 @@ class KnechtRenderThread(Thread):
         rendering_failed = 2
         not_set = -1
 
-    def __init__(self, render_presets: List[KnechtRenderPreset]):
+    def __init__(self, render_presets: List[KnechtRenderPreset], global_render_path: Path=Path('.')):
         super(KnechtRenderThread, self).__init__()
         self.render_presets = render_presets[::]
-
+        self.global_render_path = global_render_path
         self.render_log = str()
         self.render_log_name = 'RenderKnecht_Log_'
 

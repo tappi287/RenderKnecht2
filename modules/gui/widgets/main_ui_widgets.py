@@ -139,12 +139,9 @@ class MainWindowWidgets(QObject):
     def calculate_render_tree(self):
         self.render_calc_timer.stop()
         LOGGER.debug('Render Items changed. Calculating render time.')
+        render_presets = self.ui.renderTree.editor.render.collect_render_presets(ignore_result=True)
 
-        try:
-            render_presets = self.ui.renderTree.editor.render.collect_render_presets()
-        except Exception as e:
-            LOGGER.warning('Error collecting render presets for render time calculation.')
-            LOGGER.warning(e)
+        if not render_presets:
             return
 
         rt = KnechtRenderThread(render_presets, Path('.'))

@@ -84,6 +84,9 @@ class KnechtEditorRenderPresets:
             ref_id = item.reference
             is_viewset = False
 
+            if item.userType == Kg.output_item:
+                continue
+
             if not name:
                 name = 'Render_Image_Name_Not_Set'
 
@@ -120,7 +123,7 @@ class KnechtEditorRenderPresets:
             elif child_item.data(Kg.TYPE) == 'file_extension':
                 render_preset.settings['file_extension'] = child_item.data(Kg.VALUE)
 
-    def collect_render_presets(self, collect_reset=True, global_render_path: Path=Path('.')):
+    def collect_render_presets(self, collect_reset=True, global_render_path: Path=Path('.'), ignore_result=False):
         """ Collect variants and settings of the render presets in the renderTree """
         if not self.view.model() or not self.view.is_render_view:
             return
@@ -155,4 +158,9 @@ class KnechtEditorRenderPresets:
             render_presets.append(render_preset)
 
         if result:
+            return render_presets
+
+        if ignore_result:
+            # For render time calculation, even return render presets without variants
+            # or correct item origin
             return render_presets
