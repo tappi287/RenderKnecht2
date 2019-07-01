@@ -25,7 +25,7 @@ class TreeContextMenu(QMenu):
     def __init__(self, view, ui, menu_name: str = _('Baum Kontextmenü')):
         """ Context menu of tree views
 
-        :param KnechtTreeView view: tree view
+        :param modules.itemview.tree_view.KnechtTreeView view: tree view
         :param KnechtWindow ui: main window ui class
         :param str menu_name: name of the menu
         """
@@ -112,6 +112,9 @@ class TreeContextMenu(QMenu):
         restart = QAction(IconRsc.get_icon('reset'), 'Restart', self.dev_actions)
         restart.triggered.connect(self.restart_app)
 
+        reorder = QAction(IconRsc.get_icon('sort'), 'Rewrite item order whole tree', self.dev_actions)
+        reorder.triggered.connect(self.reorder_tree)
+
         self.addActions(self.dev_actions.actions())
         self.dev_actions.setVisible(False)
 
@@ -195,6 +198,10 @@ class TreeContextMenu(QMenu):
 
     def restart_app(self):
         restart_knecht_app(self.ui)
+
+    def reorder_tree(self):
+        for idx, _ in self.view.editor.iterator.iterate_view():
+            self.view.editor.iterator.order_items(idx)
 
     def update_actions(self):
         src_model = self.view.model().sourceModel()

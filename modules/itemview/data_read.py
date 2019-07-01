@@ -279,10 +279,10 @@ class KnechtDataToModel:
             return
 
         # Create FaKom item content
-        color_item = KnechtItem(fa_item, (f'{fa_item.childCount():03d}', color, 'on'))
-        sib_item = KnechtItem(fa_item, (f'{fa_item.childCount():03d}', sib, 'on', 'SIB', '', '', sib_text))
-        vos_item = KnechtItem(fa_item, (f'{fa_item.childCount():03d}', vos, 'on', 'VOS', '', '', vos_text))
-        lum_item = KnechtItem(fa_item, (f'{fa_item.childCount():03d}', lum, 'on', 'LUM', '', '', lum_text))
+        color_item = KnechtItem(fa_item, ('000', color, 'on'))
+        sib_item = KnechtItem(fa_item, ('001', sib, 'on', 'SIB', '', '', sib_text))
+        vos_item = KnechtItem(fa_item, ('002', vos, 'on', 'VOS', '', '', vos_text))
+        lum_item = KnechtItem(fa_item, ('003', lum, 'on', 'LUM', '', '', lum_text))
 
         for i in (color_item, sib_item, vos_item, lum_item):
             fa_item.append_item_child(i)

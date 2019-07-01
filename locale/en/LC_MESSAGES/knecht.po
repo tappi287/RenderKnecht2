@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2019-06-17 01:15+0200\n"
-"PO-Revision-Date: 2019-06-17 01:18+0200\n"
+"POT-Creation-Date: 2019-07-01 11:18+0200\n"
+"PO-Revision-Date: 2019-07-01 11:20+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.3\n"
 
 #: modules/gui/widgets\excel_dialog.py:44
 msgid "PR-Familie"
@@ -129,11 +129,11 @@ msgstr "Import process"
 msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr "Do you really want to cancel this process?"
 
-#: modules/gui/widgets\excel_dialog.py:449 modules/gui/wizard\wizard.py:207
+#: modules/gui/widgets\excel_dialog.py:449 modules/gui/wizard\wizard.py:205
 msgid "Ja"
 msgstr "Yes"
 
-#: modules/gui/widgets\excel_dialog.py:450 modules/gui/wizard\wizard.py:208
+#: modules/gui/widgets\excel_dialog.py:450 modules/gui/wizard\wizard.py:206
 msgid "Nein"
 msgstr "No"
 
@@ -289,15 +289,15 @@ msgstr "Estimated Render time ({} CPUs/GI)"
 msgid "Ausgabe Verzeichnis auswählen ..."
 msgstr "Choose output directory ..."
 
-#: modules/gui/widgets\main_ui_widgets.py:123
+#: modules/gui/widgets\main_ui_widgets.py:124
 msgid "Fehler beim sammeln der Preset Varianten. Einige Inhalte der Render Presets existieren nicht mehr."
 msgstr "Error collecting the preset variants. Some of the content of the Render Presets no longer exists."
 
-#: modules/gui/widgets\main_ui_widgets.py:131
+#: modules/gui/widgets\main_ui_widgets.py:132
 msgid "Es läuft bereits ein Render Vorgang."
 msgstr "Render process is already running."
 
-#: modules/gui/widgets\main_ui_widgets.py:156
+#: modules/gui/widgets\main_ui_widgets.py:154
 msgid "abgeschlossen am: "
 msgstr "finished on: "
 
@@ -346,8 +346,20 @@ msgid "FaKom Option\tVarianten einer Farbkombination"
 msgstr "FaKom option\tVariants of a color combination"
 
 #: modules/gui/widgets\menu_create.py:66
+msgid "Ausgabe Objekt\tDefiniert einen Ausgabepfad"
+msgstr "Output node\tDefines an Output directory"
+
+#: modules/gui/widgets\menu_create.py:68
 msgid "Separator\tNicht-interagierbares Ordnungselement"
 msgstr "Separator\tNon-interactable order element"
+
+#: modules/gui/widgets\menu_create.py:159
+msgid "<Kein Pfad gesetzt>"
+msgstr "<No valid path>"
+
+#: modules/gui/widgets\menu_create.py:159
+msgid "Ausgabe Pfad"
+msgstr "Output Path"
 
 #: modules/gui/widgets\menu_deltagen.py:22
 msgid "DeltaGen"
@@ -619,8 +631,8 @@ msgstr "Do you really want to continue with this operation?"
 msgid "Fortfahren"
 msgstr "Continue"
 
-#: modules/gui/widgets\message_box.py:69 modules/gui/wizard\wizard.py:48
-#: modules/gui/wizard\wizard.py:190 modules/gui\main_app.py:109
+#: modules/gui/widgets\message_box.py:69 modules/gui/wizard\wizard.py:47
+#: modules/gui/wizard\wizard.py:188 modules/gui\main_app.py:109
 #: modules/gui\main_app.py:128
 msgid "Abbrechen"
 msgstr "Cancel"
@@ -814,7 +826,7 @@ msgstr "Overview of unused PR Options and Packages"
 msgid "Nicht verwendete Optionen"
 msgstr "Unused options"
 
-#: modules/gui/wizard\start.py:28 modules/gui/wizard\wizard.py:30
+#: modules/gui/wizard\start.py:28 modules/gui/wizard\wizard.py:29
 msgid "Preset Wizard"
 msgstr "Preset Wizard"
 
@@ -838,59 +850,59 @@ msgstr "Mark country-specific packages as used"
 msgid "Filter anzeigen/bearbeiten"
 msgstr "Edit filtering"
 
-#: modules/gui/wizard\wizard.py:45
+#: modules/gui/wizard\wizard.py:44
 msgid "Zurück"
 msgstr "Back"
 
-#: modules/gui/wizard\wizard.py:46
+#: modules/gui/wizard\wizard.py:45
 msgid "Weiter"
 msgstr "Next"
 
-#: modules/gui/wizard\wizard.py:47
+#: modules/gui/wizard\wizard.py:46
 msgid "Abschließen"
 msgstr "Finish"
 
-#: modules/gui/wizard\wizard.py:55
+#: modules/gui/wizard\wizard.py:54
 msgid "Sitzung"
 msgstr "Session"
 
-#: modules/gui/wizard\wizard.py:89
+#: modules/gui/wizard\wizard.py:88
 msgid "Wizard Session konnte nicht geladen werden!"
 msgstr "Wizard session could not be loaded!"
 
-#: modules/gui/wizard\wizard.py:106 modules/gui/wizard\wizard.py:143
+#: modules/gui/wizard\wizard.py:105 modules/gui/wizard\wizard.py:142
 msgid "Wizard Session geladen."
 msgstr "Wizard Session loaded."
 
-#: modules/gui/wizard\wizard.py:108
+#: modules/gui/wizard\wizard.py:107
 msgid "Fehler beim Laden der Wizard Session Datei."
 msgstr "Error loading Preset Wizard Session file."
 
-#: modules/gui/wizard\wizard.py:122
+#: modules/gui/wizard\wizard.py:121
 msgid "Wizard Session gespeichert."
 msgstr "Wizard Session saved."
 
-#: modules/gui/wizard\wizard.py:126
+#: modules/gui/wizard\wizard.py:125
 msgid "Fehler beim Speichern der Wizard Session."
 msgstr "Error saving wizard session."
 
-#: modules/gui/wizard\wizard.py:132
+#: modules/gui/wizard\wizard.py:131
 msgid "Wizard Session wurde automatisch gespeichert."
 msgstr "Wizard Session was automatically saved."
 
-#: modules/gui/wizard\wizard.py:134
+#: modules/gui/wizard\wizard.py:133
 msgid "Fehler! Wizard Session konnte nicht gespeichert werden."
 msgstr "Error! Wizard Session could not be saved."
 
-#: modules/gui/wizard\wizard.py:188
+#: modules/gui/wizard\wizard.py:186
 msgid "Soll der Assistent neu gestartet werden? Die vorhandenen Sessiondaten gehen verloren."
 msgstr "Do you want to Restart the Preset Wizard Assistant? Current Session data will be lost."
 
-#: modules/gui/wizard\wizard.py:189
+#: modules/gui/wizard\wizard.py:187
 msgid "Ok"
 msgstr "Ok"
 
-#: modules/gui/wizard\wizard.py:206
+#: modules/gui/wizard\wizard.py:204
 msgid "Soll der Assistent wirklich abgebrochen werden?"
 msgstr "Do you really want to cancel the wizard?"
 
@@ -923,7 +935,7 @@ msgid "Variantenbaum"
 msgstr "Variants Tree"
 
 #: modules/gui\main_ui.py:58 modules/gui\ui_resource.py:121
-#: modules\knecht_render.py:648
+#: modules\knecht_render.py:619
 msgid "Renderliste"
 msgstr "Render Queue"
 
@@ -1179,7 +1191,7 @@ msgstr "Changes the global DeltaGen viewer background color. This setting will a
 msgid "Bricht laufende Sendung an DeltaGen ab."
 msgstr "Cancel running DeltaGen variants send operation."
 
-#: modules/gui\ui_translations.py:116 modules\knecht_render.py:679
+#: modules/gui\ui_translations.py:116 modules\knecht_render.py:650
 msgid "Rendering"
 msgstr "Rendering"
 
@@ -1227,7 +1239,7 @@ msgstr "Convert images to PNG"
 msgid "Konvertiert die ausgegebenen Bilder nach dem Render Vorgang in PNG."
 msgstr "Converts the created images to PNG after rendering."
 
-#: modules/gui\ui_translations.py:143 modules\knecht_render.py:295
+#: modules/gui\ui_translations.py:143 modules\knecht_render.py:290
 msgid "Rendering starten"
 msgstr "Start rendering"
 
@@ -1419,43 +1431,43 @@ msgstr "The chosen Xml document is valid but contains no data."
 msgid "Fehler beim schreiben der Datei: {}"
 msgstr "Error writing the file: {}"
 
-#: modules\knecht_deltagen.py:159
+#: modules\knecht_deltagen.py:162
 msgid "DeltaGen Verbindung erfolgreich verifiziert."
 msgstr "DeltaGen connection successfully verified."
 
-#: modules\knecht_deltagen.py:174
+#: modules\knecht_deltagen.py:177
 msgid "DeltaGen Verbindungsversuch ({!s}/{!s}) in {!s} Sekunden..."
 msgstr "DeltaGen connection attempt ({!s}/{!s}) in {!s} seconds ..."
 
-#: modules\knecht_deltagen.py:202
+#: modules\knecht_deltagen.py:205
 msgid "Prüfe Verbindung..."
 msgstr "Checking connection..."
 
-#: modules\knecht_deltagen.py:210
+#: modules\knecht_deltagen.py:213
 msgid "Sperre Viewer Fenster"
 msgstr "Lock viewer window"
 
-#: modules\knecht_deltagen.py:381
+#: modules\knecht_deltagen.py:384
 msgid "Es läuft bereits eine DeltaGen Sende Operation! Vorgang abwarten oder abbrechen und anschließend erneut versuchen."
 msgstr "DeltaGen send operation already running! Wait or cancel the running operation."
 
-#: modules\knecht_deltagen.py:412
+#: modules\knecht_deltagen.py:415
 msgid "DeltaGen Sende Operation beendet."
 msgstr "DeltaGen Send Operation finished."
 
-#: modules\knecht_deltagen.py:414
+#: modules\knecht_deltagen.py:417
 msgid "Konnte <b>keine Verbindung</b> zu einer DeltaGen Instanz mit geladener Szene herstellen."
 msgstr "Could not <b> connect </ b> to a DeltaGen instance with a loaded scene."
 
-#: modules\knecht_deltagen.py:419
+#: modules\knecht_deltagen.py:422
 msgid "DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>"
 msgstr "DeltaGen command could not be sent. <b> No connection. </ b>"
 
-#: modules\knecht_deltagen.py:421
+#: modules\knecht_deltagen.py:424
 msgid "DeltaGen Sende Operation <b>abgebrochen.</b>"
 msgstr "DeltaGen Send Operation <b> aborted. </ B>"
 
-#: modules\knecht_deltagen.py:431
+#: modules\knecht_deltagen.py:434
 msgid "{0} {1} gesendet"
 msgstr "{0} {1} sent"
 
@@ -1503,71 +1515,71 @@ msgstr "Create picture with name:"
 msgid "Varianten:"
 msgstr "Variants:"
 
-#: modules\knecht_render.py:180
+#: modules\knecht_render.py:176
 msgid "Die folgenden Ausgabepfade sind zu lang, Rendering wird abgebrochen. {}{}"
 msgstr "The following output paths are too long, rendering will be canceled. {}{}"
 
-#: modules\knecht_render.py:186
+#: modules\knecht_render.py:182
 msgid "Die Render Presets enthalten einen ungültigen Ausgabepfad. Rendering wird abgebrochen."
 msgstr "Render Presets contain invalid output directory. Render process will be canceled."
 
-#: modules\knecht_render.py:219
+#: modules\knecht_render.py:214
 msgid "Konvertiere Bilddaten..."
 msgstr "Convert image data ..."
 
-#: modules\knecht_render.py:232
+#: modules\knecht_render.py:227
 msgid "{} Rendering von {} Bildern abgeschlossen in {}"
 msgstr "{} Rendering of {} images completed in {}"
 
-#: modules\knecht_render.py:249
+#: modules\knecht_render.py:244
 msgid "Sende Varianten..."
 msgstr "Send variants ..."
 
-#: modules\knecht_render.py:259
+#: modules\knecht_render.py:254
 msgid "Sende Einstellungen..."
 msgstr "Send settings ..."
 
-#: modules\knecht_render.py:347 modules\knecht_render.py:348
+#: modules\knecht_render.py:342 modules\knecht_render.py:343
 msgid "Prüfe Bilddaten..."
 msgstr "Checking image data..."
 
-#: modules\knecht_render.py:352 modules\knecht_render.py:353
+#: modules\knecht_render.py:347 modules\knecht_render.py:348
 msgid "Rendering erzeugt."
 msgstr "Rendering generated."
 
-#: modules\knecht_render.py:358
+#: modules\knecht_render.py:353
 msgid "Erzeuge nächstes Bild in {}..."
 msgstr "Creating next image in {}..."
 
-#: modules\knecht_render.py:395
+#: modules\knecht_render.py:390
 msgid "{0}Bild Konvertierung:{0}{1}"
 msgstr "{0}Image conversion:{0}{1}"
 
-#: modules\knecht_render.py:404
+#: modules\knecht_render.py:399
 msgid "Render Vorgang abgebrochen.{}Konnte keine Verbindung zu einer DeltaGen Instanz herstellen."
 msgstr "Render operation canceled.{}Could not connect to a DeltaGen instance."
 
-#: modules\knecht_render.py:441
+#: modules\knecht_render.py:436
 msgid "Bilddaten konnten nicht als gültiges Bild verifiziert werden.{}"
 msgstr "File could not be validated as a valid image file: {}"
 
-#: modules\knecht_render.py:453
+#: modules\knecht_render.py:448
 msgid "Bilddaten wurden erfolgreich verifiziert: {}"
 msgstr "Image data has been successfully verified: {}"
 
-#: modules\knecht_render.py:463
+#: modules\knecht_render.py:458
 msgid "{0}Datei konnte nicht als gültige Bilddatei verfiziert werden: {1}{0}"
 msgstr "{0}File could not be verified as valid image file: {1}{0}"
 
-#: modules\knecht_render.py:527
+#: modules\knecht_render.py:501
 msgid "{} Einstellungen - "
 msgstr "{} Settings - "
 
-#: modules\knecht_render.py:528
+#: modules\knecht_render.py:502
 msgid "Sampling: {} - Res: "
 msgstr "Sampling: {} - Res: "
 
-#: modules\knecht_render.py:529
+#: modules\knecht_render.py:503
 msgid "{}px - Ext: "
 msgstr "{}px - Ext: "
 

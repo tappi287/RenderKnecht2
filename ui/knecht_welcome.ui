@@ -111,11 +111,10 @@ QPushButton:hover {color: rgb(85, 170, 255);
      <item>
       <widget class="QLabel" name="news">
        <property name="text">
-        <string>integrate network render service functionality&lt;br&gt;
-validate RenderPreset content and dismiss render start without variants&lt;br&gt;
-correctly parse Vplus with non-unique package descriptions eg. identical package names&lt;br&gt;
-added menu action to send variants without reset&lt;br&gt;
-enhanced handling of image files and path lenghts while rendering&lt;br&gt;</string>
+        <string>fix item order numbering for preset wizard results&lt;br&gt;
+visual GUI feedback for variant state check&lt;br&gt;
+integrate network render service functionality&lt;br&gt;
+validate RenderPreset content and dismiss render start without variants&lt;br&gt;</string>
        </property>
       </widget>
      </item>

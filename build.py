@@ -124,7 +124,7 @@ def main(process: int=0):
             print('\nRemoving executable folder: ' + DIST_EXE_DIR)
             shutil.rmtree(rm_dir)
 
-        print('\nBuilding completed!')
+        print('\nBuild completed!')
 
     if process > 0:
         if not upload_release():

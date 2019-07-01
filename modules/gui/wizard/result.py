@@ -160,22 +160,27 @@ class ResultWizardPage(QWizardPage):
             # -- Add reference to trim setup --
             trim_ref = trim_items[preset_page.model]['trim_setup'].copy(copy_children=False)
             trim_ref.convert_to_reference()
+            trim_ref.setData(0, '000')
             preset_item.append_item_child(trim_ref)
 
             # -- Add reference to fakom item --
             fa_ref = trim_items[preset_page.model]['fakom'][preset_page.fakom].copy(copy_children=False)
             fa_ref.convert_to_reference()
+            fa_ref.setData(0, '001')
             preset_item.append_item_child(fa_ref)
 
             # -- Collect preset content --
             for _, pr_item in preset_page.preset_tree.editor.iterator.iterate_view():
                 if pr_item.userType == Kg.variant:
                     # --- Add PR-option ---
-                    preset_item.append_item_child(pr_item.copy())
+                    pr_item_copy = pr_item.copy()
+                    pr_item_copy.setData(0, f'{preset_item.childCount():03d}')
+                    preset_item.append_item_child(pr_item_copy)
                 else:
                     # --- Add package reference ---
                     pkg_ref = pr_item.copy(copy_children=False)
                     pkg_ref.convert_to_reference()
+                    pkg_ref.setData(0, f'{preset_item.childCount():03d}')
                     preset_item.append_item_child(pkg_ref)
                     # --- Add package ---
                     trim_items[preset_page.model]['packages'].append(pr_item.copy())
