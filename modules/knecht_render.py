@@ -164,7 +164,7 @@ class KnechtRenderThread(Thread):
         too_long_paths, invalid_paths = list(), False
 
         for render_preset in self.render_presets:
-            render_preset.preset_dir = self.create_preset_dirs
+            render_preset.create_preset_dir = self.create_preset_dirs
 
             if render_preset.path.as_posix() == '.':
                 invalid_paths = True
@@ -195,29 +195,32 @@ class KnechtRenderThread(Thread):
         for render_preset in self.render_presets:
             self._init_render_log(render_preset)
 
+            # Fallback directory
+            img_out_dir = render_preset.path
+
             # Render images
             while render_preset.remaining_images():
                 if self.abort_rendering:
                     return
 
-                name, variant_ls, out_dir = render_preset.get_next_render_image()
-                self.render_image(name, variant_ls, render_preset, out_dir)
+                name, variant_ls, img_out_dir = render_preset.get_next_render_image()
+                self.render_image(name, variant_ls, render_preset, img_out_dir)
 
                 if self.abort_rendering:
                     return
 
-            # Convert resulting images
+            # Convert resulting images of render preset
             if self.convert_to_png:
                 msg = _('Konvertiere Bilddaten...')
                 self.status.emit(msg)
                 self.btn_text.emit(msg)
 
-                self.img_thread.convert_directory(render_preset.path,
-                                                  render_preset.path,
+                self.img_thread.convert_directory(img_out_dir,
+                                                  img_out_dir,
                                                   move_converted=True)
                 self._await_conversion_result()
 
-            self._write_render_log(render_preset)
+            self._write_render_log(img_out_dir)
 
         if self.rendered_img_count >= self.total_image_count():
             duration = time_string(time.time() - self.render_start_time)
@@ -261,7 +264,7 @@ class KnechtRenderThread(Thread):
         # --- Send Rendering command
         # Create img file name and final output path
         img_file_name = f'{name}{render_preset.settings.get("file_extension")}'
-        img_path = render_preset.path / img_file_name
+        img_path = out_dir / img_file_name
 
         if self.abort_rendering:
             return
@@ -473,27 +476,6 @@ class KnechtRenderThread(Thread):
             render_preset.path = render_preset.path / render_preset.name
 
     @staticmethod
-    def create_directory(render_dir):
-        out_dir_name = 'out_' + str(time.time())[:19]
-
-        render_dir = Path(render_dir) / out_dir_name
-
-        if not render_dir.exists():
-            try:
-                render_dir.mkdir(parents=True)
-            except Exception as e:
-                LOGGER.critical('Could not create rendering directory! Rendering to executable path.\n%s', e)
-                render_dir = Path('.') / out_dir_name
-
-                try:
-                    render_dir.mkdir(parents=True)
-                except Exception as e:
-                    LOGGER.critical('Could not create fallback directory! '
-                                    'Rendering will not be able to write images.\n%s', e)
-
-        return render_dir
-
-    @staticmethod
     def get_samples(sampling: str) -> int:
         """
         Reverse actual sampling value to sampling level 1-12
@@ -521,9 +503,9 @@ class KnechtRenderThread(Thread):
         self.render_log += _('{}px - Ext: ').format(render_preset.settings.get('resolution').replace(' ', 'x'))
         self.render_log += '{}'.format(render_preset.settings.get('file_extension'))
 
-    def _write_render_log(self, render_preset: KnechtRenderPreset):
+    def _write_render_log(self, img_out_dir: Path):
         try:
-            with open(render_preset.path / self.render_log_name, 'w') as e:
+            with open(Path(img_out_dir / self.render_log_name), 'w') as e:
                 print(self.render_log, file=e)
         except Exception as e:
             LOGGER.error('Error writing render log to file: %s', e)

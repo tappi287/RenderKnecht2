@@ -6,6 +6,9 @@ from typing import List, Tuple, Union
 from PySide2.QtCore import QModelIndex
 
 from modules.knecht_fakom import FakomData
+from modules.log import init_logging
+
+LOGGER = init_logging(__name__)
 
 
 def create_file_safe_name(filename: str) -> str:
@@ -107,6 +110,9 @@ class KnechtRenderPreset:
             resolution='2560 1920'
             )
 
+        self.unique_out_dir_name = 'out_' + str(time.time())[:19]
+        self.create_preset_dir = False
+
         self.path = ui_path
 
         # Keep a list of rendering paths above the 256 chrs limit
@@ -188,7 +194,7 @@ class KnechtRenderPreset:
         for (image, shot) in self.__render_images:
             img_file_name = f'{self.__image_name(image, shot)}{self.settings.get("file_extension")}'
             out_dir_name = 'out_0123456789012345678'
-            img_path = self._get_output_dir(image, shot) / out_dir_name / img_file_name
+            img_path = self._get_output_dir(image, shot, create_dir=False) / out_dir_name / img_file_name
 
             if len(img_path.as_posix()) >= 258:
                 self.too_long_paths.append(img_path)
@@ -197,13 +203,37 @@ class KnechtRenderPreset:
             return False
         return True
 
-    def _get_output_dir(self, image: _RenderImage, shot: _RenderShot) -> Path:
+    def create_directory(self, render_dir):
+        render_dir = Path(render_dir) / self.unique_out_dir_name
+
+        if not render_dir.exists():
+            try:
+                render_dir.mkdir(parents=True)
+            except Exception as e:
+                LOGGER.critical('Could not create rendering directory! Rendering to executable path.\n%s', e)
+                render_dir = Path('.') / self.unique_out_dir_name
+
+                try:
+                    render_dir.mkdir(parents=True)
+                except Exception as e:
+                    LOGGER.critical('Could not create fallback directory! '
+                                    'Rendering will not be able to write images.\n%s', e)
+
+        return render_dir
+
+    def _get_output_dir(self, image: _RenderImage, shot: _RenderShot, create_dir=True) -> Path:
         out_dir = self.path
 
         if shot.variants.output_path:
             out_dir = shot.variants.output_path
         if image.variants.output_path:
             out_dir = image.variants.output_path
+
+        if self.create_preset_dir:
+            out_dir = out_dir / self.name
+
+        if create_dir:
+            out_dir = self.create_directory(out_dir)
 
         return out_dir
 
