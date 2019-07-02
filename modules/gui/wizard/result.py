@@ -117,7 +117,7 @@ class ResultWizardPage(QWizardPage):
             trim_item = converter.create_trim(trim)
             trim_item.refresh_id_data()
             trim_items[model_code]['trim_setup'] = trim_item
-            trim_items[model_code]['trim_option'] = converter.create_trim_options(trim)
+            trim_items[model_code]['trim_option'] = converter.create_trim_options(trim, kn_data.options_text_filter)
             trim_items[model_code]['packages'] = list()
             trim_items[model_code]['fakom'] = dict()
 

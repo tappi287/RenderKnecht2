@@ -361,6 +361,11 @@ class _DataParent:
             if c.value != 'L':
                 yield c
 
+    def iterate_optional_filtered_pr(self):
+        for c in self.iterate_pr():
+            if c.value == 'E':
+                yield c
+
     def child_count(self):
         return len(self.children)
 
@@ -452,6 +457,7 @@ class KnData:
         # keep the complete set of data.
         self.read_trim = False
         self.read_options = False
+        self.options_text_filter = False  # Read only PR-Options explicity matching "E"
         self.read_packages = False
         self.read_fakom = False
         self.pr_fam_filter_packages = False

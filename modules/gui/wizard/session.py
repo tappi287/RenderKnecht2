@@ -377,7 +377,14 @@ class WizardSession:
             trim = trim[0]
 
         if is_pr_options:
-            converter.create_pr_options(trim.iterate_optional_pr(), opt_item_model.root_item, ignore_pr_family=False)
+            if import_data.options_text_filter:
+                # Create PR-Options matching E
+                converter.create_pr_options(trim.iterate_optional_filtered_pr(), opt_item_model.root_item,
+                                            ignore_pr_family=False)
+            else:
+                # Create PR-Options not matching L
+                converter.create_pr_options(trim.iterate_optional_pr(), opt_item_model.root_item,
+                                            ignore_pr_family=False)
         else:
             converter.create_packages(trim, opt_item_model.root_item, filter_pkg_by_pr_family=False)
 

@@ -125,6 +125,11 @@ class ExcelImportDialog(QDialog):
         self.check_read_packages: QCheckBox
         self.check_read_packages.setText(_('Pakete erstellen'))
         self.check_read_packages.setIcon(IconRsc.get_icon('pkg'))
+        self.check_options_filter: QCheckBox
+        self.check_options_filter.setText(_('Optionen nach VPlus Wert filtern'))
+        self.check_options_filter.setIcon(IconRsc.get_icon('sort'))
+        self.check_options_filter.setStatusTip(_('Nur optionale PR-Optionen mit Wert E auslesen. Anderfalls alle die '
+                                                 'nicht L entsprechen aus Vplus lesen.'))
 
         self.family_box: QGroupBox
         self.family_box.setTitle(_('PR-Familien Filter Vorlagen'))
@@ -335,7 +340,7 @@ class ExcelImportDialog(QDialog):
 
         # Restore filter settings
         for box in [self.btn_filter_all, self.btn_filter_int, self.btn_filter_ext, self.check_pr_fam_filter_packages,
-                    self.check_read_trim, self.check_read_options, self.check_read_packages]:
+                    self.check_read_trim, self.check_read_options, self.check_read_packages, self.check_options_filter]:
             check_state = entry.get(box.objectName())
 
             if check_state is not None:
@@ -344,6 +349,12 @@ class ExcelImportDialog(QDialog):
                 else:
                     check_state = Qt.Unchecked
                 box.setCheckState(check_state)
+
+        if self.fixed_options:
+            self.check_read_trim.setCheckState(Qt.Checked)
+            self.check_read_options.setCheckState(Qt.Checked)
+            self.check_read_packages.setCheckState(Qt.Unchecked)
+            self.check_options_filter.setCheckState(Qt.Checked)
 
         # Restore checked models
         self.check_items(
@@ -364,7 +375,7 @@ class ExcelImportDialog(QDialog):
 
         # Save filter setting
         for box in [self.btn_filter_all, self.btn_filter_int, self.btn_filter_ext, self.check_pr_fam_filter_packages,
-                    self.check_read_trim, self.check_read_options, self.check_read_packages]:
+                    self.check_read_trim, self.check_read_options, self.check_read_packages, self.check_options_filter]:
             settings.update({box.objectName(): int(box.checkState())})
         # Save model selection
         for (src_index, item) in self._iter_view(self.treeView_Models, self.ModelColumn.code):
@@ -459,10 +470,10 @@ class ExcelImportDialog(QDialog):
         if not self.data:
             return
 
-        self.data: ExcelData
         self.data.read_trim = self.check_read_trim.isChecked()
         self.data.read_options = self.check_read_options.isChecked()
         self.data.read_packages = self.check_read_packages.isChecked()
+        self.data.options_text_filter = self.check_options_filter.isChecked()
         self.data.pr_fam_filter_packages = self.check_pr_fam_filter_packages.isChecked()
         self.data.read_fakom = self.read_fakom
         self.data.selected_models = self.selected_models

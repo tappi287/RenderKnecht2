@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-07-01 11:18+0200\n"
+"POT-Creation-Date: 2019-07-02 12:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,95 +52,103 @@ msgstr ""
 msgid "Pakete erstellen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:130
-msgid "PR-Familien Filter Vorlagen"
+#: modules/gui/widgets\excel_dialog.py:129
+msgid "Optionen nach VPlus Wert filtern"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:133
-msgid "Alle PR-Familien"
+#: modules/gui/widgets\excel_dialog.py:131
+msgid "Nur optionale PR-Optionen mit Wert E auslesen. Anderfalls alle die nicht L entsprechen aus Vplus lesen."
 msgstr ""
 
 #: modules/gui/widgets\excel_dialog.py:135
-msgid "Interieur I/VX-13"
+msgid "PR-Familien Filter Vorlagen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:137
-msgid "Exterieur I/VX-13"
+#: modules/gui/widgets\excel_dialog.py:138
+msgid "Alle PR-Familien"
 msgstr ""
 
 #: modules/gui/widgets\excel_dialog.py:140
+msgid "Interieur I/VX-13"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:142
+msgid "Exterieur I/VX-13"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:145
 msgid "PR-Familien Filter auf Pakete anwenden"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:143
+#: modules/gui/widgets\excel_dialog.py:148
 msgid "Zum filtern tippen ..."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:146
+#: modules/gui/widgets\excel_dialog.py:151
 msgid "Modellfilter"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:148
+#: modules/gui/widgets\excel_dialog.py:153
 msgid "PR-Familien-Filter"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:152
+#: modules/gui/widgets\excel_dialog.py:157
 msgid "PR Familien auswählen die ausgelesen werden sollen."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:154
+#: modules/gui/widgets\excel_dialog.py:159
 msgid "Modelle auswählen die ausgelesen werden sollen."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:168
+#: modules/gui/widgets\excel_dialog.py:173
 msgid "Excel Datei wird gelesen..."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:180
+#: modules/gui/widgets\excel_dialog.py:185
 msgid "POS Xml enthält keine bekannten Farbkombinationsmuster."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:184
+#: modules/gui/widgets\excel_dialog.py:189
 msgid "Konnte POS Xml Daten nicht lesen oder verarbeiten."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:192
+#: modules/gui/widgets\excel_dialog.py:197
 msgid "Daten werden konvertiert..."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:204
+#: modules/gui/widgets\excel_dialog.py:209
 msgid "Daten übertragen..."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:230
+#: modules/gui/widgets\excel_dialog.py:235
 msgid "Excel Daten werden geladen..."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:243
+#: modules/gui/widgets\excel_dialog.py:248
 msgid "Excel Import Fehler"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:447
+#: modules/gui/widgets\excel_dialog.py:458
 msgid "Importvorgang"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:448
+#: modules/gui/widgets\excel_dialog.py:459
 msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:449 modules/gui/wizard\wizard.py:205
+#: modules/gui/widgets\excel_dialog.py:460 modules/gui/wizard\wizard.py:205
 msgid "Ja"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:450 modules/gui/wizard\wizard.py:206
+#: modules/gui/widgets\excel_dialog.py:461 modules/gui/wizard\wizard.py:206
 msgid "Nein"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:508
+#: modules/gui/widgets\excel_dialog.py:519
 msgid "Alle Einträge auswählen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:510
+#: modules/gui/widgets\excel_dialog.py:521
 msgid "Alle Einträge abwählen"
 msgstr ""
 

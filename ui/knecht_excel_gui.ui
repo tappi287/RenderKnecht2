@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>VPlus_dialog</class>
  <widget class="QDialog" name="VPlus_dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>504</width>
+    <height>412</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>V-Plus Browser Leseoptionen</string>
   </property>
@@ -56,6 +64,20 @@
         <property name="icon">
          <iconset resource="res/gui_resource.qrc">
           <normaloff>:/type/options.png</normaloff>:/type/options.png</iconset>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="check_options_filter">
+        <property name="text">
+         <string>Optionen nach VPlus Wert filtern</string>
+        </property>
+        <property name="icon">
+         <iconset resource="res/gui_resource.qrc">
+          <normaloff>:/main/sort.png</normaloff>:/main/sort.png</iconset>
         </property>
         <property name="checked">
          <bool>true</bool>

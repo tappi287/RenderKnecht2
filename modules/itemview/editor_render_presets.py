@@ -1,4 +1,4 @@
-from typing import Generator, Tuple, Any
+from typing import Generator, Tuple, Any, Union
 from pathlib import Path
 
 from PySide2.QtCore import QModelIndex, QUuid
@@ -50,7 +50,8 @@ class KnechtEditorRenderPresets:
         view.undo_stack.setActive(True)
 
     @staticmethod
-    def _collect_referenced_preset_variants(reference: QUuid, view_origin, collect_reset=True) -> KnechtVariantList:
+    def _collect_referenced_preset_variants(reference: QUuid, view_origin, collect_reset=True
+                                            ) -> Union[KnechtVariantList, None]:
         """
         Generic variants collection from a referenced preset from the originating view
 
@@ -60,6 +61,9 @@ class KnechtEditorRenderPresets:
         """
         origin_model: KnechtModel = view_origin.model().sourceModel()
         preset_item = origin_model.id_mgr.get_preset_from_id(reference)
+
+        if preset_item.userType == Kg.output_item:
+            return
 
         if preset_item and preset_item.data(Kg.TYPE) == 'viewset':
             collect_reset = False
@@ -84,13 +88,14 @@ class KnechtEditorRenderPresets:
             ref_id = item.reference
             is_viewset = False
 
-            if item.userType == Kg.output_item:
-                continue
-
             if not name:
                 name = 'Render_Image_Name_Not_Set'
 
             variants = self._collect_referenced_preset_variants(ref_id, view_origin, collect_reset)
+
+            if not variants:
+                # Output item
+                continue
 
             if item.data(Kg.TYPE) == 'viewset':
                 if not len(variants):

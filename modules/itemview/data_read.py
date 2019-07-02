@@ -114,7 +114,7 @@ class KnechtDataToModel:
             # -- Create options --
             if self.data.read_options:
                 # Filter rows matching E
-                options_item = self.create_trim_options(trim)
+                options_item = self.create_trim_options(trim, self.data.options_text_filter)
                 self.root_item.append_item_child(options_item)
 
             # -- Create packages --
@@ -142,12 +142,17 @@ class KnechtDataToModel:
         self.create_pr_options(trim.iterate_trim_pr(), trim_item)
         return trim_item
 
-    def create_trim_options(self, trim):
+    def create_trim_options(self, trim, text_filter_options=False):
         # -- Create trim line options item --
         data = (f'{self.root_item.childCount():03d}', f'{trim.model_text} Options', trim.model, 'options', '',
                 self.id_gen.create_id(), f'{trim.market} - {trim.gearbox}')
         options_item = KnechtItem(self.root_item, data)
-        self.create_pr_options(trim.iterate_optional_pr(), options_item)
+
+        if text_filter_options:
+            self.create_pr_options(trim.iterate_optional_filtered_pr(), options_item)
+        else:
+            self.create_pr_options(trim.iterate_optional_pr(), options_item)
+
         return options_item
 
     def create_package(self, trim: KnTrim, pkg: KnPackage, order: int=0) -> KnechtItem:
