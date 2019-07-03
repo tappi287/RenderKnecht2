@@ -148,6 +148,9 @@ class WizardSession:
                 LOGGER.debug('Setting default session attribute: %s: %s', k, v)
                 setattr(self.data, k, v)
 
+        # Make sure newly added attributes exists in older sessions
+        self.data.import_data.options_text_filter = True
+
     def reset_session(self):
         self.data = SessionData()
         self._load_default_filter()

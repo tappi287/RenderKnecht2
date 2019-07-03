@@ -115,7 +115,6 @@ class ExcelImportDialog(QDialog):
         # --- Init Icons + Translations ---
         self.option_box: QGroupBox
         self.option_box.setTitle(_('Optionen'))
-        self.option_box.setEnabled(False)
         self.check_read_trim: QCheckBox
         self.check_read_trim.setText(_('Trimlines erstellen'))
         self.check_read_trim.setIcon(IconRsc.get_icon('car'))
@@ -289,8 +288,10 @@ class ExcelImportDialog(QDialog):
         self._setup_tree_columns()
         self.buttonBox.setEnabled(True)
         self.family_box.setEnabled(True)
-        if not self.fixed_options:
-            self.option_box.setEnabled(True)
+        if self.fixed_options:
+            for box in [self.check_pr_fam_filter_packages, self.check_read_trim, self.check_read_options,
+                        self.check_read_packages]:
+                box.setEnabled(False)
 
         self._setup_header_width()
         self._load_default_pr_filter()
