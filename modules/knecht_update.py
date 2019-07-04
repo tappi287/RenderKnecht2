@@ -41,9 +41,9 @@ def restart_knecht_app(ui):
         print('Can not restart in Debug environment.')
         return
 
+    ui.close()
     p = Process(target=_start_knecht_app)
     p.start()
-    ui.close()
 
 
 class _KnechtUpdateThreadSignals(QObject):

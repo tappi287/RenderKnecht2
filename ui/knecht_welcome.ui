@@ -111,7 +111,8 @@ QPushButton:hover {color: rgb(85, 170, 255);
      <item>
       <widget class="QLabel" name="news">
        <property name="text">
-        <string>fix item order numbering for preset wizard results&lt;br&gt;
+        <string>fix Reset not working in preset wizard results because of missing ID&lt;br&gt;
+fix item order numbering for preset wizard results&lt;br&gt;
 visual GUI feedback for variant state check&lt;br&gt;
 integrate network render service functionality&lt;br&gt;
 validate RenderPreset content and dismiss render start without variants&lt;br&gt;</string>

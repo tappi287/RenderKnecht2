@@ -33,7 +33,6 @@ class SessionData:
         self.import_data = KnData()
         self.fakom_selection = dict()  # str(Model): List[FA_SIB_LUM_on]
         self.preset_page_ids = set()   # Keep a set of created preset page id's
-        self.preset_page_num = 0
         self.preset_page_content = dict()  # Key: model_code+fakom Value: preset tree xml data as string
 
         self.lock_btn = True    # Preset Page PR-Option Lock button state
@@ -226,11 +225,6 @@ class WizardSession:
         """ Create a Wizard preset page for each selected FaKom item """
         self.clear_preset_pages()
         self.data.preset_page_ids = set()
-
-        self.data.preset_page_num = 0
-        for fakom_ls in self.data.fakom_selection.values():
-            for _ in fakom_ls:
-                self.data.preset_page_num += 1
 
         for model_code, fakom_ls in self.data.fakom_selection.items():
             # Create available PR-Options and Packages per model

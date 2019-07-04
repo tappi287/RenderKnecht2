@@ -43,11 +43,12 @@ class PresetWizardPage(QWizardPage):
         self.fakom = fakom
 
         trim = [x for x in wizard.session.data.import_data.models if x.model == model][0]
+        self.model_text = trim.model_text
+
         SetupWidget.from_ui_file(self, Resource.ui_paths['wizard_preset'])
 
         # -- Title --
-        num = 1 + len(self.wizard.session.data.preset_page_ids)
-        self.setTitle(f'{num:02d}/{self.wizard.session.data.preset_page_num:02d} Preset - {trim.model_text}')
+        self.page_num = 1 + len(self.wizard.session.data.preset_page_ids)
 
         # -- Sub Title Update Timer --
         self.update_title_timer = QTimer()
@@ -247,6 +248,8 @@ class PresetWizardPage(QWizardPage):
             else:
                 option_names += f'_{item.data(Kg.VALUE)}'  # Add Package PR to name
 
+        self.setTitle(f'{self.page_num:02d}/{len(self.wizard.session.data.preset_page_ids):02d}'
+                      f' Preset - {self.model_text}')
         self.setSubTitle(f'{self.model}_{self.fakom}{option_names}')
 
     def setup_button_state(self):

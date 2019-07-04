@@ -17,7 +17,7 @@ if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     print('Using high dpi Pixmaps')
 
-VERSION = '0.987'
+VERSION = '0.988'
 
 # TODO: Add image output directory tree item to be placed anywhere
 #  eg. placed in preset will render preset to this directory, placed in render_preset will render presets not

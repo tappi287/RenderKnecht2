@@ -28,7 +28,8 @@ _ = lang.gettext
 
 
 def create_reset_item(order: int=0) -> KnechtItem:
-    reset_item = KnechtItem(None, (f'{order:03d}', 'Reset', '', 'reset'))
+    reset_item = KnechtItem(None, (f'{order:03d}', 'Reset', '', 'reset', '', Kid.create_id()))
+    reset_item.refresh_id_data()
 
     child_data = [('000', 'reset', 'on', '', '', '', 'Sollte einen im Modell vorhanden Reset Schalter betätigen'),
                   ('001', 'reset', 'off', '', '', '', 'Sollte einen im Modell vorhanden Reset Schalter betätigen'),
