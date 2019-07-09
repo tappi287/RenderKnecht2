@@ -4,6 +4,7 @@ from typing import Union
 
 from PySide2 import QtWidgets
 
+from modules.gui.widgets.path_util import path_exists
 from modules.language import get_translation
 from modules.log import init_logging
 from modules.settings import KnechtSettings
@@ -64,7 +65,7 @@ class FileDialog:
 
         file, file_ext = cls.__create_file_dialog(parent, title, directory, file_filter)
 
-        if file and Path(file).exists():
+        if file and path_exists(file):
             if Path(file).suffix != f'.{file_key}':
                 LOGGER.warning(f'User supposed to open: %s but opened: %s - returning None',
                                f'.{file_key}', Path(file).suffix)
@@ -84,7 +85,7 @@ class FileDialog:
 
         directory = cls.__create_dir_dialog(parent, title, directory)
 
-        if directory and Path(directory).exists():
+        if directory and path_exists(directory):
             KnechtSettings.app['current_path'] = Path(directory).as_posix()
 
         return directory
@@ -121,15 +122,15 @@ class FileDialog:
         # Fallback path USERPROFILE path or current directory '.'
         __fallback = Path(os.getenv('USERPROFILE', '.'))
 
-        if not d or not Path(d).exists():
-            if KnechtSettings.app['current_path'] not in ['', '.'] and __c.exists():
+        if not d or not path_exists(d):
+            if KnechtSettings.app['current_path'] not in ['', '.'] and path_exists(__c):
                 # Set to settings current_path and continue with file vs. dir check
                 d = __c
             else:
                 return __fallback
 
         if Path(d).is_file():
-            if Path(d).parent.exists():
+            if path_exists(Path(d).parent):
                 # Remove file and return directory
                 return Path(d).parent
             else:

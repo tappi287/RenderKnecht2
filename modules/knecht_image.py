@@ -6,6 +6,7 @@ from PySide2.QtCore import QObject, Signal
 import numpy as np
 from imageio import imread, imwrite
 
+from modules.gui.widgets.path_util import path_exists
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -27,7 +28,7 @@ class KnechtImage(QObject):
 
     def convert_directory(self, img_dir: Path, output_dir: Path=Path('.'),
                           output_format: str='.png', move_converted: bool=False) -> bool:
-        if not img_dir.exists():
+        if not path_exists(img_dir):
             return False
 
         img_list = list()
@@ -84,7 +85,7 @@ class ConversionThread(Thread):
             if self.output_dir == Path('.'):
                 self.output_dir = img_file.parent
 
-            if not self.output_dir.exists():
+            if not path_exists(self.output_dir):
                 try:
                     self.output_dir.mkdir(parents=True)
                 except Exception as e:
@@ -113,7 +114,7 @@ class ConversionThread(Thread):
 
             # Create un-converted directory
             move_dir = self.output_dir.parent / self.unconverted_dir_name
-            if not move_dir.exists():
+            if not path_exists(move_dir):
                 move_dir.mkdir(parents=True)
 
             # Move the file to un-converted directory

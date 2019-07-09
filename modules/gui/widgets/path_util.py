@@ -21,6 +21,7 @@ Copyright (C) 2017 Stefan Tapper, All rights reserved.
 """
 import os.path
 from pathlib import Path
+from typing import Union
 
 from PySide2.QtCore import QObject, Signal, QRegExp, Qt
 from PySide2.QtGui import QRegExpValidator
@@ -36,6 +37,21 @@ LOGGER = init_logging(__name__)
 lang = get_translation()
 lang.install()
 _ = lang.gettext
+
+
+def path_exists(p: Union[Path, str]) -> bool:
+    """ Accessing pathlib.Path.exists can throw all kinds of wierd errors
+        try to catch exceptions here,
+    """
+    try:
+        p = Path(p)
+        if not p.exists():
+            return False
+    except OSError as e:
+        LOGGER.error('Can not access path: %s', e)
+        return False
+
+    return True
 
 
 class SetDirectoryPath(QObject):
@@ -71,13 +87,13 @@ class SetDirectoryPath(QObject):
 
     def btn_open_dialog(self):
         current_path = Path(KnechtSettings.app.get('current_path'))
-        if not current_path.exists():
+        if not path_exists(current_path):
             current_path = Path('.')
 
         if self.line_edit:
             line_edit_path = Path(self.line_edit.text())
 
-            if line_edit_path.exists():
+            if path_exists(line_edit_path):
                 current_path = line_edit_path
 
         if self.path:
@@ -86,7 +102,7 @@ class SetDirectoryPath(QObject):
         self.get_directory_file_dialog(current_path, *self.dialog_args)
 
     def get_directory_file_dialog(self, current_path, title=_("Verzeichnis auswählen"), file_filter='(*.*)'):
-        if not Path(current_path).exists() or current_path == '':
+        if not path_exists(current_path) or current_path == '':
             current_path = Path(KnechtSettings.app.get('current_path'))
         else:
             current_path = Path(current_path)
@@ -116,7 +132,7 @@ class SetDirectoryPath(QObject):
 
     def set_path(self, current_path):
         current_path = Path(current_path)
-        if not current_path.exists():
+        if not path_exists(current_path):
             return
 
         # Update line edit

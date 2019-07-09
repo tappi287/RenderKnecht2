@@ -5,6 +5,7 @@ from zipfile import ZipFile
 
 from PySide2.QtCore import QEvent, QObject, QTimer, Qt, Slot
 
+from modules.gui.widgets.path_util import path_exists
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_update import UpdateModel
 from modules.itemview.xml import SaveLoadController
@@ -250,7 +251,7 @@ class KnechtSession(QObject):
 
     def restore(self) -> bool:
         """ Restore a user session asynchronous """
-        if not self.session_zip.exists():
+        if not path_exists(self.session_zip):
             return False
 
         self.load_dir = CreateZip.create_tmp_dir()

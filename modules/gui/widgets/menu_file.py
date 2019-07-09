@@ -5,6 +5,7 @@ from PySide2.QtGui import QKeySequence
 from PySide2.QtWidgets import QAction, QMenu
 
 from modules.gui.widgets.menu_import import ImportMenu
+from modules.gui.widgets.path_util import path_exists
 from modules.gui.widgets.progress_overlay import ShowTreeViewProgressMessage
 from modules.itemview.model import KnechtModel
 from modules.settings import KnechtSettings
@@ -119,7 +120,7 @@ class FileMenu(QObject):
 
         file = self.view_mgr.current_file()
 
-        if not file or not file.exists():
+        if not file or not path_exists(file):
             if self._ask_save_as_file(file):
                 # User agreed to set new save file
                 self.save_as_xml()
@@ -268,7 +269,7 @@ class FileMenu(QObject):
             file, file_type = entry
             file_name = Path(file).stem
 
-            if not Path(file).exists():
+            if not path_exists(file):
                 # Skip and remove non existing files
                 KnechtSettings.app['recent_files'].pop(idx)
                 continue

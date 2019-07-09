@@ -5,6 +5,7 @@ from typing import List, Tuple, Union
 
 from PySide2.QtCore import QModelIndex
 
+from modules.gui.widgets.path_util import path_exists
 from modules.knecht_fakom import FakomData
 from modules.log import init_logging
 
@@ -206,7 +207,7 @@ class KnechtRenderPreset:
     def create_directory(self, render_dir):
         render_dir = Path(render_dir) / self.unique_out_dir_name
 
-        if not render_dir.exists():
+        if not path_exists(render_dir):
             try:
                 render_dir.mkdir(parents=True)
             except Exception as e:

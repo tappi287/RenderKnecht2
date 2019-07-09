@@ -10,6 +10,7 @@ from PySide2.QtCore import QObject, Qt, Signal, Slot
 from imageio import imread
 
 from modules.gui.widgets.message_box import GenericErrorBox
+from modules.gui.widgets.path_util import path_exists
 from modules.itemview.tree_view import KnechtTreeView
 from modules.knecht_deltagen import CommunicateDeltaGen, SendToDeltaGen
 from modules.knecht_image import KnechtImage
@@ -324,7 +325,7 @@ class KnechtRenderThread(Thread):
     def _await_rendered_image(self, img_path: Path):
         """ Wait until image was created """
         start_time = time.time()
-        while not img_path.exists():
+        while not path_exists(img_path):
             time.sleep(1)
 
             self.display_remaining_time()

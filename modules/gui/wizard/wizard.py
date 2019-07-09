@@ -8,6 +8,7 @@ from modules import KnechtSettings
 from modules.gui.clipboard import TreeClipboard
 from modules.gui.widgets.file_dialog import FileDialog
 from modules.gui.widgets.message_box import AskToContinue
+from modules.gui.widgets.path_util import path_exists
 from modules.gui.wizard.data_import import ImportWizardPage
 from modules.gui.wizard.fakom import FakomWizardPage
 from modules.gui.wizard.menus import WizardNavMenu, WizardSessionMenu
@@ -74,7 +75,7 @@ class PresetWizard(QWizard):
         self.addPage(self.page_placeholder)
 
         # Load session file if provided
-        if file and Path(file).exists():
+        if file and path_exists(file):
             self.open_session_file(Path(file).as_posix())
 
     @Slot()

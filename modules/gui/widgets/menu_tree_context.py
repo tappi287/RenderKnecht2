@@ -8,6 +8,7 @@ from PySide2.QtWidgets import QAction, QActionGroup, QMenu
 from modules.globals import get_settings_dir
 from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.menu_create import CreateMenu
+from modules.gui.widgets.path_util import path_exists
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.knecht_update import restart_knecht_app
 from modules.language import get_translation
@@ -175,7 +176,7 @@ class TreeContextMenu(QMenu):
     def open_settings_dir(self):
         settings_dir = Path(get_settings_dir())
 
-        if settings_dir.exists():
+        if path_exists(settings_dir):
             q = QUrl.fromLocalFile(settings_dir.as_posix())
             QDesktopServices.openUrl(q)
 

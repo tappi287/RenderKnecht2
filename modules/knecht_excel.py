@@ -8,6 +8,7 @@ from zipfile import ZIP_LZMA, ZipFile
 import pandas as pd
 
 from modules.globals import get_settings_dir
+from modules.gui.widgets.path_util import path_exists
 from modules.knecht_utils import list_class_values, CreateZip
 from modules.knecht_fakom import FakomData
 from modules.language import get_translation
@@ -200,7 +201,7 @@ class ExcelData:
         if file_path is None:
             in_zip = Path(get_settings_dir()) / 'Excel_data.zip'
 
-            if not in_zip.exists():
+            if not path_exists(in_zip):
                 return False
         else:
             in_zip = file_path
@@ -269,7 +270,7 @@ class ExcelReader:
         :returns bool: True - successfully read file; False - read error, see errors
         """
         # Test file exists
-        if not file.exists():
+        if not path_exists(file):
             self.errors.append(_('Datei exisitiert nicht: {}').format(file.as_posix()))
             LOGGER.error('Can not read file: %s', file.name)
             return False

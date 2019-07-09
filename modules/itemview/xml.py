@@ -6,6 +6,7 @@ from typing import Union
 
 from PySide2.QtCore import QObject, Signal, Slot
 
+from modules.gui.widgets.path_util import path_exists
 from modules.itemview.item import KnechtItem
 from modules.itemview.model import KnechtModel
 from modules.itemview.tree_view import KnechtTreeView
@@ -83,7 +84,7 @@ class SaveLoadController(QObject):
     def open(self, file: Union[Path, str]):
         file = Path(file)
 
-        if not file.exists():
+        if not path_exists(file):
             LOGGER.info('The provided Xml path does not seem to exist or is un-accessible.')
             self.load_aborted.emit(_('Kann nicht auf die gewählte Datei zugreifen.'), file)
             return

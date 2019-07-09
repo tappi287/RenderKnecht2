@@ -159,8 +159,12 @@ class KnechtSettings:
     def load(cls) -> None:
         file = Path(cls.get_settings_path())
 
-        if not file or not file.exists():
-            print('Could not locate settings file! Using default settings!')
+        try:
+            if not file or not file.exists():
+                print('Could not locate settings file! Using default settings!')
+                return
+        except OSError as e:
+            print('Could not locate settings file! Using default settings!\n', e)
             return
 
         default_settings = dict()
@@ -193,8 +197,11 @@ class KnechtSettings:
         for idx, entry in enumerate(cls.app.get('recent_files') or [('file.xml', 'xml')]):
             entry_file, entry_type = entry
 
-            if Path(entry_file).exists():
-                updated_recent_files.append((entry_file, entry_type))
+            try:
+                if Path(entry_file).exists():
+                    updated_recent_files.append((entry_file, entry_type))
+            except OSError as e:
+                print('Can not access path: ', e)
 
         cls.app['recent_files'] = updated_recent_files
 

@@ -12,7 +12,7 @@ from queue import Queue
 from datetime import datetime, timedelta
 from functools import partial
 
-from modules.gui.widgets.path_util import SetDirectoryPath
+from modules.gui.widgets.path_util import SetDirectoryPath, path_exists
 from modules.gui.animation import AnimatedButton
 from modules.gui.ui_overlay import InfoOverlay, Overlay
 from modules.gui.widgets.menu_job_mgr_context import JobManagerContextMenu
@@ -352,7 +352,7 @@ class PathRenderService(QtCore.QObject):
 
     def open_desktop_directory(self, directory: Path):
         """ Open directory with desktop explorer """
-        if directory.exists():
+        if path_exists(directory):
             q = QtCore.QUrl.fromLocalFile(directory.as_posix())
             QDesktopServices.openUrl(q)
         else:
@@ -387,7 +387,7 @@ class PathRenderService(QtCore.QObject):
         # Create the path to the render file C:/some_dir/some_file_render.mb
         render_file = scene_file.with_name(render_file.name)
 
-        if render_file.exists():
+        if path_exists(render_file):
             # Delete the file
             try:
                 render_file.unlink()

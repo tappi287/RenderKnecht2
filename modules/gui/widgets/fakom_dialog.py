@@ -6,7 +6,7 @@ from PySide2.QtWidgets import QDialog, QGroupBox, QLabel, QLineEdit, QToolButton
 from modules import KnechtSettings
 from modules.globals import Resource
 from modules.gui.gui_utils import SetupWidget
-from modules.gui.widgets.path_util import SetDirectoryPath
+from modules.gui.widgets.path_util import SetDirectoryPath, path_exists
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -112,7 +112,7 @@ class FakomImportDialog(QDialog):
 
     def verify_paths(self):
         for p in (self.pos_path.path, self.xlsx_path.path):
-            if p is None or not p.exists() or not p.is_file():
+            if p is None or not path_exists(p) or not p.is_file():
                 break
         else:
             return True

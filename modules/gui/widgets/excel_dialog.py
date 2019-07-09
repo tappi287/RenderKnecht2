@@ -8,6 +8,7 @@ from modules.globals import Resource
 from modules.gui.gui_utils import SetupWidget, replace_widget
 from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.message_box import AskToContinue, GenericMsgBox
+from modules.gui.widgets.path_util import path_exists
 from modules.itemview.item import KnechtItem
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
@@ -176,7 +177,7 @@ class ExcelImportDialog(QDialog):
         fakom_result, xl_result = True, False
 
         # -- Read Fakom data if pos file provided --
-        if pos_file and pos_file.exists():
+        if pos_file and path_exists(pos_file):
             try:
                 fakom_data = FakomReader.read_pos_file(pos_file)
 

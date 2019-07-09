@@ -12,6 +12,7 @@ from PySide2.QtCore import QObject, QTimer, Signal, Slot, Qt
 from modules.globals import UPDATE_DIR_URL, UPDATE_INSTALL_FILE, UPDATE_VERSION_FILE
 from modules.globals import get_settings_dir, get_current_modules_dir, FROZEN
 from modules.gui.widgets.message_box import AskToContinue
+from modules.gui.widgets.path_util import path_exists
 from modules.language import get_translation
 from modules.log import init_logging
 from modules.settings import KnechtSettings
@@ -26,7 +27,7 @@ _ = lang.gettext
 
 def _start_knecht_app():
     app_path = Path(os.path.join(get_current_modules_dir(), 'RenderKnecht.exe'))
-    if app_path.is_file() and app_path.exists():
+    if path_exists(app_path) and app_path.is_file():
         time.sleep(2)
         Popen(app_path.as_posix())
 
@@ -230,7 +231,7 @@ class KnechtUpdate(QObject):
         return False
 
     def _is_update_ready(self) -> bool:
-        if self.installer_file.exists():
+        if path_exists(self.installer_file):
             if self.remote_version > KnechtSettings.app['version']:
                 return True
         return False
