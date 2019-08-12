@@ -17,15 +17,12 @@ if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     print('Using high dpi Pixmaps')
 
-VERSION = '0.991'
+VERSION = '0.992'
 
 # TODO: Add image output directory tree item to be placed anywhere
 #  eg. placed in preset will render preset to this directory, placed in render_preset will render presets not
 #  containing out_dir_item to that dir
-# TODO: offer Save&Close on unclean document close
 # TODO: Rename, Renumber Images from different RenderPresets
-# TODO: add GSP PR Family to default INT
-# TODO: read I PR Options as default
 
 
 def initialize_log_listener(logging_queue):

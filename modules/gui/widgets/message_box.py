@@ -102,3 +102,43 @@ class AskToContinueCritical(AskToContinue):
     def __init__(self, parent):
         super(AskToContinueCritical, self).__init__(parent)
         self.setIcon(QMessageBox.Critical)
+
+
+class AskDocumentClose(GenericMsgBox):
+    title = _('Ungespeichertes Dokument')
+
+    txt = _('Das Dokument enthält Änderungen die <b>nicht</b> gespeichert wurden!<br><br>'
+            'Diese werden durch Schließen des Dokumentes endgültig <b>verloren</b> gehen.')
+
+    ok_txt = _('Schließen')
+    abort_txt = _('Abbrechen')
+    save_txt = _('Speichern')
+
+    icon_key = 'warn'
+
+    def __init__(self, parent):
+        super(GenericMsgBox, self).__init__(parent, self.title, self.txt, self.icon_key)
+        self.setIcon(QMessageBox.Question)
+        self.setWindowTitle(self.title)
+        self.setText(self.txt)
+
+        self.setStandardButtons(QMessageBox.Save | QMessageBox.Ok | QMessageBox.Abort)
+        self.setDefaultButton(QMessageBox.Abort)
+
+    def ask(self, save_call):
+        self.button(QMessageBox.Save).setText(self.save_txt)
+        self.button(QMessageBox.Save).setIcon(IconRsc.get_icon('disk'))
+        self.button(QMessageBox.Save).setStyleSheet('padding: 4px 6px;')
+        self.button(QMessageBox.Ok).setText(self.ok_txt)
+        self.button(QMessageBox.Ok).setIcon(IconRsc.get_icon('play'))
+        self.button(QMessageBox.Ok).setStyleSheet('padding: 4px 6px;')
+        self.button(QMessageBox.Abort).setText(self.abort_txt)
+        self.button(QMessageBox.Abort).setIcon(IconRsc.get_icon('stop'))
+        self.button(QMessageBox.Abort).setStyleSheet('padding: 4px 6px;')
+
+        result = self.exec_()
+        if result == QMessageBox.Ok:
+            return True
+        elif result == QMessageBox.Save:
+            save_call()
+        return False

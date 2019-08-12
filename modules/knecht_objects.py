@@ -326,6 +326,10 @@ class _DataTrimOption:
 
 
 class _DataParent:
+    PR_TRIM_FILTER = ('L', 'I')     # Excel cell content that indicates an option belongs to default trim
+    PR_OPT_FILTER = ('E',)          # Excel cell content that clearly indicates an option is optional
+    PR_UNAVAILABLE_FILTER = ('-',)  # Excel cell content that clearly indicates an option is unavailable
+
     def __init__(self):
         """ Data Item that can have PR/Package children """
         self.children: List[_DataTrimOption] = list()
@@ -348,23 +352,43 @@ class _DataParent:
                 yield c
 
     def iterate_available_pr(self):
+        """
+        Return PR-Options -NOT- matching Unavailable filter
+
+        :return KnPr
+        """
         for c in self.iterate_pr():
-            if c.value and c.value != '-':
+            if c.value and c.value not in self.PR_UNAVAILABLE_FILTER:
                 yield c
 
     def iterate_trim_pr(self):
+        """
+        Return PR-Options -EXACTLY- matching Trim filter
+
+        :return KnPr
+        """
         for c in self.iterate_pr():
-            if c.value == 'L':
+            if c.value in self.PR_TRIM_FILTER:
                 yield c
 
     def iterate_optional_pr(self):
+        """
+        Return PR-Options -NOT- matching Trim or Unavailable filters
+
+        :return KnPr
+        """
         for c in self.iterate_pr():
-            if c.value != 'L':
+            if c.value not in self.PR_TRIM_FILTER and c.value not in self.PR_UNAVAILABLE_FILTER:
                 yield c
 
     def iterate_optional_filtered_pr(self):
+        """
+        Return PR-Options -EXACTLY- matching the PR_OPT_FILTER
+
+        :return KnPr
+        """
         for c in self.iterate_pr():
-            if c.value == 'E':
+            if c.value in self.PR_OPT_FILTER:
                 yield c
 
     def child_count(self):

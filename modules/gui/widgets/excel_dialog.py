@@ -375,6 +375,9 @@ class ExcelImportDialog(QDialog):
         settings['models'] = list()
         settings['pr_families'] = list()
 
+        # Reset filters
+        self._clear_tree_filter()
+
         # Save filter setting
         for box in [self.btn_filter_all, self.btn_filter_int, self.btn_filter_ext, self.check_pr_fam_filter_packages,
                     self.check_read_trim, self.check_read_options, self.check_read_packages, self.check_options_filter]:

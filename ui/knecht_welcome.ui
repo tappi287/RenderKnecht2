@@ -111,12 +111,12 @@ QPushButton:hover {color: rgb(85, 170, 255);
      <item>
       <widget class="QLabel" name="news">
        <property name="text">
-        <string>add INT PR-Family to default Excel filter, remember to re-apply this to already imported docs whose PR-Family filter will be reloaded from disk&lt;br&gt;
-fix Reset not working in preset wizard results because of missing ID&lt;br&gt;
-fix item order numbering for preset wizard results&lt;br&gt;
-visual GUI feedback for variant state check&lt;br&gt;
-integrate network render service functionality&lt;br&gt;
-validate RenderPreset content and dismiss render start without variants&lt;br&gt;</string>
+        <string>add save action to document close dialog&lt;br&gt;
+clear text filter in Vplus import dialog upon accept&lt;br&gt;
+properly dismiss existing wizard session data on re-import&lt;br&gt;
+update to PySide 5.13&lt;br&gt;
+read PR-Options &quot;I&quot; exactly like &quot;L&quot; as default trim line options&lt;br&gt;
+added Gearbox PR-Family to default INT familys&lt;br&gt;</string>
        </property>
       </widget>
      </item>

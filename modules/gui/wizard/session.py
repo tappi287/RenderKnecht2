@@ -152,6 +152,11 @@ class WizardSession:
 
     def reset_session(self):
         self.data = SessionData()
+
+        # Reset Preset Page content - available PR-Options/Packages
+        self.opt_models = dict()
+        self.pkg_models = dict()
+
         self._load_default_filter()
         self.wizard.page_fakom.result_tree.clear()
         self.clear_preset_pages()

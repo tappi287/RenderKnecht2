@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2019-07-02 12:05+0200\n"
-"PO-Revision-Date: 2019-07-02 12:07+0200\n"
+"POT-Creation-Date: 2019-08-12 14:48+0200\n"
+"PO-Revision-Date: 2019-08-12 14:50+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,28 +16,28 @@ msgstr ""
 "Language: en\n"
 "X-Generator: Poedit 2.2.3\n"
 
-#: modules/gui/widgets\excel_dialog.py:44
+#: modules/gui/widgets\excel_dialog.py:45
 msgid "PR-Familie"
 msgstr "PR-Family"
 
-#: modules/gui/widgets\excel_dialog.py:44
-#: modules/gui/widgets\excel_dialog.py:46 modules/itemview\model_globals.py:22
+#: modules/gui/widgets\excel_dialog.py:45
+#: modules/gui/widgets\excel_dialog.py:47 modules/itemview\model_globals.py:22
 msgid "Beschreibung"
 msgstr "Description"
 
-#: modules/gui/widgets\excel_dialog.py:46
+#: modules/gui/widgets\excel_dialog.py:47
 msgid "Getriebe"
 msgstr "Gearbox"
 
-#: modules/gui/widgets\excel_dialog.py:46
+#: modules/gui/widgets\excel_dialog.py:47
 msgid "Markt"
 msgstr "Market"
 
-#: modules/gui/widgets\excel_dialog.py:46
+#: modules/gui/widgets\excel_dialog.py:47
 msgid "Model"
 msgstr "Model"
 
-#: modules/gui/widgets\excel_dialog.py:117
+#: modules/gui/widgets\excel_dialog.py:118
 msgid "Optionen"
 msgstr "Options"
 
@@ -129,27 +129,27 @@ msgstr "Loading Excel data..."
 msgid "Excel Import Fehler"
 msgstr "Excel Import Error"
 
-#: modules/gui/widgets\excel_dialog.py:458
+#: modules/gui/widgets\excel_dialog.py:463
 msgid "Importvorgang"
 msgstr "Import process"
 
-#: modules/gui/widgets\excel_dialog.py:459
+#: modules/gui/widgets\excel_dialog.py:464
 msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr "Do you really want to cancel this process?"
 
-#: modules/gui/widgets\excel_dialog.py:460 modules/gui/wizard\wizard.py:205
+#: modules/gui/widgets\excel_dialog.py:465 modules/gui/wizard\wizard.py:206
 msgid "Ja"
 msgstr "Yes"
 
-#: modules/gui/widgets\excel_dialog.py:461 modules/gui/wizard\wizard.py:206
+#: modules/gui/widgets\excel_dialog.py:466 modules/gui/wizard\wizard.py:207
 msgid "Nein"
 msgstr "No"
 
-#: modules/gui/widgets\excel_dialog.py:519
+#: modules/gui/widgets\excel_dialog.py:524
 msgid "Alle Einträge auswählen"
 msgstr "Check all items"
 
-#: modules/gui/widgets\excel_dialog.py:521
+#: modules/gui/widgets\excel_dialog.py:526
 msgid "Alle Einträge abwählen"
 msgstr "Un-check all items"
 
@@ -209,47 +209,47 @@ msgstr "Choose POS Variants Xml ..."
 msgid "Excel Dateien (*.xlsx);"
 msgstr "Excel files (*.xlsx);"
 
-#: modules/gui/widgets\fakom_dialog.py:99 modules/gui/widgets\file_dialog.py:26
+#: modules/gui/widgets\fakom_dialog.py:99 modules/gui/widgets\file_dialog.py:27
 msgid "Excel Dateien *.xlsx auswaehlen"
 msgstr "Choose Excel Files *.xlsx"
 
-#: modules/gui/widgets\file_dialog.py:25
+#: modules/gui/widgets\file_dialog.py:26
 msgid "Variant Preset Dateien (*.xml)"
 msgstr "Variant Preset Files (*.xml)"
 
-#: modules/gui/widgets\file_dialog.py:25
+#: modules/gui/widgets\file_dialog.py:26
 msgid "Variants *.XML auswaehlen"
 msgstr "Select Variants * .XML"
 
-#: modules/gui/widgets\file_dialog.py:26
+#: modules/gui/widgets\file_dialog.py:27
 msgid "Excel Dateien (*.xlsx)"
 msgstr "Excel Files (*.xlsx)"
 
-#: modules/gui/widgets\file_dialog.py:27
+#: modules/gui/widgets\file_dialog.py:28
 msgid "Variant CMD Dateien (*.cmd)"
 msgstr "Variant CMD Files (*.cmd)"
 
-#: modules/gui/widgets\file_dialog.py:27
+#: modules/gui/widgets\file_dialog.py:28
 msgid "Variants *.CMD auswaehlen"
 msgstr "Select Variants *.CMD"
 
-#: modules/gui/widgets\file_dialog.py:28
+#: modules/gui/widgets\file_dialog.py:29
 msgid "DeltaGen POS Varianten *.xml oder *.pos auswaehlen"
 msgstr "Select DeltaGen POS variants *.xml or *.pos"
 
-#: modules/gui/widgets\file_dialog.py:29
+#: modules/gui/widgets\file_dialog.py:30
 msgid "DeltaGen POS Datei (*.xml;*.pos)"
 msgstr "DeltaGen POS File (*.xml;*.pos)"
 
-#: modules/gui/widgets\file_dialog.py:30
+#: modules/gui/widgets\file_dialog.py:31
 msgid "RK Session Dateien (*.rksession)"
 msgstr "RK Session Files (* .rksession)"
 
-#: modules/gui/widgets\file_dialog.py:30
+#: modules/gui/widgets\file_dialog.py:31
 msgid "Session *.rksession auswaehlen"
 msgstr "Choose *.rksession file"
 
-#: modules/gui/widgets\file_dialog.py:31
+#: modules/gui/widgets\file_dialog.py:32
 msgid "Verzeichnis auswaehlen ..."
 msgstr "Select directory ..."
 
@@ -422,7 +422,7 @@ msgid "Einfügen\tStrg+V"
 msgstr "Paste\tCtrl+V"
 
 #: modules/gui/widgets\menu_edit.py:86
-#: modules/gui/widgets\menu_tree_context.py:74 modules/gui/wizard\preset.py:293
+#: modules/gui/widgets\menu_tree_context.py:75 modules/gui/wizard\preset.py:296
 msgid "Selektierte Zeilen entfernen\tEntf"
 msgstr "Remove selected rows\tDel"
 
@@ -434,55 +434,55 @@ msgstr "Select references\tCtrl+R"
 msgid "Selektion aufheben\tStrg+D"
 msgstr "Clear selection\tCtrl+D"
 
-#: modules/gui/widgets\menu_file.py:45
+#: modules/gui/widgets\menu_file.py:46
 msgid "Zuletzt geöffnet"
 msgstr "Recent files"
 
-#: modules/gui/widgets\menu_file.py:72
+#: modules/gui/widgets\menu_file.py:73
 msgid "Neu\tStrg+N"
 msgstr "New\tCtrl+N"
 
-#: modules/gui/widgets\menu_file.py:78
+#: modules/gui/widgets\menu_file.py:79
 msgid "Öffnen\tStrg+O"
 msgstr "Open\tCtrl+O"
 
-#: modules/gui/widgets\menu_file.py:88
+#: modules/gui/widgets\menu_file.py:89
 msgid "Speichern\tStrg+S"
 msgstr "Save\tCtrl+S"
 
-#: modules/gui/widgets\menu_file.py:94
+#: modules/gui/widgets\menu_file.py:95
 msgid "Speichern unter ...\tStrg+Shift+S"
 msgstr "Save as ...\tCtrl+Shift+S"
 
-#: modules/gui/widgets\menu_file.py:109
+#: modules/gui/widgets\menu_file.py:110
 msgid "Neues_Dokument_{:02d}.xml"
 msgstr "New_Document_{:02d}.xml"
 
-#: modules/gui/widgets\menu_file.py:156
+#: modules/gui/widgets\menu_file.py:157
 msgid "Datei gespeichert:{0}{1:.3}s"
 msgstr "File saved:{0}{1:.3}s"
 
-#: modules/gui/widgets\menu_file.py:183
+#: modules/gui/widgets\menu_file.py:184
 msgid "Daten werden gelesen"
 msgstr "Data is being read"
 
-#: modules/gui/widgets\menu_file.py:203
+#: modules/gui/widgets\menu_file.py:204
 msgid "{0} in {1:.3}s geladen."
 msgstr "{0} loaded in {1:.3}s."
 
-#: modules/gui/widgets\menu_file.py:245
+#: modules/gui/widgets\menu_file.py:246
 msgid "Zieldatei zum Speichern festlegen?"
 msgstr "Set destination file to save?"
 
-#: modules/gui/widgets\menu_file.py:246
+#: modules/gui/widgets\menu_file.py:247
 msgid "Die Datei: <i>{}</i><br>Pfad: <i>{}</i><br>wurde entfernt oder existiert nicht mehr.<br><br>Neue Zieldatei zum Speichern festlegen?"
 msgstr "The file: <i>{}</i><br>Path: <i>{}</i><br> has been removed or does not exist anymore.<br><br>Set new target file to save?"
 
-#: modules/gui/widgets\menu_file.py:251
+#: modules/gui/widgets\menu_file.py:252
 msgid "Speichern unter.."
 msgstr "Save as.."
 
-#: modules/gui/widgets\menu_file.py:260 modules/gui/wizard\menus.py:77
+#: modules/gui/widgets\menu_file.py:261 modules/gui/wizard\menus.py:77
 msgid "Keine Einträge vorhanden"
 msgstr "No entries"
 
@@ -513,7 +513,7 @@ msgstr "Cancel job"
 
 #: modules/gui/widgets\menu_job_mgr_context.py:57
 msgid "PSD Erstellung erzwingen."
-msgstr "Force PSD creation"
+msgstr "Force PSD creation."
 
 #: modules/gui/widgets\menu_job_mgr_context.py:59
 msgid "Ausgabe Verzeichnis öffnen"
@@ -535,31 +535,31 @@ msgstr "Move to the end of the queue"
 msgid "Sprache"
 msgstr "Language"
 
-#: modules/gui/widgets\menu_tree_context.py:25
+#: modules/gui/widgets\menu_tree_context.py:26
 msgid "Baum Kontextmenü"
 msgstr "Tree Contextmenu"
 
-#: modules/gui/widgets\menu_tree_context.py:38
+#: modules/gui/widgets\menu_tree_context.py:39
 msgid "Senden an DeltaGen"
 msgstr "Send to DeltaGen"
 
-#: modules/gui/widgets\menu_tree_context.py:39
+#: modules/gui/widgets\menu_tree_context.py:40
 msgid "Selektierte Bauminhalte als Variantenschaltung mit vorherigem Reset an DeltaGen senden."
 msgstr "Send selected tree content to DeltaGen with prior reset."
 
-#: modules/gui/widgets\menu_tree_context.py:46
+#: modules/gui/widgets\menu_tree_context.py:47
 msgid "Ohne Reset an DeltaGen senden"
 msgstr "Send to DeltaGen without reset"
 
-#: modules/gui/widgets\menu_tree_context.py:47
+#: modules/gui/widgets\menu_tree_context.py:48
 msgid "Selektierte Bauminhalte ohne einen Reset an DeltaGen senden."
 msgstr "Send selected tree content to DeltaGen without prior reset."
 
-#: modules/gui/widgets\menu_tree_context.py:54
+#: modules/gui/widgets\menu_tree_context.py:55
 msgid "PR String in Zwischenablage kopieren"
 msgstr "Copy PR String to clipboard"
 
-#: modules/gui/widgets\menu_tree_context.py:87
+#: modules/gui/widgets\menu_tree_context.py:88
 msgid "Hide ID columns"
 msgstr "Hide ID columns"
 
@@ -639,17 +639,33 @@ msgstr "Do you really want to continue with this operation?"
 msgid "Fortfahren"
 msgstr "Continue"
 
-#: modules/gui/widgets\message_box.py:69 modules/gui/wizard\wizard.py:47
-#: modules/gui/wizard\wizard.py:188 modules/gui\main_app.py:109
-#: modules/gui\main_app.py:128
+#: modules/gui/widgets\message_box.py:69 modules/gui/widgets\message_box.py:114
+#: modules/gui/wizard\wizard.py:48 modules/gui/wizard\wizard.py:189
+#: modules/gui\main_app.py:109 modules/gui\main_app.py:128
 msgid "Abbrechen"
 msgstr "Cancel"
 
-#: modules/gui/widgets\path_util.py:88
+#: modules/gui/widgets\message_box.py:108
+msgid "Ungespeichertes Dokument"
+msgstr "Unsaved document"
+
+#: modules/gui/widgets\message_box.py:110
+msgid "Das Dokument enthält Änderungen die <b>nicht</b> gespeichert wurden!<br><br>Diese werden durch Schließen des Dokumentes endgültig <b>verloren</b> gehen."
+msgstr "The Document contains changes that <b>have not</b> been saved!<br><br>These will be <b>lost</b> by closing the document."
+
+#: modules/gui/widgets\message_box.py:113 modules/gui\ui_view_manager.py:27
+msgid "Schließen"
+msgstr "Close"
+
+#: modules/gui/widgets\message_box.py:115
+msgid "Speichern"
+msgstr "Save"
+
+#: modules/gui/widgets\path_util.py:104
 msgid "Verzeichnis auswählen"
 msgstr "Choose directory"
 
-#: modules/gui/widgets\path_util.py:153
+#: modules/gui/widgets\path_util.py:169
 msgid "< Gültigen Pfad eingeben >"
 msgstr "< Enter valid path >"
 
@@ -722,7 +738,7 @@ msgstr "Data loaded - Restart FaKom import"
 msgid "Für die Preseterstellung werden Farb- sowie Trimlinedaten benötigt. Im Anschluss an den Importvorgang kann dieser Dialog fortgesetzt werden."
 msgstr "Color And Trimline data are required for preset creation. You can continue this Dialog once the Import is finished."
 
-#: modules/gui/wizard\data_import.py:49 modules/gui/wizard\result.py:63
+#: modules/gui/wizard\data_import.py:49 modules/gui/wizard\result.py:64
 msgid "Ergebnis"
 msgstr "Result"
 
@@ -790,51 +806,51 @@ msgstr "Reset Preset Wizard and discard existing data"
 msgid "Navigation"
 msgstr "Navigation"
 
-#: modules/gui/wizard\preset.py:69
+#: modules/gui/wizard\preset.py:70
 msgid "Preset auto&magisch befüllen"
 msgstr "Fill preset auto&magically"
 
-#: modules/gui/wizard\preset.py:71
+#: modules/gui/wizard\preset.py:72
 msgid "Aktuelles Preset automagisch mit nicht verwendeten Optionen befüllen. Bezugs-, Sitz-, Leder oder Fahrwerksoptionen werden ignoriert."
 msgstr "Automagically fill current preset with unused options. Seat cover, seat type, leather or ride height options are ignored."
 
-#: modules/gui/wizard\preset.py:79
+#: modules/gui/wizard\preset.py:80
 msgid "Bereits verwendete Optionen ein- oder ausblenden"
 msgstr "Hide already used options"
 
-#: modules/gui/wizard\preset.py:86
+#: modules/gui/wizard\preset.py:87
 msgid "Bereits verwendete Optionen für die Bearbeitung sperren"
 msgstr "Block already used Options for editing"
 
-#: modules/gui/wizard\preset.py:93
+#: modules/gui/wizard\preset.py:94
 msgid "Spalte Beschreibung ein- oder ausblenden"
 msgstr "Hide or Show description column"
 
-#: modules/gui/wizard\preset.py:290
+#: modules/gui/wizard\preset.py:293
 msgid "Alle Optionen entfernen"
 msgstr "Remove all options"
 
-#: modules/gui/wizard\preset.py:326
+#: modules/gui/wizard\preset.py:329
 msgid "Selektierte Optionen sperren"
 msgstr "Lock selected Options"
 
-#: modules/gui/wizard\preset.py:330
+#: modules/gui/wizard\preset.py:333
 msgid "Selektierte Optionen entsperren"
 msgstr "Unlock selected options"
 
-#: modules/gui/wizard\result.py:58
+#: modules/gui/wizard\result.py:59
 msgid "Wizard Ergebnis"
 msgstr "Wizard Result"
 
-#: modules/gui/wizard\result.py:59
+#: modules/gui/wizard\result.py:60
 msgid "Überblick über nicht verwendete Optionen und Pakete"
 msgstr "Overview of unused PR Options and Packages"
 
-#: modules/gui/wizard\result.py:65
+#: modules/gui/wizard\result.py:66
 msgid "Nicht verwendete Optionen"
 msgstr "Unused options"
 
-#: modules/gui/wizard\start.py:28 modules/gui/wizard\wizard.py:29
+#: modules/gui/wizard\start.py:28 modules/gui/wizard\wizard.py:30
 msgid "Preset Wizard"
 msgstr "Preset Wizard"
 
@@ -858,59 +874,59 @@ msgstr "Mark country-specific packages as used"
 msgid "Filter anzeigen/bearbeiten"
 msgstr "Edit filtering"
 
-#: modules/gui/wizard\wizard.py:44
+#: modules/gui/wizard\wizard.py:45
 msgid "Zurück"
 msgstr "Back"
 
-#: modules/gui/wizard\wizard.py:45
+#: modules/gui/wizard\wizard.py:46
 msgid "Weiter"
 msgstr "Next"
 
-#: modules/gui/wizard\wizard.py:46
+#: modules/gui/wizard\wizard.py:47
 msgid "Abschließen"
 msgstr "Finish"
 
-#: modules/gui/wizard\wizard.py:54
+#: modules/gui/wizard\wizard.py:55
 msgid "Sitzung"
 msgstr "Session"
 
-#: modules/gui/wizard\wizard.py:88
+#: modules/gui/wizard\wizard.py:89
 msgid "Wizard Session konnte nicht geladen werden!"
 msgstr "Wizard session could not be loaded!"
 
-#: modules/gui/wizard\wizard.py:105 modules/gui/wizard\wizard.py:142
+#: modules/gui/wizard\wizard.py:106 modules/gui/wizard\wizard.py:143
 msgid "Wizard Session geladen."
 msgstr "Wizard Session loaded."
 
-#: modules/gui/wizard\wizard.py:107
+#: modules/gui/wizard\wizard.py:108
 msgid "Fehler beim Laden der Wizard Session Datei."
 msgstr "Error loading Preset Wizard Session file."
 
-#: modules/gui/wizard\wizard.py:121
+#: modules/gui/wizard\wizard.py:122
 msgid "Wizard Session gespeichert."
 msgstr "Wizard Session saved."
 
-#: modules/gui/wizard\wizard.py:125
+#: modules/gui/wizard\wizard.py:126
 msgid "Fehler beim Speichern der Wizard Session."
 msgstr "Error saving wizard session."
 
-#: modules/gui/wizard\wizard.py:131
+#: modules/gui/wizard\wizard.py:132
 msgid "Wizard Session wurde automatisch gespeichert."
 msgstr "Wizard Session was automatically saved."
 
-#: modules/gui/wizard\wizard.py:133
+#: modules/gui/wizard\wizard.py:134
 msgid "Fehler! Wizard Session konnte nicht gespeichert werden."
 msgstr "Error! Wizard Session could not be saved."
 
-#: modules/gui/wizard\wizard.py:186
+#: modules/gui/wizard\wizard.py:187
 msgid "Soll der Assistent neu gestartet werden? Die vorhandenen Sessiondaten gehen verloren."
 msgstr "Do you want to Restart the Preset Wizard Assistant? Current Session data will be lost."
 
-#: modules/gui/wizard\wizard.py:187
+#: modules/gui/wizard\wizard.py:188
 msgid "Ok"
 msgstr "Ok"
 
-#: modules/gui/wizard\wizard.py:204
+#: modules/gui/wizard\wizard.py:205
 msgid "Soll der Assistent wirklich abgebrochen werden?"
 msgstr "Do you really want to cancel the wizard?"
 
@@ -943,7 +959,7 @@ msgid "Variantenbaum"
 msgstr "Variants Tree"
 
 #: modules/gui\main_ui.py:58 modules/gui\ui_resource.py:121
-#: modules\knecht_render.py:619
+#: modules\knecht_render.py:620
 msgid "Renderliste"
 msgstr "Render Queue"
 
@@ -1025,7 +1041,7 @@ msgstr "Invalid/non-existent scene path specified."
 
 #: modules/gui\path_render_service.py:258
 msgid " Setze vorherigen Szenenpfad."
-msgstr "Set previous scene path."
+msgstr " Set previous scene path."
 
 #: modules/gui\path_render_service.py:259
 msgid "Vorherigen Szenenpfad gesetzt:<br><i>{}</i>"
@@ -1089,11 +1105,11 @@ msgstr "<span style=\\color: red;\\><b>Connection to the render Service terminat
 
 #: modules/gui\path_render_service.py:590
 msgid "Empfange: "
-msgstr "Receiving:"
+msgstr "Receiving: "
 
 #: modules/gui\path_render_service.py:592
 msgid "Sende   : "
-msgstr "Sending  :"
+msgstr "Sending  : "
 
 #: modules/gui\path_render_service.py:604
 msgid "Job Titel darf nur Buchstaben, Zahlen, Binde- oder _strich enthalten."
@@ -1199,7 +1215,7 @@ msgstr "Changes the global DeltaGen viewer background color. This setting will a
 msgid "Bricht laufende Sendung an DeltaGen ab."
 msgstr "Cancel running DeltaGen variants send operation."
 
-#: modules/gui\ui_translations.py:116 modules\knecht_render.py:650
+#: modules/gui\ui_translations.py:116 modules\knecht_render.py:651
 msgid "Rendering"
 msgstr "Rendering"
 
@@ -1247,7 +1263,7 @@ msgstr "Convert images to PNG"
 msgid "Konvertiert die ausgegebenen Bilder nach dem Render Vorgang in PNG."
 msgstr "Converts the created images to PNG after rendering."
 
-#: modules/gui\ui_translations.py:143 modules\knecht_render.py:290
+#: modules/gui\ui_translations.py:143 modules\knecht_render.py:291
 msgid "Rendering starten"
 msgstr "Start rendering"
 
@@ -1312,30 +1328,18 @@ msgid "Den zu verwendenden Renderer wählen."
 msgstr "Choose a renderer to use."
 
 #: modules/gui\ui_view_manager.py:24
-msgid "Ungespeicherte Änderungen"
-msgstr "Unsaved Changes"
-
-#: modules/gui\ui_view_manager.py:25
-msgid "Das Dokument enthält Änderungen die <b>nicht</b> gespeichert wurden!<br><br>Diese werden durch Schließen des Dokumentes endgültig <b>verloren</b> gehen."
-msgstr "The Document contains changes that <b>have not</b> been saved!<br><br>These will be <b>lost</b> by closing the document."
-
-#: modules/gui\ui_view_manager.py:27 modules/gui\ui_view_manager.py:31
-msgid "Schließen"
-msgstr "Close"
-
-#: modules/gui\ui_view_manager.py:28
 msgid "Zwischenablage verwerfen?"
 msgstr "Discard clipboard?"
 
-#: modules/gui\ui_view_manager.py:29
+#: modules/gui\ui_view_manager.py:25
 msgid "Die Zwischenablage enthält <i>{}</i> Elemente aus<br><i>{}</i><br><br>Diese werden durch Schließen des Dokumentes aus der Zwischenablage <b>entfernt</b>."
 msgstr "Clipboard contains <i>{}</i> elements from<br><i>{}</i><br><br>Those will be <b>deleted</b> from the clipboard upon close."
 
-#: modules/gui\ui_view_manager.py:48
+#: modules/gui\ui_view_manager.py:44
 msgid "Neues_Dokument.xml"
 msgstr "New_Document.xml"
 
-#: modules/gui\ui_view_manager.py:141
+#: modules/gui\ui_view_manager.py:137
 msgid "Kann Beschäftigten nicht entlassen. Verstoß gegen Arbeitnehmerschutzgesetz festgestellt."
 msgstr "Can not delete widget that is busy."
 
@@ -1415,11 +1419,11 @@ msgstr "Error - Can not find already opened file within document tabulators."
 msgid "Datei ist bereits geöffnet."
 msgstr "File is already opened."
 
-#: modules/itemview\xml.py:88
+#: modules/itemview\xml.py:89
 msgid "Kann nicht auf die gewählte Datei zugreifen."
 msgstr "Can not access the chosen file."
 
-#: modules/itemview\xml.py:107
+#: modules/itemview\xml.py:108
 msgid "Allgemeiner Fehler beim laden der Daten."
 msgstr "General error while loading the data."
 
@@ -1479,158 +1483,158 @@ msgstr "DeltaGen Send Operation <b> aborted. </ B>"
 msgid "{0} {1} gesendet"
 msgstr "{0} {1} sent"
 
-#: modules\knecht_excel.py:273
+#: modules\knecht_excel.py:274
 msgid "Datei exisitiert nicht: {}"
 msgstr "File does not exist: {}"
 
-#: modules\knecht_excel.py:289
+#: modules\knecht_excel.py:290
 msgid "Die Arbeitsblätter für PR-Optionen oder Modelle enthalten keine Daten oder konnten nicht gelesen werden."
 msgstr "The worksheets for PR-Options or Models contained no data or could not be read."
 
-#: modules\knecht_excel.py:431
+#: modules\knecht_excel.py:432
 msgid "Es wurden nicht alle benötigten Arbeitsblätter gefunden {}. Es fehlen: {}"
 msgstr "Not all necessary worksheets have been found {}. Missing: {}"
 
-#: modules\knecht_image.py:91
+#: modules\knecht_image.py:92
 msgid "Konnte Ausgabe Verzeichnis nicht erstellen: {}"
 msgstr "Couldn't create output directory: {}"
 
-#: modules\knecht_image.py:98
+#: modules\knecht_image.py:99
 msgid "Konnte Bilddatei {} nicht konvertieren: {}"
 msgstr "Couldn't convert image file {}: {}"
 
-#: modules\knecht_image.py:105
+#: modules\knecht_image.py:106
 msgid "Bilddatei erstellt: {}"
 msgstr "Image file created: {}"
 
-#: modules\knecht_image.py:107
+#: modules\knecht_image.py:108
 msgid "Konnte Bilddatei {} nicht erstellen: {}"
 msgstr "Couldn't create image file {}: {}"
 
-#: modules\knecht_image.py:124
+#: modules\knecht_image.py:125
 msgid "Konnte unkonvertierte Bilddatei nicht verschieben: {}"
 msgstr "Couldn't move unconverted image file: {}"
 
-#: modules\knecht_render.py:93
+#: modules\knecht_render.py:94
 msgid "RenderKnecht Render Log erstellt am "
 msgstr "RenderKnecht render log created on "
 
-#: modules\knecht_render.py:94
+#: modules\knecht_render.py:95
 msgid "Erzeuge Bild mit Namen:"
 msgstr "Create picture with name:"
 
-#: modules\knecht_render.py:95
+#: modules\knecht_render.py:96
 msgid "Varianten:"
 msgstr "Variants:"
 
-#: modules\knecht_render.py:176
+#: modules\knecht_render.py:177
 msgid "Die folgenden Ausgabepfade sind zu lang, Rendering wird abgebrochen. {}{}"
 msgstr "The following output paths are too long, rendering will be canceled. {}{}"
 
-#: modules\knecht_render.py:182
+#: modules\knecht_render.py:183
 msgid "Die Render Presets enthalten einen ungültigen Ausgabepfad. Rendering wird abgebrochen."
 msgstr "Render Presets contain invalid output directory. Render process will be canceled."
 
-#: modules\knecht_render.py:214
+#: modules\knecht_render.py:215
 msgid "Konvertiere Bilddaten..."
 msgstr "Convert image data ..."
 
-#: modules\knecht_render.py:227
+#: modules\knecht_render.py:228
 msgid "{} Rendering von {} Bildern abgeschlossen in {}"
 msgstr "{} Rendering of {} images completed in {}"
 
-#: modules\knecht_render.py:244
+#: modules\knecht_render.py:245
 msgid "Sende Varianten..."
 msgstr "Send variants ..."
 
-#: modules\knecht_render.py:254
+#: modules\knecht_render.py:255
 msgid "Sende Einstellungen..."
 msgstr "Send settings ..."
 
-#: modules\knecht_render.py:342 modules\knecht_render.py:343
+#: modules\knecht_render.py:343 modules\knecht_render.py:344
 msgid "Prüfe Bilddaten..."
 msgstr "Checking image data..."
 
-#: modules\knecht_render.py:347 modules\knecht_render.py:348
+#: modules\knecht_render.py:348 modules\knecht_render.py:349
 msgid "Rendering erzeugt."
 msgstr "Rendering generated."
 
-#: modules\knecht_render.py:353
+#: modules\knecht_render.py:354
 msgid "Erzeuge nächstes Bild in {}..."
 msgstr "Creating next image in {}..."
 
-#: modules\knecht_render.py:390
+#: modules\knecht_render.py:391
 msgid "{0}Bild Konvertierung:{0}{1}"
 msgstr "{0}Image conversion:{0}{1}"
 
-#: modules\knecht_render.py:399
+#: modules\knecht_render.py:400
 msgid "Render Vorgang abgebrochen.{}Konnte keine Verbindung zu einer DeltaGen Instanz herstellen."
 msgstr "Render operation canceled.{}Could not connect to a DeltaGen instance."
 
-#: modules\knecht_render.py:436
+#: modules\knecht_render.py:437
 msgid "Bilddaten konnten nicht als gültiges Bild verifiziert werden.{}"
 msgstr "File could not be validated as a valid image file: {}"
 
-#: modules\knecht_render.py:448
+#: modules\knecht_render.py:449
 msgid "Bilddaten wurden erfolgreich verifiziert: {}"
 msgstr "Image data has been successfully verified: {}"
 
-#: modules\knecht_render.py:458
+#: modules\knecht_render.py:459
 msgid "{0}Datei konnte nicht als gültige Bilddatei verfiziert werden: {1}{0}"
 msgstr "{0}File could not be verified as valid image file: {1}{0}"
 
-#: modules\knecht_render.py:501
+#: modules\knecht_render.py:502
 msgid "{} Einstellungen - "
 msgstr "{} Settings - "
 
-#: modules\knecht_render.py:502
+#: modules\knecht_render.py:503
 msgid "Sampling: {} - Res: "
 msgstr "Sampling: {} - Res: "
 
-#: modules\knecht_render.py:503
+#: modules\knecht_render.py:504
 msgid "{}px - Ext: "
 msgstr "{}px - Ext: "
 
-#: modules\knecht_session.py:190
+#: modules\knecht_session.py:191
 msgid "Sitzung während Leerlauf erfolgreich gespeichert"
 msgstr "Session successfully saved while idle"
 
-#: modules\knecht_session.py:281
+#: modules\knecht_session.py:282
 msgid "Sitzungswiederherstellung abgeschlossen"
 msgstr "Session restore finished"
 
-#: modules\knecht_update.py:211
+#: modules\knecht_update.py:212
 msgid "Suche nach Anwendungs Updates gestartet."
 msgstr "Started search for application updates."
 
-#: modules\knecht_update.py:265
+#: modules\knecht_update.py:266
 msgid "Die Anwendung ist auf dem neusten Stand."
 msgstr "The application is up to date."
 
-#: modules\knecht_update.py:270
+#: modules\knecht_update.py:271
 msgid "Aktualisierung konnte nicht durchgeführt werden."
 msgstr "Encountered errors during application update. Try again later."
 
-#: modules\knecht_update.py:279
+#: modules\knecht_update.py:280
 msgid "App Update"
 msgstr "App update"
 
-#: modules\knecht_update.py:280
+#: modules\knecht_update.py:281
 msgid "Eine aktualisierte Version {} ist verfügbar.<br><br>Möchten Sie die Aktualisierung jetzt durchführen?<br><br>Die Anwendung muss für das Update beendet werden."
 msgstr "Updated version {} is available.<br><br>Do you want to update the application now?<br><br>The application has to exit to proceed with the update."
 
-#: modules\knecht_update.py:284
+#: modules\knecht_update.py:285
 msgid "Jetzt aktualisieren"
 msgstr "Update now"
 
-#: modules\knecht_update.py:285
+#: modules\knecht_update.py:286
 msgid "Vielleicht später..."
 msgstr "Maybe later..."
 
-#: modules\knecht_update.py:297
+#: modules\knecht_update.py:298
 msgid "Aktualisierung"
 msgstr "Update"
 
-#: modules\knecht_update.py:298
+#: modules\knecht_update.py:299
 msgid "Version {} ist bereit zur Installation."
 msgstr "Version {} is ready for installation."

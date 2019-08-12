@@ -5,7 +5,7 @@ from PySide2.QtCore import Qt, Slot
 from PySide2.QtWidgets import QLineEdit
 
 from modules.gui.widgets.menu_tree_context import TreeContextMenu
-from modules.gui.widgets.message_box import AskToContinue
+from modules.gui.widgets.message_box import AskToContinue, AskDocumentClose
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.tree_view import KnechtTreeView
 from modules.itemview.view_manager import ViewManager
@@ -21,10 +21,6 @@ _ = lang.gettext
 
 
 class UiViewManager(ViewManager):
-    close_file_title = _('Ungespeicherte Änderungen')
-    close_file_txt = _('Das Dokument enthält Änderungen die <b>nicht</b> gespeichert wurden!<br><br>'
-                       'Diese werden durch Schließen des Dokumentes endgültig <b>verloren</b> gehen.')
-    close_file_ok = _('Schließen')
     close_clip_title = _('Zwischenablage verwerfen?')
     close_clip_txt = _('Die Zwischenablage enthält <i>{}</i> Elemente aus<br><i>{}</i><br><br>'
                        'Diese werden durch Schließen des Dokumentes aus der Zwischenablage <b>entfernt</b>.')
@@ -161,10 +157,10 @@ class UiViewManager(ViewManager):
         """
         # Ask on unsaved changes
         if not tab_view.undo_stack.isClean():
-            msg_box = AskToContinue(self.ui)
+            msg_box = AskDocumentClose(self.ui)
             self.ui.play_hint_sound()
 
-            if not msg_box.ask(self.close_file_title, self.close_file_txt, self.close_file_ok):
+            if not msg_box.ask(self.ui.main_menu.file_menu.save_xml):
                 # User wants to abort close action
                 return False
 
