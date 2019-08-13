@@ -118,6 +118,10 @@ class KnechtEditorRenderPresets:
         :return:
         """
         for child_item in render_preset_item.iter_children():
+            if child_item.userType == Kg.output_item:
+                # Set preset specific output path if output item present along settings/child items
+                render_preset.path = Path(child_item.data(Kg.VALUE))
+
             if child_item.userType != Kg.render_setting:
                 continue
 
@@ -153,8 +157,10 @@ class KnechtEditorRenderPresets:
                     result = False
 
                 if is_viewset:
+                    # This will also collect output path from variants
                     render_preset.add_shot(name, variants)
                 else:
+                    # This will also collect output path from variants
                     render_preset.add_image(name, variants)
 
             # Collect render settings

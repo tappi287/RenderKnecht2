@@ -67,7 +67,7 @@ class KnechtCollectVariants(QObject):
             if not current_item:
                 return variants
 
-        if current_item.userType == Kg.variant:
+        if current_item.userType in (Kg.variant, Kg.output_item):
             self._add_variant(current_item, variants, src_model)
             return variants
 
@@ -117,10 +117,12 @@ class KnechtCollectVariants(QObject):
 
     @staticmethod
     def _add_variant(item: KnechtItem, variants: KnechtVariantList, src_model: KnechtModel) -> None:
-        if item.userType in (Kg.variant, Kg.output_item):
+        if item.userType == Kg.variant:
             index = src_model.get_index_from_item(item)
-            # LOGGER.debug('Adding variant: %s %s', item.data(Kg.NAME), item.data(Kg.VALUE))
             variants.add(index, item.data(Kg.NAME), item.data(Kg.VALUE), item.data(Kg.TYPE))
+        elif item.userType == Kg.output_item:
+            variants.output_path = item.data(Kg.VALUE)
+            LOGGER.debug('Collected output path: %s', item.data(Kg.VALUE))
 
     @classmethod
     def _order_children(cls, preset_item: KnechtItem) -> List[KnechtItem]:
