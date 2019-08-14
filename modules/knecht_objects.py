@@ -118,6 +118,8 @@ class KnechtRenderPreset:
 
         # Keep a list of rendering paths above the 256 chrs limit
         self.too_long_paths = list()
+        # Keep a list of rendering paths that could not be created or could not be written too
+        self.invalid_paths: List[str] = list()
 
         self.__image_count = 0
 
@@ -204,6 +206,39 @@ class KnechtRenderPreset:
             return False
         return True
 
+    def verify_output_paths(self) -> bool:
+        """ Iterate render images and return False if any Path is invalid """
+        self.invalid_paths: List[str] = list()
+
+        for (image, shot) in self.__render_images:
+            try:
+                img_path = self._get_output_dir(image, shot, create_dir=True)
+                if not img_path.exists():
+                    self.invalid_paths.append(str(img_path))
+            except Exception as e:
+                LOGGER.error('Error creating or verifying output path: %s', e)
+                self.invalid_paths.append(str(e))
+
+        if self.invalid_paths:
+            return False
+        return True
+
+    def _get_output_dir(self, image: _RenderImage, shot: _RenderShot, create_dir=True) -> Path:
+        out_dir = self.path
+
+        if shot.variants.output_path:
+            out_dir = Path(shot.variants.output_path)
+        if image.variants.output_path:
+            out_dir = Path(image.variants.output_path)
+
+        if self.create_preset_dir:
+            out_dir = out_dir / self.name
+
+        if create_dir:
+            out_dir = self.create_directory(out_dir)
+
+        return out_dir
+
     def create_directory(self, render_dir):
         render_dir = Path(render_dir) / self.unique_out_dir_name
 
@@ -221,22 +256,6 @@ class KnechtRenderPreset:
                                     'Rendering will not be able to write images.\n%s', e)
 
         return render_dir
-
-    def _get_output_dir(self, image: _RenderImage, shot: _RenderShot, create_dir=True) -> Path:
-        out_dir = self.path
-
-        if shot.variants.output_path:
-            out_dir = shot.variants.output_path
-        if image.variants.output_path:
-            out_dir = image.variants.output_path
-
-        if self.create_preset_dir:
-            out_dir = out_dir / self.name
-
-        if create_dir:
-            out_dir = self.create_directory(out_dir)
-
-        return out_dir
 
     def __create_render_images_list(self):
         """

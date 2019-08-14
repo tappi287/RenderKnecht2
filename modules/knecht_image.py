@@ -26,9 +26,17 @@ class KnechtImage(QObject):
     def __init__(self, parent=None):
         super(KnechtImage, self).__init__(parent)
 
+    def convert_file(self, img_file: Path, output_dir: Path=Path('.'),
+                     output_format: str='.png', move_converted: bool=False) -> bool:
+        if not path_exists(img_file) or not path_exists(output_dir):
+            return False
+
+        self._start_img_thread([img_file, ], output_dir, output_format, move_converted)
+        return True
+
     def convert_directory(self, img_dir: Path, output_dir: Path=Path('.'),
                           output_format: str='.png', move_converted: bool=False) -> bool:
-        if not path_exists(img_dir):
+        if not path_exists(img_dir) or not path_exists(output_dir):
             return False
 
         img_list = list()
@@ -39,9 +47,13 @@ class KnechtImage(QObject):
         if not img_list:
             return False
 
+        self._start_img_thread(img_list, output_dir, output_format, move_converted)
+        return True
+
+    def _start_img_thread(self, img_list: List[Path], output_dir: Path,
+                          output_format: str, move_converted: bool):
         img_thread = ConversionThread(img_list, self.conversion_result, output_dir, output_format, move_converted)
         img_thread.start()
-        return True
 
     @staticmethod
     def open_with_imageio(file: Path) -> Union[None, np.array]:
@@ -109,7 +121,7 @@ class ConversionThread(Thread):
                 continue
 
             # Move source files
-            if not self.move_converted:
+            if not self.move_converted or img_file.suffix == self.output_format:
                 continue
 
             # Create un-converted directory

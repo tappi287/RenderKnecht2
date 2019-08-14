@@ -63,6 +63,7 @@ class KnechtEditorRenderPresets:
         preset_item = origin_model.id_mgr.get_preset_from_id(reference)
 
         if preset_item.userType == Kg.output_item:
+            # Skip output items which will be collected in settings
             return
 
         if preset_item and preset_item.data(Kg.TYPE) == 'viewset':
@@ -117,10 +118,18 @@ class KnechtEditorRenderPresets:
         :param KnechtRenderPreset render_preset: the RenderPreset to update the settings of
         :return:
         """
+        origin_model: KnechtModel = render_preset_item.origin.model().sourceModel()
+
         for child_item in render_preset_item.iter_children():
+            # Collect referenced output items
+            if child_item.userType == Kg.reference:
+                ref_item = origin_model.id_mgr.get_preset_from_id(child_item.reference)
+                if ref_item.userType == Kg.output_item:
+                    child_item = ref_item
+
             if child_item.userType == Kg.output_item:
-                # Set preset specific output path if output item present along settings/child items
                 render_preset.path = Path(child_item.data(Kg.VALUE))
+                continue
 
             if child_item.userType != Kg.render_setting:
                 continue

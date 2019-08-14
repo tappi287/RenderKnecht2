@@ -111,12 +111,17 @@ QPushButton:hover {color: rgb(85, 170, 255);
      <item>
       <widget class="QLabel" name="news">
        <property name="text">
-        <string>add save action to document close dialog&lt;br&gt;
-clear text filter in Vplus import dialog upon accept&lt;br&gt;
-properly dismiss existing wizard session data on re-import&lt;br&gt;
-update to PySide 5.13&lt;br&gt;
-read PR-Options &quot;I&quot; exactly like &quot;L&quot; as default trim line options&lt;br&gt;
-added Gearbox PR-Family to default INT familys&lt;br&gt;</string>
+        <string>&lt;ul&gt;
+&lt;li&gt;enhanced render preset validation prior to rendering, output dirs will be test written, resolution setting user input is verified&lt;/li&gt;
+&lt;li&gt;implemented output items functionality letting you specify output dirs per image/preset/shot/render preset&lt;/li&gt;
+&lt;li&gt;image conversion is done after every image render respecting the new output targets&lt;/li&gt;
+&lt;li&gt;add save action to document close dialog&lt;/li&gt;
+&lt;li&gt;clear text filter in Vplus import dialog upon accept&lt;/li&gt;
+&lt;li&gt;properly dismiss existing wizard session data on re-import&lt;/li&gt;
+&lt;li&gt;update to PySide 5.13&lt;/li&gt;
+&lt;li&gt;read PR-Options &quot;I&quot; exactly like &quot;L&quot; as default trim line options&lt;/li&gt;
+&lt;li&gt;added Gearbox PR-Family to default INT familys&lt;/li&gt;
+&lt;/ul&gt;</string>
        </property>
       </widget>
      </item>

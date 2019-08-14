@@ -151,7 +151,7 @@ class KnechtRenderThread(Thread):
         self.dg_operation_result = -1
 
     def run(self):
-        if self.verify_render_settings():
+        if self.verify_render_presets():
             self.render_loop()
         else:
             self.render_result = self.Result.rendering_failed
@@ -159,18 +159,37 @@ class KnechtRenderThread(Thread):
         self.finish_rendering()
         LOGGER.info('Rendering Thread finished.')
 
-    def verify_render_settings(self) -> bool:
+    def verify_render_presets(self) -> bool:
         """ Verify the rendering settings before start """
         # --- Verify path lengths and output path set ---
-        too_long_paths, invalid_paths = list(), False
+        too_long_paths, invalid_paths = list(), list()
 
         for render_preset in self.render_presets:
             render_preset.create_preset_dir = self.create_preset_dirs
 
-            if render_preset.path.as_posix() == '.':
-                invalid_paths = True
+            # --- Verify Path length and try to create output directories
             if not render_preset.verify_path_lengths():
                 too_long_paths += [p.name for p in render_preset.too_long_paths]
+            else:
+                # At this point output directories will be created
+                if not render_preset.verify_output_paths():
+                    invalid_paths += render_preset.invalid_paths
+
+            # --- Verify Render Preset Resolution
+            #     (the only field were user input is possible)
+            setting_result = True
+            try:
+                res_values = [int(r) for r in render_preset.settings.get('resolution').split(' ')]
+                if len(res_values) != 2 or sum(res_values) < 0 or sum(res_values) > 99999:
+                    setting_result = False
+            except ValueError or TypeError as e:
+                # Resolution settings does not contain integers
+                LOGGER.error(e)
+                setting_result = False
+
+            if not setting_result:
+                self.error.emit(_('Ungültige Auflösungseinstellungen in {}').format(render_preset.name))
+                return False
 
         if too_long_paths:
             self.error.emit(
@@ -180,8 +199,9 @@ class KnechtRenderThread(Thread):
             return False
 
         if invalid_paths:
-            self.error.emit(_('Die Render Presets enthalten einen ungültigen Ausgabepfad. '
-                              'Rendering wird abgebrochen.'))
+            self.error.emit(_('Die Render Presets enthalten ungültige Ausgabepfade. '
+                              'Rendering wird abgebrochen. {}{}').format('\n\n', '\n'.join(invalid_paths))
+                            )
             return False
 
         return True
@@ -196,9 +216,6 @@ class KnechtRenderThread(Thread):
         for render_preset in self.render_presets:
             self._init_render_log(render_preset)
 
-            # Fallback directory
-            img_out_dir = render_preset.path
-
             # Render images
             while render_preset.remaining_images():
                 if self.abort_rendering:
@@ -210,18 +227,7 @@ class KnechtRenderThread(Thread):
                 if self.abort_rendering:
                     return
 
-            # Convert resulting images of render preset
-            if self.convert_to_png:
-                msg = _('Konvertiere Bilddaten...')
-                self.status.emit(msg)
-                self.btn_text.emit(msg)
-
-                self.img_thread.convert_directory(img_out_dir,
-                                                  img_out_dir,
-                                                  move_converted=True)
-                self._await_conversion_result()
-
-            self._write_render_log(img_out_dir)
+                self._write_render_log(img_out_dir)
 
         if self.rendered_img_count >= self.total_image_count():
             duration = time_string(time.time() - self.render_start_time)
@@ -278,10 +284,18 @@ class KnechtRenderThread(Thread):
 
         # --- Loop until image created
         LOGGER.info('Rendering image: %s', img_path.name)
-        self.render_log += f'\n{self._return_date_time()} {self.render_log_msg[1]} {name}\n{self.render_log_msg[2]}\n'
+        self.render_log += f'\n\n{self._return_date_time()} {self.render_log_msg[1]} {name}\n{self.render_log_msg[2]}\n'
         self._add_variants_log(variant_ls)
 
         self._await_rendered_image(img_path)
+
+        # --- Convert result image to PNG
+        if self.convert_to_png and render_preset.settings.get("file_extension") != '.png':
+            if self.img_thread.convert_file(img_path, out_dir, move_converted=True):
+                msg = _('Konvertiere Bilddaten...')
+                self.status.emit(msg)
+                self.btn_text.emit(msg)
+                self._await_conversion_result()
 
         self.rendered_img_count += 1
 
@@ -352,7 +366,7 @@ class KnechtRenderThread(Thread):
         # Wait 5 seconds for DeltaGen to recover
         for count in range(5, 0, -1):
             msg = _('Erzeuge nächstes Bild in {}...').format(str(count))
-            self.status.emit(msg)
+            self.status.emit(msg + '\n')
             self.btn_text.emit(msg)
             time.sleep(1)
 
@@ -388,7 +402,7 @@ class KnechtRenderThread(Thread):
 
     @Slot(str)
     def _image_conversion_result(self, result: str):
-        self.render_log += _('{0}Bild Konvertierung:{0}{1}').format('\n', result)
+        self.render_log += _('Bild Konvertierung: {}').format(result)
         self.img_conversion_finished = True
 
     @Slot(int)
