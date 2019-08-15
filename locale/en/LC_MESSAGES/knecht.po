@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2019-08-12 14:48+0200\n"
-"PO-Revision-Date: 2019-08-12 14:50+0200\n"
+"POT-Creation-Date: 2019-08-15 13:47+0200\n"
+"PO-Revision-Date: 2019-08-15 13:49+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -959,7 +959,7 @@ msgid "Variantenbaum"
 msgstr "Variants Tree"
 
 #: modules/gui\main_ui.py:58 modules/gui\ui_resource.py:121
-#: modules\knecht_render.py:620
+#: modules\knecht_render.py:640
 msgid "Renderliste"
 msgstr "Render Queue"
 
@@ -1215,7 +1215,7 @@ msgstr "Changes the global DeltaGen viewer background color. This setting will a
 msgid "Bricht laufende Sendung an DeltaGen ab."
 msgstr "Cancel running DeltaGen variants send operation."
 
-#: modules/gui\ui_translations.py:116 modules\knecht_render.py:651
+#: modules/gui\ui_translations.py:116 modules\knecht_render.py:671
 msgid "Rendering"
 msgstr "Rendering"
 
@@ -1263,7 +1263,7 @@ msgstr "Convert images to PNG"
 msgid "Konvertiert die ausgegebenen Bilder nach dem Render Vorgang in PNG."
 msgstr "Converts the created images to PNG after rendering."
 
-#: modules/gui\ui_translations.py:143 modules\knecht_render.py:291
+#: modules/gui\ui_translations.py:143 modules\knecht_render.py:307
 msgid "Rendering starten"
 msgstr "Start rendering"
 
@@ -1495,23 +1495,23 @@ msgstr "The worksheets for PR-Options or Models contained no data or could not b
 msgid "Es wurden nicht alle benötigten Arbeitsblätter gefunden {}. Es fehlen: {}"
 msgstr "Not all necessary worksheets have been found {}. Missing: {}"
 
-#: modules\knecht_image.py:92
+#: modules\knecht_image.py:104
 msgid "Konnte Ausgabe Verzeichnis nicht erstellen: {}"
 msgstr "Couldn't create output directory: {}"
 
-#: modules\knecht_image.py:99
+#: modules\knecht_image.py:111
 msgid "Konnte Bilddatei {} nicht konvertieren: {}"
 msgstr "Couldn't convert image file {}: {}"
 
-#: modules\knecht_image.py:106
+#: modules\knecht_image.py:118
 msgid "Bilddatei erstellt: {}"
 msgstr "Image file created: {}"
 
-#: modules\knecht_image.py:108
+#: modules\knecht_image.py:120
 msgid "Konnte Bilddatei {} nicht erstellen: {}"
 msgstr "Couldn't create image file {}: {}"
 
-#: modules\knecht_image.py:125
+#: modules\knecht_image.py:137
 msgid "Konnte unkonvertierte Bilddatei nicht verschieben: {}"
 msgstr "Couldn't move unconverted image file: {}"
 
@@ -1527,71 +1527,75 @@ msgstr "Create picture with name:"
 msgid "Varianten:"
 msgstr "Variants:"
 
-#: modules\knecht_render.py:177
+#: modules\knecht_render.py:191
+msgid "Ungültige Auflösungseinstellungen in {}"
+msgstr "Invalid resolution settings in {}"
+
+#: modules\knecht_render.py:196
 msgid "Die folgenden Ausgabepfade sind zu lang, Rendering wird abgebrochen. {}{}"
 msgstr "The following output paths are too long, rendering will be canceled. {}{}"
 
-#: modules\knecht_render.py:183
-msgid "Die Render Presets enthalten einen ungültigen Ausgabepfad. Rendering wird abgebrochen."
-msgstr "Render Presets contain invalid output directory. Render process will be canceled."
+#: modules\knecht_render.py:202
+msgid "Die Render Presets enthalten ungültige Ausgabepfade. Rendering wird abgebrochen. {}{}"
+msgstr "The render presets contain invalid output paths. Rendering is canceled. {}{}"
 
-#: modules\knecht_render.py:215
-msgid "Konvertiere Bilddaten..."
-msgstr "Convert image data ..."
-
-#: modules\knecht_render.py:228
+#: modules\knecht_render.py:237
 msgid "{} Rendering von {} Bildern abgeschlossen in {}"
 msgstr "{} Rendering of {} images completed in {}"
 
-#: modules\knecht_render.py:245
+#: modules\knecht_render.py:254
 msgid "Sende Varianten..."
 msgstr "Send variants ..."
 
-#: modules\knecht_render.py:255
+#: modules\knecht_render.py:264
 msgid "Sende Einstellungen..."
 msgstr "Send settings ..."
 
-#: modules\knecht_render.py:343 modules\knecht_render.py:344
+#: modules\knecht_render.py:298 modules\knecht_render.py:378
+msgid "Konvertiere Bilddaten..."
+msgstr "Convert image data ..."
+
+#: modules\knecht_render.py:359 modules\knecht_render.py:360
 msgid "Prüfe Bilddaten..."
 msgstr "Checking image data..."
 
-#: modules\knecht_render.py:348 modules\knecht_render.py:349
+#: modules\knecht_render.py:364 modules\knecht_render.py:365
 msgid "Rendering erzeugt."
 msgstr "Rendering generated."
 
-#: modules\knecht_render.py:354
+#: modules\knecht_render.py:370
 msgid "Erzeuge nächstes Bild in {}..."
 msgstr "Creating next image in {}..."
 
-#: modules\knecht_render.py:391
-msgid "{0}Bild Konvertierung:{0}{1}"
-msgstr "{0}Image conversion:{0}{1}"
+#: modules\knecht_render.py:411
+msgid "Bild Konvertierung: {}"
+msgstr "Image conversion: {}"
 
-#: modules\knecht_render.py:400
+#: modules\knecht_render.py:420
 msgid "Render Vorgang abgebrochen.{}Konnte keine Verbindung zu einer DeltaGen Instanz herstellen."
 msgstr "Render operation canceled.{}Could not connect to a DeltaGen instance."
 
-#: modules\knecht_render.py:437
+#: modules\knecht_render.py:457
 msgid "Bilddaten konnten nicht als gültiges Bild verifiziert werden.{}"
 msgstr "File could not be validated as a valid image file: {}"
 
-#: modules\knecht_render.py:449
+#: modules\knecht_render.py:469
 msgid "Bilddaten wurden erfolgreich verifiziert: {}"
 msgstr "Image data has been successfully verified: {}"
 
-#: modules\knecht_render.py:459
+#: modules\knecht_render.py:479
 msgid "{0}Datei konnte nicht als gültige Bilddatei verfiziert werden: {1}{0}"
 msgstr "{0}File could not be verified as valid image file: {1}{0}"
 
-#: modules\knecht_render.py:502
+#: modules\knecht_render.py:522
 msgid "{} Einstellungen - "
 msgstr "{} Settings - "
 
-#: modules\knecht_render.py:503
+#: modules\knecht_render.py:523
 msgid "Sampling: {} - Res: "
 msgstr "Sampling: {} - Res: "
 
-#: modules\knecht_render.py:504
+#: modules\knecht_render.py:524
 msgid "{}px - Ext: "
 msgstr "{}px - Ext: "
 
