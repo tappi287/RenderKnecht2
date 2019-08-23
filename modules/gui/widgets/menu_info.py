@@ -1,7 +1,11 @@
 from PySide2.QtCore import QObject, QTimer, Slot
 from PySide2.QtWidgets import QMenu
 
+from modules.gui.ui_generic_tab import GenericTabWidget
 from modules.gui.ui_resource import IconRsc
+from modules.gui.widgets.about_page import KnechtAbout
+from modules.gui.widgets.help_page import KnechtHelpPage
+from modules.gui.widgets.welcome_page import KnechtWelcome
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -15,7 +19,7 @@ _ = lang.gettext
 
 class InfoMenu(QObject):
     def __init__(self, ui, menu: QMenu=None):
-        """ The File menu
+        """ The Info menu
 
         :param modules.gui.main_ui.KnechtWindow ui:
         :param menu: Menu already setup in ui file
@@ -29,6 +33,12 @@ class InfoMenu(QObject):
 
         self.ui.actionVersionCheck.triggered.connect(self.update_check)
         self.ui.actionVersionCheck.setEnabled(True)
+        self.ui.actionInfo.triggered.connect(self.show_info_page)
+        self.ui.actionInfo.setEnabled(True)
+        self.ui.actionWelcome.triggered.connect(self.show_welcome_page)
+        self.ui.actionWelcome.setEnabled(True)
+        self.ui.actionHelp.triggered.connect(self.show_docs)
+        self.ui.actionHelp.setEnabled(True)
 
         QTimer.singleShot(1, self.delayed_setup)
 
@@ -48,3 +58,36 @@ class InfoMenu(QObject):
         self.ui.actionVersionCheck.setText(
             _('Aktualisierung auf Version {}...').format(version_text)
             )
+
+    def show_info_page(self):
+        # --- About Page ---
+        about_page = KnechtAbout(self.ui)
+
+        # Skip if view already exists
+        if self.ui.view_mgr.get_view_by_name(about_page.windowTitle()):
+            del about_page
+            return
+
+        GenericTabWidget(self.ui, about_page)
+
+    def show_welcome_page(self):
+        # --- Welcome Page ---
+        welcome_page = KnechtWelcome(self.ui)
+
+        # Skip if view already exists
+        if self.ui.view_mgr.get_view_by_name(welcome_page.windowTitle()):
+            del welcome_page
+            return
+
+        GenericTabWidget(self.ui, welcome_page)
+
+    def show_docs(self):
+        # --- Help Page ---
+        docs_page = KnechtHelpPage(self.ui)
+
+        # Skip if view already exists
+        if self.ui.view_mgr.get_view_by_name(docs_page.windowTitle()):
+            del docs_page
+            return
+
+        GenericTabWidget(self.ui, docs_page)

@@ -45,7 +45,7 @@ def translate_main_ui(ui):
     ui.actionVersionCheck: QAction
     ui.actionVersionCheck.setText(_('Auf Aktualisierungen prüfen...'))
     ui.actionIntro: QAction
-    ui.actionIntro.setText(_('Einführung'))
+    ui.actionWelcome.setText(_('Startseite'))
     ui.actionHelp: QAction
     ui.actionHelp.setText(_('Dokumentation'))
 

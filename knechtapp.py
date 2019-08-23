@@ -10,6 +10,7 @@ from modules.globals import FROZEN, MAIN_LOGGER_NAME
 from modules.gui.gui_utils import KnechtExceptionHook
 from modules.gui.main_app import KnechtApp
 from modules.log import init_logging, setup_log_queue_listener, setup_logging
+from modules.gui.widgets.about_page import InfoMessage
 from modules.settings import KnechtSettings, delayed_log_setup
 from ui import darkstyle, gui_resource
 
@@ -17,11 +18,14 @@ if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     print('Using high dpi Pixmaps')
 
-VERSION = '0.995'
+VERSION = '0.998'
 
-# TODO: Add image output directory tree item to be placed anywhere
-#  eg. placed in preset will render preset to this directory, placed in render_preset will render presets not
-#  containing out_dir_item to that dir
+InfoMessage.ver = VERSION
+InfoMessage.lic = 'GPL v3'
+InfoMessage.auth = 'Stefan Tapper'
+InfoMessage.mail = 'tapper.stefan@gmail.com'
+InfoMessage.cred = ['Python Community', 'PyCharm Community Edition', 'Stackoverflow', 'PySide Docs']
+
 # TODO: Rename, Renumber Images from different RenderPresets
 
 

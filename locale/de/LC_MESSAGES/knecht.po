@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-08-15 13:47+0200\n"
+"POT-Creation-Date: 2019-08-23 16:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -253,6 +253,10 @@ msgstr ""
 msgid "Verzeichnis auswaehlen ..."
 msgstr ""
 
+#: modules/gui/widgets\help_page.py:27 modules/gui\ui_translations.py:50
+msgid "Dokumentation"
+msgstr ""
+
 #: modules/gui/widgets\history.py:87
 msgid "Historie"
 msgstr ""
@@ -289,23 +293,23 @@ msgstr ""
 msgid "  0: Aktueller Zustand des Dokuments"
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:81
+#: modules/gui/widgets\main_ui_widgets.py:80
 msgid "Geschätzte Renderzeit ({} CPUs/GI)"
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:88
+#: modules/gui/widgets\main_ui_widgets.py:87
 msgid "Ausgabe Verzeichnis auswählen ..."
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:124
+#: modules/gui/widgets\main_ui_widgets.py:123
 msgid "Fehler beim sammeln der Preset Varianten. Einige Inhalte der Render Presets existieren nicht mehr."
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:132
+#: modules/gui/widgets\main_ui_widgets.py:131
 msgid "Es läuft bereits ein Render Vorgang."
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:154
+#: modules/gui/widgets\main_ui_widgets.py:153
 msgid "abgeschlossen am: "
 msgstr ""
 
@@ -505,7 +509,7 @@ msgstr ""
 msgid "Preset Assistent"
 msgstr ""
 
-#: modules/gui/widgets\menu_info.py:49
+#: modules/gui/widgets\menu_info.py:59
 msgid "Aktualisierung auf Version {}..."
 msgstr ""
 
@@ -1167,11 +1171,7 @@ msgid "Auf Aktualisierungen prüfen..."
 msgstr ""
 
 #: modules/gui\ui_translations.py:48
-msgid "Einführung"
-msgstr ""
-
-#: modules/gui\ui_translations.py:50
-msgid "Dokumentation"
+msgid "Startseite"
 msgstr ""
 
 #: modules/gui\ui_translations.py:67

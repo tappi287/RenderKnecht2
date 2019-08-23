@@ -12,6 +12,9 @@ MAIN_LOGGER_NAME = 'knecht_main'
 SETTINGS_FILE = 'settings.json'
 SETTINGS_DIR_NAME = 'RenderKnecht2'
 
+DOCS_FILEPATH = 'locale/RenderKnecht2_Dokumentation.chm'
+DOCS_HTML_FILEPATH = 'locale/help/RenderKnecht_Dokumentation.html'
+
 ITEM_WORK_INTERVAL = 90
 ITEM_WORK_CHUNK = 8
 

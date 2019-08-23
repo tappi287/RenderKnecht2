@@ -9,6 +9,7 @@ knecht_files = [('license.txt', '.'),
                 ('ui/*.qss', 'ui'),
                 ('locale/de/LC_MESSAGES/*.mo', 'locale/de/LC_MESSAGES'),
                 ('locale/en/LC_MESSAGES/*.mo', 'locale/en/LC_MESSAGES'),
+                ('locale/help/', 'locale/help'),
                 ]
 
 local_hooks = ['hooks']

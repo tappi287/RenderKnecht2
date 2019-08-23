@@ -1847,7 +1847,7 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actionInfo"/>
     <addaction name="actionVersionCheck"/>
-    <addaction name="actionIntro"/>
+    <addaction name="actionWelcome"/>
     <addaction name="actionHelp"/>
    </widget>
    <widget class="QMenu" name="menuDatei">
@@ -2142,9 +2142,13 @@ p, li { white-space: pre-wrap; }
     <string>Dokumentation</string>
    </property>
   </action>
-  <action name="actionIntro">
+  <action name="actionWelcome">
+   <property name="icon">
+    <iconset resource="res/gui_resource.qrc">
+     <normaloff>:/main/RK_Icon.png</normaloff>:/main/RK_Icon.png</iconset>
+   </property>
    <property name="text">
-    <string>Einführung</string>
+    <string>Startseite</string>
    </property>
   </action>
   <action name="actionSchnuffi">

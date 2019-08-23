@@ -373,6 +373,23 @@ class ViewManager(QObject):
     def get_view_by_file(self, file: Path):
         return self.file_mgr.get_widget_from_file(file).user_view
 
+    def get_view_by_name(self, name: str) -> Union[None, QWidget]:
+        for (tab_idx, tab_page, file) in self._list_tabs():
+            if self.tab.tabText(tab_idx) == name:
+                return tab_page
+
+    def _list_tabs(self) -> Tuple[int, QWidget, str]:
+        for tab_idx in range(0, self.tab.count()):
+            tab_page = self.tab.widget(tab_idx)
+            file = self.file_mgr.get_file_from_widget(tab_page)
+
+            if not file:
+                file = 'No file set.'
+            else:
+                file = file.name
+
+            yield tab_idx, tab_page, file
+
     def log_tabs(self):
         """ Debug fn """
 
@@ -385,15 +402,7 @@ class ViewManager(QObject):
                 return tab_page.objectName()
 
         LOGGER.debug('##### Tab Index #####')
-        for tab_idx in range(0, self.tab.count()):
-            tab_page = self.tab.widget(tab_idx)
-            file = self.file_mgr.get_file_from_widget(tab_page)
-
-            if not file:
-                file = 'No file set.'
-            else:
-                file = file.name
-
+        for (tab_idx, tab_page, file) in self._list_tabs():
             LOGGER.debug('{:02d} {} - {}'.format(tab_idx, get_tab_view_name(tab_page), file))
 
         LOGGER.debug('##### File Mgr Index #####')

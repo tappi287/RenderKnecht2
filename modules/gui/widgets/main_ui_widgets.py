@@ -38,8 +38,7 @@ class MainWindowWidgets(QObject):
         self.ui = ui
 
         # --- Welcome Page ---
-        welcome_page = KnechtWelcome(self.ui)
-        GenericTabWidget(self.ui, welcome_page)
+        self.ui.main_menu.info_menu.show_welcome_page()
 
         # -- Clear Buttons --
         MouseDblClickFilter(self.ui.pushButton_Src_clear, self.clear_document_view)
