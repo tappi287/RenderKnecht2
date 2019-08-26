@@ -14,10 +14,9 @@ requests = "*"
 bottleneck = "*"
 jsonpickle = "*"
 ujson = "*"
-pyinstaller = {git = "https://github.com/pyinstaller/pyinstaller.git"}
 
 [dev-packages]
 jupyter = "*"
 tornado = "==5.1.1"
 paramiko = "*"
-pyinstaller = "*"
+pyinstaller = {git = "https://github.com/pyinstaller/pyinstaller.git"}

@@ -27,7 +27,7 @@ class KnechtHelpPage(QWebEngineView):
         self.setWindowTitle(_('Dokumentation'))
 
         self.installEventFilter(self)
-        self.setZoomFactor(self.zoom)
+        self.setZoomFactor(KnechtHelpPage.zoom)
         self.load_docs()
 
     def load_docs(self):
@@ -35,11 +35,13 @@ class KnechtHelpPage(QWebEngineView):
 
         if path_exists(doc_file):
             q = QUrl.fromLocalFile(doc_file.as_posix())
+            LOGGER.info('Loading Documentation file: %s', q.toDisplayString())
+
             self.load(q)
 
     def update_zoom(self, amount):
-        self.zoom = max(self.min_zoom, min(self.max_zoom, self.zoom + amount))
-        self.setZoomFactor(self.zoom)
+        KnechtHelpPage.zoom = max(self.min_zoom, min(self.max_zoom, KnechtHelpPage.zoom + amount))
+        self.setZoomFactor(KnechtHelpPage.zoom)
         self.ui.msg(f'Zoom {int(self.zoom * 100)}%', 500)
 
     def eventFilter(self, obj, event):
