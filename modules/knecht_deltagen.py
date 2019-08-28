@@ -31,7 +31,7 @@ class CommunicateDeltaGenSignals(QObject):
     no_connection = Signal()
     status = Signal(str)
     progress = Signal(int)
-    variant_status = Signal(KnechtVariant)  # TODO: Report Variant State to GUI
+    variant_status = Signal(KnechtVariant)
 
 
 class CommunicateDeltaGen(Thread):
@@ -184,7 +184,7 @@ class CommunicateDeltaGen(Thread):
         return False
 
     def _send_command_operation(self, command: str):
-        timeout, num_tries = 1, 1
+        timeout, num_tries = 2, 1
 
         if self.rendering_mode:
             timeout, num_tries = 20, 5
@@ -249,8 +249,12 @@ class CommunicateDeltaGen(Thread):
         __p = round(100 / variants_num * (1 + idx))
         self.progress.emit(__p)
 
-        # Extract variant set and value
-        variant_str = 'VARIANT {} {};'.format(variant.name, variant.value)
+        if variant.item_type == 'command':
+            # Look-up new command variants
+            variant_str = variant.value
+        else:
+            # Extract variant set and value
+            variant_str = 'VARIANT {} {};'.format(variant.name, variant.value)
 
         # Add a long timeout in front of every variant send
         receive_timeout = self._regular_receive_timeout

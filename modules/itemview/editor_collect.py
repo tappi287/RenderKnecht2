@@ -6,6 +6,7 @@ from PySide2.QtCore import QModelIndex, QObject, QUuid, Signal
 from modules.itemview.item import KnechtItem
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
+from modules.knecht_image import KnechtImageCameraInfo
 from modules.knecht_objects import KnechtVariantList
 from modules.language import get_translation
 from modules.log import init_logging
@@ -101,6 +102,10 @@ class KnechtCollectVariants(QObject):
 
         ordered_child_ls = self._order_children(preset_item)
 
+        if preset_item.userType == Kg.camera_item:
+            self._add_camera_variants(preset_item, variants_ls, src_model)
+            return
+
         for child in ordered_child_ls:
             self._add_variant(child, variants_ls, src_model)
 
@@ -109,6 +114,10 @@ class KnechtCollectVariants(QObject):
 
                 if ref_preset.userType == Kg.output_item:
                     self._add_variant(ref_preset, variants_ls, src_model)
+                    continue
+
+                if ref_preset.userType == Kg.camera_item:
+                    self._add_camera_variants(ref_preset, variants_ls, src_model)
                     continue
 
                 if ref_preset:
@@ -123,6 +132,25 @@ class KnechtCollectVariants(QObject):
         elif item.userType == Kg.output_item:
             variants.output_path = item.data(Kg.VALUE)
             LOGGER.debug('Collected output path: %s', item.data(Kg.VALUE))
+
+    @staticmethod
+    def _add_camera_variants(item: KnechtItem, variants: KnechtVariantList, src_model: KnechtModel) -> None:
+        """ Convert Camera Preset items to camera command variants """
+        for child in item.iter_children():
+            camera_tag, camera_value = child.data(Kg.NAME), child.data(Kg.VALUE)
+
+            if camera_tag in KnechtImageCameraInfo.rtt_camera_cmds:
+                index = src_model.get_index_from_item(child)
+                camera_cmd = KnechtImageCameraInfo.rtt_camera_cmds.get(camera_tag)
+
+                try:
+                    camera_cmd = camera_cmd.format(*camera_value.split(','))
+                except Exception as e:
+                    LOGGER.warning('Camera Info Tag Value does not match %s\n%s', camera_value, e)
+
+                variants.add(index, camera_tag, camera_cmd, 'command')
+
+                LOGGER.debug('Collecting Camera Command %s: %s', camera_tag, camera_cmd)
 
     @classmethod
     def _order_children(cls, preset_item: KnechtItem) -> List[KnechtItem]:

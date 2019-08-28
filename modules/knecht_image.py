@@ -2,6 +2,7 @@ from pathlib import Path
 from threading import Thread
 from typing import Union, List
 
+from PIL import Image
 from PySide2.QtCore import QObject, Signal
 import numpy as np
 from imageio import imread, imwrite
@@ -139,3 +140,95 @@ class ConversionThread(Thread):
                 pass
 
         self.result_signal.emit(result)
+
+
+class KnechtImageCameraInfo:
+    """ Read Camera information from PNG files written from 3DS DeltaGen """
+    # Define which "tEXt" chunks to read from DeltaGen PNG files
+    # will test wildcard style with startswith(tag)
+    rtt_camera_tags = {'rtt_width', 'rtt_height',   # most likely refers to window resolution
+                       'rtt_Camera',                # read all tags starting with rtt_Camera
+                       'Software',                  # contains version information
+                       'rtt_BackgroundColor_RGBA',  # viewer background color
+                       'rtt_antiAliasQuality',      # AA Sampling value 0-9
+                       'rtt_FileName',              # Scene file name
+                       }
+
+    # Define which camera info tag belongs to which CAMERA socket command
+    rtt_camera_cmds = {
+        'rtt_Camera_FOV': 'FOV CAMERA {0}',
+        'rtt_Camera_Position': 'POS CAMERA {0}{1}{2}',
+        'rtt_Camera_Orientation': 'ORIENT CAMERA {0}{1}{2}{3}',
+        'knecht_clip_near': 'CLIPPLANE_NEAR CAMERA {0}',
+        'knecht_clip_far': 'CLIPPLANE_FAR CAMERA {0}',
+        }
+
+    # Define item descriptions for certain camera tags
+    rtt_camera_desc = {
+        'rtt_Camera_FOV': _('DeltaGen Kamera Sichtfeld: Angle'),
+        'rtt_Camera_Position': _('DeltaGen Kamera Position: X, Y, Z'),
+        'rtt_Camera_Orientation': _('DeltaGen Kamera Orientierung: Rotation Vector X, Y, Z, Angle'),
+        'rtt_BackgroundColor_RGBA': _('Viewer Hintergrund Farbe: R, G, B, A'),
+        'rtt_width': _('Viewer Breite in Px'),
+        'rtt_height': _('Viewer Höhe in Px'),
+        'rtt_Camera_RenderOutputWidth': _('Ausgabe Breite in Px'),
+        'rtt_Camera_RenderOutputHeight': _('Ausgabe Höhe in Px'),
+        'rtt_antiAliasQuality': 'Anti Aliasing Sampling Factor',
+        }
+
+    # Example dictonary for item creation
+    camera_example_info = {
+        'Software'                       : '3DEXCITE DELTAGEN 2017.1', 'rtt_Camera_FOV': '38.8801',
+        'rtt_Camera_FocalLength'         : '34', 'rtt_Camera_Projection': '1', 'rtt_Camera_EyeSeparation': '77.44',
+        'rtt_Camera_ConvergenceDistance' : '34', 'rtt_Camera_PreScale': '1', 'rtt_Camera_Overscan': '1',
+        'rtt_Camera_HorizontalFilmOffset': '0', 'rtt_Camera_VerticalFilmOffset': '0',
+        'rtt_Camera_HorizontalSensorSize': '36', 'rtt_Camera_VerticalSensorSize': '24', 'rtt_Camera_FilmFit': '2',
+        'rtt_Camera_RenderOutputWidth'   : '2880', 'rtt_Camera_RenderOutputHeight': '1620',
+        'rtt_Camera_Position'            : '1658.65, 483.29, 866.389',
+        'rtt_Camera_Orientation'         : '0.261426, 0.586788, 0.766379, 2.48355',
+        'rtt_BackgroundColor_RGBA'       : '1, 1, 1, 1', 'rtt_width': '1920', 'rtt_height': '1080',
+        'rtt_antiAliasQuality'           : '8',
+        'rtt_FileName'                   : 'Some_File.csb'
+        }
+
+    def __init__(self, file: Union[str, Path]):
+        self.file = file
+        self.file_is_valid = False
+        self.info_is_valid = False
+
+        self._camera_info = dict()
+
+    def read_image(self) -> bool:
+        if path_exists(self.file):
+            self.file_is_valid = True
+        else:
+            return False
+
+        # Open Image with Pillow
+        try:
+            with open(self.file, 'rb') as fp:
+                im = Image.open(fp)
+        except Exception as e:
+            LOGGER.error(e)
+            return False
+
+        # Read through image info dict for required camera tags
+        for k, v in im.info.items():
+            for tag in self.rtt_camera_tags:
+                if k.startswith(tag):
+                    self._camera_info[k] = v
+
+        if not im.info or not self._camera_info:
+            return False
+        else:
+            self.info_is_valid = True
+
+        return True
+
+    def camera_info(self):
+        return self._camera_info.items()
+
+    def is_valid(self):
+        if self.file_is_valid and self.info_is_valid and self._camera_info:
+            return True
+        return False

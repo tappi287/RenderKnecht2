@@ -7,6 +7,7 @@ from modules.gui.ui_resource import IconRsc
 from modules.idgen import KnechtUuidGenerator as Kid
 from modules.itemview.item import KnechtItem
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
+from modules.knecht_image import KnechtImageCameraInfo
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -64,9 +65,12 @@ class CreateMenu(QMenu):
                        (_("FaKom Option\tVarianten einer Farbkombination"),
                        i.get_icon('fakom'), self._create_fakom_option),
                        (_('Ausgabe Objekt\tDefiniert einen Ausgabepfad'),
-                        i.get_icon('folder'), self._create_output_item),
+                        i.get_icon('folder'), self._create_output_item), (
+                       _('Kamera Objekt\tEnthält 3DS DeltaGen Kameradaten'), i.get_icon('videocam'),
+                       self._create_camera_item),
                        (_("Separator\tNicht-interagierbares Ordnungselement"),
-                       i.get_icon('navicon'), self._create_separator)]
+                       i.get_icon('navicon'), self._create_separator)
+                       ]
 
         for a in action_list:
             name, icon, method_call = a
@@ -116,6 +120,16 @@ class CreateMenu(QMenu):
         children = list()
         children.append(self._create_item('#_Shot', 'Shot_00', '', '', '', 'Schalter des Shot Varianten Sets'))
         self._add_item('Viewset', ('', 'viewset'), children, _id=True)
+
+    def _create_camera_item(self):
+        children = list()
+
+        for k, v in KnechtImageCameraInfo.camera_example_info.items():
+            children.append(
+                self._create_item(k, v, '', '', '', KnechtImageCameraInfo.rtt_camera_desc.get(k) or '')
+                )
+
+        self._add_item(_('DeltaGen Kamera'), ('', 'camera_item'), children, _id=True)
 
     def _create_reset(self):
         children = list()

@@ -1,9 +1,11 @@
+from pathlib import Path
 from typing import Union
 
-from PySide2.QtCore import QMimeData, QObject, Qt, QItemSelectionModel, QModelIndex
+from PySide2.QtCore import QMimeData, QObject, Qt, QItemSelectionModel, QModelIndex, QUrl
 from PySide2.QtGui import QDragMoveEvent, QDropEvent
 
 from modules.gui.clipboard import TreeClipboard
+from modules.gui.widgets.path_util import path_exists
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.language import get_translation
 from modules.log import init_logging
@@ -38,6 +40,10 @@ class KnechtDragDrop(QObject):
     def drag_move_event(self, e: QDragMoveEvent):
         src = e.source()
 
+        if e.mimeData().hasUrls():
+            e.setDropAction(Qt.LinkAction)
+            e.accept(self.view.rect())
+
         if isinstance(src, self.view.__class__):
             e.setDropAction(Qt.MoveAction)
 
@@ -53,6 +59,20 @@ class KnechtDragDrop(QObject):
         mime: QMimeData = e.mimeData()
         src = e.source()
 
+        # -- File drop --
+        if mime.hasUrls():
+            destination_index = self.view.indexAt(e.pos())
+            for url in mime.urls():
+                local_path = Path(url.toLocalFile())
+                if not path_exists(local_path):
+                    continue
+
+                self.file_drop(local_path, destination_index)
+
+            e.accept()
+            return
+
+        # --- Internal View Drops ---
         if not isinstance(src, self.view.__class__):
             e.ignore()
             return
@@ -99,6 +119,11 @@ class KnechtDragDrop(QObject):
         self._select_drop_index(destination_index)
 
         self._paste()
+
+    def file_drop(self, file: Path, destination_index: QModelIndex):
+        self._select_drop_index(destination_index)
+        name = destination_index.siblingAtColumn(Kg.NAME)
+        LOGGER.debug('File Drop@%s: %s', name.data(Qt.DisplayRole), file.as_posix())
 
     def _select_drop_index(self, destination_index: QModelIndex):
         """ Select current row or clear selection """

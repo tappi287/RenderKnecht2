@@ -24,6 +24,7 @@ class KnechtVariant:
         :param QModelIndex index: The model index this Variant refers too
         :param str name: The name of the Variant Set
         :param str value: The Variant inside the Variant Set
+        :param str item_type:
         """
         self.index = index
         self.name = name

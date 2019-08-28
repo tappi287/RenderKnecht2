@@ -432,6 +432,7 @@ class KnechtItemStyle:
         'copy': 'copy',
         'checkmark': 'checkmark',
         'output_item': 'folder',
+        'camera_item': 'videocam',
         }
 
     @classmethod

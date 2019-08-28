@@ -1,7 +1,7 @@
 from typing import List, Union
 
 from PySide2.QtCore import QAbstractItemModel, QModelIndex, QPersistentModelIndex, QRegExp, QSortFilterProxyModel, \
-    QUuid, Qt, Slot
+    QUuid, Qt, Slot, QMimeData
 
 from modules.itemview.item import KnechtItem
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
@@ -397,6 +397,10 @@ class KnechtModel(QAbstractItemModel):
 
     def supportedDropActions(self):
         return Qt.CopyAction | Qt.MoveAction
+
+    def canDropMimeData(self, data: QMimeData, action: Qt.DropAction, row:int, column:int, parent: QModelIndex) -> bool:
+        """ We just want to indicate that we accept external data and handle this at view level """
+        return True
 
     def sort(self, column, order=Qt.AscendingOrder):
         LOGGER.debug('Sorting called %s %s', column, order)

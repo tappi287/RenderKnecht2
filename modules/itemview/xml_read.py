@@ -106,7 +106,7 @@ class KnechtXmlReader:
         if node.tag == 'variant' and node.text:
             node.set('value', node.text)
 
-        if node.tag == 'preset':
+        if node.tag in ('preset', 'camera_item'):
             # Create preset item: node, parent
             self.__preset_item = self._create_tree_item(node)
 

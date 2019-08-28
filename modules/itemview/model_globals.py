@@ -26,7 +26,7 @@ class KnechtModelGlobals:
                         render_preset='render_preset', sampling='render_setting', file_extension='render_setting',
                         resolution='render_setting', separator='separator', sub_separator='sub_separator',
                         seperator='separator', sub_seperator='Sub_separator',
-                        output_item='output_item')
+                        output_item='output_item', camera_item='camera_item',)
 
     # White Filter to apply on quick filtering
     QUICK_VIEW_FILTER = ['preset', 'separator', 'render_preset']
@@ -41,7 +41,7 @@ class KnechtModelGlobals:
     xml_tag_user_type = {
         'preset'   : 1000, 'variant': 1001, 'reference': 1002, 'render_preset': 1003, 'render_setting': 1004,
         'separator': 1005, 'seperator': 1005, 'sub_seperator': 1006, 'sub_separator': 1006,
-        'output_item': 1010
+        'output_item': 1010, 'camera_item': 1011,
         }
 
     xml_tag_by_user_type = dict()
@@ -52,7 +52,7 @@ class KnechtModelGlobals:
 
     for idx, desc in enumerate(
             ['preset', 'variant', 'reference', 'render_preset', 'render_setting', 'separator', 'sub_separator',
-             'checkable', 'group_item', 'dialog_item', 'output_item']):
+             'checkable', 'group_item', 'dialog_item', 'output_item', 'camera_item']):
         type_keys[1000 + idx] = desc
 
     # Qt UserTypes will be in 1000s
@@ -67,6 +67,7 @@ class KnechtModelGlobals:
     group_item = 1008
     dialog_item = 1009
     output_item = 1010
+    camera_item = 1011
     locked_preset = 1100
     xml_tag_by_user_type[locked_preset] = 'preset'
     locked_variant = 1101
