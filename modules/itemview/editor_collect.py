@@ -142,6 +142,7 @@ class KnechtCollectVariants(QObject):
             if camera_tag in KnechtImageCameraInfo.rtt_camera_cmds:
                 index = src_model.get_index_from_item(child)
                 camera_cmd = KnechtImageCameraInfo.rtt_camera_cmds.get(camera_tag)
+                camera_value = camera_value.replace(' ', '')
 
                 try:
                     camera_cmd = camera_cmd.format(*camera_value.split(','))
@@ -179,3 +180,5 @@ class KnechtCollectVariants(QObject):
 
         if ref_id:
             return src_model.id_mgr.get_preset_from_id(ref_id)
+        else:
+            return KnechtItem()

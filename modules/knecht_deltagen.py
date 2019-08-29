@@ -251,7 +251,7 @@ class CommunicateDeltaGen(Thread):
 
         if variant.item_type == 'command':
             # Look-up new command variants
-            variant_str = variant.value
+            variant_str = f'{variant.value};'
         else:
             # Extract variant set and value
             variant_str = 'VARIANT {} {};'.format(variant.name, variant.value)

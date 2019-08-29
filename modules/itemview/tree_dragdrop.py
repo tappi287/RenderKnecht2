@@ -7,6 +7,7 @@ from PySide2.QtGui import QDragMoveEvent, QDropEvent
 from modules.gui.clipboard import TreeClipboard
 from modules.gui.widgets.path_util import path_exists
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
+from modules.knecht_image import KnechtImageCameraInfo
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -20,6 +21,7 @@ _ = lang.gettext
 
 class KnechtDragDrop(QObject):
     clear_select_current_flags = (QItemSelectionModel.ClearAndSelect | QItemSelectionModel.Rows)
+    supported_file_types = ('.png', '.exr')
 
     def __init__(self, view):
         """ KnechtTreeView Helper class to handle item drag and drop
@@ -122,8 +124,24 @@ class KnechtDragDrop(QObject):
 
     def file_drop(self, file: Path, destination_index: QModelIndex):
         self._select_drop_index(destination_index)
-        name = destination_index.siblingAtColumn(Kg.NAME)
-        LOGGER.debug('File Drop@%s: %s', name.data(Qt.DisplayRole), file.as_posix())
+        order = int(destination_index.siblingAtColumn(Kg.ORDER).data(Qt.DisplayRole) or '-1') + 1
+        LOGGER.debug('File Drop@%s: %s', order, file.as_posix())
+
+        if file.suffix in self.supported_file_types:
+            cam_info_img = KnechtImageCameraInfo(file)
+            cam_info_img.read_image()
+
+            if cam_info_img.is_valid():
+                cam_item = self.view.editor.util.create_camera_item(file.name, cam_info_img.camera_info())
+                cam_item.setData(Kg.ORDER, f'{order:03d}')
+                self.view.editor.create_top_level_rows([cam_item])
+            else:
+                if cam_info_img.file_is_valid and not cam_info_img.info_is_valid:
+                    self.view.info_overlay.display(_('Keine Kamera Daten in Datei gefunden.\n'), 3000)
+                    LOGGER.error('Camera data could not be found in %s', file.as_posix())
+                else:
+                    self.view.info_overlay.display(_('Konnte Datei mit Kamera Daten nicht lesen.\n'), 3000)
+                    LOGGER.error('Could not read file with camera data %s', file.as_posix())
 
     def _select_drop_index(self, destination_index: QModelIndex):
         """ Select current row or clear selection """

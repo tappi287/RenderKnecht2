@@ -2,10 +2,12 @@ from typing import List, Tuple
 
 from PySide2.QtCore import QModelIndex, QUuid, Qt
 
+from modules.idgen import KnechtUuidGenerator
 from modules.itemview.item import KnechtItem
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.model_update import UpdateModel
+from modules.knecht_image import KnechtImageCameraInfo
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -25,6 +27,16 @@ class KnechtEditorUtilities:
         :param modules.itemview.editor.KnechtEditor editor:
         """
         self.editor = editor
+
+    @classmethod
+    def create_camera_item(cls, name: str, camera_info: dict):
+        item = KnechtItem(None, ('', name, '', 'camera_item', '', KnechtUuidGenerator.create_id(),))
+
+        for idx, (k, v) in enumerate(camera_info.items()):
+            item.append_item_child(
+                KnechtItem(item, (f'{idx:03d}', k, v, '', '', '', KnechtImageCameraInfo.rtt_camera_desc.get(k) or '', ))
+                )
+        return item
 
     @classmethod
     def insert_child_from_data(cls, model, parent, data):

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b7c66bf34264f9c1187d902af69270bcc0c159089186c8d1bd2310ddce9a8435"
+            "sha256": "e9268489765d41f2f0a447cf609ea3f02f267da5dc5ae19d6dc91557e771bd5e"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -166,6 +166,15 @@
                 "sha256:f8dc19d92896558f9c4317ee365729ead9d7bbcf2052a9a19a3ef17abbb8ac5b"
             ],
             "version": "==6.1.0"
+        },
+        "pyquaternion": {
+            "hashes": [
+                "sha256:2d89d19259d62a8fbd25219eee7dacc1f6bb570becb70e1e883f622597c7d81d",
+                "sha256:9da8a22375783c1d5f2d65d195b4eb6c1ce2c5a5cab4700860b3bacc4dacb460",
+                "sha256:bac5945d08b9a2f4106dc76206e40f353c7240fdf37a370e13b03113c135f59b"
+            ],
+            "index": "pypi",
+            "version": "==0.9.5"
         },
         "pyside2": {
             "hashes": [
@@ -573,7 +582,7 @@
         },
         "pyinstaller": {
             "git": "https://github.com/pyinstaller/pyinstaller.git",
-            "ref": "46286a1f455d8e0837f7c2b9e1bbdff1ef858f0f"
+            "ref": "1085db7070242fc04dae1769b379d7217ac14b1a"
         },
         "pynacl": {
             "hashes": [
@@ -601,7 +610,8 @@
         },
         "pyrsistent": {
             "hashes": [
-                "sha256:34b47fa169d6006b32e99d4b3c4031f155e6e68ebcc107d6454852e8e0ee6533"
+                "sha256:34b47fa169d6006b32e99d4b3c4031f155e6e68ebcc107d6454852e8e0ee6533",
+                "sha256:c038d474d5b023f16ded0b0cec4418b0751193b3e932f4a760dd7c75068ff724"
             ],
             "version": "==0.15.4"
         },

@@ -157,8 +157,8 @@ class KnechtImageCameraInfo:
     # Define which camera info tag belongs to which CAMERA socket command
     rtt_camera_cmds = {
         'rtt_Camera_FOV': 'FOV CAMERA {0}',
-        'rtt_Camera_Position': 'POS CAMERA {0}{1}{2}',
-        'rtt_Camera_Orientation': 'ORIENT CAMERA {0}{1}{2}{3}',
+        'rtt_Camera_Position': 'POS CAMERA {0} {1} {2}',
+        'rtt_Camera_Orientation': 'ORIENT CAMERA {0} {1} {2} {3}',
         'knecht_clip_near': 'CLIPPLANE_NEAR CAMERA {0}',
         'knecht_clip_far': 'CLIPPLANE_FAR CAMERA {0}',
         }
@@ -221,12 +221,33 @@ class KnechtImageCameraInfo:
         if not im.info or not self._camera_info:
             return False
         else:
+            # Test if all required camera command keys are inside camera info
+            if self._camera_info.keys().isdisjoint(self.rtt_camera_cmds.keys()):
+                return False
             self.info_is_valid = True
+
+        # Convert Camera Orientation
+        self._convert_orientation()
 
         return True
 
+    def _convert_orientation(self):
+        """ rtt_Camera_Orientation is stored X Y Z ANGLE rotation axis in radians + rotation angle in radians
+            socket command wants X Y Z in radians but angle in degrees ...
+        """
+        v = self._camera_info.get('rtt_Camera_Orientation') or ''
+        values = v.replace(' ', '').split(',')
+
+        if not len(values) == 4:
+            return
+
+        x, y, z, radian_angle = values
+        degree_angle = np.math.degrees(float(radian_angle))
+
+        self._camera_info['rtt_Camera_Orientation'] = f'{x}, {y}, {z}, {degree_angle}'
+
     def camera_info(self):
-        return self._camera_info.items()
+        return self._camera_info
 
     def is_valid(self):
         if self.file_is_valid and self.info_is_valid and self._camera_info:

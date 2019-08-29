@@ -122,14 +122,13 @@ class CreateMenu(QMenu):
         self._add_item('Viewset', ('', 'viewset'), children, _id=True)
 
     def _create_camera_item(self):
-        children = list()
+        if not self.current_view:
+            return
 
-        for k, v in KnechtImageCameraInfo.camera_example_info.items():
-            children.append(
-                self._create_item(k, v, '', '', '', KnechtImageCameraInfo.rtt_camera_desc.get(k) or '')
-                )
-
-        self._add_item(_('DeltaGen Kamera'), ('', 'camera_item'), children, _id=True)
+        self.item_count += 1
+        name = _('DeltaGen_Kamera_{:03d}').format(self.item_count)
+        new_item = self.current_view.editor.util.create_camera_item(name, KnechtImageCameraInfo.camera_example_info)
+        self.current_view.editor.create_top_level_rows([new_item])
 
     def _create_reset(self):
         children = list()
