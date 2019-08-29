@@ -1,11 +1,11 @@
 from pathlib import Path
 from threading import Thread
-from typing import Union, List
+from typing import List, Union
 
-from PIL import Image
-from PySide2.QtCore import QObject, Signal
+import OpenImageIO as oiio
 import numpy as np
-from imageio import imread, imwrite
+from OpenImageIO import ImageBuf, ImageBufAlgo, ImageOutput, ImageSpec
+from PySide2.QtCore import QObject, Signal
 
 from modules.gui.widgets.path_util import path_exists
 from modules.language import get_translation
@@ -31,6 +31,8 @@ class KnechtImage(QObject):
                      output_format: str='.png', move_converted: bool=False) -> bool:
         if not path_exists(img_file) or not path_exists(output_dir):
             return False
+        if not img_file.suffix.casefold() in self.supported_image_types:
+            return False
 
         self._start_img_thread([img_file, ], output_dir, output_format, move_converted)
         return True
@@ -55,26 +57,6 @@ class KnechtImage(QObject):
                           output_format: str, move_converted: bool):
         img_thread = ConversionThread(img_list, self.conversion_result, output_dir, output_format, move_converted)
         img_thread.start()
-
-    @staticmethod
-    def open_with_imageio(file: Path) -> Union[None, np.array]:
-        """ Open image files with imageio and convert to 8bit """
-        try:
-            LOGGER.info('Loading image file with imageio. %s', file.name)
-            img = imread(file.as_posix())
-        except Exception as e:
-            LOGGER.error(e)
-            return None
-
-        # Convert none 8bit depth images
-        if img.dtype == np.float32:
-            # Convert 32bit float images to 8bit integer
-            img = np.uint8(img * 255)
-        elif img.dtype == np.uint16:
-            # Convert 16bit integer[0 - 65535] to 8bit integer [0-255]
-            img = np.uint8(img / 256)
-
-        return img
 
 
 class ConversionThread(Thread):
@@ -107,7 +89,7 @@ class ConversionThread(Thread):
 
             # Open and convert image
             try:
-                img = KnechtImage.open_with_imageio(img_file)
+                img = OpenImageUtil.read_image(img_file)
             except Exception as e:
                 result += _('Konnte Bilddatei {} nicht konvertieren: {}').format(img_file.name, f'{e}\n')
                 continue
@@ -115,7 +97,7 @@ class ConversionThread(Thread):
             # Write image to file
             try:
                 img_out = self.output_dir / Path(img_file.stem).with_suffix(self.output_format)
-                imwrite(img_out, img)
+                OpenImageUtil.write_image(img_out, img)
                 result += _('Bilddatei erstellt: {}').format(f'{img_out.name}\n')
             except Exception as e:
                 result += _('Konnte Bilddatei {} nicht erstellen: {}').format(img_file.name, f'{e}\n')
@@ -140,6 +122,147 @@ class ConversionThread(Thread):
                 pass
 
         self.result_signal.emit(result)
+
+
+class OpenImageUtil:
+    @classmethod
+    def get_image_resolution(cls, img_file: Path) -> (int, int):
+        img_input = cls._image_input(img_file)
+
+        if img_input:
+            res_x, res_y = img_input.spec().width, img_input.spec().height
+            img_input.close()
+            del img_input
+            return res_x, res_y
+        return 0, 0
+
+    @classmethod
+    def premultiply_image(cls, img_pixels: np.array) -> np.array:
+        """ Premultiply a numpy image with itself """
+        a = cls.np_to_imagebuf(img_pixels)
+        ImageBufAlgo.premult(a, a)
+
+        return a.get_pixels(a.spec().format, a.spec().roi_full)
+
+    @staticmethod
+    def get_numpy_oiio_img_format(np_array: np.ndarray) -> Union[oiio.BASETYPE]:
+        """ Returns either float or 8 bit integer format"""
+        img_format = oiio.FLOAT
+
+        if np_array.dtype == np.uint8:
+            img_format = oiio.UINT8
+        elif np_array.dtype == np.uint16:
+            img_format = oiio.UINT16
+
+        return img_format
+
+    @classmethod
+    def convert_img_to_uint8(cls, img: np.ndarray) -> Union[None, np.ndarray]:
+        """ Convert an image array to 8bit integer """
+        img_format = cls.get_numpy_oiio_img_format(img)
+
+        # Convert none 8bit depth images
+        if img_format == oiio.FLOAT:
+            # Convert 32bit float images to 8bit integer
+            img = np.uint8(img * 255)
+        elif img_format == oiio.UINT8:
+            # Keep 8bit integers untouched
+            pass
+        elif img_format == oiio.UINT16:
+            # Convert 16bit integer[0 - 65535] to 8bit integer [0-255]
+            img = np.uint8(img / 256)
+
+        return img
+
+    @classmethod
+    def np_to_imagebuf(cls, img_pixels: np.array):
+        """ Load a numpy array 8/32bit to oiio ImageBuf """
+        if len(img_pixels.shape) < 3:
+            LOGGER.error('Can not create image with pixel data in this shape. Expecting 4 channels(RGBA).')
+            return
+
+        h, w, c = img_pixels.shape
+        img_spec = ImageSpec(w, h, c, cls.get_numpy_oiio_img_format(img_pixels))
+
+        img_buf = ImageBuf(img_spec)
+        img_buf.set_pixels(img_spec.roi_full, img_pixels)
+
+        return img_buf
+
+    @classmethod
+    def _image_input(cls, img_file: Path):
+        """ CLOSE the returned object after usage! """
+        img_input = oiio.ImageInput.open(img_file.as_posix())
+
+        if img_input is None:
+            LOGGER.error('Error reading image: %s', oiio.geterror())
+            return
+        return img_input
+
+    @classmethod
+    def read_image(cls, img_file: Path, format: str='') -> Union[np.ndarray, None]:
+        img_input = cls._image_input(img_file)
+
+        if not img_input:
+            return None
+
+        # Read out image data as numpy array
+        img = img_input.read_image(format=format)
+        img_input.close()
+
+        return img
+
+    @classmethod
+    def write_image(cls, file: Path, pixels: np.array):
+        output = ImageOutput.create(file.as_posix())
+        if not output:
+            LOGGER.error('Error creating oiio image output:\n%s', oiio.geterror())
+            return
+
+        if len(pixels.shape) < 3:
+            LOGGER.error('Can not create image with Pixel data in this shape. Expecting 3 or 4 channels(RGB, RGBA).')
+            return
+
+        h, w, c = pixels.shape
+        spec = ImageSpec(w, h, c, cls.get_numpy_oiio_img_format(pixels))
+
+        result = output.open(file.as_posix(), spec)
+        if result:
+            try:
+                output.write_image(pixels)
+            except Exception as e:
+                LOGGER.error('Could not write Image: %s', e)
+        else:
+            LOGGER.error('Could not open image file for writing: %s: %s', file.name, output.geterror())
+
+        output.close()
+
+    @classmethod
+    def read_img_metadata(cls, img_file: Path) -> dict:
+        img_buf = ImageBuf(img_file.as_posix())
+        img_dict = dict()
+
+        if not img_buf:
+            LOGGER.error(oiio.geterror())
+            return img_dict
+
+        for param in img_buf.spec().extra_attribs:
+            img_dict[param.name] = param.value
+
+        cls.close_img_buf(img_buf, img_file)
+
+        return img_dict
+
+    @staticmethod
+    def close_img_buf(img_buf, img_file: Union[Path, None]=None):
+        try:
+            img_buf.clear()
+            del img_buf
+
+            if img_file:
+                oiio.ImageCache().invalidate(img_file.as_posix())
+        except Exception as e:
+            LOGGER.error('Error closing img buf: %s', e)
 
 
 class KnechtImageCameraInfo:
@@ -184,8 +307,8 @@ class KnechtImageCameraInfo:
         'rtt_Camera_HorizontalFilmOffset': '0', 'rtt_Camera_VerticalFilmOffset': '0',
         'rtt_Camera_HorizontalSensorSize': '36', 'rtt_Camera_VerticalSensorSize': '24', 'rtt_Camera_FilmFit': '2',
         'rtt_Camera_RenderOutputWidth'   : '2880', 'rtt_Camera_RenderOutputHeight': '1620',
-        'rtt_Camera_Position'            : '1658.65, 483.29, 866.389',
-        'rtt_Camera_Orientation'         : '0.261426, 0.586788, 0.766379, 2.48355',
+        'rtt_Camera_Position'            : '-221.522, -143.877, 88.475',
+        'rtt_Camera_Orientation'         : '0.734806, -0.397707, -0.549444, 89.13848193527295',
         'rtt_BackgroundColor_RGBA'       : '1, 1, 1, 1', 'rtt_width': '1920', 'rtt_height': '1080',
         'rtt_antiAliasQuality'           : '8',
         'rtt_FileName'                   : 'Some_File.csb'
@@ -204,21 +327,20 @@ class KnechtImageCameraInfo:
         else:
             return False
 
-        # Open Image with Pillow
+        # Get image meta data with OpenImageIO
         try:
-            with open(self.file, 'rb') as fp:
-                im = Image.open(fp)
+            img_meta = OpenImageUtil.read_img_metadata(self.file)
         except Exception as e:
             LOGGER.error(e)
             return False
 
         # Read through image info dict for required camera tags
-        for k, v in im.info.items():
+        for k, v in img_meta.items():
             for tag in self.rtt_camera_tags:
                 if k.startswith(tag):
                     self._camera_info[k] = v
 
-        if not im.info or not self._camera_info:
+        if not img_meta or not self._camera_info:
             return False
         else:
             # Test if all required camera command keys are inside camera info

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e9268489765d41f2f0a447cf609ea3f02f267da5dc5ae19d6dc91557e771bd5e"
+            "sha256": "48aaf1910f5c0d4daae869bbcb759e23a71039fe11dc924ade70b8892ac62c33"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -115,6 +115,14 @@
             "index": "pypi",
             "version": "==1.16.2"
         },
+        "openimageio": {
+            "file": "https://piwigo.ilikeviecher.com/ftp-upload/packages/OpenImageIO-2.0.7-cp37-cp37m-win_amd64.whl",
+            "hashes": [
+                "sha256:0927e82a286825eda1d7e2556680e3010b352b1dd755f69cfca679419839b816"
+            ],
+            "index": "pypi",
+            "version": "==2.0.7"
+        },
         "pandas": {
             "hashes": [
                 "sha256:18d91a9199d1dfaa01ad645f7540370ba630bdcef09daaf9edf45b4b1bca0232",
@@ -166,15 +174,6 @@
                 "sha256:f8dc19d92896558f9c4317ee365729ead9d7bbcf2052a9a19a3ef17abbb8ac5b"
             ],
             "version": "==6.1.0"
-        },
-        "pyquaternion": {
-            "hashes": [
-                "sha256:2d89d19259d62a8fbd25219eee7dacc1f6bb570becb70e1e883f622597c7d81d",
-                "sha256:9da8a22375783c1d5f2d65d195b4eb6c1ce2c5a5cab4700860b3bacc4dacb460",
-                "sha256:bac5945d08b9a2f4106dc76206e40f353c7240fdf37a370e13b03113c135f59b"
-            ],
-            "index": "pypi",
-            "version": "==0.9.5"
         },
         "pyside2": {
             "hashes": [
@@ -610,8 +609,7 @@
         },
         "pyrsistent": {
             "hashes": [
-                "sha256:34b47fa169d6006b32e99d4b3c4031f155e6e68ebcc107d6454852e8e0ee6533",
-                "sha256:c038d474d5b023f16ded0b0cec4418b0751193b3e932f4a760dd7c75068ff724"
+                "sha256:34b47fa169d6006b32e99d4b3c4031f155e6e68ebcc107d6454852e8e0ee6533"
             ],
             "version": "==0.15.4"
         },

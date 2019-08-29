@@ -96,7 +96,7 @@ def main(process: int=0):
 
     update_version_info(out_dir)
 
-    if process < 2:
+    if process in (0, 1, 2):
         # Build with PyInstaller
         args = ['pyinstaller', '--noconfirm', SPEC_FILE]
         p = Popen(args=args)
@@ -107,7 +107,7 @@ def main(process: int=0):
             print('PyInstaller could not build executable!')
             return
 
-    if process == 1:
+    if process in (1, 2):
         print('\nRunning Inno Studio Setup Script...')
         args = [get_inno_executable_path().as_posix(), '-compile', ISS_FILE]
         p = Popen(args, cwd=Path(__file__).parent)
@@ -126,7 +126,7 @@ def main(process: int=0):
 
         print('\nBuild completed!')
 
-    if process > 0:
+    if process in (2, 3):
         if not upload_release():
             print('Error while updating remote directory!')
             return
@@ -139,8 +139,9 @@ def ask_process() -> int:
           "##########################################################")
     print("Choose which process you'd like to proceed with:\n"
           "\t\t0 - Build Executable\n"
-          "\t\t1 - Build Executable + Installer + Upload\n"
-          "\t\t2 - Only upload existing Installer to remote directory.\n")
+          "\t\t1 - Build Executable + Installer\n"
+          "\t\t2 - Build Executable + Installer + Upload\n"
+          "\t\t3 - Only upload existing Installer to remote directory.\n")
     answer = input('Answer: ')
 
     if answer not in ['0', '1', '2', 'q', 'exit', 'quit']:

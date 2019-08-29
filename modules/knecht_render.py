@@ -7,13 +7,12 @@ from threading import Thread
 from typing import List
 
 from PySide2.QtCore import QObject, Qt, Signal, Slot
-from imageio import imread
 
 from modules.gui.widgets.message_box import GenericErrorBox
 from modules.gui.widgets.path_util import path_exists
 from modules.itemview.tree_view import KnechtTreeView
 from modules.knecht_deltagen import CommunicateDeltaGen, SendToDeltaGen
-from modules.knecht_image import KnechtImage
+from modules.knecht_image import KnechtImage, OpenImageUtil
 from modules.knecht_utils import time_string
 from modules.knecht_objects import KnechtRenderPreset, KnechtVariantList
 from modules.language import get_translation
@@ -447,9 +446,11 @@ class KnechtRenderThread(Thread):
 
             try:
                 # Try to read image
-                with open(img_path.as_posix(), 'rb') as f:
-                    img = imread(f)
-                img = True
+                img = OpenImageUtil.read_image(img_path)
+
+                if img:
+                    del img
+                    img = True
             except ValueError or OSError as exception_message:
                 """ Value error if format not found or file incomplete; OSError on non-existent file """
                 LOGGER.debug('Rendered image could not be verified. Verification loop %s sec.\n%s', timeout,
