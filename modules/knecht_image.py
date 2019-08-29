@@ -275,6 +275,7 @@ class KnechtImageCameraInfo:
                        'rtt_BackgroundColor_RGBA',  # viewer background color
                        'rtt_antiAliasQuality',      # AA Sampling value 0-9
                        'rtt_FileName',              # Scene file name
+                       'knecht',                    # Custom RenderKnecht data
                        }
 
     # Define which camera info tag belongs to which CAMERA socket command
@@ -297,6 +298,7 @@ class KnechtImageCameraInfo:
         'rtt_Camera_RenderOutputWidth': _('Ausgabe Breite in Px'),
         'rtt_Camera_RenderOutputHeight': _('Ausgabe Höhe in Px'),
         'rtt_antiAliasQuality': 'Anti Aliasing Sampling Factor',
+        'knecht_clip_near': 'Near Clipping Plane', 'knecht_clip_far': 'Far Clipping Plane',
         }
 
     # Example dictonary for item creation
@@ -311,7 +313,8 @@ class KnechtImageCameraInfo:
         'rtt_Camera_Orientation'         : '0.734806, -0.397707, -0.549444, 89.13848193527295',
         'rtt_BackgroundColor_RGBA'       : '1, 1, 1, 1', 'rtt_width': '1920', 'rtt_height': '1080',
         'rtt_antiAliasQuality'           : '8',
-        'rtt_FileName'                   : 'Some_File.csb'
+        'rtt_FileName'                   : 'Some_File.csb',
+        'knecht_clip_near': '100.0', 'knecht_clip_far': '10000.0',
         }
 
     def __init__(self, file: Union[str, Path]):

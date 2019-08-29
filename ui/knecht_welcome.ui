@@ -112,15 +112,9 @@ QPushButton:hover {color: rgb(85, 170, 255);
       <widget class="QLabel" name="news">
        <property name="text">
         <string>&lt;ul&gt;
-&lt;li&gt;public pre-release app under GPLv3, &lt;a href=&quot;https://teams.microsoft.com/l/channel/19%3ad2bec81eaa8e4243a8c7b30e234e2f15%40thread.skype/DevOps%2520Updates?groupId=64c5e130-ce80-40e5-9d4b-de93f3502869&amp;tenantId=65705161-30e1-462b-b734-6ad1e41dfe35&quot;&gt;Report Bugs!&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;implemented Info, Docs, Welcome pages in Info ? menu&lt;/li&gt;
-&lt;li&gt;update to PySide 5.13, PyInstaller 4.0#dev, Python 3.7.4&lt;/li&gt;
-&lt;li&gt;enhanced render preset validation prior to rendering, output dirs will be test written, resolution setting user input is verified&lt;/li&gt;
-&lt;li&gt;implemented output items functionality letting you specify output dirs per image/preset/shot/render preset&lt;/li&gt;
-&lt;li&gt;image conversion is done after every image render respecting the new output targets&lt;/li&gt;
-&lt;li&gt;add save action to document close dialog&lt;/li&gt;
-&lt;li&gt;clear text filter in Vplus import dialog upon accept&lt;/li&gt;
-&lt;li&gt;properly dismiss existing wizard session data on re-import&lt;/li&gt;
+&lt;li&gt;public release app under GPLv3, &lt;a href=&quot;https://teams.microsoft.com/l/channel/19%3ad2bec81eaa8e4243a8c7b30e234e2f15%40thread.skype/DevOps%2520Updates?groupId=64c5e130-ce80-40e5-9d4b-de93f3502869&amp;tenantId=65705161-30e1-462b-b734-6ad1e41dfe35&quot;&gt;Report Bugs!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;add DeltaGen Camera Data import from image file drops see the documentation for limitations and usage&lt;/li&gt;
+&lt;li&gt;replace image in output with OpenImageIO removing the heavy imageio+freeimagelib dependency&lt;/li&gt;
 &lt;li&gt;read PR-Options &quot;I&quot; exactly like &quot;L&quot; as default trim line options&lt;/li&gt;
 &lt;li&gt;added Gearbox PR-Family to default INT familys&lt;/li&gt;
 &lt;/ul&gt;</string>
