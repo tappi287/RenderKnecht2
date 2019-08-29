@@ -229,9 +229,6 @@ class KnechtRenderThread(Thread):
 
                 self._write_render_log(img_out_dir)
 
-        if not self.img_conversion_finished:
-            self._await_conversion_result()
-
         if self.rendered_img_count >= self.total_image_count():
             duration = time_string(time.time() - self.render_start_time)
             self.progress_text.emit(_('{} Rendering von {} Bildern abgeschlossen in {}').format(
@@ -293,11 +290,16 @@ class KnechtRenderThread(Thread):
         self._await_rendered_image(img_path)
 
         # --- Convert result image to PNG
-        if self.convert_to_png and render_preset.settings.get("file_extension") != '.png':
+        if self.convert_to_png and render_preset.settings.get("file_extension").casefold() != '.png':
             if self.img_thread.convert_file(img_path, out_dir, move_converted=True):
                 msg = _('Konvertiere Bilddaten...')
                 self.status.emit(msg)
                 self.btn_text.emit(msg)
+        else:
+            self.img_conversion_finished = True
+
+        if not self.img_conversion_finished:
+            self._await_conversion_result()
 
         self.rendered_img_count += 1
 

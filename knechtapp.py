@@ -28,7 +28,6 @@ InfoMessage.cred = ['Python Community', 'PyCharm Community Edition', 'Stackoverf
 
 # TODO: Rename, Renumber Images from different RenderPresets
 # TODO: String parsing in order in variants list ABC on; DEF on;
-# TODO: Rendering to png never finishes conversion
 
 
 def initialize_log_listener(logging_queue):
