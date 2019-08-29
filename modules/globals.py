@@ -30,7 +30,6 @@ UPDATE_INSTALL_FILE = 'RenderKnecht2_Setup_{version}_win64.exe'
 DG_TCP_IP = 'localhost'
 DG_TCP_PORT = 3333
 
-FREEIMAGE_LIB = 'freeimage-3.15.1-win64.dll'
 
 # Frozen or Debugger
 if getattr(sys, 'frozen', False):
@@ -90,10 +89,3 @@ class Resource:
     ui_paths = dict()
     icon_paths = dict()
     darkstyle = ":darkstyle/darkstyle.qss"
-
-
-# FreeImg Library for imageIo
-base_path = Path(get_current_modules_dir())
-free_image_lib_path = base_path / 'bin' / FREEIMAGE_LIB
-print('Free Image Libary: ' + free_image_lib_path.as_posix())
-os.environ['IMAGEIO_FREEIMAGE_LIB'] = free_image_lib_path.absolute().as_posix()

@@ -448,7 +448,7 @@ class KnechtRenderThread(Thread):
                 # Try to read image
                 img = OpenImageUtil.read_image(img_path)
 
-                if img:
+                if img is not None and len(img):
                     del img
                     img = True
             except ValueError or OSError as exception_message:
@@ -463,7 +463,7 @@ class KnechtRenderThread(Thread):
                 # Wait 10 seconds
                 time.sleep(10)
 
-            if img:
+            if img is not None and img is True:
                 del img
                 LOGGER.debug('Rendered image was verified as valid image file.')
 

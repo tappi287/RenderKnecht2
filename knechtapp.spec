@@ -16,7 +16,7 @@ local_hooks = ['hooks']
 
 a = Analysis(['knechtapp.py'],
              pathex=['I:\\Nextcloud\\py\\RenderKnecht2'],
-             binaries=[('bin/*', 'bin')],
+             binaries=[],
              datas=knecht_files,
              hiddenimports=[],
              hookspath=local_hooks,
@@ -46,13 +46,3 @@ coll = COLLECT(exe,
                strip=False,
                upx=False,
                name='RenderKnecht2')
-
-try:
-    from pathlib import Path
-    import shutil
-
-    base_path = Path('.') / 'dist' / coll.name
-    base_path = base_path.absolute()
-    shutil.rmtree(Path(base_path / 'imageio'))
-except Exception as e:
-    print(e)
