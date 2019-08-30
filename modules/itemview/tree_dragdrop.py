@@ -7,7 +7,7 @@ from PySide2.QtGui import QDragMoveEvent, QDropEvent
 from modules.gui.clipboard import TreeClipboard
 from modules.gui.widgets.path_util import path_exists
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
-from modules.knecht_image import KnechtImageCameraInfo
+from modules.knecht_camera import KnechtImageCameraInfo
 from modules.language import get_translation
 from modules.log import init_logging
 

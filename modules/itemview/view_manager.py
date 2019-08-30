@@ -277,7 +277,7 @@ class ViewManager(QObject):
             return
 
         current_view = current_tab.user_view
-        self.log_tabs()
+        # self.log_tabs()
 
         # Update view filtering
         current_view.set_filter_widget_text(current_view.current_filter_text())

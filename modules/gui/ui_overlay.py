@@ -1,8 +1,9 @@
 import queue
+from typing import Iterable
 
 from PySide2 import QtWidgets
 from PySide2.QtCore import QAbstractAnimation, QEasingCurve, QEvent, QPropertyAnimation, QRect, QTimer, QSize, Qt, Signal
-from PySide2.QtGui import QEnterEvent, QFont, QMovie, QPalette, QShowEvent, QHideEvent, QMouseEvent
+from PySide2.QtGui import QEnterEvent, QFont, QMovie, QPalette, QShowEvent, QHideEvent, QMouseEvent, QFontMetrics
 
 from modules.gui.ui_resource import FontRsc
 from modules.language import get_translation
@@ -17,6 +18,10 @@ _ = lang.gettext
 
 
 class _OverlayWidget(QtWidgets.QWidget):
+    # Overlay specific font to correctly calculate font metrics
+    # which do not get updated when widget font style or size changes
+    overlay_font = FontRsc.get_font('SourceSansPro-Regular')
+
     def __init__(self, parent):
         super(_OverlayWidget, self).__init__(parent)
 
@@ -171,62 +176,6 @@ class Overlay(_OverlayWidget):
         self.movie_screen.hide()
 
 
-class IntroOverlay(_OverlayWidget):
-    opaque_timer = QTimer()
-    opaque_timer.setSingleShot(True)
-
-    finished_signal = Signal()
-
-    def __init__(self, parent):
-        super(IntroOverlay, self).__init__(parent)
-        self.parent = parent
-
-        self.intro_mov = QMovie(':/anim/Introduction.gif')
-        self.intro_mov.setCacheMode(QMovie.CacheAll)
-        self.intro_mov.finished.connect(self.finished)
-        self.opaque_timer.timeout.connect(self.set_opaque_for_mouse_events)
-
-        self.installEventFilter(self)
-
-    def eventFilter(self, obj, event):
-        if obj is None or event is None:
-            return False
-
-        if obj is self:
-            if event.type() == QEvent.MouseButtonPress:
-                self.mouse_click()
-                return True
-
-        return False
-
-    def set_opaque_for_mouse_events(self):
-        self.setAttribute(Qt.WA_TransparentForMouseEvents, False)
-
-    def intro(self):
-        LOGGER.info('Playing introduction in %sx %sy %spx %spx',
-                    self.parent.rect().x(), self.parent.rect().y(),
-                    self.parent.rect().width(), self.parent.rect().height())
-
-        self.movie_screen.setMovie(self.intro_mov)
-        self.movie_screen.setGeometry(self.parent.rect())
-        self._updateParent()
-        self.opaque_timer.start(1000)
-        self.movie_screen.show()
-        self.show()
-
-        self.intro_mov.jumpToFrame(0)
-        self.intro_mov.start()
-
-    def mouse_click(self):
-        self.intro_mov.stop()
-        self.finished()
-
-    def finished(self):
-        self.movie_screen.hide()
-        self.hide()
-        self.finished_signal.emit()
-
-
 class InfoOverlay(_OverlayWidget):
     """ Provides an overlay area with additional information """
     # Signal that new message will be displayed
@@ -239,15 +188,10 @@ class InfoOverlay(_OverlayWidget):
     # Maximum message length
     max_length = 1500
 
-    # Mouse Timer
-    mouse_leave_timer = QTimer()
-    mouse_leave_timer.setSingleShot(True)
-    mouse_leave_timer.setInterval(200)
-
     # Geometry
     offset_factor_y = 0.10
     overlay_width_factor = 0.65
-    overlay_height = 36
+    overlay_height = 42
 
     # Background appearance
     # will be rgba(0, 0, 0, opacity * bg_opacity)
@@ -269,20 +213,19 @@ class InfoOverlay(_OverlayWidget):
 
     def __init__(self, parent):
         super(InfoOverlay, self).__init__(parent)
-        # TODO: disappears on tab change
 
         # Parent widget where overlay will be displayed
         self.parent: QtWidgets.QWidget = parent
 
         self.setAttribute(Qt.WA_TransparentForMouseEvents, False)
         self.setFocusPolicy(Qt.NoFocus)
+        self.setStyleSheet('background: rgba(200,0,0,150);')
 
-        try:
-            self.scroll_bar = self.parent.horizontalScrollBar()
-            self.scroll_bar.installEventFilter(self)
-        except Exception as e:
-            LOGGER.error('Overlay parent has no horizontal scrollbar. %s', e)
-            self.scroll_bar = QtWidgets.QScrollBar()
+        if hasattr(self.parent, 'verticalScrollBar'):
+            self.vertical_scroll_bar = self.parent.verticalScrollBar()
+        else:
+            self.vertical_scroll_bar = QtWidgets.QScrollBar(self)
+            self.vertical_scroll_bar.hide()
 
         # Disable horizontal scrollbar
         try:
@@ -297,6 +240,7 @@ class InfoOverlay(_OverlayWidget):
         self.box_layout = QtWidgets.QHBoxLayout(self)
         self.box_layout.setContentsMargins(0, self.header_height, 0, 0)
         self.box_layout.setSpacing(0)
+        self.setLayout(self.box_layout)
 
         # Text Label
         self.txt_label = QtWidgets.QLabel(self)
@@ -308,7 +252,7 @@ class InfoOverlay(_OverlayWidget):
                                      QtWidgets.QSizePolicy.Expanding)
         self.txt_label.setAlignment(Qt.AlignLeft | Qt.AlignTop)
         self.txt_label.style_opacity = self.opacity
-        self.txt_label.setStyleSheet(self.bg_style + self.text_style)
+        self.update_label_opacity(self.opacity)
         self.label_animation = QPropertyAnimation(self, b"geometry")
 
         # Add Text Label to layout
@@ -331,13 +275,13 @@ class InfoOverlay(_OverlayWidget):
         # Init timer's
         self.display_timer = QTimer()
         self.display_timer.setSingleShot(True)
-        self.layout_timer = QTimer()
-        self.layout_timer.setSingleShot(True)
-        self.swap_timer = QTimer()
-        self.swap_timer.setSingleShot(True)
+        self.display_timer.timeout.connect(self.display_time_expired)
 
-        # Connect the timers
-        self.setup_timers()
+        self.mouse_leave_timer = QTimer()
+        self.mouse_leave_timer.setSingleShot(True)
+        self.mouse_leave_timer.setInterval(200)
+        # Restore opacity after overlay was made transparent by mouse enter event
+        self.mouse_leave_timer.timeout.connect(self.restore_visibility)
 
         # Create queue
         self.msg_q = queue.Queue(self.queue_size)
@@ -360,32 +304,26 @@ class InfoOverlay(_OverlayWidget):
         # Toggle a resize after first window draw
         QTimer.singleShot(1, self.delayed_setup)
 
+    def delayed_setup(self):
+        font_size = 'font-size: {}px;'.format(int(round(FontRsc.regular.pixelSize() * 1.1)))
+        self.text_style = self.text_style + ' ' + font_size
+        # LOGGER.debug('Preparing text style: %s', self.text_style)
+        self.update_label_opacity(self.opacity)
+
+        self.txt_label.setMinimumWidth(405)
+        self.txt_label.setMinimumHeight(self.overlay_height)
+        self.txt_label.setMaximumWidth(int(self.parent.width() * self.overlay_width_factor))
+        self.custom_resize()
+
     def _parent_resize_wrapper(self, event):
         self.org_parent_resize_event(event)
         self.custom_resize()
 
         event.accept()
 
-    def delayed_setup(self):
-        font_size = 'font-size: {}px;'.format(int(round(FontRsc.regular.pixelSize() * 1.1)))
-        self.text_style = self.text_style + ' ' + font_size
-        # LOGGER.debug('Preparing text style: %s', self.text_style)
-        bgr_style = self.bg_style + self.text_style
-        self.txt_label.setStyleSheet(bgr_style)
-
-        self.txt_label.setMinimumWidth(405)
-        self.txt_label.setMaximumWidth(int(self.parent.width() * self.overlay_width_factor))
-        self.custom_resize()
-
     def eventFilter(self, obj, event):
         """ Make Widget transparent on Mouse Move and Enter Event """
         if obj is self.txt_label:
-            # --- Hide and restore overlay widget on label hide/show events ---
-            if event.type() in [QEvent.Type.Show, QEvent.Type.ShowToParent, QShowEvent]:
-                self.show()
-            elif event.type() in [QEvent.Type.Hide, QEvent.Type.HideToParent, QHideEvent]:
-                self.hide()
-
             # --- Detect Mouse Events ---
             if event.type() == QEnterEvent.Enter or event.type() == QMouseEvent.MouseMove:
                 self.mouse_leave_timer.stop()
@@ -398,7 +336,7 @@ class InfoOverlay(_OverlayWidget):
                 event.accept()
                 return True
 
-            if event.type() == QMouseEvent.MouseButtonPress:
+            if event.type() == QMouseEvent.MouseButtonPress and not self.btn_box.active:
                 self.display_exit()
                 event.accept()
                 return True
@@ -409,8 +347,9 @@ class InfoOverlay(_OverlayWidget):
         """ Restore opacity after mouse events """
         self.update_label_opacity(255)
 
-    def update_label_opacity(self, opacity):
+    def update_label_opacity(self, opacity, right: int=5):
         bgr_style = self.bg_style.format(opacity=opacity) + self.text_style.format(opacity=opacity)
+        bgr_style += f'padding-right: {right}px;'
         self.txt_label.setStyleSheet(bgr_style)
 
     def setup_timers(self):
@@ -420,53 +359,11 @@ class InfoOverlay(_OverlayWidget):
         # Restore opacity after overlay was made transparent by mouse enter event
         self.mouse_leave_timer.timeout.connect(self.restore_visibility)
 
-    def scroll_bar_eventFilter(self, obj, event):
-        if obj is self.scroll_bar:
-            if event.type() == QEvent.Type.Hide:
-                LOGGER.debug('Scroll Bar Hidden - Re-setting Overlay Size')
-                self.txt_label.setMinimumHeight(self.lbl_min_height)
-
-                LOGGER.debug('Label Size Hint: %s, Actual Size: %s', self.txt_label.minimumSizeHint().height(),
-                             self.txt_label.size().height())
-                return True
-            elif event.type() == QEvent.Type.Show:
-                LOGGER.debug('Scroll Bar Shown - Resizing Overlay')
-                self.txt_label.setMinimumHeight(self.lbl_min_height)
-                self.txt_label.setMinimumHeight(round(self.lbl_min_height + self.scroll_bar.height() * 1.5))
-
-                LOGGER.debug('Label Size Hint: %s, Actual Size: %s', self.txt_label.minimumSizeHint().height(),
-                             self.txt_label.size().height())
-                return True
-
-            return False
-
-    def custom_resize(self):
-        p = self.parent.frameGeometry()
-
-        btn_width = self.btn_box.frameGeometry().width()
-
-        # Set offset y position
-        y = int(p.height() * self.offset_factor_y)
-
-        # Size based on text size and limit Overlay Width factor
-        max_width = int(p.width() * self.overlay_width_factor)
-        text_size = self.txt_label.fontMetrics().boundingRect(self.txt_label.text())
-        width = min(text_size.width(), max_width)
-        self.txt_label.setMinimumWidth(width)
-
-        # Align Right
-        x = p.width() - width
-
-        # Height
-        h = self.txt_label.sizeHint().height()
-
-        self.setGeometry(x, y, width, h)
-
     def display(self,
                 message: str = 'Information overlay',
                 duration: int = display_duration,
                 immediate: bool = False,
-                *buttons):
+                buttons: Iterable = tuple()):
         """ add new overlay message """
         if self.msg_q.full():
             return
@@ -484,10 +381,10 @@ class InfoOverlay(_OverlayWidget):
 
     def display_confirm(self,
                         message: str = 'Confirm message',
-                        *buttons,
-                        immediate: bool = False) -> None:
+                        buttons: Iterable = tuple(),
+                        immediate: bool = False):
         """ Add overlay message and buttons and wait for confirmation """
-        self.display(message, self.display_duration, immediate, *buttons)
+        self.display(message, self.display_duration, immediate, buttons)
 
     def display_time_expired(self, was_btn_box=False):
         if self.msg_q.empty():
@@ -534,7 +431,7 @@ class InfoOverlay(_OverlayWidget):
             # Create Buttons
             if buttons:
                 for btn in buttons:
-                    self.create_button(*btn)
+                    self.create_button(btn)
 
             # Display message
             self.txt_label.setText(message)
@@ -542,8 +439,10 @@ class InfoOverlay(_OverlayWidget):
             self.update_opacity(self.opacity, show_anim=show_anim)
             self.display_timer.start(duration)
 
-    def create_button(self, txt: str = 'Button', callback=None):
+    def create_button(self, button):
         """ Dynamic button creation on request """
+        txt, callback = button
+
         new_button = QtWidgets.QPushButton(txt, self.btn_box)
         new_button.setStyleSheet('background-color: white;')
         self.btn_box_layout.addWidget(new_button, 0, Qt.AlignRight)
@@ -587,17 +486,12 @@ class InfoOverlay(_OverlayWidget):
                 self.label_animation.stop()
             return
 
-        self.custom_resize()
-        y = int(self.parent.frameGeometry().height() * self.offset_factor_y)
-        h = self.height()
-        w = self.width()
-        x = self.parent.frameGeometry().width() - w
+        geo = self.custom_resize()
+        start_x = geo.x() + geo.width() * end_val
+        end_x = geo.x() + geo.width() * start_val
 
-        start_x = x + w * end_val
-        end_x = x + w * start_val
-
-        start_rect = QRect(start_x, y, w, h)
-        end_rect = QRect(end_x, y, w, h)
+        start_rect = QRect(start_x, geo.y(), geo.width(), geo.height())
+        end_rect = QRect(end_x, geo.y(), geo.width(), geo.height())
 
         self.label_animation.setDuration(duration)
         self.label_animation.setStartValue(start_rect)
@@ -613,6 +507,37 @@ class InfoOverlay(_OverlayWidget):
         self.label_animation.start(QPropertyAnimation.KeepWhenStopped)
 
         self.label_animation.finished.connect(self.anim_label_finished)
+
+    def custom_resize(self):
+        p = self.parent.frameGeometry()
+
+        # Extra width from vertical scrollbar and btn box
+        scrollbar_width, btn_width = 0, 0
+        if self.vertical_scroll_bar.isVisible():
+            scrollbar_width = self.vertical_scroll_bar.width()
+        if self.btn_box.active:
+            btn_width = self.btn_box.frameGeometry().width()
+
+        # Set right padding required for scrollbar and btn_box
+        self.update_label_opacity(self.opacity, (btn_width + scrollbar_width) or 5)
+
+        # Width based on text size
+        text_size = self.txt_label.fontMetrics().boundingRect(self.txt_label.text())
+        # Limit to parent widget width
+        w = min(p.width(), round((p.width() * self.overlay_width_factor)))
+        # Set offset x position to align right
+        x = p.width() - w
+        # Set offset y position
+        y = round(p.height() * self.offset_factor_y)
+        # Height based on required lines of text
+        # (FontMetrics will always return width for one line in this setup)
+        extra_lines = int(text_size.width() / w) or 1
+        h = round(self.txt_label.sizeHint().height() + (text_size.height() * extra_lines))
+
+        self.txt_label.setMinimumWidth(w)
+        self.setGeometry(x, y, w, h)
+
+        return self.geometry()
 
     def anim_label_finished(self):
         if self.txt_label.style_opacity == 0:

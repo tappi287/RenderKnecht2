@@ -7,7 +7,7 @@ from modules.gui.ui_resource import IconRsc
 from modules.idgen import KnechtUuidGenerator as Kid
 from modules.itemview.item import KnechtItem
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
-from modules.knecht_image import KnechtImageCameraInfo
+from modules.knecht_camera import KnechtImageCameraInfo
 from modules.language import get_translation
 from modules.log import init_logging
 

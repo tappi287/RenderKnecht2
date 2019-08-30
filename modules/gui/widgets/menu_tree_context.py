@@ -3,7 +3,7 @@ from pathlib import Path
 from PySide2 import QtCore
 from PySide2.QtCore import QUrl
 from PySide2.QtGui import QDesktopServices, QKeySequence
-from PySide2.QtWidgets import QAction, QActionGroup, QMenu
+from PySide2.QtWidgets import QAction, QActionGroup, QMenu, QPushButton
 
 from modules.globals import get_settings_dir
 from modules.gui.ui_resource import IconRsc
@@ -110,6 +110,12 @@ class TreeContextMenu(QMenu):
         notify_click = QAction(IconRsc.get_icon('eye'), 'Show click tray notification', self.dev_actions)
         notify_click.triggered.connect(self.click_tray_notification)
 
+        overlay_btn_msg = QAction(IconRsc.get_icon('check_box'), 'Show overlay confirm message', self.dev_actions)
+        overlay_btn_msg.triggered.connect(self.overlay_confirm_message)
+
+        overlay_msg = QAction(IconRsc.get_icon('check_box_empty'), 'Show regular overlay message', self.dev_actions)
+        overlay_msg.triggered.connect(self.overlay_message)
+
         restart = QAction(IconRsc.get_icon('reset'), 'Restart', self.dev_actions)
         restart.triggered.connect(self.restart_app)
 
@@ -203,6 +209,16 @@ class TreeContextMenu(QMenu):
     def reorder_tree(self):
         for idx, _ in self.view.editor.iterator.iterate_view():
             self.view.editor.iterator.order_items(idx)
+
+    def overlay_message(self):
+        self.view.info_overlay.display('Message one in queue for a duration of 3000ms', 3000)
+        self.view.info_overlay.display('Message two in queue for a duration of 3000ms', 3000)
+
+    def overlay_confirm_message(self):
+        buttons = (('Buttontext 1', None), ('Buttontext 2', None))
+        self.view.info_overlay.display_confirm('Test Message to confirm something. '
+                                               'Lenghty information ahead! This message ends '
+                                               'with this sentence.', buttons)
 
     def update_actions(self):
         src_model = self.view.model().sourceModel()

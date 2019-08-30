@@ -347,12 +347,17 @@ class SendToDeltaGen(QObject):
 
         self.dg.start()
 
-    def send_variants(self, variant_ls: KnechtVariantList, view: Union[KnechtTreeView, None]=None) -> None:
+    def _display_view_destroyed(self):
+        """ If view is closed while sending fall back to variant tree """
+        self.display_view = self.ui.variantTree
+
+    def send_variants(self, variant_ls: KnechtVariantList, view: Union[KnechtTreeView, None]=None):
         if self.is_running():
             return
 
         if view:
             self.display_view = view
+            self.display_view.destroyed.connect(self._display_view_destroyed)
         else:
             self.display_view = self.ui.variantTree
 
