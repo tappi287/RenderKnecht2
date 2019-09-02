@@ -1,7 +1,6 @@
 from pathlib import Path
-from typing import Union
 
-from PySide2.QtCore import QMimeData, QObject, Qt, QItemSelectionModel, QModelIndex, QUrl
+from PySide2.QtCore import QItemSelectionModel, QMimeData, QModelIndex, QObject, Qt
 from PySide2.QtGui import QDragMoveEvent, QDropEvent
 
 from modules.gui.clipboard import TreeClipboard
@@ -132,7 +131,7 @@ class KnechtDragDrop(QObject):
             cam_info_img.read_image()
 
             if cam_info_img.is_valid():
-                cam_item = self.view.editor.util.create_camera_item(file.name, cam_info_img.camera_info())
+                cam_item = self.view.editor.util.create_camera_item(file.name, cam_info_img.camera_info)
                 cam_item.setData(Kg.ORDER, f'{order:03d}')
                 self.view.editor.create_top_level_rows([cam_item])
             else:
@@ -142,6 +141,9 @@ class KnechtDragDrop(QObject):
                 else:
                     self.view.info_overlay.display(_('Konnte Datei mit Kamera Daten nicht lesen.\n'), 3000)
                     LOGGER.error('Could not read file with camera data %s', file.as_posix())
+
+        # Validate created camera items
+        KnechtImageCameraInfo.validate_camera_items(self.view)
 
     def _select_drop_index(self, destination_index: QModelIndex):
         """ Select current row or clear selection """

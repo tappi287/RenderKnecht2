@@ -252,7 +252,7 @@ class InfoOverlay(_OverlayWidget):
                                      QtWidgets.QSizePolicy.Expanding)
         self.txt_label.setAlignment(Qt.AlignLeft | Qt.AlignTop)
         self.txt_label.style_opacity = self.opacity
-        self.update_label_opacity(self.opacity)
+        self.update_label_style(self.opacity)
         self.label_animation = QPropertyAnimation(self, b"geometry")
 
         # Add Text Label to layout
@@ -308,7 +308,7 @@ class InfoOverlay(_OverlayWidget):
         font_size = 'font-size: {}px;'.format(int(round(FontRsc.regular.pixelSize() * 1.1)))
         self.text_style = self.text_style + ' ' + font_size
         # LOGGER.debug('Preparing text style: %s', self.text_style)
-        self.update_label_opacity(self.opacity)
+        self.update_label_style(self.opacity)
 
         self.txt_label.setMinimumWidth(405)
         self.txt_label.setMinimumHeight(self.overlay_height)
@@ -327,7 +327,7 @@ class InfoOverlay(_OverlayWidget):
             # --- Detect Mouse Events ---
             if event.type() == QEnterEvent.Enter or event.type() == QMouseEvent.MouseMove:
                 self.mouse_leave_timer.stop()
-                self.update_label_opacity(40)
+                self.update_label_style(40)
                 event.accept()
                 return True
 
@@ -345,9 +345,9 @@ class InfoOverlay(_OverlayWidget):
 
     def restore_visibility(self):
         """ Restore opacity after mouse events """
-        self.update_label_opacity(255)
+        self.update_label_style(255)
 
-    def update_label_opacity(self, opacity, right: int=5):
+    def update_label_style(self, opacity, right: int=5):
         bgr_style = self.bg_style.format(opacity=opacity) + self.text_style.format(opacity=opacity)
         bgr_style += f'padding-right: {right}px;'
         self.txt_label.setStyleSheet(bgr_style)
@@ -464,6 +464,8 @@ class InfoOverlay(_OverlayWidget):
 
             self.label_animation.stop()
             show_anim=False
+            # Resize on first show to adapt for button box size
+            self.custom_resize()
         else:
             self.btn_box.hide()
 
@@ -519,7 +521,7 @@ class InfoOverlay(_OverlayWidget):
             btn_width = self.btn_box.frameGeometry().width()
 
         # Set right padding required for scrollbar and btn_box
-        self.update_label_opacity(self.opacity, (btn_width + scrollbar_width) or 5)
+        self.update_label_style(self.opacity, (btn_width + scrollbar_width) or 5)
 
         # Width based on text size
         text_size = self.txt_label.fontMetrics().boundingRect(self.txt_label.text())

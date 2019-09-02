@@ -9,6 +9,7 @@ from modules.gui.widgets.message_box import AskToContinue, AskDocumentClose
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.tree_view import KnechtTreeView
 from modules.itemview.view_manager import ViewManager
+from modules.knecht_camera import KnechtImageCameraInfo
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -35,6 +36,9 @@ class UiViewManager(ViewManager):
         self.filter_widget = self.ui.lineEdit_Src_filter
 
         self.tab.currentChanged.connect(self.ui_tab_changed)
+
+        # Validate camera_item values on initial view creation
+        self.view_updated.connect(KnechtImageCameraInfo.validate_camera_items)
 
         self.view_about_to_be_removed.connect(self.remove_view)
         self.setup_initial_tab_view(initial_tree_view)

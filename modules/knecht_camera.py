@@ -4,12 +4,9 @@ from typing import Union
 import numpy as np
 
 from modules.gui.widgets.path_util import path_exists
-from modules.itemview.item import KnechtItem
 from modules.itemview.model import KnechtModel
-from modules.itemview.tree_view import KnechtTreeView
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
-
-from modules.knecht_image import _, OpenImageUtil, LOGGER
+from modules.knecht_image import OpenImageUtil
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -19,31 +16,6 @@ LOGGER = init_logging(__name__)
 lang = get_translation()
 lang.install()
 _ = lang.gettext
-
-
-def check_view_camera_info(view: KnechtTreeView):
-    if view.is_render_view:
-        return
-
-    close_btn = ('[X]', None)
-    src_model: KnechtModel = view.model().sourceModel()
-    highlight_items = []
-
-    # Iterate Camera Items
-    for index in view.editor.match.indices(Kg.xml_tag_user_type[Kg.camera_item], Kg.TYPE):
-        item: KnechtItem = src_model.get_item(index)
-        
-        cam = KnechtImageCameraInfo('')
-        for child in item.iter_children():
-            cam.camera_info[child.data(Kg.NAME)] = child.data(Kg.VALUE)
-            highlight_items += child
-            
-        if cam.has_camera_unsendable_values():
-            view.info_overlay.display_confirm(_('Achtung! Es wurden Kameraeinstellungen gefunden die nicht an DeltaGen'
-                                                'gesendet werden können:\n') + cam.camera_warning,
-                                              close_btn)
-
-    src_model.style_recursive_items(highlight_items)
 
 
 class KnechtImageCameraInfo:
@@ -164,12 +136,45 @@ class KnechtImageCameraInfo:
             return True
         return False
 
-    def has_camera_unsendable_values(self):
-        settings_unsendable = False
-        for tag, default_value in self.rtt_camera_defaults.items():
-            value = self.camera_info.get(tag)
-            if value is not None and value != default_value:
-                self.camera_warning += _('Abweichender Wert {} in {}\n').format(value, tag)
-                settings_unsendable = True
-                
-        return settings_unsendable
+    @classmethod
+    def validate_camera_items(cls, view):
+        """
+        Compare camera_item values with default values and warn if
+        there are values that can not be send to DeltaGen
+
+        :param modules.itemview.tree_view.KnechtTreeView view:
+        :return:
+        """
+        if view.is_render_view:
+            return
+
+        close_btn = ('[X]', None)
+        src_model: KnechtModel = view.model().sourceModel()
+        prx_indices_to_select = list()
+        highlight_items = []
+
+        # Iterate Camera Items
+        for index in view.editor.match.indices(Kg.xml_tag_by_user_type[Kg.camera_item], Kg.TYPE):
+            src_index = view.model().mapToSource(index)
+            item_valid, warn_msg = True, ''
+
+            for child_idx, child in view.editor.iterator.iterate_view(src_index):
+                tag, value = child.data(Kg.NAME), child.data(Kg.VALUE)
+                default_value = cls.rtt_camera_defaults.get(tag)
+
+                if default_value is not None and value is not None:
+                    if value != default_value:
+                        highlight_items.append(child)
+                        prx_indices_to_select.append(child_idx)
+                        warn_msg += _('Abweichender Wert {} in {}\n').format(value, tag)
+                        item_valid = False
+
+            if not item_valid:
+                msg = _('Achtung! Es wurden Kameraeinstellungen gefunden die nicht an DeltaGen '
+                        'gesendet werden können:\n{}').format(warn_msg)
+                view.info_overlay.display_confirm(msg, (close_btn,))
+
+        # Point user to problematic values
+        if highlight_items:
+            src_model.style_recursive_items(highlight_items)
+            view.editor.selection.clear_and_select_src_index_ls(prx_indices_to_select)
