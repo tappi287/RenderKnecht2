@@ -57,7 +57,7 @@ class KnechtCollectVariants(QObject):
         if not current_item:
             return variants
 
-        if KnechtSettings.dg['reset'] and collect_reset:
+        if KnechtSettings.dg['reset'] and collect_reset and current_item.userType != Kg.camera_item:
             self._collect_reset_preset(variants, src_model)
 
         if current_item.userType == Kg.reference:
@@ -72,6 +72,8 @@ class KnechtCollectVariants(QObject):
             self._add_variant(current_item, variants, src_model)
             return variants
 
+        variants.preset_name = current_item.data(Kg.NAME)
+        variants.preset_id = current_item.preset_id
         self._collect_preset_variants(current_item, variants, src_model)
 
         return variants
@@ -105,9 +107,6 @@ class KnechtCollectVariants(QObject):
         if preset_item.userType == Kg.camera_item:
             self._add_camera_variants(preset_item, variants_ls, src_model)
             return
-
-        variants_ls.preset_name = preset_item.data(Kg.NAME)
-        variants_ls.preset_id = preset_item.preset_id
 
         for child in ordered_child_ls:
             self._add_variant(child, variants_ls, src_model)

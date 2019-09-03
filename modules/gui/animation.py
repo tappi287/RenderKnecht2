@@ -63,7 +63,7 @@ class BgrAnimation(QObject):
         self.fade_anim.setEndValue(QColor(*end_color))
         self.fade_anim.setDuration(duration)
 
-        self.fade_anim.start()
+        self.fade_anim.start(QAbstractAnimation.KeepWhenStopped)
 
     def _setup_blink(self, anim_color: tuple=(26, 118, 255, 255)):
         start_color = self.bg_color

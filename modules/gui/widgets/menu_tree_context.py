@@ -116,6 +116,9 @@ class TreeContextMenu(QMenu):
         overlay_msg = QAction(IconRsc.get_icon('check_box_empty'), 'Show regular overlay message', self.dev_actions)
         overlay_msg.triggered.connect(self.overlay_message)
 
+        overlay_imm_msg = QAction(IconRsc.get_icon('reset'), 'Show immediate overlay message', self.dev_actions)
+        overlay_imm_msg.triggered.connect(self.overlay_message_immediate)
+
         restart = QAction(IconRsc.get_icon('reset'), 'Restart', self.dev_actions)
         restart.triggered.connect(self.restart_app)
 
@@ -211,8 +214,10 @@ class TreeContextMenu(QMenu):
             self.view.editor.iterator.order_items(idx)
 
     def overlay_message(self):
-        self.view.info_overlay.display('Message one in queue for a duration of 3000ms', 3000)
-        self.view.info_overlay.display('Message two in queue for a duration of 3000ms', 3000)
+        self.view.info_overlay.display('Message in queue for a duration of 5000ms', 5000)
+
+    def overlay_message_immediate(self):
+        self.view.info_overlay.display('Immediate message for a duration of 6000ms', 6000, True)
 
     def overlay_confirm_message(self):
         buttons = (('Buttontext 1', None), ('Buttontext 2', None))

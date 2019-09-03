@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Union
 
 import numpy as np
+from PySide2.QtCore import Qt
 
 from modules.gui.widgets.path_util import path_exists
 from modules.itemview.model import KnechtModel
@@ -157,6 +158,7 @@ class KnechtImageCameraInfo:
         for index in view.editor.match.indices(Kg.xml_tag_by_user_type[Kg.camera_item], Kg.TYPE):
             src_index = view.model().mapToSource(index)
             item_valid, warn_msg = True, ''
+            name = index.siblingAtColumn(Kg.NAME).data(Qt.DisplayRole)
 
             for child_idx, child in view.editor.iterator.iterate_view(src_index):
                 tag, value = child.data(Kg.NAME), child.data(Kg.VALUE)
@@ -166,12 +168,13 @@ class KnechtImageCameraInfo:
                     if value != default_value:
                         highlight_items.append(child)
                         prx_indices_to_select.append(child_idx)
-                        warn_msg += _('Abweichender Wert {} in {}\n').format(value, tag)
+                        warn_msg += _('{}: {}<br />').format(tag, value)
                         item_valid = False
 
             if not item_valid:
-                msg = _('Achtung! Es wurden Kameraeinstellungen gefunden die nicht an DeltaGen '
-                        'gesendet werden können:\n{}').format(warn_msg)
+                msg = _('<b>Achtung!</b><br /><i>{}</i><br />'
+                        'Es wurden Kameraeinstellungen gefunden die nicht an DeltaGen '
+                        'gesendet werden können:<br />{}').format(name, warn_msg)
                 view.info_overlay.display_confirm(msg, (close_btn,))
 
         # Point user to problematic values

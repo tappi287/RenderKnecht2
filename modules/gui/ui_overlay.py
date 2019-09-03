@@ -1,5 +1,7 @@
+import re
+
 from PySide2 import QtWidgets
-from PySide2.QtCore import QPropertyAnimation, QTimer, Qt
+from PySide2.QtCore import QPropertyAnimation, QTimer, Qt, QAbstractAnimation
 from PySide2.QtGui import QEnterEvent, QMouseEvent, QMovie, QRegion
 
 from modules.globals import Resource
@@ -45,6 +47,7 @@ class InfoOverlay(QtWidgets.QWidget):
         self.parent = parent
         self.queue = list()
         self.btn_list = list()
+        self.message_active = False
 
         # --- Get header height ---
         self.header_height = 0
@@ -126,6 +129,7 @@ class InfoOverlay(QtWidgets.QWidget):
     def _adapt_size(self):
         top_spacing = round(self.parent.frameGeometry().height() * self.y_offset_factor) + self.header_height
         left_spacing = round(self.parent.frameGeometry().width() * self.x_offset_factor)
+
         self.left_space_widget.setMinimumWidth(left_spacing)
         self.top_space_widget.setMinimumHeight(top_spacing)
         self.resize(self.parent.size())
@@ -148,7 +152,7 @@ class InfoOverlay(QtWidgets.QWidget):
             return
 
         self.queue.append(
-            (message, duration, buttons, )
+            (self._force_word_wrap(message), duration, buttons,)
             )
 
         if not self.msg_timer.isActive() or immediate:
@@ -170,7 +174,7 @@ class InfoOverlay(QtWidgets.QWidget):
         if self.queue:
             self._next_entry(False)
         else:
-            self.bg_anim.fade(self.bg_color, (self.bg_color[0], self.bg_color[1], self.bg_color[2], 0), 300)
+            self._init_fade_anim(False)
             QTimer.singleShot(300, self.hide_all)
 
     def _next_entry(self, called_from_timer: bool=True):
@@ -197,19 +201,27 @@ class InfoOverlay(QtWidgets.QWidget):
         self.restore_visibility()
 
         # Animate if not called from the queue timer
-        if not called_from_timer and self.bg_anim.color.alpha() >= 255:
-            LOGGER.debug('%s %s', self.bg_anim.bg_color.alpha(), self.bg_anim.color.alpha())
+        if not called_from_timer and not self.message_active:
             self.overlay_grp.setUpdatesEnabled(False)
-            self.bg_anim.fade(
-                (self.bg_color[0], self.bg_color[1], self.bg_color[2], 0), self.bg_color, 500
-            )
+            self._init_fade_anim(True)
             QTimer.singleShot(150, self._enable_updates)
 
         QTimer.singleShot(1, self._adapt_size)
+        self.message_active = True
         self.msg_timer.start(duration)
 
     def _enable_updates(self):
         self.overlay_grp.setUpdatesEnabled(True)
+
+    def _init_fade_anim(self, fade_in: bool=True):
+        if self.bg_anim.fade_anim.state() == QAbstractAnimation.Running:
+            LOGGER.debug('Stopping running animation.')
+            self.bg_anim.fade_anim.stop()
+
+        if fade_in:
+            self.bg_anim.fade((self.bg_color[0], self.bg_color[1], self.bg_color[2], 0), self.bg_color, 500)
+        else:
+            self.bg_anim.fade(self.bg_color, (self.bg_color[0], self.bg_color[1], self.bg_color[2], 0), 300)
 
     def create_button(self, button):
         """ Dynamic button creation on request """
@@ -230,9 +242,30 @@ class InfoOverlay(QtWidgets.QWidget):
         if not self.msg_timer.isActive() and not self.queue:
             self.hide()
             self.btn_box.hide()
+            self.message_active = False
 
     def show_all(self):
         self.show()
+
+    @staticmethod
+    def _force_word_wrap(message: str) -> str:
+        """ Force white space in too long words """
+        word_chr_limit = 35
+        new_message = ''
+
+        # Find words aswell as whitespace \W
+        for word in re.findall("[\w']+|[\W]+", message):
+            if not len(word) > word_chr_limit:
+                new_message += word
+                continue
+
+            # Add a hard line break in words longer than the limit
+            for start in range(0, len(word), word_chr_limit):
+                end = start + word_chr_limit
+                new_message += word[start:end] + '\n'
+
+        # Return without trailing space
+        return new_message
 
 
 class MainWindowOverlay(InfoOverlay):

@@ -2,7 +2,7 @@ import time
 from threading import Event, Thread
 from typing import Union
 
-from PySide2.QtCore import QObject, QTimer, Signal, Slot, Qt
+from PySide2.QtCore import QObject, QTimer, Signal, Slot, Qt, QUuid
 from PySide2.QtGui import QColor
 from PySide2.QtWidgets import QComboBox, QPushButton
 
@@ -312,6 +312,10 @@ class SendToDeltaGen(QObject):
         super(SendToDeltaGen, self).__init__(parent=ui)
         self.ui = ui
 
+        # Keep a reference to finished overlay buttons
+        self.finished_queue = list()
+        self.finished_queue_size = 5
+
         # View to display the info overlay
         self.display_view = self.ui.variantTree
 
@@ -350,6 +354,7 @@ class SendToDeltaGen(QObject):
     def _display_view_destroyed(self):
         """ If view is closed while sending fall back to variant tree """
         self.display_view = self.ui.variantTree
+        self.finished_queue = list()
 
     def send_variants(self, variant_ls: KnechtVariantList, view: Union[KnechtTreeView, None]=None):
         if self.is_running():
@@ -357,6 +362,7 @@ class SendToDeltaGen(QObject):
 
         if view:
             self.display_view = view
+            self.display_view.info_overlay.display_exit()
             self.display_view.destroyed.connect(self._display_view_destroyed)
         else:
             self.display_view = self.ui.variantTree
@@ -432,7 +438,6 @@ class SendToDeltaGen(QObject):
             self.ui.msg(_('DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>'), 5000)
         elif result == CommunicateDeltaGen.Result.aborted:
             self.ui.msg(_('DeltaGen Sende Operation <b>abgebrochen.</b>'), 2500)
-        # TODO: permanently visible finished message in non rendering operations
 
     def _update_status(self, message: str, duration: int=1500):
         self.display_view.info_overlay.display(message, duration, True)
@@ -491,13 +496,14 @@ class SendToDeltaGen(QObject):
 
     def _display_variants_finished_overlay(self):
         """ Display a message with last send variants preset and provide option to select it """
-        def select_preset():
-            indices = self.display_view.model().sourceModel().id_mgr.get_preset_from_id(self.dg.variants_ls.preset_id)
-            self.display_view.editor.selection.clear_and_set_current(indices)
+        if not self.dg.variants_ls.preset_name or not KnechtSettings.dg.get('display_send_finished_overlay'):
+            return
 
-        if self.dg.variants_ls.preset_name and KnechtSettings.dg.get('display_send_finished_overlay'):
-            btns = (('Preset selektieren', select_preset), ('[X]', None))
-            self.display_view.info_overlay.display_confirm(f'{self.dg.variants_ls.preset_name} gesendet.', btns)
+        preset_selector = _OverlayPresetSelector(
+            self.display_view, self.dg.variants_ls.preset_id, self.dg.variants_ls.preset_name
+            )
+        self.finished_queue.insert(0, preset_selector)
+        self.finished_queue = self.finished_queue[:self.finished_queue_size]
 
     def _update_tree_view_variant_state(self, variant: KnechtVariant):
         src_model: KnechtModel = self.display_view.model().sourceModel()
@@ -519,3 +525,23 @@ class SendToDeltaGen(QObject):
 
         src_model.setData(name_idx, name_color, Qt.BackgroundRole)
         src_model.setData(value_idx, value_color, Qt.BackgroundRole)
+
+
+class _OverlayPresetSelector:
+    def __init__(self, view: KnechtTreeView, preset_id: QUuid, preset_name: str):
+        """ Helper class to select the preset from the last send operation """
+        self.view = view
+        self.preset_id = preset_id
+
+        btns = (
+            (_('Auswählen'), self.select_preset),
+            ('[X]', None)
+            )
+        self.view.info_overlay.display_confirm(
+            _('Senden an DeltaGen abgeschlossen:<br /><i>{}</i>').format(preset_name), btns)
+
+    def select_preset(self):
+        item = self.view.model().sourceModel().id_mgr.get_preset_from_id(self.preset_id)
+        if item:
+            idx = self.view.model().sourceModel().get_index_from_item(item)
+            self.view.editor.selection.clear_and_select_src_index_ls([idx])

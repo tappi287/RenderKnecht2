@@ -167,7 +167,6 @@ class KnechtWindow(QMainWindow):
         msg = _('Die Varianten enthalten keine Reset Schaltung! Die zu sendenden Varianten '
                 'werden mit vorangegangen Schaltungen kollidieren.')
 
-        self.overlay.display_exit()
         self.overlay.display(msg, duration=5000, immediate=True)
 
     def msg(self, txt: str, duration: int=4000) -> None:
