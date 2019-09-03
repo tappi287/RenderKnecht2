@@ -163,7 +163,7 @@ class KnechtTreeView(QTreeView):
         self._filter_text_widget = widget
         self._filter_text_widget.textEdited.connect(self.set_filter_widget_text)
 
-        bg_color = (255, 255, 255)
+        bg_color = (255, 255, 255, 255)
         if KnechtSettings.app['app_style'] == 'fusion-dark':
             bg_color = KnechtSettings.dark_style['bg_color']
         self.filter_bgr_animation = BgrAnimation(self._filter_text_widget, bg_color)

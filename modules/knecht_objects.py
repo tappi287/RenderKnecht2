@@ -3,7 +3,7 @@ import time
 from pathlib import Path
 from typing import List, Tuple, Union
 
-from PySide2.QtCore import QModelIndex
+from PySide2.QtCore import QModelIndex, QUuid
 
 from modules.gui.widgets.path_util import path_exists
 from modules.knecht_fakom import FakomData
@@ -51,6 +51,9 @@ class KnechtVariantList:
     def __init__(self):
         self.variants: List[KnechtVariant] = list()
         self.output_path = None
+
+        self.preset_name: str = ''
+        self.preset_id = None
 
     def add(self, index: QModelIndex, name: str, value: str, item_type: str='') -> None:
         """ Add a single variant to the list of variants

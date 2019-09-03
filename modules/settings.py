@@ -146,6 +146,7 @@ class KnechtSettings:
         viewer_size='1280 720',
         viewer_background='#ffffff',
         viewer_apply_bg=False,
+        display_send_finished_overlay=False,
         )
     fakom = dict(
         last_pos_file='',

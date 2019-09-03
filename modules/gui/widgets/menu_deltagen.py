@@ -28,7 +28,7 @@ class DeltaGenMenu(QMenu):
         super(DeltaGenMenu, self).__init__(menu_name, ui)
         self.ui = ui
 
-        self.reset, self.freeze, self.check, self.display = None, None, None, None
+        self.reset, self.freeze, self.check, self.display, self.display_overlay = None, None, None, None, None
 
         self.setup_deltagen_menu()
         QTimer.singleShot(1, self.delayed_setup)
@@ -55,6 +55,10 @@ class DeltaGenMenu(QMenu):
         self.display = self._setup_checkable_action(_('State Check im Baum anzeigen'), False,
                                                     self.toggle_state_check_display)
 
+        # ---- Display Overlay after Preset Send operation finished ----
+        self.display_overlay = self._setup_checkable_action(_('Zuletzt gesendetes Preset als Overlay anzeigen'), False,
+                                                            self.toggle_display_finished_overlay)
+
     def _setup_checkable_action(self, name: str, checked: bool, target: object):
         check_icon = IconRsc.get_icon('check_box_empty')
         check_icon.addPixmap(IconRsc.get_pixmap('check_box'), QIcon.Normal, QIcon.On)
@@ -73,6 +77,7 @@ class DeltaGenMenu(QMenu):
         self.freeze.setChecked(KnechtSettings.dg['freeze_viewer'])
         self.check.setChecked(KnechtSettings.dg['check_variants'])
         self.display.setChecked(KnechtSettings.dg['display_variant_check'])
+        self.display_overlay.setChecked(KnechtSettings.dg['display_send_finished_overlay'])
 
     @Slot(bool)
     def toggle_reset(self, checked: bool):
@@ -90,6 +95,10 @@ class DeltaGenMenu(QMenu):
     @Slot(bool)
     def toggle_state_check_display(self, checked: bool):
         KnechtSettings.dg['display_variant_check'] = checked
+
+    @Slot(bool)
+    def toggle_display_finished_overlay(self, checked: bool):
+        KnechtSettings.dg['display_send_finished_overlay'] = checked
 
     def enable_menus(self, enabled: bool=True):
         for a in self.menu.actions():

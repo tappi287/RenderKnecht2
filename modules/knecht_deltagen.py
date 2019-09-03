@@ -422,6 +422,7 @@ class SendToDeltaGen(QObject):
         if result == CommunicateDeltaGen.Result.send_success:
             if not self.rendering:
                 self.ui.msg(_('DeltaGen Sende Operation beendet.'), 2500)
+                self._display_variants_finished_overlay()
         elif result == CommunicateDeltaGen.Result.send_failed:
             self.ui.msg(_('Konnte <b>keine Verbindung</b> '
                           'zu einer DeltaGen Instanz mit geladener Szene herstellen.'), 5000)
@@ -433,7 +434,7 @@ class SendToDeltaGen(QObject):
             self.ui.msg(_('DeltaGen Sende Operation <b>abgebrochen.</b>'), 2500)
         # TODO: permanently visible finished message in non rendering operations
 
-    def _update_status(self, message: str, duration: int=800):
+    def _update_status(self, message: str, duration: int=1500):
         self.display_view.info_overlay.display(message, duration, True)
 
     def _update_progress(self, progress: int):
@@ -487,6 +488,16 @@ class SendToDeltaGen(QObject):
 
     def _size_viewer_combo_box_start(self):
         self.size_box_timeout.start()
+
+    def _display_variants_finished_overlay(self):
+        """ Display a message with last send variants preset and provide option to select it """
+        def select_preset():
+            indices = self.display_view.model().sourceModel().id_mgr.get_preset_from_id(self.dg.variants_ls.preset_id)
+            self.display_view.editor.selection.clear_and_set_current(indices)
+
+        if self.dg.variants_ls.preset_name and KnechtSettings.dg.get('display_send_finished_overlay'):
+            btns = (('Preset selektieren', select_preset), ('[X]', None))
+            self.display_view.info_overlay.display_confirm(f'{self.dg.variants_ls.preset_name} gesendet.', btns)
 
     def _update_tree_view_variant_state(self, variant: KnechtVariant):
         src_model: KnechtModel = self.display_view.model().sourceModel()

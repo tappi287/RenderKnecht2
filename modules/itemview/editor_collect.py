@@ -106,6 +106,9 @@ class KnechtCollectVariants(QObject):
             self._add_camera_variants(preset_item, variants_ls, src_model)
             return
 
+        variants_ls.preset_name = preset_item.data(Kg.NAME)
+        variants_ls.preset_id = preset_item.preset_id
+
         for child in ordered_child_ls:
             self._add_variant(child, variants_ls, src_model)
 

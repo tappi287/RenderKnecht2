@@ -32,7 +32,7 @@ class BgrAnimationGroup(QObject):
 
 class BgrAnimation(QObject):
 
-    def __init__(self, widget: QWidget, bg_color: Tuple[int, int, int]=None):
+    def __init__(self, widget: QWidget, bg_color: Tuple[int, int, int, int], additional_stylesheet: str=''):
         """ Animate provided Widget background stylesheet color
 
         :param widget:
@@ -40,10 +40,10 @@ class BgrAnimation(QObject):
         """
         super(BgrAnimation, self).__init__(widget)
         self.widget = widget
-        self._color = QColor()
+        self.color = QColor()
 
         self.bg_color = self.widget.palette().color(QPalette.Background)
-
+        self.additional_stylesheet = additional_stylesheet
         if bg_color:
             self.bg_color = QColor(*bg_color)
 
@@ -56,7 +56,7 @@ class BgrAnimation(QObject):
         self._setup_pulsate()
 
         self.fade_anim = QPropertyAnimation(self, b'backColor')
-        self.fade_anim.setEasingCurve(QEasingCurve.InOutSine)
+        self.fade_anim.setEasingCurve(QEasingCurve.InCubic)
 
     def fade(self, start_color: tuple, end_color: tuple, duration:int):
         self.fade_anim.setStartValue(QColor(*start_color))
@@ -65,7 +65,7 @@ class BgrAnimation(QObject):
 
         self.fade_anim.start()
 
-    def _setup_blink(self, anim_color: tuple=(26, 118, 255)):
+    def _setup_blink(self, anim_color: tuple=(26, 118, 255, 255)):
         start_color = self.bg_color
         anim_color = QColor(*anim_color)
 
@@ -80,7 +80,7 @@ class BgrAnimation(QObject):
         self.color_anim.setLoopCount(num)
         self.color_anim.start()
 
-    def _setup_pulsate(self, anim_color: tuple=(255, 80, 50)):
+    def _setup_pulsate(self, anim_color: tuple=(255, 80, 50, 255)):
         start_color = self.bg_color
         anim_color = QColor(*anim_color)
 
@@ -95,14 +95,13 @@ class BgrAnimation(QObject):
         self.pulsate_anim.start()
 
     def _get_back_color(self):
-        return self._color
+        return self.color
 
     def _set_back_color(self, color):
-        self._color = color
-
-        qss_color = f'rgb({color.red()}, {color.green()}, {color.blue()})'
+        self.color = color
+        qss_color = f'rgba({color.red()}, {color.green()}, {color.blue()}, {color.alpha()})'
         try:
-            self.widget.setStyleSheet('background-color: ' + qss_color + ';')
+            self.widget.setStyleSheet(f'background-color: {qss_color};{self.additional_stylesheet}')
         except AttributeError as e:
             LOGGER.debug('Error setting widget background color: %s', e)
 
