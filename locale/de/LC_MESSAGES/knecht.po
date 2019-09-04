@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-08-29 16:16+0200\n"
+"POT-Creation-Date: 2019-09-04 10:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -402,6 +402,10 @@ msgstr ""
 msgid "State Check im Baum anzeigen"
 msgstr ""
 
+#: modules/gui/widgets\menu_deltagen.py:59
+msgid "Zuletzt gesendetes Preset als Overlay anzeigen"
+msgstr ""
+
 #: modules/gui/widgets\menu_edit.py:23
 msgid "Bearbeiten"
 msgstr ""
@@ -668,7 +672,7 @@ msgstr ""
 msgid "Das Dokument enthält Änderungen die <b>nicht</b> gespeichert wurden!<br><br>Diese werden durch Schließen des Dokumentes endgültig <b>verloren</b> gehen."
 msgstr ""
 
-#: modules/gui/widgets\message_box.py:113 modules/gui\ui_view_manager.py:27
+#: modules/gui/widgets\message_box.py:113 modules/gui\ui_view_manager.py:28
 msgid "Schließen"
 msgstr ""
 
@@ -1338,19 +1342,19 @@ msgstr ""
 msgid "Den zu verwendenden Renderer wählen."
 msgstr ""
 
-#: modules/gui\ui_view_manager.py:24
+#: modules/gui\ui_view_manager.py:25
 msgid "Zwischenablage verwerfen?"
 msgstr ""
 
-#: modules/gui\ui_view_manager.py:25
+#: modules/gui\ui_view_manager.py:26
 msgid "Die Zwischenablage enthält <i>{}</i> Elemente aus<br><i>{}</i><br><br>Diese werden durch Schließen des Dokumentes aus der Zwischenablage <b>entfernt</b>."
 msgstr ""
 
-#: modules/gui\ui_view_manager.py:44
+#: modules/gui\ui_view_manager.py:48
 msgid "Neues_Dokument.xml"
 msgstr ""
 
-#: modules/gui\ui_view_manager.py:137
+#: modules/gui\ui_view_manager.py:141
 msgid "Kann Beschäftigten nicht entlassen. Verstoß gegen Arbeitnehmerschutzgesetz festgestellt."
 msgstr ""
 
@@ -1422,12 +1426,12 @@ msgstr ""
 msgid "Daten werden eingerichtet."
 msgstr ""
 
-#: modules/itemview\tree_dragdrop.py:140
+#: modules/itemview\tree_dragdrop.py:139
 msgid ""
 "Keine Kamera Daten in Datei gefunden.\n"
 msgstr ""
 
-#: modules/itemview\tree_dragdrop.py:143
+#: modules/itemview\tree_dragdrop.py:142
 msgid ""
 "Konnte Datei mit Kamera Daten nicht lesen.\n"
 msgstr ""
@@ -1464,6 +1468,46 @@ msgstr ""
 msgid "Fehler beim schreiben der Datei: {}"
 msgstr ""
 
+#: modules\knecht_camera.py:51
+msgid "DeltaGen Kamera Sichtfeld: Angle"
+msgstr ""
+
+#: modules\knecht_camera.py:52
+msgid "DeltaGen Kamera Position: X, Y, Z"
+msgstr ""
+
+#: modules\knecht_camera.py:53
+msgid "DeltaGen Kamera Orientierung: Rotation Vector X, Y, Z, Angle"
+msgstr ""
+
+#: modules\knecht_camera.py:54
+msgid "Viewer Hintergrund Farbe: R, G, B, A"
+msgstr ""
+
+#: modules\knecht_camera.py:55
+msgid "Viewer Breite in Px"
+msgstr ""
+
+#: modules\knecht_camera.py:56
+msgid "Viewer Höhe in Px"
+msgstr ""
+
+#: modules\knecht_camera.py:57
+msgid "Ausgabe Breite in Px"
+msgstr ""
+
+#: modules\knecht_camera.py:58
+msgid "Ausgabe Höhe in Px"
+msgstr ""
+
+#: modules\knecht_camera.py:171
+msgid "{}: {}<br />"
+msgstr ""
+
+#: modules\knecht_camera.py:175
+msgid "<b>Achtung!</b><br /><i>{}</i><br />Es wurden Kameraeinstellungen gefunden die nicht an DeltaGen gesendet werden können:<br />{}"
+msgstr ""
+
 #: modules\knecht_deltagen.py:162
 msgid "DeltaGen Verbindung erfolgreich verifiziert."
 msgstr ""
@@ -1480,28 +1524,36 @@ msgstr ""
 msgid "Sperre Viewer Fenster"
 msgstr ""
 
-#: modules\knecht_deltagen.py:388
+#: modules\knecht_deltagen.py:399
 msgid "Es läuft bereits eine DeltaGen Sende Operation! Vorgang abwarten oder abbrechen und anschließend erneut versuchen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:419
+#: modules\knecht_deltagen.py:430
 msgid "DeltaGen Sende Operation beendet."
 msgstr ""
 
-#: modules\knecht_deltagen.py:421
+#: modules\knecht_deltagen.py:433
 msgid "Konnte <b>keine Verbindung</b> zu einer DeltaGen Instanz mit geladener Szene herstellen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:426
+#: modules\knecht_deltagen.py:438
 msgid "DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>"
 msgstr ""
 
-#: modules\knecht_deltagen.py:428
+#: modules\knecht_deltagen.py:440
 msgid "DeltaGen Sende Operation <b>abgebrochen.</b>"
 msgstr ""
 
-#: modules\knecht_deltagen.py:438
+#: modules\knecht_deltagen.py:449
 msgid "{0} {1} gesendet"
+msgstr ""
+
+#: modules\knecht_deltagen.py:537
+msgid "Auswählen"
+msgstr ""
+
+#: modules\knecht_deltagen.py:541
+msgid "Senden an DeltaGen abgeschlossen:<br /><i>{}</i>"
 msgstr ""
 
 #: modules\knecht_excel.py:274
@@ -1534,38 +1586,6 @@ msgstr ""
 
 #: modules\knecht_image.py:120
 msgid "Konnte unkonvertierte Bilddatei nicht verschieben: {}"
-msgstr ""
-
-#: modules\knecht_image.py:292
-msgid "DeltaGen Kamera Sichtfeld: Angle"
-msgstr ""
-
-#: modules\knecht_image.py:293
-msgid "DeltaGen Kamera Position: X, Y, Z"
-msgstr ""
-
-#: modules\knecht_image.py:294
-msgid "DeltaGen Kamera Orientierung: Rotation Vector X, Y, Z, Angle"
-msgstr ""
-
-#: modules\knecht_image.py:295
-msgid "Viewer Hintergrund Farbe: R, G, B, A"
-msgstr ""
-
-#: modules\knecht_image.py:296
-msgid "Viewer Breite in Px"
-msgstr ""
-
-#: modules\knecht_image.py:297
-msgid "Viewer Höhe in Px"
-msgstr ""
-
-#: modules\knecht_image.py:298
-msgid "Ausgabe Breite in Px"
-msgstr ""
-
-#: modules\knecht_image.py:299
-msgid "Ausgabe Höhe in Px"
 msgstr ""
 
 #: modules\knecht_render.py:93
