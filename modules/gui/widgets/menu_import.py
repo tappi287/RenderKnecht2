@@ -6,6 +6,7 @@ from PySide2.QtWidgets import QAction, QMenu
 
 from modules.gui.ui_generic_tab import GenericTabWidget
 from modules.gui.ui_resource import IconRsc
+from modules.gui.widgets.db_dialog import DatapoolDialog
 from modules.gui.widgets.excel_dialog import ExcelImportDialog
 from modules.gui.widgets.fakom_dialog import FakomImportDialog
 from modules.gui.widgets.file_dialog import FileDialog
@@ -42,8 +43,10 @@ class ImportMenu(QMenu):
         fa_action.triggered.connect(self.open_fakom)
         pw_action = QAction(IconRsc.get_icon('qub_button'), _('Preset Assistent'), self)
         pw_action.triggered.connect(self.open_wizard)
+        dp_action = QAction(IconRsc.get_icon('storage'), _('Datapool Einträge'), self)
+        dp_action.triggered.connect(self.open_db)
 
-        self.addActions([xl_action, fa_action, pw_action])
+        self.addActions([xl_action, fa_action, pw_action, dp_action])
 
     @Slot()
     @Slot(Path)
@@ -109,6 +112,18 @@ class ImportMenu(QMenu):
         # Emit new model
         new_model = KnechtModel(_root_item)
         self.new_model_ready.emit(new_model, file.with_suffix('.xml'), True)
+
+    def open_db(self):
+        dp_dialog = DatapoolDialog(self.ui)
+        dp_dialog.destroyed.connect(self._report_destroyed)
+        dp_dialog.finished.connect(self.open_db_finished)
+
+        # Create Datapool Import tab
+        GenericTabWidget(self.ui, dp_dialog)
+
+    @Slot(KnechtModel)
+    def open_db_finished(self, model, file: Path):
+        self.new_model_ready.emit(model, file, True)
 
     @staticmethod
     def _report_destroyed(widget):

@@ -32,6 +32,7 @@ _ = lang.gettext
 class KnechtWindow(QMainWindow):
     system_tray_click_connected = False
     tree_focus_changed = Signal(QTreeView)
+    is_about_to_quit = Signal()
 
     def __init__(self, app):
         """ The GUI MainWindow Class

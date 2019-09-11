@@ -170,6 +170,7 @@ class KnechtApp(QtWidgets.QApplication):
 
     def about_to_quit(self):
         LOGGER.debug('QApplication is about to quit.')
+        self.ui.is_about_to_quit.emit()
         self.ui.system_tray.hide()
         self.ui.system_tray.deleteLater()
 

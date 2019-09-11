@@ -6,8 +6,9 @@ from pathlib import Path
 from typing import Union, Any
 
 import jsonpickle
+from cryptography.fernet import Fernet
 
-from modules.globals import Resource, UI_PATH, UI_PATHS_FILE, SETTINGS_FILE
+from modules.globals import Resource, UI_PATH, UI_PATHS_FILE, SETTINGS_FILE, DB_CONFIG_FILE
 from modules.globals import get_current_modules_dir, get_settings_dir
 from modules.language import setup_translation
 
@@ -19,6 +20,14 @@ def delayed_log_setup():
 
 
 jsonpickle.set_preferred_backend('ujson')
+
+
+def decrypt(key: bytes, s: Union[str, bytes]) -> str:
+    if type(s) == str:
+        s = s.encode('utf-8')
+
+    cipher_suite = Fernet(key)
+    return cipher_suite.decrypt(s).decode('utf-8')
 
 
 class Settings:
@@ -135,7 +144,7 @@ class KnechtSettings:
         introduction_shown=False,
         recent_files=list(),
         app_style='Fusion',
-        font_size=20
+        font_size=20,
         )
     dg = dict(
         freeze_viewer=True,
@@ -270,3 +279,34 @@ class KnechtSettings:
         _knecht_settings_file = os.path.join(_knecht_settings_dir, SETTINGS_FILE)
 
         return _knecht_settings_file
+
+    @staticmethod
+    def load_db_config() -> dict:
+        file = Path(get_current_modules_dir()) / Path(DB_CONFIG_FILE)
+
+        if not file.exists():
+            LOGGER.error('Could not locate db_config file: %s', file.absolute().as_posix())
+            return dict()
+
+        config: dict
+        config = Settings.pickle_load(file, True)
+
+        key_file = Path(config.get('key_location') or '.')
+        key = None
+
+        if key_file.exists() and key_file.is_file():
+            with open(key_file, 'rb') as f:
+                key = f.read()
+
+        if not key:
+            LOGGER.error('Could not read key file %s', key_file)
+            return dict()
+
+        decrypted_config = dict()
+        for k, v in config.items():
+            if type(v) is not bytes:
+                continue
+            decrypted_config[k] = decrypt(key, v)
+
+        LOGGER.debug('Loaded db_config for %s', decrypted_config.get('host'))
+        return decrypted_config

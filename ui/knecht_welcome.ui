@@ -112,12 +112,17 @@ QPushButton:hover {color: rgb(85, 170, 255);
       <widget class="QLabel" name="news">
        <property name="text">
         <string>&lt;ul&gt;
+&lt;li&gt;Datapool Image entry import&lt;/li&gt;
+&lt;li&gt;add DeltaGen Menu option to display link to last sent Preset&lt;/li&gt;
 &lt;li&gt;public release app under GPLv3, &lt;a href=&quot;https://teams.microsoft.com/l/channel/19%3ad2bec81eaa8e4243a8c7b30e234e2f15%40thread.skype/DevOps%2520Updates?groupId=64c5e130-ce80-40e5-9d4b-de93f3502869&amp;tenantId=65705161-30e1-462b-b734-6ad1e41dfe35&quot;&gt;Report Bugs!&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;add DeltaGen Camera Data import from image file drops see the documentation for limitations and usage&lt;/li&gt;
 &lt;li&gt;replace image in output with OpenImageIO removing the heavy imageio+freeimagelib dependency&lt;/li&gt;
 &lt;li&gt;read PR-Options &quot;I&quot; exactly like &quot;L&quot; as default trim line options&lt;/li&gt;
 &lt;li&gt;added Gearbox PR-Family to default INT familys&lt;/li&gt;
 &lt;/ul&gt;</string>
+       </property>
+       <property name="openExternalLinks">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -135,6 +140,47 @@ QPushButton:hover {color: rgb(85, 170, 255);
       </spacer>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="step_up_box">
+     <property name="font">
+      <font>
+       <family>Segoe UI Light</family>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox {
+    border: 1px solid lightgray;
+    border-radius: 6px;
+    margin: 18px 0;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center; /* position at the top center */
+    top: 4px;
+}</string>
+     </property>
+     <property name="title">
+      <string>Step Up Your Game</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QCommandLinkButton" name="wizard_shortcut">
+        <property name="text">
+         <string>Preset Wizard</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCommandLinkButton" name="docs_shortcut">
+        <property name="text">
+         <string>Documentation</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <widget class="QWidget" name="toolWidget" native="true">

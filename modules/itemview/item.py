@@ -436,19 +436,22 @@ class KnechtItemStyle:
         }
 
     @classmethod
-    def style_column(cls, item: KnechtItem, item_type_key: str=None) -> None:
+    def style_column(cls, item: KnechtItem, item_type_key: str=None, column: int=0) -> None:
         item_type_key = item_type_key or item.data(Kg.TYPE)
+
+        if not column:
+            column = Kg.style_column
 
         if item_type_key not in cls.ICON_MAP.keys():
             return
 
-        if item.data(Kg.style_column, Qt.DecorationRole):
+        if item.data(column, Qt.DecorationRole):
             return
 
         icon_key = cls.ICON_MAP[item_type_key]
         icon = IconRsc.get_icon(icon_key)
 
-        item.itemData[Qt.DecorationRole][Kg.style_column] = icon
+        item.itemData[Qt.DecorationRole][column] = icon
 
     @classmethod
     def style_row(cls, item: KnechtItem, role, style_data: Union[QBrush, QFont]) -> None:

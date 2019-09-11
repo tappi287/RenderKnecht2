@@ -14,6 +14,7 @@ from modules.itemview.model import KnechtModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.model_update import UpdateModel
 from modules.itemview.tree_view import KnechtTreeView
+from modules.itemview.tree_view_checkable import KnechtTreeViewCheckable
 from modules.itemview.tree_view_utils import KnechtTreeViewShortcuts, setup_header_layout
 from modules.knecht_excel import ExcelData, ExcelReader
 from modules.knecht_excel_data import ExcelDataToKnechtData
@@ -101,8 +102,11 @@ class ExcelImportDialog(QDialog):
         self.tabWidget_Excel.currentChanged.connect(self._clear_tree_filter)
 
         # --- Init Tree Views ---
-        self.treeView_Models = self._init_tree_view(self.treeView_Models)
-        self.treeView_PrFam = self._init_tree_view(self.treeView_PrFam)
+        self.treeView_Models = KnechtTreeViewCheckable(self, None, replace=self.treeView_Models,
+                                                       filter_widget=self.lineEdit_filter)
+
+        self.treeView_PrFam = KnechtTreeViewCheckable(self, None, replace=self.treeView_PrFam,
+                                                      filter_widget=self.lineEdit_filter)
 
         # --- Reader Thread ---
         thread_signals = self.ThreadSignals()
@@ -112,6 +116,9 @@ class ExcelImportDialog(QDialog):
         thread_signals.error.connect(self.read_failed)
         thread_signals.exception_sig.connect(self._thread_exception)
         thread_signals.progress_msg.connect(self.show_progress)
+
+        # --- Abort thread if UI is closed ---
+        self.ui.is_about_to_quit.connect(self._finalize_dialog)
 
         # --- Init Icons + Translations ---
         self.option_box: QGroupBox
@@ -309,19 +316,7 @@ class ExcelImportDialog(QDialog):
         if pr_ext:
             pr_family_filter += self.PrDefaultFilter.exterior
 
-        self.check_items(pr_family_filter, self.PrColumn.code, self.treeView_PrFam, check_all=pr_all)
-
-    def check_items(self, check_items: list, column: int, view: KnechtTreeView,
-                    check_all: bool=False, check_none: bool=False):
-        for (src_index, item) in self._iter_view(view, column):
-            value, item_value = item.data(column, role=Qt.DisplayRole), None
-
-            if value in check_items or check_all and not check_none:
-                item_value = Qt.Checked
-            else:
-                item_value = Qt.Unchecked
-
-            view.model().sourceModel().setData(src_index, item_value, Qt.CheckStateRole)
+        self.treeView_PrFam.check_items(pr_family_filter, self.PrColumn.code, check_all=pr_all)
 
     @staticmethod
     def _iter_view(view: KnechtTreeView, column: int):
@@ -359,13 +354,10 @@ class ExcelImportDialog(QDialog):
             self.check_options_filter.setCheckState(Qt.Checked)
 
         # Restore checked models
-        self.check_items(
-            entry.get('models') or list(), self.ModelColumn.code, self.treeView_Models
-            )
+        self.treeView_Models.check_items(entry.get('models') or list(), self.ModelColumn.code)
+
         # Restore checked Pr Families
-        self.check_items(
-            entry.get('pr_families') or list(), self.PrColumn.code, self.treeView_PrFam
-            )
+        self.treeView_PrFam.check_items(entry.get('pr_families') or list(), self.PrColumn.code)
 
         self._settings_loaded = True
         return True
@@ -430,29 +422,6 @@ class ExcelImportDialog(QDialog):
         self.treeView_PrFam.clear_filter()
         self.treeView_Models.clear_filter()
 
-    def _init_tree_view(self, tree_view: QTreeView) -> KnechtTreeView:
-        """ Replace the UI Designer placeholder tree views """
-        parent = tree_view.parent()
-        new_view = KnechtTreeView(parent, None)
-        replace_widget(tree_view, new_view)
-
-        # Setup filter widget
-        new_view.filter_text_widget = self.lineEdit_filter
-        # Setup keyboard shortcuts
-        new_view.shortcuts = KnechtTreeViewShortcuts(new_view)
-        new_view.context = ExcelContextMenu(self, new_view)
-        # Uneditable
-        new_view.setEditTriggers(QTreeView.NoEditTriggers)
-        new_view.supports_drop = False
-        new_view.supports_drag_move = False
-        new_view.setDragDropMode(QTreeView.NoDragDrop)
-
-        # Update with placeholder Model to avoid access to unset attributes
-        UpdateModel(new_view).update(KnechtModel())
-        new_view.setHeaderHidden(True)
-
-        return new_view
-
     def _ask_close(self):
         if self._asked_for_close:
             return False
@@ -514,45 +483,3 @@ class ExcelImportDialog(QDialog):
 
         if self_destruct:
             self.deleteLater()
-
-
-class ExcelContextMenu(QMenu):
-    def __init__(self, dialog: ExcelImportDialog, view: KnechtTreeView):
-        super(ExcelContextMenu, self).__init__('Tree_Context', dialog)
-        self.dialog = dialog
-
-        self.select_all = QAction(IconRsc.get_icon('check_box'), _('Alle Einträge auswählen'))
-        self.select_all.triggered.connect(self.select_all_items)
-        self.select_none = QAction(IconRsc.get_icon('check_box_empty'), _('Alle Einträge abwählen'))
-        self.select_none.triggered.connect(self.select_no_items)
-        self.addActions([self.select_none, self.select_all])
-
-        self.view = view
-        self.view.installEventFilter(self)
-
-    def select_all_items(self):
-        self.dialog.check_items(
-            [], self.get_column(), self.view, check_all=True
-            )
-
-    def select_no_items(self):
-        self.dialog.check_items(
-            [], self.get_column(), self.view, check_none=True
-            )
-
-    def get_column(self) -> int:
-        if self.view is self.dialog.treeView_Models:
-            return self.dialog.ModelColumn.code
-        else:
-            return self.dialog.PrColumn.code
-
-    def eventFilter(self, obj: QObject, event:QEvent):
-        if obj not in [self.dialog.treeView_PrFam, self.dialog.treeView_Models]:
-            return False
-
-        if event.type() == QEvent.ContextMenu:
-            self.view = obj
-            self.popup(event.globalPos())
-            return True
-
-        return False

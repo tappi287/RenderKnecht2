@@ -1,5 +1,5 @@
 from PySide2.QtCore import QEvent, Qt
-from PySide2.QtWidgets import QPushButton, QVBoxLayout, QWidget, QGroupBox
+from PySide2.QtWidgets import QPushButton, QVBoxLayout, QWidget, QGroupBox, QCommandLinkButton
 
 from modules import KnechtSettings
 from modules.globals import Resource
@@ -45,6 +45,14 @@ class KnechtWelcome(QWidget):
         self.import_btn.setText(_('Import'))
         self.import_btn.setMenu(self.ui.main_menu.file_menu.import_menu)
 
+        self.step_up_box: QGroupBox
+        self.step_up_box.setTitle('Step Up Your Game')
+
+        self.wizard_shortcut: QCommandLinkButton
+        self.wizard_shortcut.pressed.connect(self.open_wizard)
+        self.docs_shortcut: QCommandLinkButton
+        self.docs_shortcut.pressed.connect(self.open_docs)
+
         self.recent_layout: QVBoxLayout = self.recent_layout
         self.recent_btns = list()
 
@@ -58,6 +66,14 @@ class KnechtWelcome(QWidget):
 
     def _import(self):
         self.ui.main_menu.file_menu.import_menu.popup(self.import_btn.pos())
+
+    def open_wizard(self):
+        self.step_up_box.setTitle('Skill Level Increased ++')
+        self.ui.main_menu.file_menu.import_menu.open_wizard()
+
+    def open_docs(self):
+        self.step_up_box.setTitle('Skill Level Increased ++')
+        self.ui.main_menu.info_menu.show_docs()
 
     def update_recent_entries(self):
         LOGGER.debug('Updating Welcome page recent entries.')

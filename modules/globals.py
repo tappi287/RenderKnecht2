@@ -14,6 +14,7 @@ SETTINGS_DIR_NAME = 'RenderKnecht2'
 
 DOCS_FILEPATH = 'locale/RenderKnecht2_Dokumentation.chm'
 DOCS_HTML_FILEPATH = 'locale/help/RenderKnecht_Dokumentation.html'
+DB_CONFIG_FILE = 'db_config.zip'
 
 ITEM_WORK_INTERVAL = 90
 ITEM_WORK_CHUNK = 8
@@ -40,7 +41,7 @@ else:
     FROZEN = False
 
 
-def get_current_modules_dir():
+def get_current_modules_dir() -> str:
     """ Return path to this app modules directory """
     # Path to this module OR path to PyInstaller executable directory _MEIPASS
     mod_dir = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__ + '/..')))

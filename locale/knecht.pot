@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-09-04 10:20+0200\n"
+"POT-Creation-Date: 2019-09-10 16:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,141 +15,197 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: modules/gui/widgets\excel_dialog.py:45
-msgid "PR-Familie"
+#: modules/gui/widgets\db_dialog.py:57
+msgid "Datapool Projekte"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:45
-#: modules/gui/widgets\excel_dialog.py:47 modules/itemview\model_globals.py:22
-msgid "Beschreibung"
+#: modules/gui/widgets\db_dialog.py:61
+msgid "Bildeinträge"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:47
-msgid "Getriebe"
+#: modules/gui/widgets\db_dialog.py:63
+msgid "Detailspalten anzeigen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:47
-msgid "Markt"
+#: modules/gui/widgets\db_dialog.py:66
+msgid "Im Baum tippen um zu filtern..."
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:47
-msgid "Model"
+#: modules/gui/widgets\db_dialog.py:122
+msgid "Verbinde mit Datenbank"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:118
-msgid "Optionen"
+#: modules/gui/widgets\db_dialog.py:131
+msgid "Bezeichnung"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:120
-msgid "Trimlines erstellen"
+#: modules/gui/widgets\db_dialog.py:131
+msgid "Job"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:123
-msgid "Optionen erstellen"
+#: modules/gui/widgets\db_dialog.py:131
+msgid "Modelljahr"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:126
-msgid "Pakete erstellen"
+#: modules/gui/widgets\db_dialog.py:131 modules/itemview\model_globals.py:22
+msgid "Id"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:129
-msgid "Optionen nach VPlus Wert filtern"
+#: modules/gui/widgets\db_dialog.py:147
+msgid "Daten werden angefordert"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:131
-msgid "Nur optionale PR-Optionen mit Wert E auslesen. Anderfalls alle die nicht L entsprechen aus Vplus lesen."
+#: modules/gui/widgets\db_dialog.py:157
+msgid "Priorität"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:135
-msgid "PR-Familien Filter Vorlagen"
+#: modules/gui/widgets\db_dialog.py:157
+msgid "wagenbauteil Id"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:138
-msgid "Alle PR-Familien"
+#: modules/gui/widgets\db_dialog.py:157 modules/gui\path_render_service.py:124
+msgid "Erstellt"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:140
-msgid "Interieur I/VX-13"
+#: modules/gui/widgets\db_dialog.py:157 modules/itemview\model_globals.py:22
+msgid "Name"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:142
-msgid "Exterieur I/VX-13"
+#: modules/gui/widgets\db_dialog.py:219
+msgid "Projekt auswählen"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:145
-msgid "PR-Familien Filter auf Pakete anwenden"
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:148
-msgid "Zum filtern tippen ..."
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:151
-msgid "Modellfilter"
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:153
-msgid "PR-Familien-Filter"
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:157
-msgid "PR Familien auswählen die ausgelesen werden sollen."
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:159
-msgid "Modelle auswählen die ausgelesen werden sollen."
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:173
-msgid "Excel Datei wird gelesen..."
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:185
-msgid "POS Xml enthält keine bekannten Farbkombinationsmuster."
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:189
-msgid "Konnte POS Xml Daten nicht lesen oder verarbeiten."
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:197
-msgid "Daten werden konvertiert..."
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:209
-msgid "Daten übertragen..."
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:235
-msgid "Excel Daten werden geladen..."
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:248
-msgid "Excel Import Fehler"
-msgstr ""
-
-#: modules/gui/widgets\excel_dialog.py:463
+#: modules/gui/widgets\db_dialog.py:252
+#: modules/gui/widgets\excel_dialog.py:432
 msgid "Importvorgang"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:464
+#: modules/gui/widgets\db_dialog.py:253
+#: modules/gui/widgets\excel_dialog.py:433
 msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:465 modules/gui/wizard\wizard.py:206
+#: modules/gui/widgets\db_dialog.py:254
+#: modules/gui/widgets\excel_dialog.py:434 modules/gui/wizard\wizard.py:206
 msgid "Ja"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:466 modules/gui/wizard\wizard.py:207
+#: modules/gui/widgets\db_dialog.py:255
+#: modules/gui/widgets\excel_dialog.py:435 modules/gui/wizard\wizard.py:207
 msgid "Nein"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:524
-msgid "Alle Einträge auswählen"
+#: modules/gui/widgets\excel_dialog.py:46
+msgid "PR-Familie"
 msgstr ""
 
-#: modules/gui/widgets\excel_dialog.py:526
-msgid "Alle Einträge abwählen"
+#: modules/gui/widgets\excel_dialog.py:46
+#: modules/gui/widgets\excel_dialog.py:48 modules/itemview\model_globals.py:22
+msgid "Beschreibung"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:48
+msgid "Getriebe"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:48
+msgid "Markt"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:48
+msgid "Model"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:125
+msgid "Optionen"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:127
+msgid "Trimlines erstellen"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:130
+msgid "Optionen erstellen"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:133
+msgid "Pakete erstellen"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:136
+msgid "Optionen nach VPlus Wert filtern"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:138
+msgid "Nur optionale PR-Optionen mit Wert E auslesen. Anderfalls alle die nicht L entsprechen aus Vplus lesen."
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:142
+msgid "PR-Familien Filter Vorlagen"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:145
+msgid "Alle PR-Familien"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:147
+msgid "Interieur I/VX-13"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:149
+msgid "Exterieur I/VX-13"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:152
+msgid "PR-Familien Filter auf Pakete anwenden"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:155
+msgid "Zum filtern tippen ..."
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:158
+msgid "Modellfilter"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:160
+msgid "PR-Familien-Filter"
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:164
+msgid "PR Familien auswählen die ausgelesen werden sollen."
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:166
+msgid "Modelle auswählen die ausgelesen werden sollen."
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:180
+msgid "Excel Datei wird gelesen..."
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:192
+msgid "POS Xml enthält keine bekannten Farbkombinationsmuster."
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:196
+msgid "Konnte POS Xml Daten nicht lesen oder verarbeiten."
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:204
+msgid "Daten werden konvertiert..."
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:216
+msgid "Daten übertragen..."
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:242
+msgid "Excel Daten werden geladen..."
+msgstr ""
+
+#: modules/gui/widgets\excel_dialog.py:255
+msgid "Excel Import Fehler"
 msgstr ""
 
 #: modules/gui/widgets\fakom_dialog.py:39 modules/gui\ui_translations.py:38
@@ -504,21 +560,25 @@ msgstr ""
 msgid "Keine Einträge vorhanden"
 msgstr ""
 
-#: modules/gui/widgets\menu_import.py:36
+#: modules/gui/widgets\menu_import.py:37
 #: modules/gui/widgets\welcome_page.py:45 modules/gui/wizard\data_import.py:43
 msgid "Import"
 msgstr ""
 
-#: modules/gui/widgets\menu_import.py:39
+#: modules/gui/widgets\menu_import.py:40
 msgid "V-Plus Browser"
 msgstr ""
 
-#: modules/gui/widgets\menu_import.py:41
+#: modules/gui/widgets\menu_import.py:42
 msgid "FaKom Lutscher"
 msgstr ""
 
-#: modules/gui/widgets\menu_import.py:43
+#: modules/gui/widgets\menu_import.py:44
 msgid "Preset Assistent"
+msgstr ""
+
+#: modules/gui/widgets\menu_import.py:46
+msgid "Datapool Einträge"
 msgstr ""
 
 #: modules/gui/widgets\menu_info.py:59
@@ -973,16 +1033,16 @@ msgstr ""
 msgid "Anwendungsausnahme"
 msgstr ""
 
-#: modules/gui\main_ui.py:58
+#: modules/gui\main_ui.py:59
 msgid "Variantenbaum"
 msgstr ""
 
-#: modules/gui\main_ui.py:58 modules/gui\ui_resource.py:121
+#: modules/gui\main_ui.py:59 modules/gui\ui_resource.py:121
 #: modules\knecht_render.py:643
 msgid "Renderliste"
 msgstr ""
 
-#: modules/gui\main_ui.py:167
+#: modules/gui\main_ui.py:168
 msgid "Die Varianten enthalten keine Reset Schaltung! Die zu sendenden Varianten werden mit vorangegangen Schaltungen kollidieren."
 msgstr ""
 
@@ -1016,10 +1076,6 @@ msgstr ""
 
 #: modules/gui\path_render_service.py:123
 msgid "Szenendatei"
-msgstr ""
-
-#: modules/gui\path_render_service.py:124
-msgid "Erstellt"
 msgstr ""
 
 #: modules/gui\path_render_service.py:124
@@ -1391,14 +1447,6 @@ msgid "{0} für {1} ändern {2} ..."
 msgstr ""
 
 #: modules/itemview\model_globals.py:22
-msgid "Id"
-msgstr ""
-
-#: modules/itemview\model_globals.py:22
-msgid "Name"
-msgstr ""
-
-#: modules/itemview\model_globals.py:22
 msgid "Order"
 msgstr ""
 
@@ -1434,6 +1482,18 @@ msgstr ""
 #: modules/itemview\tree_dragdrop.py:142
 msgid ""
 "Konnte Datei mit Kamera Daten nicht lesen.\n"
+msgstr ""
+
+#: modules/itemview\tree_view_checkable.py:84
+msgid "Alle Einträge auswählen"
+msgstr ""
+
+#: modules/itemview\tree_view_checkable.py:86
+msgid "Selektierte Einträge auswählen"
+msgstr ""
+
+#: modules/itemview\tree_view_checkable.py:88
+msgid "Alle Einträge abwählen"
 msgstr ""
 
 #: modules/itemview\view_manager.py:105
@@ -1506,6 +1566,37 @@ msgstr ""
 
 #: modules\knecht_camera.py:175
 msgid "<b>Achtung!</b><br /><i>{}</i><br />Es wurden Kameraeinstellungen gefunden die nicht an DeltaGen gesendet werden können:<br />{}"
+msgstr ""
+
+#: modules\knecht_datapool.py:88
+msgid "Keine Datenbankkonfiguration verfügbar. Datapool über das Netzwerk erreichbar?"
+msgstr ""
+
+#: modules\knecht_datapool.py:245 modules\knecht_datapool.py:258
+msgid ""
+"Datenbank Fehler:\n"
+msgstr ""
+
+#: modules\knecht_datapool.py:249
+msgid ""
+"Kann keine Verbindung zur Datenbank herstellen!\n"
+"{}"
+msgstr ""
+
+#: modules\knecht_datapool.py:251
+msgid ""
+"Kann Datenbank nicht finden!\n"
+"{}"
+msgstr ""
+
+#: modules\knecht_datapool.py:253
+msgid ""
+"Unbekannter Fehler:\n"
+"{}"
+msgstr ""
+
+#: modules\knecht_datapool.py:265
+msgid "Die Anfrage an die Datenbank resultierte in keinem Ergebnis."
 msgstr ""
 
 #: modules\knecht_deltagen.py:162

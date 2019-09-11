@@ -2,6 +2,7 @@
 
 block_cipher = None
 knecht_files = [('license.txt', '.'),
+                ('db_config.zip', '.'),
                 ('ui/*.py', 'ui'),
                 ('ui/*.ui', 'ui'),
                 ('ui/*.json', 'ui'),
@@ -21,7 +22,7 @@ a = Analysis(['knechtapp.py'],
              hiddenimports=[],
              hookspath=local_hooks,
              runtime_hooks=[],
-             excludes=['zmq', 'jupyter', 'tornado', 'paramiko', 'IPython', 'cryptography', 'tk', 'tkinter', 'lib2to3'],
+             excludes=['zmq', 'jupyter', 'tornado', 'paramiko', 'IPython', 'tk', 'tkinter', 'lib2to3'],
              win_no_prefer_redirects=False,
              win_private_assemblies=False,
              cipher=block_cipher,
