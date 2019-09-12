@@ -73,4 +73,21 @@ class KnechtTreeViewShortcuts(QObject):
             self.view.set_filter_widget_text(filter_txt)
             return True
 
+        # --- Movement with Arrow or Page Up/Down Keys
+        if not self.view.supports_drag_move:
+            return False
+
+        if event.key() == Qt.Key_Up:
+            self.view.editor.move_rows_keyboard(move_up=True)
+            return True
+        elif event.key() == Qt.Key_Down:
+            self.view.editor.move_rows_keyboard(move_up=False)
+            return True
+        elif event.key() == Qt.Key_PageUp:
+            self.view.editor.move_rows_keyboard(move_up=True, jump=True)
+            return True
+        elif event.key() == Qt.Key_PageDown:
+            self.view.editor.move_rows_keyboard(move_up=False, jump=True)
+            return True
+
         return False

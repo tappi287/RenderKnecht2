@@ -47,19 +47,19 @@ class KnechtItemSelection(QObject):
         proxy_model = self.view.model()
         proxy_index_ls = self.view.selectionModel().selectedRows()
 
-        src_index_ls = []
-        for proxy_index in proxy_index_ls:
-            src_index_ls.append(proxy_model.mapToSource(proxy_index))
+        sub_indices, top_indices = self.sort_index_list(proxy_index_ls)
 
-        sub_items, top_items = self.sort_index_list(src_index_ls)
+        # Map to source model indices
+        top_indices = [proxy_model.mapToSource(i) for i in top_indices]
+        sub_indices = [proxy_model.mapToSource(i) for i in sub_indices]
 
-        if src_model.rowCount() == len(top_items):
+        if src_model.rowCount() == len(top_indices):
             # Report the whole model as selected
             self.whole_tree_selected = True
-            return sub_items, top_items, src_model
+            return sub_indices, top_indices, src_model
 
         # Return selected source model indices and the source model
-        return sub_items, top_items, src_model
+        return sub_indices, top_indices, src_model
 
     def get_selection(self) -> Tuple[List[QModelIndex], KnechtModel]:
         """ Return all selected elements[in proxy sort order] and the actual source model

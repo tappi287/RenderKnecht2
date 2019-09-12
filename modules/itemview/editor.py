@@ -1,6 +1,6 @@
 from typing import List
 
-from PySide2.QtCore import QItemSelectionModel, QModelIndex, QObject
+from PySide2.QtCore import QItemSelectionModel, QModelIndex, QObject, Qt
 from PySide2.QtWidgets import QTreeView
 
 from modules.itemview.editor_collect import KnechtCollectVariants
@@ -154,6 +154,26 @@ class KnechtEditor(QObject):
         self.view.view_cleared.emit(self.view)
 
         self.util.new_empty_model(self.view)
+
+    def move_rows_keyboard(self, move_up: bool=False, jump: bool=False):
+        proxy_index_ls: List[QModelIndex] = self.view.selectionModel().selectedRows()
+        if not proxy_index_ls:
+            return
+
+        rows = [r.row() for r in proxy_index_ls]
+        move_steps = 10 if jump else 1
+
+        if move_up:
+            first_idx = proxy_index_ls[rows.index(min(rows))]  # Index with smallest row number
+            destination_row = max(0, first_idx.row() - move_steps)
+            destination_idx = first_idx.siblingAtRow(destination_row)
+        else:
+            last_idx = proxy_index_ls[rows.index(max(rows))]  # Index with greatest row number
+            destination_row = min(self.view.model().rowCount(), last_idx.row() + move_steps)
+            destination_idx = last_idx.siblingAtRow(destination_row)
+
+        LOGGER.debug('Move Target: %s', destination_idx.siblingAtColumn(Kg.NAME).data(Qt.DisplayRole))
+        self.move_rows(destination_idx)
 
     def move_rows(self, destination_idx: QModelIndex):
         proxy_model = self.view.model()
