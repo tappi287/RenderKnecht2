@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-09-10 16:07+0200\n"
+"POT-Creation-Date: 2019-09-11 18:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,82 +15,90 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: modules/gui/widgets\db_dialog.py:57
+#: modules/gui/widgets\db_dialog.py:60
 msgid "Datapool Projekte"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:61
+#: modules/gui/widgets\db_dialog.py:64
 msgid "Bildeinträge"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:63
+#: modules/gui/widgets\db_dialog.py:66
 msgid "Detailspalten anzeigen"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:66
+#: modules/gui/widgets\db_dialog.py:69
 msgid "Im Baum tippen um zu filtern..."
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:122
+#: modules/gui/widgets\db_dialog.py:133
 msgid "Verbinde mit Datenbank"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:131
+#: modules/gui/widgets\db_dialog.py:143
 msgid "Bezeichnung"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:131
+#: modules/gui/widgets\db_dialog.py:143
 msgid "Job"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:131
+#: modules/gui/widgets\db_dialog.py:143
 msgid "Modelljahr"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:131 modules/itemview\model_globals.py:22
+#: modules/gui/widgets\db_dialog.py:143 modules/itemview\model_globals.py:22
 msgid "Id"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:147
+#: modules/gui/widgets\db_dialog.py:159
 msgid "Daten werden angefordert"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:157
+#: modules/gui/widgets\db_dialog.py:170
 msgid "Priorität"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:157
+#: modules/gui/widgets\db_dialog.py:170
 msgid "wagenbauteil Id"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:157 modules/gui\path_render_service.py:124
+#: modules/gui/widgets\db_dialog.py:170 modules/gui\path_render_service.py:124
 msgid "Erstellt"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:157 modules/itemview\model_globals.py:22
+#: modules/gui/widgets\db_dialog.py:170 modules/itemview\model_globals.py:22
 msgid "Name"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:219
+#: modules/gui/widgets\db_dialog.py:232
 msgid "Projekt auswählen"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:252
+#: modules/gui/widgets\db_dialog.py:237
+msgid "Zeitüberschreitung"
+msgstr ""
+
+#: modules/gui/widgets\db_dialog.py:238
+msgid "Zeitüberschreitung bei Datenbankverbindung. Die Verbindung wurde automatisch getrennt."
+msgstr ""
+
+#: modules/gui/widgets\db_dialog.py:270
 #: modules/gui/widgets\excel_dialog.py:432
 msgid "Importvorgang"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:253
+#: modules/gui/widgets\db_dialog.py:271
 #: modules/gui/widgets\excel_dialog.py:433
 msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:254
+#: modules/gui/widgets\db_dialog.py:272
 #: modules/gui/widgets\excel_dialog.py:434 modules/gui/wizard\wizard.py:206
 msgid "Ja"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:255
+#: modules/gui/widgets\db_dialog.py:273
 #: modules/gui/widgets\excel_dialog.py:435 modules/gui/wizard\wizard.py:207
 msgid "Nein"
 msgstr ""
@@ -309,7 +317,8 @@ msgstr ""
 msgid "Verzeichnis auswaehlen ..."
 msgstr ""
 
-#: modules/gui/widgets\help_page.py:27 modules/gui\ui_translations.py:50
+#: modules/gui/widgets\help_page.py:27 modules/gui/widgets\welcome_page.py:56
+#: modules/gui\ui_translations.py:50
 msgid "Dokumentation"
 msgstr ""
 
@@ -370,7 +379,7 @@ msgid "abgeschlossen am: "
 msgstr ""
 
 #: modules/gui/widgets\menu_create.py:24
-#: modules/gui/widgets\welcome_page.py:35
+#: modules/gui/widgets\welcome_page.py:36
 msgid "Erstellen"
 msgstr ""
 
@@ -561,7 +570,7 @@ msgid "Keine Einträge vorhanden"
 msgstr ""
 
 #: modules/gui/widgets\menu_import.py:37
-#: modules/gui/widgets\welcome_page.py:45 modules/gui/wizard\data_import.py:43
+#: modules/gui/widgets\welcome_page.py:46 modules/gui/wizard\data_import.py:43
 msgid "Import"
 msgstr ""
 
@@ -613,8 +622,25 @@ msgstr ""
 msgid "Sprache"
 msgstr ""
 
+#: modules/gui/widgets\menu_tab_context.py:21
 #: modules/gui/widgets\menu_tree_context.py:26
 msgid "Baum Kontextmenü"
+msgstr ""
+
+#: modules/gui/widgets\menu_tab_context.py:33
+msgid "Dokumenten Pfad in Zwischenablage kopieren"
+msgstr ""
+
+#: modules/gui/widgets\menu_tab_context.py:34
+msgid "Dokumenten Pfad öffnen"
+msgstr ""
+
+#: modules/gui/widgets\menu_tab_context.py:63
+msgid "Kein gültiger Pfad für das Dokument gesetzt. Das Dokument muss zuerst gespeichert werden."
+msgstr ""
+
+#: modules/gui/widgets\menu_tab_context.py:68
+msgid "Dokumenten Pfad wurde in die Zwischenablage kopiert.<br/><i>{}<i>"
 msgstr ""
 
 #: modules/gui/widgets\menu_tree_context.py:39
@@ -777,24 +803,29 @@ msgstr ""
 msgid "Spalte"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:29
+#: modules/gui/widgets\welcome_page.py:30
 msgid "Willkommen"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:31
+#: modules/gui/widgets\welcome_page.py:32
 msgid "RenderKnecht v{}"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:36
+#: modules/gui/widgets\welcome_page.py:37
 msgid "Kürzlich verwendet"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:38
+#: modules/gui/widgets\welcome_page.py:39
 msgid "Neues Dokument"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:41
+#: modules/gui/widgets\welcome_page.py:42
 msgid "Dokument öffnen"
+msgstr ""
+
+#: modules/gui/widgets\welcome_page.py:53 modules/gui/wizard\start.py:28
+#: modules/gui/wizard\wizard.py:30
+msgid "Preset Wizard"
 msgstr ""
 
 #: modules/gui/wizard\data_import.py:24 modules/gui/wizard\fakom.py:27
@@ -927,10 +958,6 @@ msgstr ""
 
 #: modules/gui/wizard\result.py:66
 msgid "Nicht verwendete Optionen"
-msgstr ""
-
-#: modules/gui/wizard\start.py:28 modules/gui/wizard\wizard.py:30
-msgid "Preset Wizard"
 msgstr ""
 
 #: modules/gui/wizard\start.py:29

@@ -5,6 +5,7 @@ from modules.gui.widgets.menu_deltagen import DeltaGenMenu
 from modules.gui.widgets.menu_edit import EditMenu
 from modules.gui.widgets.menu_file import FileMenu
 from modules.gui.widgets.menu_info import InfoMenu
+from modules.gui.widgets.menu_tab_context import TabContextMenu
 from modules.gui.widgets.menu_view import ViewMenu
 from modules.gui.widgets.menu_language import LanguageMenu
 from modules.language import get_translation
@@ -37,6 +38,9 @@ class MainWindowMenu(QtCore.QObject):
         self.lang_menu = LanguageMenu(ui)
 
         self.info_menu = InfoMenu(ui, ui.menuInfo)
+
+        # Document tab context menu
+        self.tab_context = TabContextMenu(self.ui)
 
         # Clear menuBar and add in order
         self.ui.menuBar().clear()

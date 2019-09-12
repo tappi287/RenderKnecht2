@@ -112,6 +112,7 @@ QPushButton:hover {color: rgb(85, 170, 255);
       <widget class="QLabel" name="news">
        <property name="text">
         <string>&lt;ul&gt;
+&lt;li&gt;add document tab context with ability to copy paths&lt;/li&gt;
 &lt;li&gt;Datapool Image entry import&lt;/li&gt;
 &lt;li&gt;add DeltaGen Menu option to display link to last sent Preset&lt;/li&gt;
 &lt;li&gt;public release app under GPLv3, &lt;a href=&quot;https://teams.microsoft.com/l/channel/19%3ad2bec81eaa8e4243a8c7b30e234e2f15%40thread.skype/DevOps%2520Updates?groupId=64c5e130-ce80-40e5-9d4b-de93f3502869&amp;tenantId=65705161-30e1-462b-b734-6ad1e41dfe35&quot;&gt;Report Bugs!&lt;/a&gt;&lt;/li&gt;

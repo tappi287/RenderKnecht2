@@ -18,7 +18,7 @@ if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     print('Using high dpi Pixmaps')
 
-VERSION = '1.10'
+VERSION = '1.11'
 
 InfoMessage.ver = VERSION
 InfoMessage.lic = 'GPL v3'
@@ -27,6 +27,7 @@ InfoMessage.mail = 'tapper.stefan@gmail.com'
 InfoMessage.cred = ['Python Community', 'PyCharm Community Edition', 'Stackoverflow', 'PySide Docs']
 
 # TODO: Rename, Renumber Images from different RenderPresets
+# TODO: Item Ordering with arrow + page keys
 
 
 def initialize_log_listener(logging_queue):
