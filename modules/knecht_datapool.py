@@ -1,7 +1,7 @@
 import datetime
 import logging
 import sys
-from threading import Thread, Event
+from threading import Event, Thread
 from typing import List, Tuple
 
 # noinspection PyPackageRequirements
@@ -10,12 +10,11 @@ from PySide2.QtCore import QObject, Signal
 # noinspection PyPackageRequirements
 from mysql.connector import errorcode as my_sql_error_code
 
-from modules.log import init_logging
 from modules.language import get_translation
-from modules.settings import Settings, KnechtSettings
+from modules.log import init_logging
+from modules.settings import KnechtSettings
 
 LOGGER = init_logging(__name__)
-
 
 # translate strings
 lang = get_translation()
@@ -90,9 +89,14 @@ class DatapoolConnector:
 
         try:
             self.db = mysql.connector.connect(**self.config)
+            LOGGER.info('Connecting to database: %s', self.config.get('host'))
         except mysql.connector.Error as err:
             self._set_connection_error(err)
             return False
+
+        if not self.db.is_connected():
+            return False
+
         return True
 
     def _query(self, query: str, fetch_one: bool=False, fetch_num: int=0) -> List[Tuple]:
@@ -365,27 +369,36 @@ class DatapoolController(QObject):
     def start(self):
         self.db_thread.start()
 
-    def close(self):
+    def close(self) -> bool:
         if self.db_thread.is_alive():
             LOGGER.info('Shutting down Datapool Connection Thread.')
             self.db_thread.shutdown()
             self.db_thread.join(timeout=2)
 
+            if self.db_thread.is_alive():
+                LOGGER.error("Datapool thread could not be joined. Network trouble. We depend on Windows now, "
+                             "aka we're lost.")
+                self.error.emit(_('Netzwerkverbindung konnte nicht beendet werden. Bitte warten und in einer Minute '
+                                  'erneut versuchen.'))
+                return False
+
+        return True
+
     def request_project(self, project_id: str):
         self.db_thread.request_project(int(project_id))
 
 
-def shutdown(db: DatapoolConnector):
+def _shutdown(db: DatapoolConnector):
     db.close()
     del db
 
     sys.exit()
 
 
-if __name__ == '__main__':
+def _main():
     logging.basicConfig()
-    LOGGER = logging.getLogger(__name__)
-    LOGGER.setLevel(logging.DEBUG)
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
 
     local_dev_config = {
         'host': "localhost", 'user': 'dev', 'password': 'y$=oAQX.x4oWh2%', 'database': 'dev'
@@ -393,24 +406,28 @@ if __name__ == '__main__':
 
     db = DatapoolConnector(local_dev_config)
     if not db.connect_db():
-        LOGGER.debug(db.error_report())
-        shutdown(db)
+        logger.debug(db.error_report())
+        _shutdown(db)
 
-    LOGGER.debug('Successfully connected!')
+    logger.debug('Successfully connected!')
 
     if not db.collect_projects():
-        shutdown(db)
+        _shutdown(db)
 
     for _id in db.data.get('project'):
-        LOGGER.debug('Project %s: %s', _id, db.data['project'].get(_id))
+        logger.debug('Project %s: %s', _id, db.data['project'].get(_id))
 
     project_id = int(input("Enter a project id: "))
 
     if not db.collect_images(project_id):
-        shutdown(db)
+        _shutdown(db)
 
     for img_id in db.data['image'][project_id]:
         name, priority, created, pr_string, opt_id, produced_image_id = db.data['image'][project_id][img_id]
-        LOGGER.debug('%s - %s - %s', name, created, priority)
+        logger.debug('%s - %s - %s', name, created, priority)
 
-    shutdown(db)
+    _shutdown(db)
+
+
+if __name__ == '__main__':
+    _main()

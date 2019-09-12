@@ -96,7 +96,7 @@ class DatapoolDialog(QDialog):
         self.connection_timeout.timeout.connect(self.connection_timed_out)
 
         # Make sure to end thread on App close
-        self.ui.is_about_to_quit.connect(self._finalize_dialog)
+        self.ui.is_about_to_quit.connect(self.close)
 
         # Intercept mouse press events from project view
         self.org_view_mouse_press_event = self.project_view.mousePressEvent
@@ -242,7 +242,6 @@ class DatapoolDialog(QDialog):
         self.close()
 
     def accept(self):
-        self._finalize_dialog(False)
         self.create_presets()
 
         self._asked_for_close = True
@@ -256,9 +255,12 @@ class DatapoolDialog(QDialog):
 
         LOGGER.info('Datapool window close event triggered. Aborting database connection')
         # End thread
-        self._finalize_dialog()
+        if not self._finalize_dialog():
+            close_event.ignore()
+            return False
 
         close_event.accept()
+        return True
 
     def _ask_abort_close(self):
         if self._asked_for_close:
@@ -278,9 +280,11 @@ class DatapoolDialog(QDialog):
         # Close confirmed
         return False
 
-    def _finalize_dialog(self, self_destruct: bool=True):
+    def _finalize_dialog(self, self_destruct: bool=True) -> bool:
         LOGGER.debug('Datapool dialog is finishing tasks.')
-        self.dp.close()
+        if not self.dp.close():
+            return False
 
         if self_destruct:
             self.deleteLater()
+        return True

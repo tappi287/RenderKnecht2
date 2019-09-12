@@ -106,7 +106,7 @@ class Settings:
         return False
 
     @staticmethod
-    def pickle_load(file: Path, compressed: bool=False) -> object:
+    def pickle_load(file: Path, compressed: bool=False) -> Any:
         obj = None
 
         try:
