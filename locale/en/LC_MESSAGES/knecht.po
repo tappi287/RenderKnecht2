@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2019-09-11 18:14+0200\n"
-"PO-Revision-Date: 2019-09-11 18:15+0200\n"
+"POT-Creation-Date: 2019-09-13 08:21+0200\n"
+"PO-Revision-Date: 2019-09-13 08:22+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: modules/gui/widgets\db_dialog.py:60
 msgid "Datapool Projekte"
@@ -84,20 +84,20 @@ msgstr "Timeout"
 msgid "Zeitüberschreitung bei Datenbankverbindung. Die Verbindung wurde automatisch getrennt."
 msgstr "Database connection timeout. The connection has been automatically disconnected."
 
-#: modules/gui/widgets\db_dialog.py:270 modules/gui/widgets\excel_dialog.py:432
+#: modules/gui/widgets\db_dialog.py:272 modules/gui/widgets\excel_dialog.py:432
 msgid "Importvorgang"
 msgstr "Import process"
 
-#: modules/gui/widgets\db_dialog.py:271 modules/gui/widgets\excel_dialog.py:433
+#: modules/gui/widgets\db_dialog.py:273 modules/gui/widgets\excel_dialog.py:433
 msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr "Do you really want to cancel this process?"
 
-#: modules/gui/widgets\db_dialog.py:272 modules/gui/widgets\excel_dialog.py:434
+#: modules/gui/widgets\db_dialog.py:274 modules/gui/widgets\excel_dialog.py:434
 #: modules/gui/wizard\wizard.py:206
 msgid "Ja"
 msgstr "Yes"
 
-#: modules/gui/widgets\db_dialog.py:273 modules/gui/widgets\excel_dialog.py:435
+#: modules/gui/widgets\db_dialog.py:275 modules/gui/widgets\excel_dialog.py:435
 #: modules/gui/wizard\wizard.py:207
 msgid "Nein"
 msgstr "No"
@@ -1588,31 +1588,31 @@ msgstr "{}: {}<br />"
 msgid "<b>Achtung!</b><br /><i>{}</i><br />Es wurden Kameraeinstellungen gefunden die nicht an DeltaGen gesendet werden können:<br />{}"
 msgstr "<b>Attention!</b><br /><i>{}</i><br />Some Camera Settings cannot be sent to DeltaGen:<br />{}"
 
-#: modules\knecht_datapool.py:88
+#: modules\knecht_datapool.py:87
 msgid "Keine Datenbankkonfiguration verfügbar. Datapool über das Netzwerk erreichbar?"
 msgstr "Database configuration not found. Datapool available on the Network?"
 
-#: modules\knecht_datapool.py:245 modules\knecht_datapool.py:258
+#: modules\knecht_datapool.py:249 modules\knecht_datapool.py:262
 msgid "Datenbank Fehler:\n"
 msgstr "Database error:\n"
 
-#: modules\knecht_datapool.py:249
+#: modules\knecht_datapool.py:253
 msgid ""
 "Kann keine Verbindung zur Datenbank herstellen!\n"
 "{}"
 msgstr ""
-"Can not connect to database!\n"
+"Cannot connect to the database!\n"
 "{}"
 
-#: modules\knecht_datapool.py:251
+#: modules\knecht_datapool.py:255
 msgid ""
 "Kann Datenbank nicht finden!\n"
 "{}"
 msgstr ""
-"Can not locate database!\n"
+"Can't find database!\n"
 "{}"
 
-#: modules\knecht_datapool.py:253
+#: modules\knecht_datapool.py:257
 msgid ""
 "Unbekannter Fehler:\n"
 "{}"
@@ -1620,9 +1620,13 @@ msgstr ""
 "Unknown error:\n"
 "{}"
 
-#: modules\knecht_datapool.py:265
+#: modules\knecht_datapool.py:269
 msgid "Die Anfrage an die Datenbank resultierte in keinem Ergebnis."
 msgstr "The request to the database did not result in any result."
+
+#: modules\knecht_datapool.py:381
+msgid "Netzwerkverbindung konnte nicht beendet werden. Bitte warten und in einer Minute erneut versuchen."
+msgstr "Network connection could not be terminated. Please wait and try again in a minute."
 
 #: modules\knecht_deltagen.py:162
 msgid "DeltaGen Verbindung erfolgreich verifiziert."

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-09-11 18:14+0200\n"
+"POT-Creation-Date: 2019-09-13 08:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,22 +83,22 @@ msgstr ""
 msgid "Zeitüberschreitung bei Datenbankverbindung. Die Verbindung wurde automatisch getrennt."
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:270
+#: modules/gui/widgets\db_dialog.py:272
 #: modules/gui/widgets\excel_dialog.py:432
 msgid "Importvorgang"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:271
+#: modules/gui/widgets\db_dialog.py:273
 #: modules/gui/widgets\excel_dialog.py:433
 msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:272
+#: modules/gui/widgets\db_dialog.py:274
 #: modules/gui/widgets\excel_dialog.py:434 modules/gui/wizard\wizard.py:206
 msgid "Ja"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:273
+#: modules/gui/widgets\db_dialog.py:275
 #: modules/gui/widgets\excel_dialog.py:435 modules/gui/wizard\wizard.py:207
 msgid "Nein"
 msgstr ""
@@ -1595,35 +1595,39 @@ msgstr ""
 msgid "<b>Achtung!</b><br /><i>{}</i><br />Es wurden Kameraeinstellungen gefunden die nicht an DeltaGen gesendet werden können:<br />{}"
 msgstr ""
 
-#: modules\knecht_datapool.py:88
+#: modules\knecht_datapool.py:87
 msgid "Keine Datenbankkonfiguration verfügbar. Datapool über das Netzwerk erreichbar?"
 msgstr ""
 
-#: modules\knecht_datapool.py:245 modules\knecht_datapool.py:258
+#: modules\knecht_datapool.py:249 modules\knecht_datapool.py:262
 msgid ""
 "Datenbank Fehler:\n"
 msgstr ""
 
-#: modules\knecht_datapool.py:249
+#: modules\knecht_datapool.py:253
 msgid ""
 "Kann keine Verbindung zur Datenbank herstellen!\n"
 "{}"
 msgstr ""
 
-#: modules\knecht_datapool.py:251
+#: modules\knecht_datapool.py:255
 msgid ""
 "Kann Datenbank nicht finden!\n"
 "{}"
 msgstr ""
 
-#: modules\knecht_datapool.py:253
+#: modules\knecht_datapool.py:257
 msgid ""
 "Unbekannter Fehler:\n"
 "{}"
 msgstr ""
 
-#: modules\knecht_datapool.py:265
+#: modules\knecht_datapool.py:269
 msgid "Die Anfrage an die Datenbank resultierte in keinem Ergebnis."
+msgstr ""
+
+#: modules\knecht_datapool.py:381
+msgid "Netzwerkverbindung konnte nicht beendet werden. Bitte warten und in einer Minute erneut versuchen."
 msgstr ""
 
 #: modules\knecht_deltagen.py:162

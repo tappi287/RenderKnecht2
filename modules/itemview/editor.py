@@ -164,15 +164,14 @@ class KnechtEditor(QObject):
         move_steps = 10 if jump else 1
 
         if move_up:
-            first_idx = proxy_index_ls[rows.index(min(rows))]  # Index with smallest row number
+            first_idx = proxy_index_ls[rows.index(min(rows))]  # Index with smallest row number inside selection
             destination_row = max(0, first_idx.row() - move_steps)
             destination_idx = first_idx.siblingAtRow(destination_row)
         else:
-            last_idx = proxy_index_ls[rows.index(max(rows))]  # Index with greatest row number
+            last_idx = proxy_index_ls[rows.index(max(rows))]  # Index with largest row number inside selection
             destination_row = min(self.view.model().rowCount(), last_idx.row() + move_steps)
             destination_idx = last_idx.siblingAtRow(destination_row)
 
-        LOGGER.debug('Move Target: %s', destination_idx.siblingAtColumn(Kg.NAME).data(Qt.DisplayRole))
         self.move_rows(destination_idx)
 
     def move_rows(self, destination_idx: QModelIndex):
