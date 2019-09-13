@@ -82,6 +82,7 @@ class FakomWizardPage(QWizardPage):
         new_view.setSelectionBehavior(QTreeView.SelectRows)
         new_view.setEditTriggers(QTreeView.NoEditTriggers)
         new_view.setDragDropMode(QTreeView.NoDragDrop)
+        new_view.supports_drag_move = False
         new_view.setIndentation(15)
 
         # Setup filter widget

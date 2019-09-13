@@ -42,7 +42,7 @@ class KnechtTreeView(QTreeView):
         self.progress_overlay = ProgressOverlay(self)
         self.progress = self.progress_overlay.progress
 
-        # Setup tree view progress bar helper
+        # -- Setup tree view progress bar helper
         self.progress_msg = ShowTreeViewProgressMessage(self)
 
         # -- Add an undo stack to the view

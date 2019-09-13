@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-09-13 08:21+0200\n"
+"POT-Creation-Date: 2019-09-13 14:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,12 +94,14 @@ msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr ""
 
 #: modules/gui/widgets\db_dialog.py:274
-#: modules/gui/widgets\excel_dialog.py:434 modules/gui/wizard\wizard.py:206
+#: modules/gui/widgets\excel_dialog.py:434
+#: modules/gui/widgets\menu_tree.py:105 modules/gui/wizard\wizard.py:206
 msgid "Ja"
 msgstr ""
 
 #: modules/gui/widgets\db_dialog.py:275
-#: modules/gui/widgets\excel_dialog.py:435 modules/gui/wizard\wizard.py:207
+#: modules/gui/widgets\excel_dialog.py:435
+#: modules/gui/widgets\menu_tree.py:106 modules/gui/wizard\wizard.py:207
 msgid "Nein"
 msgstr ""
 
@@ -504,7 +506,7 @@ msgid "Einfügen\tStrg+V"
 msgstr ""
 
 #: modules/gui/widgets\menu_edit.py:86
-#: modules/gui/widgets\menu_tree_context.py:75
+#: modules/gui/widgets\menu_tree_context.py:79
 #: modules/gui/wizard\preset.py:296
 msgid "Selektierte Zeilen entfernen\tEntf"
 msgstr ""
@@ -623,7 +625,7 @@ msgid "Sprache"
 msgstr ""
 
 #: modules/gui/widgets\menu_tab_context.py:21
-#: modules/gui/widgets\menu_tree_context.py:26
+#: modules/gui/widgets\menu_tree_context.py:27
 msgid "Baum Kontextmenü"
 msgstr ""
 
@@ -643,27 +645,79 @@ msgstr ""
 msgid "Dokumenten Pfad wurde in die Zwischenablage kopiert.<br/><i>{}<i>"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:39
+#: modules/gui/widgets\menu_tree.py:19
+msgid "Baum"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree.py:30
+msgid "Breite der Kopfspalten an Bauminhalt anpassen"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree.py:32
+msgid "Schnellansicht ein-/ausschalten"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree.py:34
+msgid "Bauminhalt vollständig verwerfen"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree.py:40
+msgid "Filter zurücksetzen\tEsc"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree.py:42
+msgid "Bauminhalte vollständig einklappen\t2x Esc"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree.py:50
+msgid "Selektierte Elemente aufwärts verschieben\tPfeil auf"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree.py:53
+msgid "Selektierte Elemente abwärts verschieben\tPfeil ab"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree.py:56
+msgid "Selektierte Elemente 10 Schritte aufwärts verschieben\tBild auf"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree.py:59
+msgid "Selektierte Elemente 10 Schritte abwärts verschieben\tBild ab"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree.py:102
+msgid "Bauminhalt verwerfen"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree.py:103
+msgid "Soll der Bauminhalt von<br/><i>{}</i><br/>wirklich vollständig <b>verworfen</b> werden?"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree.py:125
+msgid "{} vollständig verwerfen"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree_context.py:41
 msgid "Senden an DeltaGen"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:40
+#: modules/gui/widgets\menu_tree_context.py:42
 msgid "Selektierte Bauminhalte als Variantenschaltung mit vorherigem Reset an DeltaGen senden."
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:47
+#: modules/gui/widgets\menu_tree_context.py:49
 msgid "Ohne Reset an DeltaGen senden"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:48
+#: modules/gui/widgets\menu_tree_context.py:50
 msgid "Selektierte Bauminhalte ohne einen Reset an DeltaGen senden."
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:55
+#: modules/gui/widgets\menu_tree_context.py:57
 msgid "PR String in Zwischenablage kopieren"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:88
+#: modules/gui/widgets\menu_tree_context.py:92
 msgid "Hide ID columns"
 msgstr ""
 

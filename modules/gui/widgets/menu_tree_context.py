@@ -8,6 +8,7 @@ from PySide2.QtWidgets import QAction, QActionGroup, QMenu, QPushButton
 from modules.globals import get_settings_dir
 from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.menu_create import CreateMenu
+from modules.gui.widgets.menu_tree import TreeMenu
 from modules.gui.widgets.path_util import path_exists
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.knecht_update import restart_knecht_app
@@ -35,6 +36,7 @@ class TreeContextMenu(QMenu):
 
         self.edit_menu = self.ui.main_menu.edit_menu
         self.create_menu = CreateMenu(self)
+        self.tree_menu = TreeMenu(self, ui)
 
         self.send_dg_action = QAction(IconRsc.get_icon('paperplane'), _('Senden an DeltaGen'), self)
         dg_tip_1 = _('Selektierte Bauminhalte als Variantenschaltung mit vorherigem Reset an DeltaGen senden.')
@@ -67,6 +69,8 @@ class TreeContextMenu(QMenu):
         # ---- Prepare Context Menus & Actions ----
         # ---- Add main menu > edit -----
         self.addMenu(self.edit_menu)
+        # ---- Add main menu > tree -----
+        self.addMenu(self.tree_menu)
         # ---- Add main menu > create -----
         self.addMenu(self.create_menu)
 
