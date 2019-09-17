@@ -1,6 +1,7 @@
 from typing import List, Union
 
 from PySide2.QtCore import QObject, QTimer, Slot
+from PySide2.QtWidgets import QPlainTextEdit
 
 from modules.itemview.item import KnechtItem
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
@@ -65,6 +66,10 @@ class VariantInputFields(QObject):
         # Add tree item and sort order
         new_item = self.add_variant_item(variant_set_str, variant_str)
         self.add_items([new_item])
+
+        # Clear Input field
+        self.ui.plainTextEdit_addVariant_Setname.clear()
+        self.ui.plainTextEdit_addVariant_Variant.clear()
 
     def add_items(self, items):
         self.view.editor.create_top_level_rows(items)
