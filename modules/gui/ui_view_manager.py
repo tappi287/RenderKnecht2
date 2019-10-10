@@ -116,6 +116,9 @@ class UiViewManager(ViewManager):
         # Connect missing reset signal
         tree_view.reset_missing.connect(self.ui.report_missing_reset)
 
+        # Connect file dropped signal
+        tree_view.file_dropped.connect(self.ui.main_menu.file_menu.guess_open_file)
+
         # Hide ID columns
         tree_view.hideColumn(Kg.REF)
         tree_view.hideColumn(Kg.ID)

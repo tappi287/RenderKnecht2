@@ -144,7 +144,7 @@ def ask_process() -> int:
           "\t\t3 - Only upload existing Installer to remote directory.\n")
     answer = input('Answer: ')
 
-    if answer not in ['0', '1', '2', 'q', 'exit', 'quit']:
+    if answer not in ['0', '1', '2', '3', 'q', 'exit', 'quit']:
         ask_process()
 
     if answer.isdigit():

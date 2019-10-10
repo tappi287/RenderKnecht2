@@ -1,7 +1,8 @@
+from pathlib import Path
 from typing import Union
 
 from PySide2.QtCore import QTimer, Qt, Signal
-from PySide2.QtGui import QIcon, QPixmap
+from PySide2.QtGui import QIcon, QPixmap, QDragEnterEvent, QDropEvent
 from PySide2.QtWidgets import QMainWindow, QSystemTrayIcon, QTreeView, QWidget
 from PySide2.QtWinExtras import QWinTaskbarButton
 
@@ -109,6 +110,40 @@ class KnechtWindow(QMainWindow):
 
         # ---- Translate Ui elements loaded from ui file ----
         translate_main_ui(self)
+
+        self.setAcceptDrops(True)
+
+    def _get_drop_event_files(self, mime_data):
+        files = []
+        for url in mime_data.urls():
+            if not url.isLocalFile():
+                continue
+
+            file = Path(url.toLocalFile())
+
+            if file.suffix.casefold() in self.main_menu.file_menu.supported_file_types:
+                files.append(file)
+
+        return files
+
+    def dragEnterEvent(self, event: QDragEnterEvent):
+        if event.mimeData().hasUrls():
+            if self._get_drop_event_files(event.mimeData()):
+                event.acceptProposedAction()
+            else:
+                event.ignore()
+
+    def dropEvent(self, event: QDropEvent):
+        if event.mimeData().hasUrls():
+            files = self._get_drop_event_files(event.mimeData())
+            if files:
+                for file in files:
+                    self.main_menu.file_menu.guess_open_file(file)
+                event.accept()
+                return True
+
+        event.ignore()
+        return False
 
     def app_focus_changed(self, old_widget: QWidget, new_widget: QWidget):
         if isinstance(new_widget, KnechtTreeView):

@@ -8,7 +8,7 @@ from PySide2.QtCore import QFile, QObject, Slot, QEvent, Signal, QTimer, Qt
 from PySide2.QtGui import QMouseEvent
 from PySide2.QtWidgets import QWidget
 
-from modules.globals import UI_PATH, get_settings_dir
+from modules.globals import UI_PATH, get_settings_dir, get_current_modules_dir
 from modules.gui.ui_loader import loadUi
 from modules.log import init_logging
 
@@ -31,7 +31,7 @@ class SetupWidget(QObject):
         logging.root.setLevel(logging.ERROR)
 
         # Load the Ui file
-        ui_file = Path(UI_PATH + '/' + ui_file)
+        ui_file = Path(get_current_modules_dir()) / UI_PATH / ui_file
         file = QFile(ui_file.as_posix())
         file.open(QFile.ReadOnly)
         loadUi(file, widget_cls, custom_widgets)

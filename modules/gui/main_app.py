@@ -1,8 +1,9 @@
 import logging
 import sys
+from pathlib import Path
 
 from PySide2 import QtWidgets
-from PySide2.QtCore import QFile, QTextStream, QTimer
+from PySide2.QtCore import QFile, QTextStream, QTimer, QEvent
 
 from modules.globals import MAIN_LOGGER_NAME, Resource
 from modules.gui.gui_utils import KnechtExceptionHook
@@ -10,6 +11,7 @@ from modules.gui.main_ui import KnechtWindow
 from modules.gui.ui_resource import FontRsc, IconRsc
 from modules.gui.ui_splash_screen import show_splash_screen_movie
 from modules.gui.widgets.message_box import AskToContinueCritical, GenericErrorBox
+from modules.gui.widgets.path_util import path_exists
 from modules.knecht_deltagen import SendToDeltaGen
 from modules.knecht_render import KnechtRender
 from modules.knecht_session import KnechtSession
@@ -48,6 +50,7 @@ def load_style(app):
 
 class KnechtApp(QtWidgets.QApplication):
     def __init__(self, version, logging_queue):
+        LOGGER.info('Sys argv: %s', sys.argv)
         super(KnechtApp, self).__init__(sys.argv)
 
         splash = show_splash_screen_movie(self)
@@ -89,8 +92,46 @@ class KnechtApp(QtWidgets.QApplication):
 
         self.session_handler = None
 
+        self.file_queue = list()
+        if len(sys.argv) > 1:
+            for a in sys.argv:
+                if path_exists(a):
+                    self.file_queue.append(Path(a))
+
+            QTimer.singleShot(250, self._open_file_deferred)
+
         # Restore SessionData
         QTimer.singleShot(50, self.init_session)
+
+    def event(self, event):
+        return self.file_open_event(event)
+
+    def file_open_event(self, event):
+        if event.type() == QEvent.FileOpen:
+            LOGGER.info('Open file event with url: %s %s', event.url(), event)
+
+            url = event.url()
+            if not url.isLocalFile():
+                return False
+
+            local_file_path = Path(url.toLocalFile())
+            LOGGER.info('Opening file from FileOpenEvent: %s', local_file_path.as_posix())
+
+            self.file_queue.append(local_file_path)
+            QTimer.singleShot(150, self._open_file_deferred)
+            return True
+
+        return False
+
+    def _open_file_deferred(self):
+        if not self.file_queue:
+            return
+
+        file = self.file_queue.pop()
+        self.ui.main_menu.file_menu.guess_open_file(file)
+
+        if self.file_queue:
+            QTimer.singleShot(250, self._open_file_deferred)
 
     def ui_close_event(self, close_event):
         """ Handle the MainWindow close event """

@@ -112,6 +112,7 @@ QPushButton:hover {color: rgb(85, 170, 255);
       <widget class="QLabel" name="news">
        <property name="text">
         <string>&lt;ul&gt;
+&lt;li&gt;drop xml/rksession/xlsx documents on ui or trees to open&lt;/li&gt;
 &lt;li&gt;add document tab context with ability to copy paths&lt;/li&gt;
 &lt;li&gt;Datapool Image entry import&lt;/li&gt;
 &lt;li&gt;add DeltaGen Menu option to display link to last sent Preset&lt;/li&gt;

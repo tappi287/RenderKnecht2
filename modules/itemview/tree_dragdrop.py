@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from PySide2.QtCore import QItemSelectionModel, QMimeData, QModelIndex, QObject, Qt
+from PySide2.QtCore import QItemSelectionModel, QMimeData, QModelIndex, QObject, Qt, QTimer
 from PySide2.QtGui import QDragMoveEvent, QDropEvent
 
 from modules.gui.clipboard import TreeClipboard
@@ -33,6 +33,10 @@ class KnechtDragDrop(QObject):
 
         # Create a drag n drop specific clipboard
         self.clipboard = TreeClipboard()
+
+        self.camera_item_verification_timer = QTimer()
+        self.camera_item_verification_timer.setSingleShot(True)
+        self.camera_item_verification_timer.timeout.connect(self._verify_camera_items_deferred)
 
         # Overwrite tree drop event
         view.dropEvent = self.drop_event
@@ -126,7 +130,7 @@ class KnechtDragDrop(QObject):
         order = int(destination_index.siblingAtColumn(Kg.ORDER).data(Qt.DisplayRole) or '-1') + 1
         LOGGER.debug('File Drop@%s: %s', order, file.as_posix())
 
-        if file.suffix in self.supported_file_types:
+        if file.suffix.casefold() in self.supported_file_types:
             cam_info_img = KnechtImageCameraInfo(file)
             cam_info_img.read_image()
 
@@ -141,8 +145,14 @@ class KnechtDragDrop(QObject):
                 else:
                     self.view.info_overlay.display(_('Konnte Datei mit Kamera Daten nicht lesen.\n'), 3000)
                     LOGGER.error('Could not read file with camera data %s', file.as_posix())
+        else:
+            self.view.file_dropped.emit(file)
+            return
 
         # Validate created camera items
+        self.camera_item_verification_timer.start(150)
+
+    def _verify_camera_items_deferred(self):
         KnechtImageCameraInfo.validate_camera_items(self.view)
 
     def _select_drop_index(self, destination_index: QModelIndex):

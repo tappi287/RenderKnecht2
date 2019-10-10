@@ -1,4 +1,5 @@
 import time
+from pathlib import Path
 from typing import List
 
 from PySide2.QtCore import QModelIndex, QTimer, Qt, Signal, Slot
@@ -32,6 +33,7 @@ class KnechtTreeView(QTreeView):
     view_refreshed = Signal()
     clean_changed = Signal(bool, object)
     reset_missing = Signal()
+    file_dropped = Signal(Path)
 
     block_timeout = 60000
 

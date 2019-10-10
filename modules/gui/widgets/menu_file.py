@@ -30,6 +30,7 @@ class FileMenu(QObject):
     new_document_count = 0
     current_progress_obj = ShowTreeViewProgressMessage(None)
     load_save_mgr = None
+    supported_file_types = ('.xml', '.rksession', '.xlsx')
 
     def __init__(self, ui, menu: QMenu=None):
         """ The File menu
@@ -61,6 +62,20 @@ class FileMenu(QObject):
         self.load_save_mgr = SaveLoadController(self)
         self.load_save_mgr.model_loaded.connect(self.model_loaded)
         self.load_save_mgr.load_aborted.connect(self._load_aborted)
+
+    @Slot(Path)
+    def guess_open_file(self, local_file_path: Path) -> bool:
+        if local_file_path.suffix.casefold() == '.xml':
+            self.open_xml(local_file_path.as_posix())
+            return True
+        elif local_file_path.suffix.casefold() == '.rksession':
+            self.import_menu.open_wizard(local_file_path)
+            return True
+        elif local_file_path.suffix.casefold() == '.xlsx':
+            self.import_menu.open_xlsx(local_file_path)
+            return True
+
+        return False
 
     def setup_file_menu(self):
         insert_before = 0
