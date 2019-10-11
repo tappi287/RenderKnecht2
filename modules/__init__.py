@@ -1,6 +1,5 @@
-from modules.settings import KnechtSettings
-
 try:
+    from modules.settings import KnechtSettings
     KnechtSettings.load()
     print('Settings loaded from file.')
 except Exception as e:

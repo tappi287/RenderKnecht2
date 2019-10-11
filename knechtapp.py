@@ -1,6 +1,6 @@
 import logging
-import sys
 import multiprocessing
+import sys
 from multiprocessing import Queue
 
 from PySide2.QtCore import Qt
@@ -9,16 +9,17 @@ from PySide2.QtWidgets import QApplication
 from modules.globals import FROZEN, MAIN_LOGGER_NAME
 from modules.gui.gui_utils import KnechtExceptionHook
 from modules.gui.main_app import KnechtApp
-from modules.log import init_logging, setup_log_queue_listener, setup_logging
 from modules.gui.widgets.about_page import InfoMessage
+from modules.log import init_logging, setup_log_queue_listener, setup_logging
 from modules.settings import KnechtSettings, delayed_log_setup
+from modules.singleton import SingleInstance
 from ui import darkstyle, gui_resource
 
 if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     print('Using high dpi Pixmaps')
 
-VERSION = '1.20'
+VERSION = '1.21'
 
 InfoMessage.ver = VERSION
 InfoMessage.lic = 'GPL v3'
@@ -54,6 +55,8 @@ def shutdown(log_listener):
 
 
 def main():
+    s = SingleInstance(flavor_id='RenderKnecht2instance')  # will sys.exit(-1) if other instance is running
+
     multiprocessing.freeze_support()
     if FROZEN:
         # Set Exception hook
@@ -89,9 +92,8 @@ def main():
     app.setApplicationName('RenderKnecht')
     app.setApplicationDisplayName(app.applicationName())
     app.setApplicationVersion(VERSION)
+
     result = app.exec_()
-    #
-    #
 
     #
     #
@@ -104,6 +106,7 @@ def main():
     #
     shutdown(log_listener)
 
+    del s
     sys.exit(result)
 
 
