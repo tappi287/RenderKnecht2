@@ -31,6 +31,8 @@ UPDATE_INSTALL_FILE = 'RenderKnecht2_Setup_{version}_win64.exe'
 DG_TCP_IP = 'localhost'
 DG_TCP_PORT = 3333
 
+# KnechtViewer executable
+KNECHT_VIEWER_BIN = 'KnechtViewer.exe'
 
 # Frozen or Debugger
 if getattr(sys, 'frozen', False):

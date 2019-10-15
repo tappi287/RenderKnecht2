@@ -4,10 +4,12 @@ from PySide2.QtCore import QTimer, QObject, Slot, Signal
 from PySide2.QtGui import QKeySequence
 from PySide2.QtWidgets import QAction, QMenu
 
+from modules.globals import get_current_modules_dir, KNECHT_VIEWER_BIN
 from modules.gui.widgets.menu_import import ImportMenu
 from modules.gui.widgets.path_util import path_exists
 from modules.gui.widgets.progress_overlay import ShowTreeViewProgressMessage
 from modules.itemview.model import KnechtModel
+from modules.knecht_update import start_app
 from modules.settings import KnechtSettings
 from modules.gui.ui_view_manager import UiViewManager
 from modules.gui.ui_resource import IconRsc
@@ -31,6 +33,8 @@ class FileMenu(QObject):
     current_progress_obj = ShowTreeViewProgressMessage(None)
     load_save_mgr = None
     supported_file_types = ('.xml', '.rksession', '.xlsx')
+
+    viewer_app = Path(get_current_modules_dir()) / KNECHT_VIEWER_BIN
 
     def __init__(self, ui, menu: QMenu=None):
         """ The File menu
@@ -115,6 +119,17 @@ class FileMenu(QObject):
 
         self.menu.insertSeparator(insert_before)
 
+        # ---- Apps ----
+        start_knecht_viewer = QAction(_('KnechtViewer starten'), self.menu)
+        start_knecht_viewer.triggered.connect(self.start_knecht_viewer)
+        start_knecht_viewer.setIcon(IconRsc.get_icon('img'))
+        self.menu.insertAction(insert_before, start_knecht_viewer)
+        if not path_exists(self.viewer_app):
+            LOGGER.info('KnechtViewer executable could not be found: %s', self.viewer_app.as_posix())
+            start_knecht_viewer.setEnabled(False)
+
+        self.menu.insertSeparator(insert_before)
+
         # ---- Recent files menu ----
         self.recent_menu.aboutToShow.connect(self.update_recent_files_menu)
         self.menu.insertMenu(insert_before, self.recent_menu)
@@ -126,6 +141,9 @@ class FileMenu(QObject):
         self.view_mgr.create_view(None, new_file)
 
         self.new_document_count += 1
+
+    def start_knecht_viewer(self):
+        start_app(self.viewer_app)
 
     def save_xml(self):
         if not self.view_mgr.current_tab_is_document_tab():

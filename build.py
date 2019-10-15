@@ -3,11 +3,14 @@ from knechtapp import VERSION
 from subprocess import Popen
 from private.sftp import Remote
 from modules.globals import UPDATE_INSTALL_FILE, UPDATE_VERSION_FILE
+from distutils.dir_util import copy_tree
 
 from lxml import etree as Et
 
 import shutil
 import winreg
+
+EXTERNAL_APP_DIRS = [Path('E:\PycharmProjects\KnechtViewer\dist\KnechtViewer')]
 
 SPEC_FILE = "knechtapp.spec"
 ISS_FILE = "knechtapp_win64_setup.iss"
@@ -106,6 +109,15 @@ def main(process: int=0):
         if p.returncode != 0:
             print('PyInstaller could not build executable!')
             return
+
+        # Copy/Add external applications
+        dist_dir = Path(DIST_DIR) / Path(DIST_EXE_DIR)
+
+        for src_dir in EXTERNAL_APP_DIRS:
+            print('Adding external application from dir: ', src_dir.as_posix())
+            result = copy_tree(src_dir.absolute().as_posix(), dist_dir.absolute().as_posix(), update=1)
+            if result:
+                print('Added app folder: ', src_dir.name)
 
     if process in (1, 2):
         print('\nRunning Inno Studio Setup Script...')

@@ -27,8 +27,12 @@ _ = lang.gettext
 
 def _start_knecht_app():
     app_path = Path(os.path.join(get_current_modules_dir(), 'RenderKnecht.exe'))
+    time.sleep(2)
+    start_app(app_path)
+
+
+def start_app(app_path: Path):
     if path_exists(app_path) and app_path.is_file():
-        time.sleep(2)
         Popen(app_path.as_posix())
 
 

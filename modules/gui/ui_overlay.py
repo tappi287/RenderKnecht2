@@ -1,13 +1,12 @@
 import re
 
 from PySide2 import QtWidgets
-from PySide2.QtCore import QPropertyAnimation, QTimer, Qt, QAbstractAnimation
+from PySide2.QtCore import QAbstractAnimation, QPropertyAnimation, QTimer, Qt
 from PySide2.QtGui import QEnterEvent, QMouseEvent, QMovie, QRegion
 
 from modules.globals import Resource
 from modules.gui.animation import BgrAnimation
 from modules.gui.gui_utils import SetupWidget
-from modules.gui.ui_resource import FontRsc
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -275,10 +274,6 @@ class MainWindowOverlay(InfoOverlay):
 
 
 class _OverlayWidget(QtWidgets.QWidget):
-    # Overlay specific font to correctly calculate font metrics
-    # which do not get updated when widget font style or size changes
-    overlay_font = FontRsc.get_font('SourceSansPro-Regular')
-
     def __init__(self, parent):
         super(_OverlayWidget, self).__init__(parent)
 

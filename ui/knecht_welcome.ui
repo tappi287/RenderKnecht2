@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>534</width>
-    <height>466</height>
+    <width>493</width>
+    <height>411</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -109,9 +109,58 @@ QPushButton:hover {color: rgb(85, 170, 255);
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="news">
-       <property name="text">
-        <string>&lt;ul&gt;
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="styleSheet">
+        <string notr="true">* {background: transparent;}</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAsNeeded</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QAbstractScrollArea::AdjustToContents</enum>
+       </property>
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>430</width>
+          <height>110</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="news">
+           <property name="lineWidth">
+            <number>0</number>
+           </property>
+           <property name="text">
+            <string>&lt;ul&gt;
+&lt;li&gt;added standalone KnechtViewer for pixel perfect comparsions of images vs. DeltaGen Viewer&lt;/li&gt;
 &lt;li&gt;drop xml/rksession/xlsx documents on ui or trees to open&lt;/li&gt;
 &lt;li&gt;add document tab context with ability to copy paths&lt;/li&gt;
 &lt;li&gt;Datapool Image entry import&lt;/li&gt;
@@ -122,24 +171,21 @@ QPushButton:hover {color: rgb(85, 170, 255);
 &lt;li&gt;read PR-Options &quot;I&quot; exactly like &quot;L&quot; as default trim line options&lt;/li&gt;
 &lt;li&gt;added Gearbox PR-Family to default INT familys&lt;/li&gt;
 &lt;/ul&gt;</string>
-       </property>
-       <property name="openExternalLinks">
-        <bool>true</bool>
-       </property>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+           <property name="openExternalLinks">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
      </item>
     </layout>
    </item>
