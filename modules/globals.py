@@ -33,6 +33,7 @@ DG_TCP_PORT = 3333
 
 # KnechtViewer executable
 KNECHT_VIEWER_BIN = 'KnechtViewer.exe'
+POS_SCHNUFFI_BIN = 'PosSchnuffi.exe'
 
 # Frozen or Debugger
 if getattr(sys, 'frozen', False):

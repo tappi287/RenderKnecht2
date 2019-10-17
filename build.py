@@ -10,7 +10,8 @@ from lxml import etree as Et
 import shutil
 import winreg
 
-EXTERNAL_APP_DIRS = [Path('E:\PycharmProjects\KnechtViewer\dist\KnechtViewer')]
+EXTERNAL_APP_DIRS = [Path('E:\PycharmProjects\KnechtViewer\dist\KnechtViewer'),
+                     Path('E:\PycharmProjects\PosSchnuffi\dist\PosSchnuffi')]
 
 SPEC_FILE = "knechtapp.spec"
 ISS_FILE = "knechtapp_win64_setup.iss"

@@ -4,7 +4,7 @@ from PySide2.QtCore import QTimer, QObject, Slot, Signal
 from PySide2.QtGui import QKeySequence
 from PySide2.QtWidgets import QAction, QMenu
 
-from modules.globals import get_current_modules_dir, KNECHT_VIEWER_BIN
+from modules.globals import get_current_modules_dir, KNECHT_VIEWER_BIN, POS_SCHNUFFI_BIN
 from modules.gui.widgets.menu_import import ImportMenu
 from modules.gui.widgets.path_util import path_exists
 from modules.gui.widgets.progress_overlay import ShowTreeViewProgressMessage
@@ -35,6 +35,7 @@ class FileMenu(QObject):
     supported_file_types = ('.xml', '.rksession', '.xlsx')
 
     viewer_app = Path(get_current_modules_dir()) / KNECHT_VIEWER_BIN
+    schnuffi_app = Path(get_current_modules_dir()) / POS_SCHNUFFI_BIN
 
     def __init__(self, ui, menu: QMenu=None):
         """ The File menu
@@ -128,6 +129,14 @@ class FileMenu(QObject):
             LOGGER.info('KnechtViewer executable could not be found: %s', self.viewer_app.as_posix())
             start_knecht_viewer.setEnabled(False)
 
+        start_schnuffi_app = QAction(_('POS Schnuffi starten'), self.menu)
+        start_schnuffi_app.triggered.connect(self.start_schnuffi_app)
+        start_schnuffi_app.setIcon(IconRsc.get_icon('dog'))
+        self.menu.insertAction(insert_before, start_schnuffi_app)
+        if not path_exists(self.schnuffi_app):
+            LOGGER.info('KnechtViewer executable could not be found: %s', self.schnuffi_app.as_posix())
+            start_schnuffi_app.setEnabled(False)
+
         self.menu.insertSeparator(insert_before)
 
         # ---- Recent files menu ----
@@ -144,6 +153,9 @@ class FileMenu(QObject):
 
     def start_knecht_viewer(self):
         start_app(self.viewer_app)
+
+    def start_schnuffi_app(self):
+        start_app(self.schnuffi_app)
 
     def save_xml(self):
         if not self.view_mgr.current_tab_is_document_tab():
