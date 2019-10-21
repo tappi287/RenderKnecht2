@@ -29,16 +29,6 @@ class KnechtEditorUtilities:
         self.editor = editor
 
     @classmethod
-    def create_camera_item(cls, name: str, camera_info: dict):
-        item = KnechtItem(None, ('', name, '', 'camera_item', '', KnechtUuidGenerator.create_id(),))
-
-        for idx, (k, v) in enumerate(camera_info.items()):
-            item.append_item_child(
-                KnechtItem(item, (f'{idx:03d}', k, v, '', '', '', KnechtImageCameraInfo.rtt_camera_desc.get(k) or '', ))
-                )
-        return item
-
-    @classmethod
     def insert_child_from_data(cls, model, parent, data):
         new_position = model.rowCount(parent)
         model.insertRow(new_position, parent)
@@ -224,15 +214,12 @@ class KnechtEditorUtilities:
         del copied_items
         return items
 
-    def convert_clipboard(self, items: List[KnechtItem], src_index: QModelIndex,
-                          src_model: KnechtModel, view_origin) -> List[KnechtItem]:
+    def convert_clipboard(self, items: List[KnechtItem], src_index: QModelIndex, view_origin) -> List[KnechtItem]:
         """ When pasting to item level, convert top level items to references. """
         top_level_items = list()
         sub_level_items = list()
 
         origin_src_model = view_origin.model().sourceModel()
-
-        # TODO: Convert top level Separator to Sub_Separator
 
         for item in items:
             new_item = item.copy(copy_children=False)

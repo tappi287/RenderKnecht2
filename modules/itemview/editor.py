@@ -5,6 +5,7 @@ from PySide2.QtWidgets import QTreeView
 
 from modules.itemview.editor_collect import KnechtCollectVariants
 from modules.itemview.editor_copypaste import KnechtEditorCopyPaste
+from modules.itemview.editor_create import KnechtEditorCreate
 from modules.itemview.editor_iterate import KnechtIterateView
 from modules.itemview.editor_match import KnechtMatchItems
 from modules.itemview.editor_render_presets import KnechtEditorRenderPresets
@@ -42,6 +43,7 @@ class KnechtEditor(QObject):
         self.util = KnechtEditorUtilities(self)
         self.collect = KnechtCollectVariants(self.view)
         self.render = KnechtEditorRenderPresets(self)
+        self.create = KnechtEditorCreate(self)
 
         # --- Shortcuts ---
         self.get_current_selection = self.selection.get_current_selection

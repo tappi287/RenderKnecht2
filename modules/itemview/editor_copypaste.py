@@ -61,8 +61,7 @@ class KnechtEditorCopyPaste(QObject):
 
         src_index, src_model = self.editor.get_current_selection()
 
-        child_items = self.editor.util.convert_clipboard(
-            copied_items, src_index, src_model, self.editor.view)
+        child_items = self.editor.util.convert_clipboard(copied_items, src_index, self.editor.view)
 
         return child_items
 
@@ -191,8 +190,7 @@ class KnechtEditorCopyPaste(QObject):
         else:
             undo_cmd_chain = undo_cmd_chain_override
 
-        converted_items = self.editor.util.convert_clipboard(items + referenced_items,
-                                                             current_src_index, src_model, view_origin)
+        converted_items = self.editor.util.convert_clipboard(items + referenced_items, current_src_index, view_origin)
 
         for item in converted_items:
             TreeCommand(undo_cmd_chain, self.editor, current_src_index, src_model, item, add=True)
@@ -215,8 +213,7 @@ class KnechtEditorCopyPaste(QObject):
             undo_cmd_chain = undo_cmd_chain_override
 
         # Add clipboard items as children
-        for item in self.editor.util.convert_clipboard(items + referenced_items,
-                                                       current_src_index, src_model, view_origin):
+        for item in self.editor.util.convert_clipboard(items + referenced_items, current_src_index, view_origin):
             TreeCommand(undo_cmd_chain, self.editor, current_src_index, src_model,
                         item, add=True, parent_idx=current_src_index)
 

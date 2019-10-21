@@ -135,7 +135,7 @@ class KnechtDragDrop(QObject):
             cam_info_img.read_image()
 
             if cam_info_img.is_valid():
-                cam_item = self.view.editor.util.create_camera_item(file.name, cam_info_img.camera_info)
+                cam_item = self.view.editor.create.create_camera_item(file.name, cam_info_img.camera_info)
                 cam_item.setData(Kg.ORDER, f'{order:03d}')
                 self.view.editor.create_top_level_rows([cam_item])
             else:
