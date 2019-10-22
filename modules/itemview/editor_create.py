@@ -2,6 +2,7 @@ from typing import List, Union
 
 from PySide2.QtCore import QObject, Qt, QTimer
 
+from modules.gui.clipboard import TreeClipboard
 from modules.idgen import KnechtUuidGenerator as Kid, KnechtUuidGenerator
 from modules.itemview.item import KnechtItem
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
@@ -103,7 +104,6 @@ class KnechtEditorCreate(QObject):
         """
         super(KnechtEditorCreate, self).__init__(editor)
         self.editor = editor
-        self.queued_item = KnechtItem()
         self.item_count = 0
 
     def create_camera_item(self, name: str, camera_info: dict):
@@ -148,9 +148,9 @@ class KnechtEditorCreate(QObject):
             child_item.setData(Kg.ORDER, f'{item.childCount():03d}', Qt.DisplayRole)
             item.append_item_child(child_item)
 
-        self.queued_item = item
-        QTimer.singleShot(5, self._create_item)
-        return item
+        # Get order data
+        current_src_index, _ = self.editor.get_current_selection()
+        order = self.editor.util.get_order_data(current_src_index)
 
-    def _create_item(self):
-        self.editor.create_top_level_rows([self.queued_item])
+        self.editor.create_top_level_rows([item], at_row=order)
+        return item

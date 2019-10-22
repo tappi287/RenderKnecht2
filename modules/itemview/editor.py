@@ -127,6 +127,9 @@ class KnechtEditor(QObject):
             if not ignore_edit_triggers:
                 return
 
+        # TODO: Removing items created with mismatching proxy/src index causes trouble,
+        # moving those items fixes the issue
+
         index_ls, model = self.get_selection()
 
         if not index_ls:
@@ -139,6 +142,9 @@ class KnechtEditor(QObject):
         undo_cmd_chain = self.create_undo_chain(add=False)
 
         for index in index_ls:
+            if not index.isValid():
+                continue
+
             if index.parent() in index_ls:
                 # Skip rows who will have their parent removed
                 LOGGER.debug('Will not remove row which will have its parent deleted: %s', index.row())
@@ -228,7 +234,7 @@ class KnechtEditor(QObject):
 
         return new_index
 
-    def command_remove_row(self, index, model):
+    def command_remove_row(self, index, model) -> bool:
         """
             Calling this method directly will -NOT- create an Undo command
             Use remove_rows instead
@@ -236,6 +242,8 @@ class KnechtEditor(QObject):
         # LOGGER.debug('Command Removing Row \t@%03d P%03d', index.row(), index.parent().row())
         if not model.removeRows(index.row(), 1, index.parent()):
             LOGGER.error('Could not remove Row %s!', index.row())
+            return False
+        return True
 
     def reset(self):
         self.view.model().sourceModel().reset()

@@ -74,7 +74,7 @@ class KnechtWindow(QMainWindow):
 
         # ---- Setup renderTree ----
         self.renderTree.is_render_view = True
-        self.renderTree.accepted_item_types = [Kg.render_preset]
+        self.renderTree.accepted_item_types = [Kg.render_preset, Kg.preset]
 
         # ---- Internal Clipboard ----
         self.clipboard = TreeClipboard()

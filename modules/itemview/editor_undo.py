@@ -231,6 +231,8 @@ class TreeCommand(QtWidgets.QUndoCommand):
 
         self.debug = TreeUndoCommandChainWorker.debug
 
+        self.previous_remove_failed = False
+
         if not item:
             self.item = model.get_item(index)
 
@@ -250,11 +252,17 @@ class TreeCommand(QtWidgets.QUndoCommand):
         current_idx, new_parent_idx = self.get_current_index('Redo')
 
         if self.add:
+            if self.previous_remove_failed:
+                # Do not add item if previous remove failed
+                self.previous_remove_failed = False
+                return
+
             new_idx = self.editor.command_insert_row(self.model, current_idx, new_parent_idx, self.item)
             self.position = new_idx.row()
             self.parent_position = new_idx.parent().row()
         else:
-            self.editor.command_remove_row(current_idx, self.model)
+            if not self.editor.command_remove_row(current_idx, self.model):
+                self.previous_remove_failed = True
             self.item.setData(0, f'{int(self.item.data(0)) - 1:03d}')
 
         self.editor.iterator.order_items(new_parent_idx)
@@ -263,8 +271,14 @@ class TreeCommand(QtWidgets.QUndoCommand):
         current_idx, new_parent_idx = self.get_current_index('Undo')
 
         if self.add:
-            self.editor.command_remove_row(current_idx, self.model)
+            if not self.editor.command_remove_row(current_idx, self.model):
+                self.previous_remove_failed = True
         else:
+            if self.previous_remove_failed:
+                # Do not add item if previous remove failed
+                self.previous_remove_failed = False
+                return
+
             new_idx = self.editor.command_insert_row(self.model, current_idx, new_parent_idx, self.item)
             if self.debug:
                 LOGGER.debug('Undo created new_idx @%03dP%03d', new_idx.row(), new_idx.parent().row())

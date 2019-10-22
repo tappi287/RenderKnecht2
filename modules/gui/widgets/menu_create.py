@@ -83,9 +83,11 @@ class CreateMenu(QMenu):
         self._create_preset_from_selected(is_user_preset=True)
 
     def _create_render_preset_from_selected(self):
-        self._create_preset_from_selected(is_user_preset=False)
+        rp = self._create_preset_from_selected(is_user_preset=False)
+        if rp:
+            LOGGER.debug('RP ID: %s', rp.data(Kg.ID))
 
-    def _create_preset_from_selected(self, is_user_preset: bool=True):
+    def _create_preset_from_selected(self, is_user_preset: bool=True) -> Union[None, KnechtItem]:
         """ Copy and create a preset from selected items """
         if not self.current_view:
             LOGGER.error('Can not find view in focus to add items to.')
@@ -94,9 +96,9 @@ class CreateMenu(QMenu):
         child_items = self.current_view.editor.copypaste.copy_preset_items_from_selection()
 
         if is_user_preset:
-            self.current_view.editor.create.create_preset_from_items(child_items)
+            return self.current_view.editor.create.create_preset_from_items(child_items)
         else:
-            self.current_view.editor.create.create_render_preset_from_items(child_items)
+            return self.current_view.editor.create.create_render_preset_from_items(child_items)
 
     def _create_camera_item(self):
         if not self.current_view:

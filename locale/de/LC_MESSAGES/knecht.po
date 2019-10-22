@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-09-13 14:36+0200\n"
+"POT-Creation-Date: 2019-10-22 09:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -380,73 +380,65 @@ msgstr ""
 msgid "abgeschlossen am: "
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:24
+#: modules/gui/widgets\menu_create.py:25
 #: modules/gui/widgets\welcome_page.py:36
 msgid "Erstellen"
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:35
+#: modules/gui/widgets\menu_create.py:36
 msgid "User Preset aus Selektion"
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:43
+#: modules/gui/widgets\menu_create.py:44
 msgid "Render Preset aus Selektion"
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:51
+#: modules/gui/widgets\menu_create.py:50
 msgid "Render Preset\tEnthält User Presets, Viewsets und Rendereinstellungen"
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:53
+#: modules/gui/widgets\menu_create.py:52
 msgid "User Preset\tEnthält Varianten und/oder Referenzen"
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:55
+#: modules/gui/widgets\menu_create.py:54
 msgid "Viewset\tEnthält **eine** Shot Variante"
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:57
+#: modules/gui/widgets\menu_create.py:56
 msgid "Reset\tVarianten für eine Resetschaltung"
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:59
+#: modules/gui/widgets\menu_create.py:58
 msgid "Trimline Preset\tVarianten für eine Serienschaltung"
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:61
+#: modules/gui/widgets\menu_create.py:60
 msgid "Paket Preset\tVarianten eines Pakets"
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:63
+#: modules/gui/widgets\menu_create.py:62
 msgid "FaKom Serien\tVarianten einer Serien Farbkombination"
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:65
+#: modules/gui/widgets\menu_create.py:64
 msgid "FaKom Option\tVarianten einer Farbkombination"
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:67
+#: modules/gui/widgets\menu_create.py:66
 msgid "Ausgabe Objekt\tDefiniert einen Ausgabepfad"
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:69
+#: modules/gui/widgets\menu_create.py:68
 msgid "Kamera Objekt\tEnthält 3DS DeltaGen Kameradaten"
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:71
+#: modules/gui/widgets\menu_create.py:70
 msgid "Separator\tNicht-interagierbares Ordnungselement"
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:129
+#: modules/gui/widgets\menu_create.py:107
 msgid "DeltaGen_Kamera_{:03d}"
-msgstr ""
-
-#: modules/gui/widgets\menu_create.py:172
-msgid "<Kein Pfad gesetzt>"
-msgstr ""
-
-#: modules/gui/widgets\menu_create.py:172
-msgid "Ausgabe Pfad"
 msgstr ""
 
 #: modules/gui/widgets\menu_deltagen.py:22
@@ -519,55 +511,63 @@ msgstr ""
 msgid "Selektion aufheben\tStrg+D"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:46
+#: modules/gui/widgets\menu_file.py:52
 msgid "Zuletzt geöffnet"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:73
+#: modules/gui/widgets\menu_file.py:93
 msgid "Neu\tStrg+N"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:79
+#: modules/gui/widgets\menu_file.py:99
 msgid "Öffnen\tStrg+O"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:89
+#: modules/gui/widgets\menu_file.py:109
 msgid "Speichern\tStrg+S"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:95
+#: modules/gui/widgets\menu_file.py:115
 msgid "Speichern unter ...\tStrg+Shift+S"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:110
+#: modules/gui/widgets\menu_file.py:124
+msgid "KnechtViewer starten"
+msgstr ""
+
+#: modules/gui/widgets\menu_file.py:132
+msgid "POS Schnuffi starten"
+msgstr ""
+
+#: modules/gui/widgets\menu_file.py:149
 msgid "Neues_Dokument_{:02d}.xml"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:157
+#: modules/gui/widgets\menu_file.py:202
 msgid "Datei gespeichert:{0}{1:.3}s"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:184
+#: modules/gui/widgets\menu_file.py:229
 msgid "Daten werden gelesen"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:204
+#: modules/gui/widgets\menu_file.py:249
 msgid "{0} in {1:.3}s geladen."
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:246
+#: modules/gui/widgets\menu_file.py:291
 msgid "Zieldatei zum Speichern festlegen?"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:247
+#: modules/gui/widgets\menu_file.py:292
 msgid "Die Datei: <i>{}</i><br>Pfad: <i>{}</i><br>wurde entfernt oder existiert nicht mehr.<br><br>Neue Zieldatei zum Speichern festlegen?"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:252
+#: modules/gui/widgets\menu_file.py:297
 msgid "Speichern unter.."
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:261 modules/gui/wizard\menus.py:77
+#: modules/gui/widgets\menu_file.py:306 modules/gui/wizard\menus.py:77
 msgid "Keine Einträge vorhanden"
 msgstr ""
 
@@ -799,8 +799,8 @@ msgstr ""
 
 #: modules/gui/widgets\message_box.py:69
 #: modules/gui/widgets\message_box.py:114 modules/gui/wizard\wizard.py:48
-#: modules/gui/wizard\wizard.py:189 modules/gui\main_app.py:109
-#: modules/gui\main_app.py:128
+#: modules/gui/wizard\wizard.py:189 modules/gui\main_app.py:150
+#: modules/gui\main_app.py:169
 msgid "Abbrechen"
 msgstr ""
 
@@ -1090,40 +1090,40 @@ msgstr ""
 msgid "Soll der Assistent wirklich abgebrochen werden?"
 msgstr ""
 
-#: modules/gui\main_app.py:105 modules/gui\main_app.py:124
+#: modules/gui\main_app.py:146 modules/gui\main_app.py:165
 msgid "Anwendung beenden"
 msgstr ""
 
-#: modules/gui\main_app.py:106
+#: modules/gui\main_app.py:147
 msgid "Achtung! Ein Render Vorgang läuft.<br><br>Der Vorgang wird durch das Beenden abgebrochen.<br><br>Soll die Anwendung wirklich beendet werden?"
 msgstr ""
 
-#: modules/gui\main_app.py:110 modules/gui\main_app.py:127
+#: modules/gui\main_app.py:151 modules/gui\main_app.py:168
 msgid "Beenden erzwingen"
 msgstr ""
 
-#: modules/gui\main_app.py:125
+#: modules/gui\main_app.py:166
 msgid "Achtung! Ein laufender Prozess sendet Daten an DeltaGen.<br><br>Soll die Anwendung wirklich beendet werden?"
 msgstr ""
 
-#: modules/gui\main_app.py:146
+#: modules/gui\main_app.py:187
 msgid "<h3>Hoppla!</h3>Eine schwerwiegende Anwendungsausnahme ist aufgetreten. Speichern Sie Ihre Daten und starten Sie die Anwendung neu.<br><br>"
 msgstr ""
 
-#: modules/gui\main_app.py:149
+#: modules/gui\main_app.py:190
 msgid "Anwendungsausnahme"
 msgstr ""
 
-#: modules/gui\main_ui.py:59
+#: modules/gui\main_ui.py:60
 msgid "Variantenbaum"
 msgstr ""
 
-#: modules/gui\main_ui.py:59 modules/gui\ui_resource.py:121
+#: modules/gui\main_ui.py:60 modules/gui\ui_resource.py:121
 #: modules\knecht_render.py:643
 msgid "Renderliste"
 msgstr ""
 
-#: modules/gui\main_ui.py:168
+#: modules/gui\main_ui.py:203
 msgid "Die Varianten enthalten keine Reset Schaltung! Die zu sendenden Varianten werden mit vorangegangen Schaltungen kollidieren."
 msgstr ""
 
@@ -1491,7 +1491,7 @@ msgstr ""
 msgid "Neues_Dokument.xml"
 msgstr ""
 
-#: modules/gui\ui_view_manager.py:141
+#: modules/gui\ui_view_manager.py:144
 msgid "Kann Beschäftigten nicht entlassen. Verstoß gegen Arbeitnehmerschutzgesetz festgestellt."
 msgstr ""
 
@@ -1507,6 +1507,106 @@ msgstr ""
 msgid "Erstelle Model {} {:02d}/{:02d}..."
 msgstr ""
 
+#: modules/itemview\editor_create.py:26 modules/itemview\editor_create.py:30
+msgid "Sollte einen im Modell vorhanden Reset Schalter betätigen"
+msgstr ""
+
+#: modules/itemview\editor_create.py:34
+msgid "Benötigte Optionen müssen nach dem Reset erneut geschaltet werden."
+msgstr ""
+
+#: modules/itemview\editor_create.py:40
+msgid "Motorschalter"
+msgstr ""
+
+#: modules/itemview\editor_create.py:40
+msgid "Variante des Modells"
+msgstr ""
+
+#: modules/itemview\editor_create.py:43
+msgid "Serien_Optionen"
+msgstr ""
+
+#: modules/itemview\editor_create.py:43
+msgid "Varianten der Serienumfänge"
+msgstr ""
+
+#: modules/itemview\editor_create.py:47
+msgid "Paket"
+msgstr ""
+
+#: modules/itemview\editor_create.py:49
+msgid "Paket_Variante"
+msgstr ""
+
+#: modules/itemview\editor_create.py:49
+msgid "Varianten der Paket Option"
+msgstr ""
+
+#: modules/itemview\editor_create.py:55
+msgid "Schalter des Shot Varianten Sets"
+msgstr ""
+
+#: modules/itemview\editor_create.py:64
+msgid "Setzt das globale Sampling Level. Benutzt Clamping Einstellungen der geladenen Szene!"
+msgstr ""
+
+#: modules/itemview\editor_create.py:66
+msgid "Datei Erweiterung"
+msgstr ""
+
+#: modules/itemview\editor_create.py:67
+msgid "Setzt die Ausgabe Dateiendung. HDR wird als 8bit ausgegeben und berücksichtigt Viewport Display Adaption."
+msgstr ""
+
+#: modules/itemview\editor_create.py:71
+msgid "Auflösung"
+msgstr ""
+
+#: modules/itemview\editor_create.py:72
+msgid "Auflösung kann auch manuell, mit einem Leerzeichen getrennt, eingegeben werden: X Y"
+msgstr ""
+
+#: modules/itemview\editor_create.py:78
+msgid "XX_Farbschluessel"
+msgstr ""
+
+#: modules/itemview\editor_create.py:79
+msgid "Zweistelliger Farbschluessel"
+msgstr ""
+
+#: modules/itemview\editor_create.py:80
+msgid "PRN_Sitzbezug"
+msgstr ""
+
+#: modules/itemview\editor_create.py:80
+msgid "Sitzbezug Option"
+msgstr ""
+
+#: modules/itemview\editor_create.py:81
+msgid "PRN_Vordersitze"
+msgstr ""
+
+#: modules/itemview\editor_create.py:81
+msgid "Sitzart Option"
+msgstr ""
+
+#: modules/itemview\editor_create.py:82
+msgid "Lederpaket Option"
+msgstr ""
+
+#: modules/itemview\editor_create.py:82
+msgid "PRN_Lederumfang"
+msgstr ""
+
+#: modules/itemview\editor_create.py:92
+msgid "<Kein Pfad gesetzt>"
+msgstr ""
+
+#: modules/itemview\editor_create.py:92
+msgid "Ausgabe Pfad"
+msgstr ""
+
 #: modules/itemview\editor_undo.py:187
 msgid "Elemente hinzufügen"
 msgstr ""
@@ -1515,7 +1615,7 @@ msgstr ""
 msgid "Elemente entfernen"
 msgstr ""
 
-#: modules/itemview\editor_undo.py:287
+#: modules/itemview\editor_undo.py:301
 msgid "verschieben"
 msgstr ""
 
@@ -1555,12 +1655,12 @@ msgstr ""
 msgid "Daten werden eingerichtet."
 msgstr ""
 
-#: modules/itemview\tree_dragdrop.py:139
+#: modules/itemview\tree_dragdrop.py:143
 msgid ""
 "Keine Kamera Daten in Datei gefunden.\n"
 msgstr ""
 
-#: modules/itemview\tree_dragdrop.py:142
+#: modules/itemview\tree_dragdrop.py:146
 msgid ""
 "Konnte Datei mit Kamera Daten nicht lesen.\n"
 msgstr ""
@@ -1856,39 +1956,39 @@ msgstr ""
 msgid "Sitzungswiederherstellung abgeschlossen"
 msgstr ""
 
-#: modules\knecht_update.py:212
+#: modules\knecht_update.py:216
 msgid "Suche nach Anwendungs Updates gestartet."
 msgstr ""
 
-#: modules\knecht_update.py:266
+#: modules\knecht_update.py:270
 msgid "Die Anwendung ist auf dem neusten Stand."
 msgstr ""
 
-#: modules\knecht_update.py:271
+#: modules\knecht_update.py:275
 msgid "Aktualisierung konnte nicht durchgeführt werden."
 msgstr ""
 
-#: modules\knecht_update.py:280
+#: modules\knecht_update.py:284
 msgid "App Update"
 msgstr ""
 
-#: modules\knecht_update.py:281
+#: modules\knecht_update.py:285
 msgid "Eine aktualisierte Version {} ist verfügbar.<br><br>Möchten Sie die Aktualisierung jetzt durchführen?<br><br>Die Anwendung muss für das Update beendet werden."
 msgstr ""
 
-#: modules\knecht_update.py:285
+#: modules\knecht_update.py:289
 msgid "Jetzt aktualisieren"
 msgstr ""
 
-#: modules\knecht_update.py:286
+#: modules\knecht_update.py:290
 msgid "Vielleicht später..."
 msgstr ""
 
-#: modules\knecht_update.py:298
+#: modules\knecht_update.py:302
 msgid "Aktualisierung"
 msgstr ""
 
-#: modules\knecht_update.py:299
+#: modules\knecht_update.py:303
 msgid "Version {} ist bereit zur Installation."
 msgstr ""
 
