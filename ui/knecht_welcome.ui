@@ -134,7 +134,7 @@ QPushButton:hover {color: rgb(85, 170, 255);
           <x>0</x>
           <y>0</y>
           <width>430</width>
-          <height>110</height>
+          <height>132</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -160,6 +160,8 @@ QPushButton:hover {color: rgb(85, 170, 255);
            </property>
            <property name="text">
             <string>&lt;ul&gt;
+&lt;li&gt;Presets drop/paste on Render tree will auto-create a render preset + fixed some undo oddities&lt;/li&gt;
+&lt;li&gt;added standalone POS Schnuffi to compare differences between models/their XMLs&lt;/li&gt;
 &lt;li&gt;added standalone KnechtViewer for pixel perfect comparsions of images vs. DeltaGen Viewer&lt;/li&gt;
 &lt;li&gt;drop xml/rksession/xlsx documents on ui or trees to open&lt;/li&gt;
 &lt;li&gt;add document tab context with ability to copy paths&lt;/li&gt;

@@ -6,7 +6,7 @@ import logging.config
 from logging.handlers import QueueHandler, QueueListener
 from PySide2.QtCore import QObject, Signal
 
-from modules.globals import get_settings_dir, LOG_FILE_NAME, FROZEN, MAIN_LOGGER_NAME
+from modules.globals import get_settings_dir, LOG_FILE_NAME, FROZEN, MAIN_LOGGER_NAME, DEV_LOGGER_NAME
 
 
 def setup_logging(logging_queue, overwrite_level: str=None):
@@ -71,11 +71,15 @@ def setup_logging(logging_queue, overwrite_level: str=None):
                 'handlers': ['file', 'guiHandler', 'console'], 'propagate': False, 'level': log_level,
                 },
             # Log Window Logger
-            'gui_logger': {
+            'gui_logger'    : {
                 'handlers': ['guiHandler', 'queueHandler'], 'propagate': False, 'level': 'INFO'
                 },
+            # Scratch files, debugging etc
+            DEV_LOGGER_NAME : {
+                'handlers': ['queueHandler', 'console'], 'propagate': False, 'level': log_level,
+                },
             # Module loggers
-            '': {
+            ''              : {
                 'handlers': ['queueHandler'], 'propagate': False, 'level': log_level,
                 }
             }
