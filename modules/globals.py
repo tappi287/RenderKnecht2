@@ -1,7 +1,5 @@
 import sys
 import os
-from pathlib import Path
-
 
 UI_PATH = 'ui'
 UI_PATHS_FILE = 'gui_resource_paths.json'
@@ -9,7 +7,6 @@ UI_PATHS_FILE = 'gui_resource_paths.json'
 LOG_FILE_NAME = 'renderknecht2.log'
 MAIN_LOGGER_NAME = 'knecht_main'
 DEV_LOGGER_NAME = 'dev_module'
-PLM_XML_NAMESPACE = '{http://www.plmxml.org/Schemas/PLMXMLSchema}'
 
 SETTINGS_FILE = 'settings.json'
 SETTINGS_DIR_NAME = 'RenderKnecht2'

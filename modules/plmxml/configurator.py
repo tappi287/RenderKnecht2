@@ -1,0 +1,122 @@
+import re
+from typing import Tuple
+
+from modules.plmxml import PlmXml, pr_tags_to_reg_ex, LOGGER
+from modules.plmxml.connector import AsConnectorConnection
+from modules.plmxml.request import AsNodeSetVisibleRequest, AsMaterialConnectToTargetsRequest
+from modules.language import get_translation
+
+# translate strings
+lang = get_translation()
+lang.install()
+_ = lang.gettext
+
+
+class PlmXmlConfigurator:
+    def __init__(self, plmxml: PlmXml, config: str):
+        """ Parses a configuration String against an initialized PlmXml instance and edits the
+            product instances and materials that need their visibility or source looks changed.
+
+        :param PlmXml plmxml: PlmXml instance holding info about look library and product instances
+        :param str config: Configuration String
+        """
+        self.plmxml = plmxml
+        self.config = config
+        self.errors = list()
+
+        # Parse PlmXml against config on initialisation
+        self._parse_plmxml_against_config()
+
+    def update_config(self, config: str):
+        self.config = config
+        self._parse_plmxml_against_config()
+
+    def request_delta_gen_update(self) -> bool:
+        """ Send requests to AsConnector2 to update the DeltaGen scene with the current configuration
+
+        :return:
+        """
+        as_conn, result = AsConnectorConnection(), True
+
+        # -- Update Scene Objects Visibility
+        for visibility_request in self.create_visibility_requests():
+            req_result = as_conn.request(visibility_request)
+
+            # Handle failed requests
+            if not req_result:
+                result = False
+                self.errors.append(as_conn.error)
+
+        # -- Update Materials
+        req_result = as_conn.request(self.create_material_connect_to_targets_request())
+
+        if not req_result or not result:
+            self.errors.append(req_result)
+            return False
+
+        return True
+
+    def create_visibility_requests(self) -> Tuple[AsNodeSetVisibleRequest, AsNodeSetVisibleRequest]:
+        # -- Set Visibility of Geometry
+        visible_nodes, invisible_nodes = list(), list()
+
+        for p in self.plmxml.iterate_configurable_product_instances():
+            if p.visible:
+                visible_nodes.append(p)
+            elif not p.visible:
+                invisible_nodes.append(p)
+
+        # -- Create the actual NodeSetVisibleRequest objects
+        visible_request = AsNodeSetVisibleRequest(visible_nodes, True)
+        invisible_request = AsNodeSetVisibleRequest(invisible_nodes, False)
+
+        return visible_request, invisible_request
+
+    def create_material_connect_to_targets_request(self) -> AsMaterialConnectToTargetsRequest:
+        return AsMaterialConnectToTargetsRequest(self.plmxml.look_lib.iterate_active_targets())
+
+    def _match(self, pr_tags) -> bool:
+        """ Match a PR Tag against the current configuration string """
+        m = re.match(pr_tags_to_reg_ex(pr_tags), self.config, flags=re.IGNORECASE)
+
+        if m:
+            return True
+
+        return False
+
+    def _parse_plmxml_against_config(self):
+        # -- Geometry
+        # -- Set Visibility of Parts with PR_TAGS
+        for p in self.plmxml.iterate_configurable_product_instances():
+            # Match PR TAGS against configuration
+            if self._match(p.pr_tags):
+                p.visible = True
+            else:
+                p.visible = False
+
+        # -- Materials
+        # -- Reset visible variants
+        self.plmxml.look_lib.reset()
+
+        # -- Assign Source to Target materials
+        for target, variant in self.plmxml.look_lib.iterate_materials():
+            if not variant.pr_tags:
+                continue
+
+            # Match material PR TAGS against configuration
+            if self._match(variant.pr_tags):
+                target.visible_variant = variant
+
+                if self.plmxml.debug:
+                    LOGGER.debug(f'Switching Material {target.name[:40]:40} -> {variant.name}')
+
+        # -- Print result
+        LOGGER.info(f'Updating Configuration. Found '
+                    f'{len([t for t in self.plmxml.look_lib.iterate_active_targets()])} '
+                    f'Materials to update and '
+                    f'{len([p for p in self.plmxml.iterate_configurable_product_instances()])} objects to '
+                    f'update their visibility.')
+
+        not_updated = [t.name for t in self.plmxml.look_lib.materials.values() if not t.visible_variant]
+        LOGGER.info(f'The following {len(not_updated)} Materials did not match the config and will not be updated:\n'
+                    f'{"; ".join(not_updated)}')

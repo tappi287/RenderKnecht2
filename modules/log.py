@@ -76,7 +76,7 @@ def setup_logging(logging_queue, overwrite_level: str=None):
                 },
             # Scratch files, debugging etc
             DEV_LOGGER_NAME : {
-                'handlers': ['queueHandler', 'console'], 'propagate': False, 'level': log_level,
+                'handlers': ['console'], 'propagate': False, 'level': log_level,
                 },
             # Module loggers
             ''              : {
@@ -115,7 +115,7 @@ def init_logging(logger_name):
 
     print('Logger requested by: ',
           Path(sys._getframe().f_back.f_code.co_filename).name,
-          sys._getframe().f_back.f_code.co_name, logging.getLevelName(logger.getEffectiveLevel()))
+          sys._getframe().f_back.f_code.co_name, '- Level:', logging.getLevelName(logger.getEffectiveLevel()))
 
     return logger
 
