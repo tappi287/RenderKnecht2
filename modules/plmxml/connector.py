@@ -1,9 +1,10 @@
 import requests
 
-from modules.plmxml import LOGGER
-from modules.plmxml.request import AsConnectorRequest
+from modules.plmxml.request import AsConnectorRequest, AsGetVersionInfoRequest
 from modules.language import get_translation
+from modules.log import init_logging
 
+LOGGER = init_logging(__name__)
 
 # translate strings
 lang = get_translation()
@@ -12,23 +13,46 @@ _ = lang.gettext
 
 
 class AsConnectorConnection:
+    timeout = 10
+
     def __init__(self):
+        self._connected = False
         self.error = str()
 
+        self._check_connection()
+
+    @property
+    def connected(self):
+        return self._connected
+
+    @connected.setter
+    def connected(self, value: bool):
+        self._connected = value
+
+    def _check_connection(self) -> bool:
+        version_request = AsGetVersionInfoRequest()
+        result = self.request(version_request)
+
+        if result:
+            self.connected = True
+            LOGGER.debug(f'Connected to AsConnector {version_request.result}')
+        else:
+            self.connected = False
+            self.error = 'Could not connect to an AsConnector Instance.'
+
+        return result
+
     def request(self, as_request: AsConnectorRequest) -> bool:
-        r = requests.post(
-            as_request.get_url(), data=as_request.to_bytes(), headers=as_request.get_header()
-            )
+        try:
+            r = requests.post(
+                as_request.get_url(), data=as_request.to_bytes(), headers=as_request.get_header(), timeout=10
+                )
+        except requests.ReadTimeout:
+            pass
+        except requests.Timeout:
+            pass
 
         LOGGER.debug('Sent request to AsConnector, response code was: %s', r.status_code)
-
-        if r.ok:
-            LOGGER.debug(r.text)
-            return True
-        else:
-            LOGGER.error('Error while sending request:\n%s', as_request.to_string())
-            LOGGER.error('AsConnector result:\n%s', r.text)
-            self.error = f'Error while sending {type(as_request)} request.' \
-                         f'\nAsConnector returned:\n{r.text}'
-
-        return False
+        result = as_request.handle_response(r)
+        self.error = as_request.error
+        return result

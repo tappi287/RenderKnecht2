@@ -3,10 +3,12 @@ from typing import Dict, Union, Tuple
 
 from lxml import etree as Et
 
-from modules.plmxml import PLM_XML_NAMESPACE, LOGGER
+from modules.plmxml import PLM_XML_NAMESPACE
 from modules.plmxml.utils import pr_tags_to_reg_ex
 from modules.language import get_translation
+from modules.log import init_logging
 
+LOGGER = init_logging(__name__)
 
 # translate strings
 lang = get_translation()

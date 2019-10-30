@@ -1,10 +1,13 @@
 import re
 from typing import Tuple
 
-from modules.plmxml import PlmXml, pr_tags_to_reg_ex, LOGGER
+from modules.plmxml import PlmXml, pr_tags_to_reg_ex
 from modules.plmxml.connector import AsConnectorConnection
 from modules.plmxml.request import AsNodeSetVisibleRequest, AsMaterialConnectToTargetsRequest
 from modules.language import get_translation
+from modules.log import init_logging
+
+LOGGER = init_logging(__name__)
 
 # translate strings
 lang = get_translation()
@@ -38,6 +41,10 @@ class PlmXmlConfigurator:
         """
         as_conn, result = AsConnectorConnection(), True
 
+        if not as_conn.connected:
+            self.errors.append(as_conn.error)
+            return False
+
         # -- Update Scene Objects Visibility
         for visibility_request in self.create_visibility_requests():
             req_result = as_conn.request(visibility_request)
@@ -51,7 +58,7 @@ class PlmXmlConfigurator:
         req_result = as_conn.request(self.create_material_connect_to_targets_request())
 
         if not req_result or not result:
-            self.errors.append(req_result)
+            self.errors.append(as_conn.error)
             return False
 
         return True
