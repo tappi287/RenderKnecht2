@@ -4,7 +4,7 @@ from typing import Union
 from lxml import etree as Et
 
 from modules.itemview.item import KnechtItem
-from modules.itemview.model_globals import KnechtModelGlobals as Kg
+from modules.itemview.model_globals import KnechtModelGlobals as Kg, KnechtModelXmlTags as KgTags
 from modules.itemview.xml_id import KnechtXmlId
 from modules.language import get_translation
 from modules.log import init_logging
@@ -103,27 +103,27 @@ class KnechtXmlReader:
             node.set('order', f'{int(node.attrib["order"]):03d}')
 
         # Backwards compatible, value stored in tag text
-        if node.tag == 'variant' and node.text:
+        if node.tag == KgTags.variant_tag and node.text:
             node.set('value', node.text)
 
-        if node.tag in ('preset', 'camera_item'):
+        if node.tag in KgTags.preset_tags:
             # Create preset item: node, parent
             self.__preset_item = self._create_tree_item(node)
 
-        elif node.tag == 'render_preset':
+        elif node.tag == KgTags.render_preset_tag:
             self.__preset_item = self._create_tree_item(node)
 
-        elif node.tag in ('seperator', 'separator'):
+        elif node.tag in KgTags.separator_tags:
             self._create_tree_item(node)
 
-        elif node.tag in ('sub_seperator', 'sub_separator'):
+        elif node.tag in KgTags.sub_separator_tags:
             node.attrib['type'] = 'sub_separator'
             self._create_tree_item(node, self.__preset_item)
 
-        elif node.tag in ('render_setting'):
+        elif node.tag in KgTags.render_setting_tags:
             self._create_tree_item(node, self.__preset_item)
 
-        elif node.tag in ('variant', 'reference', 'output_item'):
+        elif node.tag in KgTags.variants_tags:
             if node.getparent().tag == Kg.xml_dom_tags['level_1']:
                 # Parse orphans aswell for session load / variants widget
                 self._create_tree_item(node)

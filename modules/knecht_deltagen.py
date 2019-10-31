@@ -6,12 +6,13 @@ from PySide2.QtCore import QObject, QTimer, Signal, Slot, Qt, QUuid
 from PySide2.QtGui import QColor
 from PySide2.QtWidgets import QComboBox, QPushButton
 
-from modules.globals import DG_TCP_IP, DG_TCP_PORT
+from modules.globals import DG_TCP_IP, DG_TCP_PORT, DeltaGenResult
 from modules.gui.widgets.button_color import QColorButton
 from modules.itemview.item import ItemStyleDefaults
 from modules.itemview.model import KnechtModel
 from modules.itemview.tree_view import KnechtTreeView
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
+from modules.knecht_plmxml import KnechtPlmXmlController
 from modules.knecht_socket import Ncat
 from modules.knecht_objects import KnechtVariant, KnechtVariantList
 from modules.language import get_translation
@@ -65,14 +66,6 @@ class CommunicateDeltaGen(Thread):
     status = signals.status
     progress = signals.progress
     variant_status = signals.variant_status
-
-    # Send finished results
-    class Result:
-        send_success = 0
-        send_failed = 1
-        cmd_success = 2
-        cmd_failed = 3
-        aborted = 4
 
     def __init__(self):
         super(CommunicateDeltaGen, self).__init__()
@@ -179,7 +172,7 @@ class CommunicateDeltaGen(Thread):
                 time.sleep(1)
 
         # No DeltaGen connection, abort
-        self.exit_send_operation(self.Result.send_failed)
+        self.exit_send_operation(DeltaGenResult.send_failed)
 
         return False
 
@@ -191,7 +184,7 @@ class CommunicateDeltaGen(Thread):
 
         if not self._connect_to_deltagen(timeout, num_tries):
             self.no_connection.emit()
-            self.exit_send_operation(self.Result.cmd_failed, skip_viewer=True)
+            self.exit_send_operation(DeltaGenResult.cmd_failed, skip_viewer=True)
             return
 
         try:
@@ -199,14 +192,14 @@ class CommunicateDeltaGen(Thread):
         except Exception as e:
             LOGGER.error('Sending command failed. %s', e)
 
-        self.exit_send_operation(self.Result.cmd_success, skip_viewer=True)
+        self.exit_send_operation(DeltaGenResult.cmd_success, skip_viewer=True)
 
     def _send_operation(self):
         self.status.emit(_('Prüfe Verbindung...'))
 
         if not self._connect_to_deltagen():
             self.no_connection.emit()
-            self.exit_send_operation(self.Result.send_failed)
+            self.exit_send_operation(DeltaGenResult.send_failed)
             return
 
         if self.freeze_viewer:
@@ -221,7 +214,7 @@ class CommunicateDeltaGen(Thread):
 
         # Abort signal
         if self.abort_connection:
-            self.exit_send_operation(self.Result.aborted)
+            self.exit_send_operation(DeltaGenResult.aborted)
             return
 
         # Send variants
@@ -231,10 +224,10 @@ class CommunicateDeltaGen(Thread):
 
             # Abort signal
             if self.abort_connection:
-                self.exit_send_operation(self.Result.aborted)
+                self.exit_send_operation(DeltaGenResult.aborted)
                 return
 
-        self.exit_send_operation(self.Result.send_success)
+        self.exit_send_operation(DeltaGenResult.send_success)
 
     def _send_and_check_variant(self, variant: KnechtVariant, idx, variants_num: int=0):
         """
@@ -331,6 +324,13 @@ class SendToDeltaGen(QObject):
 
         self._setup_main_gui()
 
+        # PlmXml Controller
+        self.plm_xml_controller = KnechtPlmXmlController(KnechtVariantList())
+        self.plm_xml_controller.status.connect(self._update_status)
+        self.plm_xml_controller.no_connection.connect(self._no_connection)
+        self.plm_xml_controller.send_finished.connect(self._send_operation_finished)
+        self.plm_xml_controller.progress.connect(self._update_progress)
+
         # Prepare Send Thread
         self.dg = CommunicateDeltaGen()
 
@@ -368,10 +368,15 @@ class SendToDeltaGen(QObject):
             self.display_view = self.ui.variantTree
 
         self.abort_btn.setEnabled(True)
+        
+        if variant_ls.plm_xml_path is not None:
+            self._send_as_connector(variant_ls)
+            return
+        
         self.transfer_options.emit(KnechtSettings.dg)
         self.transfer_variants.emit(variant_ls)
         self.dg.start_send_operation()
-
+        
     def send_command(self, command: str):
         self.transfer_command.emit(command)
 
@@ -413,6 +418,11 @@ class SendToDeltaGen(QObject):
     def _no_connection(self):
         pass
 
+    def _send_as_connector(self, variant_ls: KnechtVariantList):
+        self.plm_xml_controller.variants_ls = variant_ls
+        self.plm_xml_controller.start()
+
+
     @Slot(int)
     def _send_operation_finished(self, result: int):
         """ Thread will send result of the send operation """
@@ -425,18 +435,18 @@ class SendToDeltaGen(QObject):
             self.ui.app.alert(self.ui, 0)
 
     def _display_result(self, result: int):
-        if result == CommunicateDeltaGen.Result.send_success:
+        if result == DeltaGenResult.send_success:
             if not self.rendering:
                 self.ui.msg(_('DeltaGen Sende Operation beendet.'), 2500)
                 self._display_variants_finished_overlay()
-        elif result == CommunicateDeltaGen.Result.send_failed:
+        elif result == DeltaGenResult.send_failed:
             self.ui.msg(_('Konnte <b>keine Verbindung</b> '
                           'zu einer DeltaGen Instanz mit geladener Szene herstellen.'), 5000)
-        elif result == CommunicateDeltaGen.Result.cmd_success:
+        elif result == DeltaGenResult.cmd_success:
             pass
-        elif result == CommunicateDeltaGen.Result.cmd_failed:
+        elif result == DeltaGenResult.cmd_failed:
             self.ui.msg(_('DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>'), 5000)
-        elif result == CommunicateDeltaGen.Result.aborted:
+        elif result == DeltaGenResult.aborted:
             self.ui.msg(_('DeltaGen Sende Operation <b>abgebrochen.</b>'), 2500)
 
     def _update_status(self, message: str, duration: int=1500):

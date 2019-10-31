@@ -91,6 +91,9 @@ class ItemTemplates:
     # -- Output Item --
     output = KnechtItem(None, ('000', _('Ausgabe Pfad'), _('<Kein Pfad gesetzt>'), 'output_item'))
 
+    # -- PlmXml Item --
+    plmxml = KnechtItem(None, ('000', _('PlmXml Datei'), _('<Kein Pfad gesetzt>'), 'plmxml_item'))
+
     # -- Separator --
     separator = KnechtItem(None, ('000',  '', '', 'separator'))
 

@@ -897,7 +897,7 @@ msgstr "Color And Trimline data are required for preset creation. You can contin
 
 #: modules/gui/wizard\data_import.py:49 modules/gui/wizard\result.py:64
 msgid "Ergebnis"
-msgstr "Result"
+msgstr "DeltaGenResult"
 
 #: modules/gui/wizard\data_import.py:61
 msgid "Assistent FaKom Import"
@@ -997,7 +997,7 @@ msgstr "Unlock selected options"
 
 #: modules/gui/wizard\result.py:59
 msgid "Wizard Ergebnis"
-msgstr "Wizard Result"
+msgstr "Wizard DeltaGenResult"
 
 #: modules/gui/wizard\result.py:60
 msgid "Überblick über nicht verwendete Optionen und Pakete"

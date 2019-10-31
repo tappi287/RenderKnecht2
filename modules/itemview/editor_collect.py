@@ -114,7 +114,7 @@ class KnechtCollectVariants(QObject):
             if child.userType == Kg.reference:
                 ref_preset = self._collect_single_reference(child, src_model)
 
-                if ref_preset.userType == Kg.output_item:
+                if ref_preset.userType in (Kg.output_item, Kg.plmxml_item):
                     self._add_variant(ref_preset, variants_ls, src_model)
                     continue
 
@@ -134,6 +134,9 @@ class KnechtCollectVariants(QObject):
         elif item.userType == Kg.output_item:
             variants.output_path = item.data(Kg.VALUE)
             LOGGER.debug('Collected output path: %s', item.data(Kg.VALUE))
+        elif item.userType == Kg.plmxml_item:
+            variants.plm_xml_path = item.data(Kg.VALUE)
+            LOGGER.debug('Collected PlmXml path: %s', item.data(Kg.VALUE))
 
     @staticmethod
     def _add_camera_variants(item: KnechtItem, variants: KnechtVariantList, src_model: KnechtModel) -> None:

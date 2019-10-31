@@ -433,6 +433,7 @@ class KnechtItemStyle:
         'checkmark': 'checkmark',
         'output_item': 'folder',
         'camera_item': 'videocam',
+        'plmxml_item': 'assignment',
         }
 
     @classmethod

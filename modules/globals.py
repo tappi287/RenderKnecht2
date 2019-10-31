@@ -92,3 +92,11 @@ class Resource:
     ui_paths = dict()
     icon_paths = dict()
     darkstyle = ":darkstyle/darkstyle.qss"
+
+# Send finished results
+class DeltaGenResult:
+    send_success = 0
+    send_failed = 1
+    cmd_success = 2
+    cmd_failed = 3
+    aborted = 4

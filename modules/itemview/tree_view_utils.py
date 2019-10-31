@@ -1,6 +1,7 @@
-from PySide2.QtCore import QObject, Qt, QEvent, Signal
+from PySide2.QtCore import QEvent, QObject, Qt
 from PySide2.QtWidgets import QHeaderView
 
+from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -26,6 +27,8 @@ def setup_header_layout(widget, maximum_width: int=850):
     for column in range(1, header.count() - 1):
         header.setSectionResizeMode(column, QHeaderView.ResizeToContents)
         column_width = header.sectionSize(column) + 40
+        if column == Kg.VALUE:
+            column_width = 100
         oversize_width += column_width
 
     # Add last and first column width
@@ -36,6 +39,8 @@ def setup_header_layout(widget, maximum_width: int=850):
 
     for column in range(1, header.count() - 1):
         width = min((header.sectionSize(column) * column_scale_factor), maximum_width)
+        if column == Kg.VALUE:
+            width = 100
         header.setSectionResizeMode(column, QHeaderView.Interactive)
         header.resizeSection(column, width)
 

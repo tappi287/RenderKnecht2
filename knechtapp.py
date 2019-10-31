@@ -19,7 +19,7 @@ if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     print('Using high dpi Pixmaps')
 
-VERSION = '1.25'
+VERSION = '1.26'
 
 InfoMessage.ver = VERSION
 InfoMessage.lic = 'GPL v3'
@@ -97,7 +97,7 @@ def main():
 
     #
     #
-    # ---- Application Result ----
+    # ---- Application DeltaGenResult ----
     LOGGER.debug('---------------------------------------')
     LOGGER.debug('Qt application finished with exitcode %s', result)
     KnechtSettings.save()

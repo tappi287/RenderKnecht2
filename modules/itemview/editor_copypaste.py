@@ -16,7 +16,8 @@ LOGGER = init_logging(__name__)
 
 class KnechtEditorCopyPaste(QObject):
     """ KnechtEditor Extension to copy to and paste from the ui clipboard """
-    preset_creation_accepted_types = [Kg.preset, Kg.output_item, Kg.camera_item, Kg.variant, Kg.reference]
+    preset_creation_accepted_types = [Kg.preset, Kg.output_item, Kg.camera_item, Kg.plmxml_item,
+                                      Kg.variant, Kg.reference]
 
     def __init__(self, editor):
         """ View model editor Copy & Paste extensions

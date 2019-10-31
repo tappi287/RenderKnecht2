@@ -179,7 +179,7 @@ class FakomWizardPage(QWizardPage):
             item.setData(0, Qt.UserRole, src_index)
             item.setIcon(0, icon)
 
-        # -- Expand Result Tree --
+        # -- Expand DeltaGenResult Tree --
         for trim_item in trim_items.values():
             self.result_tree.addTopLevelItem(trim_item)
             self.result_tree.expandItem(trim_item)

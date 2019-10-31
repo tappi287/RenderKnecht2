@@ -107,6 +107,17 @@ class VariantInputFields(QObject):
                     items.append(new_item)
 
             return items
+
+        # PlmXml / LINC Style PR-Strings
+        if variant_set_str.startswith('+'):
+            items = list()
+            for variant in variant_set_str[1:].split('+'):
+                if variant != '':
+                    new_item = self.add_variant_item(variant, variant_str, len(items))
+                    items.append(new_item)
+
+            return items
+
         return False
 
     def update_actions(self):

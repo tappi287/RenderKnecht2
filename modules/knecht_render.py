@@ -331,7 +331,7 @@ class KnechtRenderThread(Thread):
                 break
 
         result = True
-        c = CommunicateDeltaGen.Result
+        c = CommunicateDeltaGen.DeltaGenResult
         if self.dg_operation_result not in [c.send_success, c.cmd_success]:
             result = False
 

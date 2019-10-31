@@ -64,8 +64,10 @@ class CreateMenu(QMenu):
                        (_("FaKom Option\tVarianten einer Farbkombination"),
                        i.get_icon('fakom'), self._create_fakom_option),
                        (_('Ausgabe Objekt\tDefiniert einen Ausgabepfad'),
-                        i.get_icon('folder'), self._create_output_item), (
-                       _('Kamera Objekt\tEnthält 3DS DeltaGen Kameradaten'), i.get_icon('videocam'),
+                        i.get_icon('folder'), self._create_output_item),
+                       (_('PlmXml Objekt\tDefiniert einen Pfad zur PlmXml Datei'), i.get_icon('assignment'),
+                        self._create_plmxml_item),
+                       (_('Kamera Objekt\tEnthält 3DS DeltaGen Kameradaten'), i.get_icon('videocam'),
                        self._create_camera_item),
                        (_("Separator\tNicht-interagierbares Ordnungselement"),
                        i.get_icon('navicon'), self._create_separator)
@@ -130,6 +132,9 @@ class CreateMenu(QMenu):
 
     def _create_output_item(self):
         self._create_item(ItemTemplates.output)
+
+    def _create_plmxml_item(self):
+        self._create_item(ItemTemplates.plmxml)
 
     def _create_separator(self):
         self._create_item(ItemTemplates.separator, False)

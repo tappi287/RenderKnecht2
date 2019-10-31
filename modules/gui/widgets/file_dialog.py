@@ -24,6 +24,7 @@ class FileDialog:
     """
     file_types = dict(
         xml=dict(title=_('Variants *.XML auswaehlen'), filter=_('Variant Preset Dateien (*.xml)')),
+        plmxml=dict(title=_('PlmXml *.XML auswaehlen'), filter=_('PlmXml Dateien (*.plmxml)')),
         xlsx=dict(title=_('Excel Dateien *.xlsx auswaehlen'), filter=_('Excel Dateien (*.xlsx)')),
         cmd=dict(title=_('Variants *.CMD auswaehlen'), filter=_('Variant CMD Dateien (*.cmd)')),
         pos=dict(title=_('DeltaGen POS Varianten *.xml oder *.pos auswaehlen'),

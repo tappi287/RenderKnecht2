@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from PySide2.QtCore import Qt, QModelIndex, QRegExp
 from PySide2.QtGui import QRegExpValidator
@@ -70,8 +71,12 @@ class KnechtValueDelegate(QStyledItemDelegate):
         item: KnechtItem = index.model().sourceModel().get_item(src_index)
         setting_type = item.data(Kg.TYPE)
 
-        if item.userType == Kg.output_item:
+        if item.userType in [Kg.output_item]:
             self.setting_delegate = OutputDirButton(self.view)
+            return True
+
+        if item.userType in [Kg.plmxml_item]:
+            self.setting_delegate = InputFileButton(self.view)
             return True
 
         if item.userType == Kg.render_setting and setting_type in RENDER_SETTING_MAP.keys():
@@ -170,7 +175,14 @@ class FileExtensionComboBox(ComboBoxDelegate):
 
 
 class OutputDirButton(KnechtValueDelegate):
-    file_dlg = FileDialog()
+    def __init__(self, view):
+        """ Basic item delegate that returns the views default item delegate or depending
+            on the item type column: an appropriate custom render setting item delegate.
+
+        :param modules.itemview.treeview.KnechtTreeView view: View we replace delegates in
+        """
+        super(OutputDirButton, self).__init__(view)
+        self.file_dlg = FileDialog()
 
     def create_editor(self, parent, option, index):
         editor = QPushButton(parent)
@@ -203,6 +215,25 @@ class OutputDirButton(KnechtValueDelegate):
     @staticmethod
     def set_model_data(editor, model, index):
         pass
+
+
+class InputFileButton(OutputDirButton):
+    def set_file_path(self):
+        editor = self.sender()
+        current_dir = Path(editor.index.siblingAtColumn(Kg.VALUE).data(Qt.DisplayRole))
+
+        if not current_dir.parent.exists():
+            current_dir = None
+
+        output_dir = self.file_dlg.open_existing_file(directory=current_dir, file_key='plmxml')
+
+        if output_dir:
+            """
+            We do not call the setModelData method and therefore need to create our undo command ourself
+            """
+            undo_cmd = ItemEditUndoCommand(current_dir, output_dir, editor.index, editing_done=False)
+            self.view.undo_stack.push(undo_cmd)
+            self.view.undo_stack.setActive(True)
 
 
 RENDER_SETTING_MAP = {

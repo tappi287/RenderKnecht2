@@ -46,7 +46,7 @@ def create_reset_item(order: int=0) -> KnechtItem:
 
 class ResultWizardPage(QWizardPage):
     def __init__(self, wizard):
-        """ Wizard Result Page
+        """ Wizard DeltaGenResult Page
 
         :param modules.gui.wizard.wizard.PresetWizard wizard: The parent wizard
         """
@@ -81,7 +81,7 @@ class ResultWizardPage(QWizardPage):
 
         self.collect_result()
         self.collect_unused_options()
-        LOGGER.info('Result Wizard Page initialized.')
+        LOGGER.info('DeltaGenResult Wizard Page initialized.')
         self.check_complete_timer.start()
 
     def cleanupPage(self):
@@ -243,7 +243,7 @@ class ResultWizardPage(QWizardPage):
         new_view = KnechtTreeView(parent, None)
         replace_widget(tree_view, new_view)
 
-        # Result wizard specific
+        # DeltaGenResult wizard specific
         new_view.setEditTriggers(QTreeView.NoEditTriggers)
         new_view.setDragDropMode(QTreeView.NoDragDrop)
         new_view.supports_drag_move = False
