@@ -645,7 +645,7 @@
                   </size>
                  </property>
                  <property name="currentIndex">
-                  <number>4</number>
+                  <number>0</number>
                  </property>
                  <item>
                   <property name="text">
@@ -708,6 +708,15 @@
                   <property name="icon">
                    <iconset resource="res/gui_resource.qrc">
                     <normaloff>:/type/viewset.png</normaloff>:/type/viewset.png</iconset>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>2560 1440</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="res/gui_resource.qrc">
+                    <normaloff>:/type/img.png</normaloff>:/type/img.png</iconset>
                   </property>
                  </item>
                  <item>
