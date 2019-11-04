@@ -53,12 +53,13 @@ class KnechtCollectVariants(QObject):
                  ) -> KnechtVariantList:
         variants = KnechtVariantList()
         current_item = src_model.get_item(index)
+        reset_found = False
 
         if not current_item:
             return variants
 
         if KnechtSettings.dg['reset'] and collect_reset and current_item.userType != Kg.camera_item:
-            self._collect_reset_preset(variants, src_model)
+            reset_found = self._collect_reset_preset(variants, src_model)
 
         if current_item.userType == Kg.reference:
             # Current item is reference, use referenced item instead
@@ -76,6 +77,9 @@ class KnechtCollectVariants(QObject):
         variants.preset_id = current_item.preset_id
         self._collect_preset_variants(current_item, variants, src_model)
 
+        if not reset_found and variants.plm_xml_path is None:
+            self.reset_missing.emit()
+
         return variants
 
     def _collect_preset_variants(self, preset_item: KnechtItem, variants_ls: KnechtVariantList,
@@ -91,10 +95,12 @@ class KnechtCollectVariants(QObject):
                 reset_presets.append(item)
 
         if not reset_presets:
-            self.reset_missing.emit()
+            return False
 
         for reset_preset in reset_presets:
             self._collect_preset_variants(reset_preset, variants_ls, src_model)
+
+        return True
 
     def _collect_preset_variants_recursive(self, preset_item: KnechtItem, variants_ls: KnechtVariantList,
                                            src_model: KnechtModel) -> None:

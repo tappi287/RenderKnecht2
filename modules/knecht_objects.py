@@ -76,6 +76,11 @@ class KnechtVariantList:
         """ Addition variants of another KnechtVariantList """
         if isinstance(other_variant_list, KnechtVariantList):
             new_ls = KnechtVariantList()
+
+            # Copy Attributes
+            for k, v in self.__dict__.items():
+                setattr(new_ls, k, v)
+
             new_ls.variants = self.variants[::]
             new_ls.variants += other_variant_list.variants
             return new_ls

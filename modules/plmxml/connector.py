@@ -43,16 +43,22 @@ class AsConnectorConnection:
         return result
 
     def request(self, as_request: AsConnectorRequest) -> bool:
+        r, err = None, str()
+
         try:
             r = requests.post(
                 as_request.get_url(), data=as_request.to_bytes(), headers=as_request.get_header(), timeout=10
                 )
-        except requests.ReadTimeout:
-            pass
-        except requests.Timeout:
-            pass
+        except requests.ConnectionError or requests.Timeout or requests.ReadTimeout as e:
+            LOGGER.error('Error connecting to AsConnector! %s', e)
+            err = str(e)
 
-        LOGGER.debug('Sent request to AsConnector, response code was: %s', r.status_code)
-        result = as_request.handle_response(r)
-        self.error = as_request.error
+        if r:
+            LOGGER.debug('Sent request to AsConnector, response code was: %s', r.status_code)
+            result = as_request.handle_response(r)
+            self.error = as_request.error
+        else:
+            self.error = str(err)
+            result = False
+
         return result

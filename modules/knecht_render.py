@@ -8,6 +8,7 @@ from typing import List
 
 from PySide2.QtCore import QObject, Qt, Signal, Slot
 
+from modules.globals import DeltaGenResult
 from modules.gui.widgets.message_box import GenericErrorBox
 from modules.gui.widgets.path_util import path_exists
 from modules.itemview.tree_view import KnechtTreeView
@@ -331,8 +332,7 @@ class KnechtRenderThread(Thread):
                 break
 
         result = True
-        c = CommunicateDeltaGen.DeltaGenResult
-        if self.dg_operation_result not in [c.send_success, c.cmd_success]:
+        if self.dg_operation_result not in [DeltaGenResult.send_success, DeltaGenResult.cmd_success]:
             result = False
 
         self.dg_operation_finished = False

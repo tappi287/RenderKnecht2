@@ -26,7 +26,7 @@ class KnechtPlmXmlController(QObject):
     no_connection = Signal()
     status = Signal(str)
     progress = Signal(int)
-    plmxml_finished = Signal(int)
+    plmxml_result = Signal(str)
 
     def __init__(self, variants_ls: KnechtVariantList):
         super(KnechtPlmXmlController, self).__init__()
@@ -35,11 +35,6 @@ class KnechtPlmXmlController(QObject):
 
         self.send_finished.connect(self._thread_finished)
 
-        self.last_result = str()
-
-    def set_last_result(self, msg: str):
-        self.last_result = msg
-
     def start(self):
         t = KnechtUpdatePlmXml(self)
         t.start()
@@ -47,8 +42,8 @@ class KnechtPlmXmlController(QObject):
         self.send_in_progress = True
 
     def _thread_finished(self, result: int):
+        LOGGER.debug('KnechtUpdatePlmXml thread finished with result:\n%s', result)
         self.send_in_progress = False
-        self.plmxml_finished.emit(result)
 
 
 class KnechtUpdatePlmXmlSignals(QObject):
@@ -80,8 +75,7 @@ class KnechtUpdatePlmXml(Thread):
         self.signals.status.connect(self.controller.status)
         self.signals.progress.connect(self.controller.progress)
         self.signals.no_connection.connect(self.controller.no_connection)
-
-        self.signals.plmxml_result.connect(self.controller.set_last_result)
+        self.signals.plmxml_result.connect(self.controller.plmxml_result)
 
     def run(self) -> None:
         self._setup_signals()
@@ -89,12 +83,13 @@ class KnechtUpdatePlmXml(Thread):
         result = DeltaGenResult.send_success
         file = Path(self.variants_ls.plm_xml_path)
 
+        self.signals.status.emit('Configuring PlmXml instance')
+
         # -- Parse a PlmXml file, collecting product instances and LookLibrary
         plm_xml_instance = PlmXml(file)
 
         if not plm_xml_instance.is_valid:
             LOGGER.error(plm_xml_instance.error)
-            self.signals.status.emit(plm_xml_instance.error)
             self.signals.plmxml_result.emit(plm_xml_instance.error)
             self.signals.send_finished.emit(DeltaGenResult.cmd_failed)
             return
@@ -106,7 +101,6 @@ class KnechtUpdatePlmXml(Thread):
         if not conf.request_delta_gen_update():
             errors = '\n'.join(conf.errors)
             LOGGER.error(errors)
-            self.signals.status.emit(errors)
             self.signals.plmxml_result.emit(errors)
             result = DeltaGenResult.send_failed
 
@@ -123,9 +117,9 @@ def _initialize_log_listener(logging_queue):
     LOGGER = init_logging(MAIN_LOGGER_NAME)
 
     # This will move all handlers from LOGGER to the queue listener
-    log_listener = setup_log_queue_listener(LOGGER, logging_queue)
+    ll = setup_log_queue_listener(LOGGER, logging_queue)
 
-    return log_listener
+    return ll
 
 
 if __name__ == '__main__':
