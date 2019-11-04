@@ -330,6 +330,7 @@ class SendToDeltaGen(QObject):
         self.plm_xml_controller.no_connection.connect(self._no_connection)
         self.plm_xml_controller.send_finished.connect(self._send_operation_finished)
         self.plm_xml_controller.progress.connect(self._update_progress)
+        self.plm_xml_controller.plmxml_finished.connect(self._plm_xml_finished)
 
         # Prepare Send Thread
         self.dg = CommunicateDeltaGen()
@@ -433,6 +434,22 @@ class SendToDeltaGen(QObject):
 
         if not self.rendering:
             self.ui.app.alert(self.ui, 0)
+
+    @Slot(int)
+    def _plm_xml_finished(self, result: int):
+        """ Additional PlmXml finished operations, send_operation_finished will also be called """
+        def copy_to_clipboard():
+            self.ui.app.clipboard().setText(self.plm_xml_controller.last_result)
+
+        if self.rendering:
+            return
+
+        btns = (
+            (_('Ergebnis kopieren'), copy_to_clipboard),
+            ('[X]', None),
+            )
+
+        self.display_view.info_overlay.display_confirm(self.plm_xml_controller.last_result, btns)
 
     def _display_result(self, result: int):
         if result == DeltaGenResult.send_success:

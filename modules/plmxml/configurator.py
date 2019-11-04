@@ -27,6 +27,8 @@ class PlmXmlConfigurator:
         self.config = config
         self.errors = list()
 
+        self.status_msg = str()
+
         # Parse PlmXml against config on initialisation
         self._parse_plmxml_against_config()
 
@@ -91,6 +93,16 @@ class PlmXmlConfigurator:
 
         return False
 
+    def _set_status_msg(self):
+        self.status_msg = f'Updating PlmXml Configuration. Found ' \
+                          f'{len([t for t in self.plmxml.look_lib.iterate_active_targets()])} ' \
+                          f'Materials to update and ' \
+                          f'{len([p for p in self.plmxml.iterate_configurable_product_instances()])} objects to ' \
+                          f'update their visibility.'
+        not_updated = [t.name for t in self.plmxml.look_lib.materials.values() if not t.visible_variant]
+        self.status_msg += f'The following {len(not_updated)} Materials did not match the config ' \
+                           f'and will not be updated:\n{"; ".join(not_updated)}'
+
     def _parse_plmxml_against_config(self):
         # -- Geometry
         # -- Set Visibility of Parts with PR_TAGS
@@ -118,12 +130,4 @@ class PlmXmlConfigurator:
                     LOGGER.debug(f'Switching Material {target.name[:40]:40} -> {variant.name}')
 
         # -- Print result
-        LOGGER.info(f'Updating Configuration. Found '
-                    f'{len([t for t in self.plmxml.look_lib.iterate_active_targets()])} '
-                    f'Materials to update and '
-                    f'{len([p for p in self.plmxml.iterate_configurable_product_instances()])} objects to '
-                    f'update their visibility.')
-
-        not_updated = [t.name for t in self.plmxml.look_lib.materials.values() if not t.visible_variant]
-        LOGGER.info(f'The following {len(not_updated)} Materials did not match the config and will not be updated:\n'
-                    f'{"; ".join(not_updated)}')
+        self._set_status_msg()
