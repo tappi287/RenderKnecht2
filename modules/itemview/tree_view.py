@@ -115,6 +115,8 @@ class KnechtTreeView(QTreeView):
 
         # Render Tree
         self.__is_render_view = False
+        # Preset Wizard Preset Tree
+        self.__is_wizard_preset_view = False
 
     @property
     def is_render_view(self):
@@ -123,6 +125,14 @@ class KnechtTreeView(QTreeView):
     @is_render_view.setter
     def is_render_view(self, val: bool):
         self.__is_render_view = val
+
+    @property
+    def is_wizard_preset_view(self):
+        return self.__is_wizard_preset_view
+
+    @is_wizard_preset_view.setter
+    def is_wizard_preset_view(self, val: bool):
+        self.__is_wizard_preset_view = val
 
     @property
     def permanent_type_filter_column(self):

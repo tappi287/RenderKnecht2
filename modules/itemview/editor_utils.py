@@ -195,6 +195,9 @@ class KnechtEditorUtilities:
         else:
             destination = 1
 
+        if dest_view.is_wizard_preset_view:
+            destination = 0
+
         if dest_view == view_origin:          # Destination and origin match?
             different_origin = False             # No different origin!
 

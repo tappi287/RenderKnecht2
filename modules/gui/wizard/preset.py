@@ -106,7 +106,7 @@ class PresetWizardPage(QWizardPage):
         self.preset_tree = self._init_tree_view(self.preset_tree, KnechtModel())
         self.preset_tree.supports_drop = True
         self.preset_tree.supports_drag_move = True
-        self.preset_tree.is_render_view = True
+        self.preset_tree.is_wizard_preset_view = True
         self.preset_tree.context = PresetTreeContextMenu(self.preset_tree, self.wizard)
         self.preset_tree.shortcut_override = PresetTreeViewShortcutOverrides(self.preset_tree)
         self.preset_tree.view_refreshed.connect(self.update_available_options)
