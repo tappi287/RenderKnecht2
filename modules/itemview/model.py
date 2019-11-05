@@ -35,6 +35,7 @@ class KnechtModel(QAbstractItemModel):
         self.root_item = root_item or self.create_root_item()
 
         self.id_mgr = KnechtModelIdentifiers(self)
+        self._initial_item_id_connection_finished = False
 
         self.is_render_view_model = False
 
@@ -374,10 +375,15 @@ class KnechtModel(QAbstractItemModel):
         else:
             item.style_italic()
 
-    def initial_item_id_connection(self):
+    def initial_item_id_connection(self, override: bool=False):
         """ This should only be called -ONCE- if the model was not populated with insert_children """
+        if self._initial_item_id_connection_finished and not override:
+            return
+
         for item in self.root_item.iter_children():
             self._connect_item_ids(item)
+
+        self._initial_item_id_connection_finished = True
 
     def _connect_item_ids(self, item):
         self._connect_item_id(item)

@@ -171,9 +171,6 @@ class KnechtItem(QObject):
         return self.childItems[row]
 
     def iter_children(self):
-        if not self.num_children:
-            return list()
-
         yield from self.childItems
 
     def childCount(self):

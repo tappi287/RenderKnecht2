@@ -82,11 +82,6 @@ class KnechtCollectVariants(QObject):
 
         return variants
 
-    def _collect_preset_variants(self, preset_item: KnechtItem, variants_ls: KnechtVariantList,
-                                 src_model: KnechtModel) -> None:
-        self.recursion_depth = 0
-        self._collect_preset_variants_recursive(preset_item, variants_ls, src_model)
-
     def _collect_reset_preset(self, variants_ls: KnechtVariantList, src_model: KnechtModel):
         reset_presets = list()
 
@@ -102,19 +97,22 @@ class KnechtCollectVariants(QObject):
 
         return True
 
+    def _collect_preset_variants(self, preset_item: KnechtItem, variants_ls: KnechtVariantList,
+                                 src_model: KnechtModel) -> None:
+        self.recursion_depth = 0
+        self._collect_preset_variants_recursive(preset_item, variants_ls, src_model)
+
     def _collect_preset_variants_recursive(self, preset_item: KnechtItem, variants_ls: KnechtVariantList,
                                            src_model: KnechtModel) -> None:
         if self.recursion_depth > self.recursion_limit:
             LOGGER.warning('Recursion limit reached while collecting references! Aborting further collections!')
             return
 
-        ordered_child_ls = self._order_children(preset_item)
-
         if preset_item.userType == Kg.camera_item:
             self._add_camera_variants(preset_item, variants_ls, src_model)
             return
 
-        for child in ordered_child_ls:
+        for child in self._order_children(preset_item):
             self._add_variant(child, variants_ls, src_model)
 
             if child.userType == Kg.reference:

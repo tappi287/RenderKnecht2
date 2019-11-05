@@ -18,6 +18,9 @@ class IdStorage:
         self.search_list_indices = search_list_indices
 
     def add(self, _id: QUuid, item: KnechtItem):
+        if _id in self.ids or item in self.items:
+            return
+
         self.items.append(item)
         self.ids.append(_id)
 
@@ -94,7 +97,7 @@ class IdStorage:
 
 
 class KnechtModelIdentifiers(QObject):
-    debug_preset = False
+    debug_preset = True
     debug_ref = False
 
     check_recurring_id = QUuid()
@@ -119,7 +122,7 @@ class KnechtModelIdentifiers(QObject):
             self._presets.remove_item(item)
             if self.debug_preset:
                 LOGGER.debug(f'Removed Preset {_id.toString()[-5:-1]}['
-                             f'{len(self._presets.items):02d}] - {item.data(1)[:10]} - {self.model}')
+                             f'{len(self._presets.items):02d}] - {item.data(0)[:3]}{item.data(1)[:10]} - {self.model}')
 
             return
 
@@ -129,7 +132,7 @@ class KnechtModelIdentifiers(QObject):
 
             if self.debug_preset:
                 LOGGER.debug(f'Added Preset {_id.toString()[-5:-1]}['
-                             f'{len(self._presets.items):02d}] - {item.data(1)[:10]} - {self.model}')
+                             f'{len(self._presets.items):02d}] - {item.data(0)[:3]}{item.data(1)[:10]} - {self.model}')
 
     def reference_id_changed(self, _id: QUuid, item: KnechtItem, add: bool, invalid: bool=False) -> None:
         """ Reference Ids updated from model """
