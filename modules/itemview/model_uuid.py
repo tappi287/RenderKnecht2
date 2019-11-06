@@ -97,7 +97,7 @@ class IdStorage:
 
 
 class KnechtModelIdentifiers(QObject):
-    debug_preset = True
+    debug_preset = False
     debug_ref = False
 
     check_recurring_id = QUuid()

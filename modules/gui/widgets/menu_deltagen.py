@@ -29,17 +29,12 @@ class DeltaGenMenu(QMenu):
         self.ui = ui
 
         self.reset, self.freeze, self.check, self.display, self.display_overlay = None, None, None, None, None
+        self.validate_plmxml = None
 
         self.setup_deltagen_menu()
-        QTimer.singleShot(1, self.delayed_setup)
 
         # Apply settings before showing
         self.aboutToShow.connect(self._apply_settings)
-
-    @Slot()
-    def delayed_setup(self):
-        """ Setup attributes that require a fully initialized ui"""
-        pass
 
     def setup_deltagen_menu(self):
         # ---- Reset On/Off ----
@@ -59,6 +54,12 @@ class DeltaGenMenu(QMenu):
         self.display_overlay = self._setup_checkable_action(_('Zuletzt gesendetes Preset als Overlay anzeigen'), False,
                                                             self.toggle_display_finished_overlay)
 
+        # ---- Validate DeltaGen Scene vs PlmXml before switching configurations
+        self.validate_plmxml = self._setup_checkable_action(
+            _('DeltaGen Szene vor dem konfigurieren mit PlmXml abgleichen.'), True, self.toggle_validate_plmxml)
+
+        self._apply_settings()
+
     def _setup_checkable_action(self, name: str, checked: bool, target: object):
         check_icon = IconRsc.get_icon('check_box_empty')
         check_icon.addPixmap(IconRsc.get_pixmap('check_box'), QIcon.Normal, QIcon.On)
@@ -73,11 +74,12 @@ class DeltaGenMenu(QMenu):
 
     def _apply_settings(self):
         """ Apply saved settings """
-        self.reset.setChecked(KnechtSettings.dg['reset'])
-        self.freeze.setChecked(KnechtSettings.dg['freeze_viewer'])
-        self.check.setChecked(KnechtSettings.dg['check_variants'])
-        self.display.setChecked(KnechtSettings.dg['display_variant_check'])
-        self.display_overlay.setChecked(KnechtSettings.dg['display_send_finished_overlay'])
+        self.reset.setChecked(KnechtSettings.dg.get('reset'))
+        self.freeze.setChecked(KnechtSettings.dg.get('freeze_viewer'))
+        self.check.setChecked(KnechtSettings.dg.get('check_variants'))
+        self.display.setChecked(KnechtSettings.dg.get('display_variant_check'))
+        self.display_overlay.setChecked(KnechtSettings.dg.get('display_send_finished_overlay'))
+        self.validate_plmxml.setChecked(KnechtSettings.dg.get('validate_plmxml_scene'))
 
     @Slot(bool)
     def toggle_reset(self, checked: bool):
@@ -99,6 +101,10 @@ class DeltaGenMenu(QMenu):
     @Slot(bool)
     def toggle_display_finished_overlay(self, checked: bool):
         KnechtSettings.dg['display_send_finished_overlay'] = checked
+
+    @Slot(bool)
+    def toggle_validate_plmxml(self, checked: bool):
+        KnechtSettings.dg['validate_plmxml_scene'] = checked
 
     def enable_menus(self, enabled: bool=True):
         for a in self.menu.actions():

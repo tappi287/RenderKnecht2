@@ -1,10 +1,12 @@
 from typing import List, Union
 
 from PySide2.QtCore import QObject, QTimer, Slot
-from PySide2.QtWidgets import QPlainTextEdit
 
 from modules.itemview.item import KnechtItem
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
+from modules.log import init_logging
+
+LOGGER = init_logging(__name__)
 
 
 class VariantInputFields(QObject):
@@ -32,6 +34,14 @@ class VariantInputFields(QObject):
     def add_variants(self):
         # Get text from Variant Set field
         variant_set_str = self.ui.plainTextEdit_addVariant_Setname.text()
+
+        # Remove trailing or leading spaces, line breaks etc.
+        if variant_set_str[-1:] in (' ', '_', '-', '\n'):
+            variant_set_str = variant_set_str[:-1]
+        if variant_set_str[:1] in (' ', '_', '-', '\n'):
+            variant_set_str = variant_set_str[1:]
+
+        LOGGER.debug(variant_set_str)
 
         # Get text from Variant field
         variant_str = self.ui.plainTextEdit_addVariant_Variant.text()

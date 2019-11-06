@@ -156,6 +156,7 @@ class KnechtSettings:
         viewer_background='#ffffff',
         viewer_apply_bg=False,
         display_send_finished_overlay=False,
+        validate_plmxml_scene=True,
         )
     fakom = dict(
         last_pos_file='',

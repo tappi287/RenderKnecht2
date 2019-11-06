@@ -1,9 +1,10 @@
 import re
-from typing import Tuple
+from typing import Tuple, List
 
-from modules.plmxml import PlmXml, pr_tags_to_reg_ex
+from modules.plmxml import PlmXml, pr_tags_to_reg_ex, NodeInfo, ProductInstance
 from modules.plmxml.connector import AsConnectorConnection
-from modules.plmxml.request import AsNodeSetVisibleRequest, AsMaterialConnectToTargetsRequest
+from modules.plmxml.request import AsNodeSetVisibleRequest, AsMaterialConnectToTargetsRequest, \
+    AsSceneGetStructureRequest
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -35,6 +36,37 @@ class PlmXmlConfigurator:
     def update_config(self, config: str):
         self.config = config
         self._parse_plmxml_against_config()
+
+    def validate_scene_vs_plmxml(self) -> Tuple[bool, List[NodeInfo]]:
+        """
+
+        :rtype: bool, list
+        :return: Request was successful, List of missing nodes
+        """
+        missing_nodes: List[NodeInfo] = list()
+
+        as_conn = AsConnectorConnection()
+
+        # -- Create GetSceneStructureRequest
+        root_node_dummy = NodeInfo(ProductInstance(as_id='root', parent_node_id='root'))
+        scene_request = AsSceneGetStructureRequest(root_node_dummy)
+        request_result = as_conn.request(scene_request)
+
+        if not request_result:
+            # Request failed
+            return False, missing_nodes
+
+        # -- Create List of LincId's in the scene
+        scene_linc_ids = {n.product_instance.linc_id for n in scene_request.result}
+
+        for node in self.plmxml.iterate_configurable_nodes():
+            if node.product_instance.linc_id not in scene_linc_ids:
+                missing_nodes.append(node)
+
+        LOGGER.debug('Validate Scene vs PlmXml Result: %s nodes are missing.', len(missing_nodes))
+
+        # Request successful, missing LincId's
+        return True, missing_nodes
 
     def request_delta_gen_update(self) -> bool:
         """ Send requests to AsConnector2 to update the DeltaGen scene with the current configuration
@@ -69,10 +101,10 @@ class PlmXmlConfigurator:
         # -- Set Visibility of Geometry
         visible_nodes, invisible_nodes = list(), list()
 
-        for p in self.plmxml.iterate_configurable_product_instances():
-            if p.visible:
+        for p in self.plmxml.iterate_configurable_nodes():
+            if p.product_instance.visible:
                 visible_nodes.append(p)
-            elif not p.visible:
+            elif not p.product_instance.visible:
                 invisible_nodes.append(p)
 
         # -- Create the actual NodeSetVisibleRequest objects
@@ -97,7 +129,7 @@ class PlmXmlConfigurator:
         self.status_msg = f'Updating PlmXml Configuration. Found ' \
                           f'{len([t for t in self.plmxml.look_lib.iterate_active_targets()])} ' \
                           f'Materials to update and ' \
-                          f'{len([p for p in self.plmxml.iterate_configurable_product_instances()])} objects to ' \
+                          f'{len([p for p in self.plmxml.iterate_configurable_nodes()])} objects to ' \
                           f'update their visibility.'
         not_updated = [t.name for t in self.plmxml.look_lib.materials.values() if not t.visible_variant]
         self.status_msg += f'The following {len(not_updated)} Materials did not match the config ' \
@@ -106,12 +138,12 @@ class PlmXmlConfigurator:
     def _parse_plmxml_against_config(self):
         # -- Geometry
         # -- Set Visibility of Parts with PR_TAGS
-        for p in self.plmxml.iterate_configurable_product_instances():
+        for n in self.plmxml.iterate_configurable_nodes():
             # Match PR TAGS against configuration
-            if self._match(p.pr_tags):
-                p.visible = True
+            if self._match(n.product_instance.pr_tags):
+                n.product_instance.visible = True
             else:
-                p.visible = False
+                n.product_instance.visible = False
 
         # -- Materials
         # -- Reset visible variants

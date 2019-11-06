@@ -1,5 +1,6 @@
 import re
 from typing import Dict, Union, Tuple
+from xml.etree import ElementTree as Et
 
 from lxml import etree as Et
 
@@ -188,13 +189,20 @@ class LookLibrary:
 
 
 class ProductInstance:
-    def __init__(self, _id='', part_ref='', name='', user_data=None):
+    def __init__(self, _id='', linc_id='', part_ref='', name='', user_data=None, as_id='', parent_node_id=''):
         self.id = _id
+        self.as_id = as_id
+        self.parent_node_id = parent_node_id
         self.name = name
         self.part_ref = part_ref
 
         self.user_data = user_data if user_data else dict()
-        self.pr_tags = user_data['PR_TAGS'] if user_data.get('PR_TAGS') else None
+        self.pr_tags = user_data['PR_TAGS'] if self.user_data.get('PR_TAGS') else None
+
+        if linc_id:
+            self.linc_id = linc_id
+        else:
+            self.linc_id = user_data['LINC_ID'] if self.user_data.get('LINC_ID') else ""
 
         self._visible = False
 
@@ -208,7 +216,12 @@ class ProductInstance:
 
 
 class NodeInfo:
-    def __init__(self, product_instance: ProductInstance):
+    class Types:
+        enumerations = ['UNKNOWN', 'SHAPE', 'GROUP', 'SPOTLIGHT', 'POINTLIGHT', 'DIRECTIONALLIGHT', 'LOCALSURROUNDING',
+                        'SWITCH', 'LOD', 'FILE', 'LOCATOR', 'LIGHTCOLLECTOR', 'SOUND', 'LIGHTEMITTER', 'FX', 'CAMERA',
+                        'BODY', 'SHELL']
+
+    def __init__(self, product_instance: ProductInstance, node_info_type: str = 'UNKNOWN', material_name: str=''):
         """ Node Info Xml node for sending requests
                 <NodeInfo>
                     <LincId>{linc_id}</LincId>
@@ -228,8 +241,18 @@ class NodeInfo:
 
         :param ProductInstance product_instance:
         """
-        self.p = product_instance
+        self.product_instance = product_instance
+        self.type = self._validate_node_info_type(node_info_type)
+        self.material_name = material_name
         self.element = self._create_node()
+
+    def _validate_node_info_type(self, value: str):
+        if value not in self.Types.enumerations:
+            LOGGER.warning('NodeInfo created with invalid type setting: %s; Setting default value: %s',
+                           value, self.Types.enumerations[0])
+            return self.Types.enumerations[0]
+        else:
+            return value
 
     @staticmethod
     def _create_user_attributes(parent, attrib_dict):
@@ -252,19 +275,34 @@ class NodeInfo:
         # NodeInfo root node
         node = Et.Element('NodeInfo')
 
+        # -- AsId
+        if self.product_instance.as_id:
+            as_id = Et.SubElement(node, 'AsId')
+            as_id.text = self.product_instance.as_id
+
+        # -- ParentNodeId
+        if self.product_instance.parent_node_id:
+            p_id = Et.SubElement(node, 'ParentNodeId')
+            p_id.text = self.product_instance.parent_node_id
+
         # -- LincId
         linc_id = Et.SubElement(node, 'LincId')
-        linc_id.text = self.p.user_data.get('LINC_ID') or ''
+        linc_id.text = self.product_instance.linc_id
 
         # -- Name
         name = Et.SubElement(node, 'Name')
-        name.text = self.p.name
+        name.text = self.product_instance.name
 
         # -- NodeInfoType
         info_type = Et.SubElement(node, 'NodeInfoType')
-        info_type.text = 'UNKNOWN'
+        info_type.text = self.type
+
+        # -- MaterialName
+        if self.material_name:
+            m = Et.SubElement(node, 'MaterialName')
+            m.text = self.material_name
 
         # -- UserAttributes
-        self._create_user_attributes(node, self.p.user_data)
+        self._create_user_attributes(node, self.product_instance.user_data)
 
         return node

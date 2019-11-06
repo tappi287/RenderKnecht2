@@ -4,9 +4,11 @@ from lxml import etree as Et
 from requests import Response
 
 from modules.language import get_translation
-from modules.plmxml.objects import MaterialTarget, NodeInfo, ProductInstance
-from modules.plmxml.globals import AS_CONNECTOR_IP, AS_CONNECTOR_PORT, AS_CONNECTOR_API_URL, PLM_XML_NAMESPACE
 from modules.log import init_logging
+from modules.plmxml.globals import AS_CONNECTOR_API_URL, AS_CONNECTOR_IP, AS_CONNECTOR_NS, AS_CONNECTOR_PORT, \
+    AS_CONNECTOR_XMLNS
+from modules.plmxml.objects import MaterialTarget, NodeInfo, ProductInstance
+from modules.plmxml.xml_helper import get_node_info_from_element
 
 LOGGER = init_logging(__name__)
 
@@ -32,13 +34,12 @@ class AsConnectorRequest:
             </{parameter}>
         </{method_type}{method_camel_case}Request>
     """
-
-    xmlns = "urn:authoringsystem_v2"
+    
     xsd = "http://www.w3.org/2001/XMLSchema"
     xsi = "http://www.w3.org/2001/XMLSchema-instance"
-
-    ns_map = {'xsd': xsd, 'xsi': xsi, None: xmlns}
-
+    
+    ns_map = {'xsd': xsd, 'xsi': xsi, None: AS_CONNECTOR_NS}
+    
     base_url = f'http://{AS_CONNECTOR_IP}:{AS_CONNECTOR_PORT}/{AS_CONNECTOR_API_URL}///'
     base_header = {'Content-Type': 'application/xml', 'Host': f'http://{AS_CONNECTOR_IP}:{AS_CONNECTOR_PORT}'}
 
@@ -66,7 +67,7 @@ class AsConnectorRequest:
         return header
 
     def to_string(self, xml: Union[None, Et._Element]=None) -> str:
-        if not xml:
+        if xml is None:
             xml = self.request
 
         return Et.tostring(xml,
@@ -95,20 +96,24 @@ class AsConnectorRequest:
 
     def handle_response(self, r: Response) -> bool:
         """ Handle the AsConnector http respsonse """
+        e = None
         try:
             e = self._response_to_element(r)
         except Exception as err:
-            LOGGER.error('Error reading AsConnector response: %s', err)
-            self.error = str(err)
-            return False
+            LOGGER.error('%s could not read AsConnector response as xml: %s', self.__class__.__name__, err)
+            self.error = f'{self.__class__.__name__} could not read AsConnector response {str(err)}'
 
-        if r.ok:
-            LOGGER.debug('AsConnector response to %s was OK.\n%s', self.__class__.__name__, r.text)
+        if r.ok and e is not None:
+            text = 'XML Response too huge to print.'
+            if len(r.text) < 2000:
+                text = r.text
+
+            LOGGER.debug('AsConnector response to %s was OK.\n%s', self.__class__.__name__, text)
             return self._read_response(e)
         else:
             LOGGER.error('Error while sending request:\n%s', self.to_string())
             LOGGER.error('AsConnector result:\n%s', r.text)
-            return self._read_error_response(e)
+            return self._read_error_response(r)
 
     @staticmethod
     def _response_to_element(r: Response) -> Et._Element:
@@ -127,14 +132,14 @@ class AsConnectorRequest:
                      f'Xml Content of response was:\n{self.to_string(r_xml)}')
         return True
 
-    def _read_error_response(self, r_xml: Et._Element) -> bool:
+    def _read_error_response(self, r: Response) -> bool:
         self.error = f'Error while sending {self.__class__.__name__} request.\nAsConnector returned:\n' \
-                     f'{self.to_string(r_xml)}'
+                     f'{r.text[:500]}'
         return False
 
 
 class AsMaterialConnectToTargetsRequest(AsConnectorRequest):
-    response_xpath = f'{{{AsConnectorRequest.xmlns}}}returnVal'
+    response_xpath = f'{AS_CONNECTOR_XMLNS}returnVal'
 
     def __init__(self,
                  target_materials: Union[Iterator, List[MaterialTarget]],
@@ -142,26 +147,6 @@ class AsMaterialConnectToTargetsRequest(AsConnectorRequest):
                  replace_target_name: bool=False
                  ):
         """ Create a Material:ConnectToTarget Request
-
-            <?xml version="1.0" encoding="utf-8"?>
-            <MaterialConnectToTargetsRequest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:authoringsystem_v2">
-                <materialNames>
-                    <string>
-                        ABC001
-                    </string>
-                </materialNames>
-                <targetNames>
-                    <string>
-                        E_ABC000_Default
-                    </string>
-                </targetNames>
-                <useCopyMethod>
-                    false
-                </useCopyMethod>
-                <replaceTargetName>
-                    false
-                </replaceTargetName>
-            </MaterialConnectToTargetsRequest>
 
         :param List[MaterialTarget] target_materials:
         :param bool use_copy_method:
@@ -209,24 +194,21 @@ class AsMaterialConnectToTargetsRequest(AsConnectorRequest):
 
 
 class AsNodeSetVisibleRequest(AsConnectorRequest):
-    response_xpath = f'{{{AsConnectorRequest.xmlns}}}returnVal'
+    response_xpath = f'{AS_CONNECTOR_XMLNS}returnVal'
 
-    def __init__(self, product_instances: Union[List[ProductInstance], Iterator], visible=False):
+    def __init__(self, nodes: Union[List[NodeInfo], Iterator], visible=False):
         super(AsNodeSetVisibleRequest, self).__init__()
         self.url = f'node/set/visible'
         self._expected_result = 'true' if visible else 'false'
+        self._set_request(nodes, visible)
 
-        self._set_request(product_instances, visible)
-
-    def _set_request(self, product_instances: Union[List[ProductInstance], Iterator], visible: bool):
+    def _set_request(self, nodes: Union[List[NodeInfo], Iterator], visible: bool):
         e = self._create_request_root_element('Node', 'SetVisible')
-        nodes = Et.SubElement(e, 'nodes')
+        n = Et.SubElement(e, 'nodes')
 
-        for p in product_instances:
-            # Create Node Info object
-            node_info = NodeInfo(p)
+        for p in nodes:
             # Append NodeInfo Xml element to nodes
-            nodes.append(node_info.element)
+            n.append(p.element)
 
         # -- Add visible parameter
         node_vis = Et.SubElement(e, 'visible')
@@ -248,7 +230,7 @@ class AsNodeSetVisibleRequest(AsConnectorRequest):
 
 
 class AsGetVersionInfoRequest(AsConnectorRequest):
-    response_xpath = f'{{{AsConnectorRequest.xmlns}}}returnVal'
+    response_xpath = f'{AS_CONNECTOR_XMLNS}returnVal'
 
     def __init__(self):
         """ Create a Version Info request
@@ -280,3 +262,91 @@ class AsGetVersionInfoRequest(AsConnectorRequest):
             LOGGER.debug('AsConnector VersionInfo request successful. Found version %s', self.result)
 
         return result
+
+
+class AsNodeGetSelection(AsConnectorRequest):
+    response_xpath = f'{AS_CONNECTOR_XMLNS}returnVal/'
+    
+    def __init__(self):
+        super(AsNodeGetSelection, self).__init__()
+        self.url = 'node/get/selection'
+        self.result = str()
+        self._set_request()
+
+    def _set_request(self):
+        e = self._create_request_root_element('Node', 'GetSelection')
+        self.request = e
+
+    def _read_response(self, r_xml: Et._Element) -> bool:
+        e = r_xml.find(self.response_xpath)
+
+        if e is not None:
+            self.result = get_node_info_from_element(e)
+            return True
+        else:
+            return False
+
+
+class AsSceneGetStructureRequest(AsConnectorRequest):
+    response_xpath = f'{AS_CONNECTOR_XMLNS}returnVal/'
+
+    def __init__(self, start_node: NodeInfo, types: List[str]=None):
+        """ AsConnector Signature:
+            <param name="node">The root node to start the search from.</param>
+            <param name="types">The list of node types that shall be returned.</param>
+            <returns>The child nodes of startNode that match the given types.</returns>
+
+        :param start_node: The root node to start the search from.
+        :param types: The list of node types that shall be returned.
+        """
+        super(AsSceneGetStructureRequest, self).__init__()
+        self.url = 'scene/get/structure'
+
+        self.result: List[NodeInfo] = list()
+
+        self._set_request(start_node, types or list())
+
+    def _set_request(self, start_node: NodeInfo, types: List[str]):
+        if not types:
+            # Default setting
+            types = ['GROUP', 'FILE']
+        else:
+            invalid_types = [t for t in types if t not in NodeInfo.Types.enumerations]
+
+            for t in invalid_types:
+                types.remove(t)
+
+        # <SceneGetStructureRequest>
+        e = self._create_request_root_element('Scene', 'GetStructure')
+
+        # -<node>
+        n = Et.SubElement(e, 'node')
+        # --<NodeInfo>
+        n.append(start_node.element)
+        # --</NodeInfo>
+        # -</node>
+
+        # -<types>
+        types = Et.SubElement(e, 'types')
+
+        for t in types:
+            # --<NodeInfoType>
+            nt = Et.SubElement(types, 'NodeInfoType')
+            nt.text = t
+            # --</NodeInfoType>
+        # -</types>
+
+        # </SceneGetStructureRequest>
+        self.request = e
+
+    def _read_response(self, r_xml: Et._Element) -> bool:
+        if r_xml is None:
+            return False
+
+        nodes = list()
+        for n in r_xml.iterfind(self.response_xpath):
+            node = get_node_info_from_element(n)
+            nodes.append(node)
+
+        self.result = nodes
+        return True

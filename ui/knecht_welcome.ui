@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>493</width>
+    <width>456</width>
     <height>411</height>
    </rect>
   </property>
@@ -133,8 +133,8 @@ QPushButton:hover {color: rgb(85, 170, 255);
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>430</width>
-          <height>132</height>
+          <width>393</width>
+          <height>165</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -160,6 +160,8 @@ QPushButton:hover {color: rgb(85, 170, 255);
            </property>
            <property name="text">
             <string>&lt;ul&gt;
+&lt;li&gt;added AsConnector PlmXml switching support, see updated documentation&lt;/li&gt;
+&lt;li&gt;various fixes for: Preset Wizard item handling, item id connection; item undo deletion&lt;/li&gt;
 &lt;li&gt;Presets drop/paste on Render tree will auto-create a render preset + fixed some undo oddities&lt;/li&gt;
 &lt;li&gt;added standalone POS Schnuffi to compare differences between models/their XMLs&lt;/li&gt;
 &lt;li&gt;added standalone KnechtViewer for pixel perfect comparsions of images vs. DeltaGen Viewer&lt;/li&gt;

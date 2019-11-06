@@ -1,6 +1,8 @@
 import requests
 
-from modules.plmxml.request import AsConnectorRequest, AsGetVersionInfoRequest
+from modules.plmxml import NodeInfo, ProductInstance, PlmXml
+from modules.plmxml.request import AsConnectorRequest, AsGetVersionInfoRequest, AsSceneGetStructureRequest, \
+    AsNodeGetSelection
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -53,7 +55,7 @@ class AsConnectorConnection:
             LOGGER.error('Error connecting to AsConnector! %s', e)
             err = str(e)
 
-        if r:
+        if r is not None:
             LOGGER.debug('Sent request to AsConnector, response code was: %s', r.status_code)
             result = as_request.handle_response(r)
             self.error = as_request.error

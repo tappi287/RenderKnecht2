@@ -435,11 +435,10 @@ class SendToDeltaGen(QObject):
         if not self.rendering:
             self.ui.app.alert(self.ui, 0)
 
-    @Slot(int)
     def _plm_xml_finished(self, result: str):
         """ Additional PlmXml finished operations, send_operation_finished will also be called """
         def copy_to_clipboard():
-            self.ui.app.clipboard().setText(self.plm_xml_controller.last_result)
+            self.ui.app.clipboard().setText(result)
 
         if self.rendering:
             return
@@ -466,7 +465,7 @@ class SendToDeltaGen(QObject):
         elif result == DeltaGenResult.aborted:
             self.ui.msg(_('DeltaGen Sende Operation <b>abgebrochen.</b>'), 2500)
 
-    def _update_status(self, message: str, duration: int=1500):
+    def _update_status(self, message: str, duration: int=2500):
         self.display_view.info_overlay.display(message, duration, True)
 
     def _update_progress(self, progress: int):

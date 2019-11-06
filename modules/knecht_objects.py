@@ -283,14 +283,14 @@ class KnechtRenderPreset:
                 self.__render_images.append((image, shot))
         return
 
-    def __create_render_image(self) -> Tuple[str, KnechtVariantList, Path]:
+    def __create_render_image(self) -> Tuple[str, KnechtVariantList, KnechtVariantList, Path]:
         __r: Tuple[_RenderImage, _RenderShot] = self.__render_images.pop(0)
         image: _RenderImage = __r[0]
         shot: _RenderShot = __r[1]
 
         image_name = self.__image_name(image, shot)
 
-        return image_name, image.variants + shot.variants, self._get_output_dir(image, shot)
+        return image_name, image.variants, shot.variants, self._get_output_dir(image, shot)
 
     def __image_name(self, image: _RenderImage, shot: _RenderShot) -> str:
         """ Create the image name based on image name and shot name """
@@ -312,19 +312,19 @@ class KnechtRenderPreset:
     def current_image_number(self) -> int:
         return self.__image_count
 
-    def get_next_render_image(self) -> Tuple[str, KnechtVariantList, Path]:
+    def get_next_render_image(self) -> Tuple[str, KnechtVariantList, KnechtVariantList, Path]:
         """
         Get the next render image name and variants.
 
         :return Tuple[str, KnechtVariantList]: (name, variants list)
         """
         if not self.remaining_images():
-            return '', KnechtVariantList(), self.path
+            return '', KnechtVariantList(), KnechtVariantList(), self.path
 
-        image_name, image_variants, out_dir = self.__create_render_image()
+        image_name, image_variants, shot_variants, out_dir = self.__create_render_image()
         self.__image_count += 1
 
-        return image_name, image_variants, out_dir
+        return image_name, image_variants, shot_variants, out_dir
 
 
 class _DataTrimOption:

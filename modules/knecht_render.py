@@ -18,6 +18,7 @@ from modules.knecht_utils import time_string
 from modules.knecht_objects import KnechtRenderPreset, KnechtVariantList
 from modules.language import get_translation
 from modules.log import init_logging
+from modules.plmxml.utils import create_pr_string_from_variants
 from modules.settings import KnechtSettings
 
 LOGGER = init_logging(__name__)
@@ -221,8 +222,8 @@ class KnechtRenderThread(Thread):
                 if self.abort_rendering:
                     return
 
-                name, variant_ls, img_out_dir = render_preset.get_next_render_image()
-                self.render_image(name, variant_ls, render_preset, img_out_dir)
+                name, image_variants, shot_variants, img_out_dir = render_preset.get_next_render_image()
+                self.render_image(name, image_variants, shot_variants, render_preset, img_out_dir)
 
                 if self.abort_rendering:
                     return
@@ -235,7 +236,8 @@ class KnechtRenderThread(Thread):
                 datetime.now().strftime('%A %H:%M -'), self.total_image_count(), duration))
             self.render_result = self.Result.rendering_completed
 
-    def render_image(self, name: str, variant_ls: KnechtVariantList, render_preset: KnechtRenderPreset, out_dir: Path):
+    def render_image(self, name: str, image_variants: KnechtVariantList, shot_variants: KnechtVariantList,
+                     render_preset: KnechtRenderPreset, out_dir: Path):
         """ perform rendering for the current image """
         self.current_img_start_time = time.time()
         self.current_img_render_time = calculate_render_time(render_preset)
@@ -247,8 +249,15 @@ class KnechtRenderThread(Thread):
         self.progress_text.emit(f'{progress_name} - {self.rendered_img_count + 1:02d}/{self.total_image_count():02d}')
 
         # --- Send image variants
-        self.send_variants.emit(variant_ls)
+        self.send_variants.emit(image_variants)
         self.btn_text.emit(_('Sende Varianten...'))
+        if not self._await_dg_result():
+            self.abort_no_connection()
+            return
+
+        # --- Send shot variants
+        self.send_variants.emit(shot_variants)
+        self.btn_text.emit(_('Sende Shot Varianten...'))
         if not self._await_dg_result():
             self.abort_no_connection()
             return
@@ -282,11 +291,15 @@ class KnechtRenderThread(Thread):
             )
         self._await_dg_result()
 
+        # Add log entry for this render image
+        self.render_log += f'\n\n{self._return_date_time()} {self.render_log_msg[1]} {name}\n{self.render_log_msg[2]}\n'
+        self._add_variants_log(image_variants)  # Add image variants to log
+        self.render_log += ';'
+        self._add_variants_log(shot_variants)   # Add shot variants to log
+        self.render_log += '\n\n'
+
         # --- Loop until image created
         LOGGER.info('Rendering image: %s', img_path.name)
-        self.render_log += f'\n\n{self._return_date_time()} {self.render_log_msg[1]} {name}\n{self.render_log_msg[2]}\n'
-        self._add_variants_log(variant_ls)
-
         self._await_rendered_image(img_path)
 
         # --- Convert result image to PNG
@@ -535,10 +548,11 @@ class KnechtRenderThread(Thread):
             LOGGER.error('Error writing render log to file: %s', e)
 
     def _add_variants_log(self, variant_ls: KnechtVariantList):
-        for variant in variant_ls.variants:
-            self.render_log += '{} {};'.format(variant.name, variant.value)
-
-        self.render_log += '\n\n'
+        if variant_ls.plm_xml_path is not None:
+            self.render_log += create_pr_string_from_variants(variant_ls)
+        else:
+            for variant in variant_ls.variants:
+                self.render_log += '{} {};'.format(variant.name, variant.value)
 
     def total_image_count(self):
         """ Return total number of images that need to be rendered """
@@ -687,7 +701,7 @@ class KnechtRender(QObject):
         self.ui.pushButton_startRender.setText(txt)
 
     @Slot(str, int)
-    def _update_status(self, message: str, duration: int=800):
+    def _update_status(self, message: str, duration: int=1500):
         self.display_view.info_overlay.display(message, duration, True)
 
     @Slot(str)

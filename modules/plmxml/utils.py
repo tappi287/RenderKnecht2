@@ -1,5 +1,6 @@
 from typing import Union
 
+from modules.knecht_objects import KnechtVariantList
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -10,6 +11,15 @@ LOGGER = init_logging(__name__)
 lang = get_translation()
 lang.install()
 _ = lang.gettext
+
+
+def create_pr_string_from_variants(variants_ls: KnechtVariantList) -> str:
+    pr_conf = ''
+
+    for variant in variants_ls.variants:
+        pr_conf += f'+{variant.name}'
+
+    return pr_conf
 
 
 def pr_tags_to_reg_ex(pr_tags: Union[None, str]) -> str:

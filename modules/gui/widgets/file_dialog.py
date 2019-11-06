@@ -32,6 +32,7 @@ class FileDialog:
         rksession=dict(title=_('Session *.rksession auswaehlen'), filter=_('RK Session Dateien (*.rksession)')),
         dir=dict(title=_('Verzeichnis auswaehlen ...'), filter=None)
         )
+    valid_recent_file_types = {'xml', 'xlsx', 'cmd', 'rksession'}
 
     @classmethod
     def open(cls,
@@ -73,7 +74,8 @@ class FileDialog:
                 return
 
             KnechtSettings.app['current_path'] = Path(file).parent.as_posix()
-            KnechtSettings.add_recent_file(Path(file).as_posix(), file_key)
+            if file_key in cls.valid_recent_file_types:
+                KnechtSettings.add_recent_file(Path(file).as_posix(), file_key)
 
         return file
 
