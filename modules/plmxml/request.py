@@ -7,8 +7,7 @@ from modules.language import get_translation
 from modules.log import init_logging
 from modules.plmxml.globals import AS_CONNECTOR_API_URL, AS_CONNECTOR_IP, AS_CONNECTOR_NS, AS_CONNECTOR_PORT, \
     AS_CONNECTOR_XMLNS
-from modules.plmxml.objects import MaterialTarget, NodeInfo, ProductInstance
-from modules.plmxml.xml_helper import get_node_info_from_element
+from modules.plmxml.objects import MaterialTarget, NodeInfo
 
 LOGGER = init_logging(__name__)
 
@@ -202,7 +201,7 @@ class AsNodeSetVisibleRequest(AsConnectorRequest):
         self._expected_result = 'true' if visible else 'false'
         self._set_request(nodes, visible)
 
-    def _set_request(self, nodes: Union[List[NodeInfo], Iterator], visible: bool):
+    def _set_request(self, nodes: Union[List[NodeInfo], Iterator[NodeInfo]], visible: bool):
         e = self._create_request_root_element('Node', 'SetVisible')
         n = Et.SubElement(e, 'nodes')
 
@@ -281,7 +280,7 @@ class AsNodeGetSelection(AsConnectorRequest):
         e = r_xml.find(self.response_xpath)
 
         if e is not None:
-            self.result = get_node_info_from_element(e)
+            self.result = NodeInfo.get_node_from_element(e)
             return True
         else:
             return False
@@ -291,13 +290,11 @@ class AsSceneGetStructureRequest(AsConnectorRequest):
     response_xpath = f'{AS_CONNECTOR_XMLNS}returnVal/'
 
     def __init__(self, start_node: NodeInfo, types: List[str]=None):
-        """ AsConnector Signature:
-            <param name="node">The root node to start the search from.</param>
-            <param name="types">The list of node types that shall be returned.</param>
-            <returns>The child nodes of startNode that match the given types.</returns>
+        """ Get all child nodes from given startNode, use as_id=root, parent_node_id=root for the complete scene
 
         :param start_node: The root node to start the search from.
         :param types: The list of node types that shall be returned.
+        :returns: The child nodes of startNode that match the given types.
         """
         super(AsSceneGetStructureRequest, self).__init__()
         self.url = 'scene/get/structure'
@@ -314,6 +311,7 @@ class AsSceneGetStructureRequest(AsConnectorRequest):
             invalid_types = [t for t in types if t not in NodeInfo.Types.enumerations]
 
             for t in invalid_types:
+                LOGGER.error('%s requested with invalid type: %s', self.__class__.__name__, t)
                 types.remove(t)
 
         # <SceneGetStructureRequest>
@@ -345,7 +343,7 @@ class AsSceneGetStructureRequest(AsConnectorRequest):
 
         nodes = list()
         for n in r_xml.iterfind(self.response_xpath):
-            node = get_node_info_from_element(n)
+            node = NodeInfo.get_node_from_element(n)
             nodes.append(node)
 
         self.result = nodes

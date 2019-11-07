@@ -1,8 +1,11 @@
 from typing import Union
 
+from lxml import etree as Et
+
 from modules.knecht_objects import KnechtVariantList
 from modules.language import get_translation
 from modules.log import init_logging
+from modules.plmxml.globals import AS_CONNECTOR_XMLNS as AS_XMLNS
 
 LOGGER = init_logging(__name__)
 
@@ -79,3 +82,52 @@ def pr_tags_to_reg_ex(pr_tags: Union[None, str]) -> str:
     # Remove trailing OR '|'
     #
     return pattern[:-1]
+
+
+def create_attribute_child_tag(parent_element: Et._Element, tag: str, value: str):
+    if value:
+        e = Et.SubElement(parent_element, tag)
+        e.text = value
+
+
+def create_user_attributes_elements_from_dict(parent, attrib_dict):
+    """
+
+    :param Et._Element parent:
+    :param dict attrib_dict:
+    :return:
+    """
+    ua = Et.SubElement(parent, 'UserAttributes')
+
+    for key, value in attrib_dict.items():
+        a = Et.SubElement(ua, 'UserAttribute')
+        k = Et.SubElement(a, 'Key')
+        k.text = key
+        v = Et.SubElement(a, 'Value')
+        v.text = value
+
+
+def find_text_attribute(child, attr_name) -> str:
+    found_attribute = child.find(f'{AS_XMLNS}{attr_name}')
+    if found_attribute is not None:
+        return found_attribute.text
+    else:
+        return ""
+
+
+def find_user_attributes_in_element(child):
+    """ Helper to find the UserAttributeArray """
+    user_attribute_dict = dict()
+    user_attributes = child.find(f'{AS_XMLNS}UserAttributes')
+
+    if user_attributes is None:
+        return user_attribute_dict
+
+    for ua in user_attributes:
+        ua_key = ua.find(f'{AS_XMLNS}Key')
+        ua_value = ua.find(f'{AS_XMLNS}Value')
+
+        if ua_key is not None and ua_value is not None:
+            user_attribute_dict[ua_key.text] = ua_value.text
+
+    return user_attribute_dict

@@ -1,7 +1,7 @@
 import re
 from typing import Tuple, List
 
-from modules.plmxml import PlmXml, pr_tags_to_reg_ex, NodeInfo, ProductInstance
+from modules.plmxml import PlmXml, pr_tags_to_reg_ex, NodeInfo
 from modules.plmxml.connector import AsConnectorConnection
 from modules.plmxml.request import AsNodeSetVisibleRequest, AsMaterialConnectToTargetsRequest, \
     AsSceneGetStructureRequest
@@ -48,7 +48,7 @@ class PlmXmlConfigurator:
         as_conn = AsConnectorConnection()
 
         # -- Create GetSceneStructureRequest
-        root_node_dummy = NodeInfo(ProductInstance(as_id='root', parent_node_id='root'))
+        root_node_dummy = NodeInfo(as_id='root', parent_node_id='root')
         scene_request = AsSceneGetStructureRequest(root_node_dummy)
         request_result = as_conn.request(scene_request)
 
@@ -57,10 +57,10 @@ class PlmXmlConfigurator:
             return False, missing_nodes
 
         # -- Create List of LincId's in the scene
-        scene_linc_ids = {n.product_instance.linc_id for n in scene_request.result}
+        scene_linc_ids = {n.linc_id for n in scene_request.result}
 
         for node in self.plmxml.iterate_configurable_nodes():
-            if node.product_instance.linc_id not in scene_linc_ids:
+            if node.linc_id not in scene_linc_ids:
                 missing_nodes.append(node)
 
         LOGGER.debug('Validate Scene vs PlmXml Result: %s nodes are missing.', len(missing_nodes))
@@ -102,9 +102,9 @@ class PlmXmlConfigurator:
         visible_nodes, invisible_nodes = list(), list()
 
         for p in self.plmxml.iterate_configurable_nodes():
-            if p.product_instance.visible:
+            if p.visible:
                 visible_nodes.append(p)
-            elif not p.product_instance.visible:
+            elif not p.visible:
                 invisible_nodes.append(p)
 
         # -- Create the actual NodeSetVisibleRequest objects
@@ -140,10 +140,10 @@ class PlmXmlConfigurator:
         # -- Set Visibility of Parts with PR_TAGS
         for n in self.plmxml.iterate_configurable_nodes():
             # Match PR TAGS against configuration
-            if self._match(n.product_instance.pr_tags):
-                n.product_instance.visible = True
+            if self._match(n.pr_tags):
+                n.visible = True
             else:
-                n.product_instance.visible = False
+                n.visible = False
 
         # -- Materials
         # -- Reset visible variants

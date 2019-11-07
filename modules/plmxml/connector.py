@@ -1,10 +1,8 @@
 import requests
 
-from modules.plmxml import NodeInfo, ProductInstance, PlmXml
-from modules.plmxml.request import AsConnectorRequest, AsGetVersionInfoRequest, AsSceneGetStructureRequest, \
-    AsNodeGetSelection
 from modules.language import get_translation
 from modules.log import init_logging
+from modules.plmxml.request import AsConnectorRequest, AsGetVersionInfoRequest
 
 LOGGER = init_logging(__name__)
 

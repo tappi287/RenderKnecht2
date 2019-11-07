@@ -7,7 +7,7 @@ from lxml import etree as Et
 from modules.gui.widgets.path_util import path_exists
 from modules.plmxml.globals import PLM_XML_NAMESPACE, PRODUCT_INSTANCE_TAGS, PRODUCT_INSTANCE_XPATH, USER_DATA_XPATH, \
     LOOK_LIBRARY_INSTANCE_NAME
-from modules.plmxml.objects import ProductInstance, LookLibrary, NodeInfo
+from modules.plmxml.objects import LookLibrary, NodeInfo
 from modules.plmxml.utils import pr_tags_to_reg_ex
 
 from modules.language import get_translation
@@ -39,7 +39,7 @@ class PlmXml:
 
     def iterate_configurable_nodes(self) -> Iterator[NodeInfo]:
         for p in self.nodes.values():
-            if p.product_instance.pr_tags:
+            if p.pr_tags:
                 yield p
 
     def _read_product_instance_element(self, n):
@@ -66,13 +66,13 @@ class PlmXml:
 
         # -- Store ProductInstance as NodeInfo
         self.nodes[instance_id] = NodeInfo(
-            ProductInstance(_id=instance_id, part_ref=part_ref, name=name, user_data=user_data)
+            plmxml_id=instance_id, part_ref=part_ref, name=name, user_data=user_data
             )
 
         # -- Print result
         if self.debug:
             LOGGER.debug(f'{instance_id}: {name}, {part_ref}, {user_data.get("PR_TAGS")}, '
-                         f'{pr_tags_to_reg_ex(self.nodes[instance_id].product_instance.pr_tags)}')
+                         f'{pr_tags_to_reg_ex(self.nodes[instance_id].pr_tags)}')
 
     @staticmethod
     def _read_node_user_data(n: Et._Element):
@@ -126,7 +126,7 @@ class PlmXml:
         LOGGER.debug('Namespace Map: %s', root.nsmap)
         LOGGER.info(f'Parsed file {self.file.name} in {parse_end - parse_start:.5f}s')
         LOGGER.info(f'Indexed {len(self.nodes)} ProductInstances from which '
-                    f'{len([_id for _id, pi in self.nodes.items() if pi.product_instance.pr_tags is not None])} '
+                    f'{len([_id for _id, pi in self.nodes.items() if pi.pr_tags is not None])} '
                     f'contained PR_TAGS in {index_end - parse_end:.5f}s')
 
         LOGGER.info(f"Found LookLibrary with {len(self.look_lib.materials)} materials and "

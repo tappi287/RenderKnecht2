@@ -5,7 +5,8 @@ from xml.etree import ElementTree as Et
 from lxml import etree as Et
 
 from modules.plmxml import PLM_XML_NAMESPACE
-from modules.plmxml.utils import pr_tags_to_reg_ex
+from modules.plmxml.utils import pr_tags_to_reg_ex, create_attribute_child_tag, \
+    create_user_attributes_elements_from_dict, find_text_attribute, find_user_attributes_in_element
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -63,19 +64,13 @@ class LookLibrary:
             target.visible_variant = None
 
     def iterate_materials(self) -> Tuple[MaterialTarget, MaterialVariant]:
-        """ Iterate the material variants of every target material
-
-        :return:
-        """
+        """ Iterate the material variants of every target material """
         for name, material in self.materials.items():
             for material_variant in material.variants:
                 yield material, material_variant
 
     def iterate_active_targets(self):
-        """ Iterate all target materials that have a visible variant
-
-        :return:
-        """
+        """ Iterate all target materials that have a visible variant """
         for material in self.materials.values():
             if material.visible_variant:
                 yield material
@@ -188,21 +183,38 @@ class LookLibrary:
         return MaterialTarget(target_name, material_variants)
 
 
-class ProductInstance:
-    def __init__(self, _id='', linc_id='', part_ref='', name='', user_data=None, as_id='', parent_node_id=''):
-        self.id = _id
-        self.as_id = as_id
-        self.parent_node_id = parent_node_id
-        self.name = name
-        self.part_ref = part_ref
+class NodeInfo:
+    class Types:
+        enumerations = ['UNKNOWN', 'SHAPE', 'GROUP', 'SPOTLIGHT', 'POINTLIGHT', 'DIRECTIONALLIGHT', 'LOCALSURROUNDING',
+                        'SWITCH', 'LOD', 'FILE', 'LOCATOR', 'LIGHTCOLLECTOR', 'SOUND', 'LIGHTEMITTER', 'FX', 'CAMERA',
+                        'BODY', 'SHELL']
 
+    def __init__(self, plmxml_id: str='', linc_id: str='', part_ref: str='', name: str='', user_data: dict=None,
+                 as_id: str='', parent_node_id: str='', node_info_type: str='UNKNOWN', material_name: str=''):
+        """ Represents ProductInstances in PlmXml and NodeInfo nodes in AsConnector
+
+        :param str plmxml_id: PlmXml document xml ProductInstance id attribute
+        :param str linc_id: PlmXml UserData LINC_ID
+        :param str part_ref: PlmXml document xml ProductInstance partRef attribute
+        :param str name: PlmXml document xml ProductInstance name attribute
+        :param user_data: PlmXml UserData/UserValue as dict
+        :param str as_id: AsConnector ID when node was read out from AsConnector REST Api, seems to be session bound
+        :param str parent_node_id: when node was read out from AsConnector REST Api
+        :param str node_info_type: One of Types.enumerations, maybe read this out from PlmXml UserData LINC_NODE_TYPE!?
+        :param material_name: when node was read out from AsConnector REST Api
+        """
         self.user_data = user_data if user_data else dict()
-        self.pr_tags = user_data['PR_TAGS'] if self.user_data.get('PR_TAGS') else None
-
+        self.plmxml_id = plmxml_id
         if linc_id:
             self.linc_id = linc_id
         else:
-            self.linc_id = user_data['LINC_ID'] if self.user_data.get('LINC_ID') else ""
+            self.linc_id = self.user_data.get('LINC_ID') or ""
+        self.part_ref = part_ref
+        self.name = name
+        self.as_id = as_id
+        self.parent_node_id = parent_node_id
+        self.type = self._validate_node_info_type(node_info_type)
+        self.material_name = material_name
 
         self._visible = False
 
@@ -214,37 +226,13 @@ class ProductInstance:
     def visible(self, value: bool):
         self._visible = value
 
+    @property
+    def element(self):
+        return self._create_node_element()
 
-class NodeInfo:
-    class Types:
-        enumerations = ['UNKNOWN', 'SHAPE', 'GROUP', 'SPOTLIGHT', 'POINTLIGHT', 'DIRECTIONALLIGHT', 'LOCALSURROUNDING',
-                        'SWITCH', 'LOD', 'FILE', 'LOCATOR', 'LIGHTCOLLECTOR', 'SOUND', 'LIGHTEMITTER', 'FX', 'CAMERA',
-                        'BODY', 'SHELL']
-
-    def __init__(self, product_instance: ProductInstance, node_info_type: str = 'UNKNOWN', material_name: str=''):
-        """ Node Info Xml node for sending requests
-                <NodeInfo>
-                    <LincId>{linc_id}</LincId>
-                    <Name>{name}</Name>
-                    <NodeInfoType>UNKNOWN</NodeInfoType>
-                    <UserAttributes>
-                        <UserAttribute>
-                            <Key>LINC_ID</Key>
-                            <Value>{linc_id}</Value>
-                        </UserAttribute>
-                        <UserAttribute>
-                            <Key>{PlmXml/UserData/UserValue/[@"title"]}</Key>
-                            <Value>{PlmXml/UserData/UserValue/[@"value"]}</Value>
-                        </UserAttribute>
-                    </UserAttributes>
-                </NodeInfo>
-
-        :param ProductInstance product_instance:
-        """
-        self.product_instance = product_instance
-        self.type = self._validate_node_info_type(node_info_type)
-        self.material_name = material_name
-        self.element = self._create_node()
+    @property
+    def pr_tags(self):
+        return self.user_data.get('PR_TAGS')
 
     def _validate_node_info_type(self, value: str):
         if value not in self.Types.enumerations:
@@ -254,55 +242,40 @@ class NodeInfo:
         else:
             return value
 
+    def _create_node_element(self):
+        """ Create an AsConnector NodeInfo Xml element from this node info instance """
+        # -- NodeInfo root node
+        node_info_element = Et.Element('NodeInfo')
+
+        # -- Create Attribute Elements
+        # <NodeInfo><tag>value</tag></NodeInfo>
+        for tag, value in [('AsId', self.as_id), ('ParentNodeId', self.parent_node_id),
+                           ('LincId', self.linc_id), ('Name', self.name), ('NodeInfoType', self.type),
+                           ('MaterialName', self.material_name)]:
+            create_attribute_child_tag(node_info_element, tag, value)
+
+        # -- Create UserAttributes Element
+        # <NodeInfo>
+        #   <UserAttributes><UserAttribute><Key>key</Key><Value>value</Value></UserAttribute></UserAttributes>
+        # </NodeInfo>
+        create_user_attributes_elements_from_dict(node_info_element, self.user_data)
+
+        return node_info_element
+
     @staticmethod
-    def _create_user_attributes(parent, attrib_dict):
-        """
+    def get_node_from_element(e: Et._Element):
+        """ Get NodeInfo instance from an AsConnectorResponse XML element """
+        linc_id = find_text_attribute(e, "LincId")
+        name = find_text_attribute(e, "Name")
+        parent_node_id = find_text_attribute(e, "ParentNodeId")
+        node_info_type = find_text_attribute(e, "NodeInfoType")
 
-        :param Et._Element parent:
-        :param dict attrib_dict:
-        :return:
-        """
-        ua = Et.SubElement(parent, 'UserAttributes')
+        if node_info_type == "":
+            node_info_type = "UNKNOWN"
 
-        for key, value in attrib_dict.items():
-            a = Et.SubElement(ua, 'UserAttribute')
-            k = Et.SubElement(a, 'Key')
-            k.text = key
-            v = Et.SubElement(a, 'Value')
-            v.text = value
+        material_name = find_text_attribute(e, "MaterialName")
+        user_attribute_array = find_user_attributes_in_element(e)
+        as_id = find_text_attribute(e, 'AsId')
 
-    def _create_node(self):
-        # NodeInfo root node
-        node = Et.Element('NodeInfo')
-
-        # -- AsId
-        if self.product_instance.as_id:
-            as_id = Et.SubElement(node, 'AsId')
-            as_id.text = self.product_instance.as_id
-
-        # -- ParentNodeId
-        if self.product_instance.parent_node_id:
-            p_id = Et.SubElement(node, 'ParentNodeId')
-            p_id.text = self.product_instance.parent_node_id
-
-        # -- LincId
-        linc_id = Et.SubElement(node, 'LincId')
-        linc_id.text = self.product_instance.linc_id
-
-        # -- Name
-        name = Et.SubElement(node, 'Name')
-        name.text = self.product_instance.name
-
-        # -- NodeInfoType
-        info_type = Et.SubElement(node, 'NodeInfoType')
-        info_type.text = self.type
-
-        # -- MaterialName
-        if self.material_name:
-            m = Et.SubElement(node, 'MaterialName')
-            m.text = self.material_name
-
-        # -- UserAttributes
-        self._create_user_attributes(node, self.product_instance.user_data)
-
-        return node
+        return NodeInfo(as_id=as_id, user_data=user_attribute_array, parent_node_id=parent_node_id, name=name,
+                        linc_id=linc_id, node_info_type=node_info_type, material_name=material_name)
