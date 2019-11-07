@@ -18,9 +18,6 @@ class IdStorage:
         self.search_list_indices = search_list_indices
 
     def add(self, _id: QUuid, item: KnechtItem):
-        if _id in self.ids or item in self.items:
-            return
-
         self.items.append(item)
         self.ids.append(_id)
 

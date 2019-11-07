@@ -69,7 +69,7 @@ class TreeUndoCommandChainWorker(QObject):
             :param TreeChainCommand undo_parent: Parent QUndoCommand containing the work chunks as childs
             :param QTreeView view: The view we will edit and that holds the progress overlay
             :param started_callback: Callable to call by Signal on start of work event loop
-            :parma finished_callback: Callable to call by Signal after the work event loop
+            :param finished_callback: Callable to call by Signal after the work event loop
         """
         super(TreeUndoCommandChainWorker, self).__init__()
 
