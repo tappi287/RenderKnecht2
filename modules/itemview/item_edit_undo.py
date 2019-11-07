@@ -1,4 +1,4 @@
-from PySide2.QtCore import QObject, QModelIndex, Slot, QEvent
+from PySide2.QtCore import QEvent, QModelIndex, QObject, Slot
 from PySide2.QtWidgets import QUndoCommand
 
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
@@ -38,6 +38,7 @@ class ViewItemEditUndo(QObject):
         self.org_view_edit(index, trigger, event)
 
         if trigger & self.view.editTriggers():
+            self.view.clear_filter()
             # Save data previous to editing
             self.previous_data = index.data()
             # Save currently edited index
