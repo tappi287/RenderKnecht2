@@ -87,14 +87,14 @@ class PlmXml:
 
     def parse_plm_xml(self):
         if not path_exists(self.file):
-            self.error = _('The PlmXml file could not be found.')
+            self.error = _(_('PlmXml Datei wurde nicht gefunden.'))
 
         # --- parse Xml tree ---
         parse_start = time.time()
         try:
             tree = Et.parse(self.file.as_posix())
         except Exception as e:
-            self.error = f'Error parsing PlmXml:\n{e}'
+            self.error = _('Fehler beim Parsen der PlmXml:\n{}').format(e)
             LOGGER.error(self.error)
             return
         parse_end = time.time()

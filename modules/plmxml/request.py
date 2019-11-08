@@ -45,7 +45,7 @@ class AsConnectorRequest:
     def __init__(self):
         self._request = None
         self.url = ''
-        self.error = str()
+        self.error = _('Kein Fehler definiert.')
 
     @property
     def request(self):
@@ -100,7 +100,8 @@ class AsConnectorRequest:
             e = self._response_to_element(r)
         except Exception as err:
             LOGGER.error('%s could not read AsConnector response as xml: %s', self.__class__.__name__, err)
-            self.error = f'{self.__class__.__name__} could not read AsConnector response {str(err)}'
+            self.error = _('{} konnte AsConnector Antwort nicht interpretieren: {}'
+                           ).format(self.__class__.__name__, str(err))
 
         if r.ok and e is not None:
             text = 'XML Response too huge to print.'
@@ -132,8 +133,9 @@ class AsConnectorRequest:
         return True
 
     def _read_error_response(self, r: Response) -> bool:
-        self.error = f'Error while sending {self.__class__.__name__} request.\nAsConnector returned:\n' \
-                     f'{r.text[:500]}'
+        self.error = _('Fehler beim senden von {} Anfrage.\nAsConnector antwortete:\n{}').format(
+                       self.__class__.__name__, r.text[:500]
+                       )
         return False
 
 

@@ -52,7 +52,7 @@ class ViewItemEditUndo(QObject):
         self.org_data_commit(editor)
         current_data = self.edit_index.data()
 
-        if self.previous_data == current_data:
+        if self.previous_data == current_data or current_data is None:
             # No change detected
             return
 

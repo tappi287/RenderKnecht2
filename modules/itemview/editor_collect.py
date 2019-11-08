@@ -77,7 +77,7 @@ class KnechtCollectVariants(QObject):
         variants.preset_id = current_item.preset_id
         self._collect_preset_variants(current_item, variants, src_model)
 
-        if not reset_found and variants.plm_xml_path is None:
+        if not reset_found and collect_reset and variants.plm_xml_path is None:
             self.reset_missing.emit()
 
         return variants

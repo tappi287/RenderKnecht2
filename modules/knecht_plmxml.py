@@ -13,7 +13,7 @@ from modules.log import init_logging, setup_logging, setup_log_queue_listener
 from modules.plmxml import PlmXml
 from modules.plmxml.configurator import PlmXmlConfigurator
 from modules.plmxml.utils import create_pr_string_from_variants
-from private.plmxml_example_data import example_pr_string, plm_xml_file
+# from private.plmxml_example_data import example_pr_string, plm_xml_file
 
 LOGGER = init_logging(__name__)
 
@@ -79,9 +79,9 @@ class KnechtUpdatePlmXml(Thread):
             scene_result += '\n'.join(
                 [f'Name: {m.product_instance.name} LincId: {m.product_instance.linc_id}' for m in missing_nodes[:20]]
                 )
-
             if len(missing_nodes) > 20:
                 scene_result += _('\n..und {} weitere Knoten.').format(len(missing_nodes[20:]))
+            scene_result += _('\nDiese Prüfung kann in den DeltaGen Optionen deaktiviert werden.')
 
             return False, scene_result
         elif request_successful and not missing_nodes:
@@ -137,7 +137,7 @@ class KnechtUpdatePlmXml(Thread):
 
 # -----------------------------------------------------
 # Everything below is for executing this as test script
-
+"""
 def _initialize_log_listener(logging_queue):
     global LOGGER
     LOGGER = init_logging(MAIN_LOGGER_NAME)
@@ -149,10 +149,6 @@ def _initialize_log_listener(logging_queue):
 
 
 if __name__ == '__main__':
-    """
-       Example script to parse a PlmXml and send a AsConnector Request
-       PR String Configuration can be entered/pasted while running.
-    """
     log_queue = Queue()
     setup_logging(log_queue)
     log_listener = _initialize_log_listener(log_queue)
@@ -178,3 +174,4 @@ if __name__ == '__main__':
 
     log_listener.stop()
     logging.shutdown()
+"""

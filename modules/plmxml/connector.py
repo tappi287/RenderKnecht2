@@ -38,7 +38,7 @@ class AsConnectorConnection:
             LOGGER.debug(f'Connected to AsConnector {version_request.result}')
         else:
             self.connected = False
-            self.error = 'Could not connect to an AsConnector Instance.'
+            self.error = _('Konnte mit keiner AsConnector Instanz verbinden.')
 
         return result
 

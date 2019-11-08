@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-10-22 09:53+0200\n"
+"POT-Creation-Date: 2019-11-08 16:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -275,7 +275,7 @@ msgid "Excel Dateien (*.xlsx);"
 msgstr ""
 
 #: modules/gui/widgets\fakom_dialog.py:99
-#: modules/gui/widgets\file_dialog.py:27
+#: modules/gui/widgets\file_dialog.py:28
 msgid "Excel Dateien *.xlsx auswaehlen"
 msgstr ""
 
@@ -288,34 +288,42 @@ msgid "Variants *.XML auswaehlen"
 msgstr ""
 
 #: modules/gui/widgets\file_dialog.py:27
+msgid "PlmXml *.XML auswaehlen"
+msgstr ""
+
+#: modules/gui/widgets\file_dialog.py:27
+msgid "PlmXml Dateien (*.plmxml)"
+msgstr ""
+
+#: modules/gui/widgets\file_dialog.py:28
 msgid "Excel Dateien (*.xlsx)"
 msgstr ""
 
-#: modules/gui/widgets\file_dialog.py:28
+#: modules/gui/widgets\file_dialog.py:29
 msgid "Variant CMD Dateien (*.cmd)"
 msgstr ""
 
-#: modules/gui/widgets\file_dialog.py:28
+#: modules/gui/widgets\file_dialog.py:29
 msgid "Variants *.CMD auswaehlen"
 msgstr ""
 
-#: modules/gui/widgets\file_dialog.py:29
+#: modules/gui/widgets\file_dialog.py:30
 msgid "DeltaGen POS Varianten *.xml oder *.pos auswaehlen"
 msgstr ""
 
-#: modules/gui/widgets\file_dialog.py:30
+#: modules/gui/widgets\file_dialog.py:31
 msgid "DeltaGen POS Datei (*.xml;*.pos)"
 msgstr ""
 
-#: modules/gui/widgets\file_dialog.py:31
+#: modules/gui/widgets\file_dialog.py:32
 msgid "RK Session Dateien (*.rksession)"
 msgstr ""
 
-#: modules/gui/widgets\file_dialog.py:31
+#: modules/gui/widgets\file_dialog.py:32
 msgid "Session *.rksession auswaehlen"
 msgstr ""
 
-#: modules/gui/widgets\file_dialog.py:32
+#: modules/gui/widgets\file_dialog.py:33
 msgid "Verzeichnis auswaehlen ..."
 msgstr ""
 
@@ -430,14 +438,18 @@ msgid "Ausgabe Objekt\tDefiniert einen Ausgabepfad"
 msgstr ""
 
 #: modules/gui/widgets\menu_create.py:68
-msgid "Kamera Objekt\tEnthält 3DS DeltaGen Kameradaten"
+msgid "PlmXml Objekt\tDefiniert einen Pfad zur PlmXml Datei"
 msgstr ""
 
 #: modules/gui/widgets\menu_create.py:70
+msgid "Kamera Objekt\tEnthält 3DS DeltaGen Kameradaten"
+msgstr ""
+
+#: modules/gui/widgets\menu_create.py:72
 msgid "Separator\tNicht-interagierbares Ordnungselement"
 msgstr ""
 
-#: modules/gui/widgets\menu_create.py:107
+#: modules/gui/widgets\menu_create.py:109
 msgid "DeltaGen_Kamera_{:03d}"
 msgstr ""
 
@@ -445,24 +457,28 @@ msgstr ""
 msgid "DeltaGen"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:46
+#: modules/gui/widgets\menu_deltagen.py:41
 msgid "Reset senden"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:49
+#: modules/gui/widgets\menu_deltagen.py:44
 msgid "Freeze Viewer"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:52
+#: modules/gui/widgets\menu_deltagen.py:47
 msgid "Varianten State Check"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:55
+#: modules/gui/widgets\menu_deltagen.py:50
 msgid "State Check im Baum anzeigen"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:59
+#: modules/gui/widgets\menu_deltagen.py:54
 msgid "Zuletzt gesendetes Preset als Overlay anzeigen"
+msgstr ""
+
+#: modules/gui/widgets\menu_deltagen.py:59
+msgid "DeltaGen Szene vor dem konfigurieren mit PlmXml abgleichen."
 msgstr ""
 
 #: modules/gui/widgets\menu_edit.py:23
@@ -1119,7 +1135,7 @@ msgid "Variantenbaum"
 msgstr ""
 
 #: modules/gui\main_ui.py:60 modules/gui\ui_resource.py:121
-#: modules\knecht_render.py:643
+#: modules\knecht_render.py:657
 msgid "Renderliste"
 msgstr ""
 
@@ -1367,7 +1383,7 @@ msgstr ""
 msgid "Bricht laufende Sendung an DeltaGen ab."
 msgstr ""
 
-#: modules/gui\ui_translations.py:116 modules\knecht_render.py:674
+#: modules/gui\ui_translations.py:116 modules\knecht_render.py:688
 msgid "Rendering"
 msgstr ""
 
@@ -1415,7 +1431,7 @@ msgstr ""
 msgid "Konvertiert die ausgegebenen Bilder nach dem Render Vorgang in PNG."
 msgstr ""
 
-#: modules/gui\ui_translations.py:143 modules\knecht_render.py:308
+#: modules/gui\ui_translations.py:143 modules\knecht_render.py:322
 msgid "Rendering starten"
 msgstr ""
 
@@ -1600,11 +1616,15 @@ msgid "PRN_Lederumfang"
 msgstr ""
 
 #: modules/itemview\editor_create.py:92
+msgid "Ausgabe Pfad"
+msgstr ""
+
+#: modules/itemview\editor_create.py:92 modules/itemview\editor_create.py:95
 msgid "<Kein Pfad gesetzt>"
 msgstr ""
 
-#: modules/itemview\editor_create.py:92
-msgid "Ausgabe Pfad"
+#: modules/itemview\editor_create.py:95
+msgid "PlmXml Datei"
 msgstr ""
 
 #: modules/itemview\editor_undo.py:187
@@ -1619,11 +1639,11 @@ msgstr ""
 msgid "verschieben"
 msgstr ""
 
-#: modules/itemview\item_edit_undo.py:76
+#: modules/itemview\item_edit_undo.py:77
 msgid "{0} ändern {1} ..."
 msgstr ""
 
-#: modules/itemview\item_edit_undo.py:82
+#: modules/itemview\item_edit_undo.py:83
 msgid "{0} für {1} ändern {2} ..."
 msgstr ""
 
@@ -1784,51 +1804,55 @@ msgstr ""
 msgid "Netzwerkverbindung konnte nicht beendet werden. Bitte warten und in einer Minute erneut versuchen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:162
+#: modules\knecht_deltagen.py:155
 msgid "DeltaGen Verbindung erfolgreich verifiziert."
 msgstr ""
 
-#: modules\knecht_deltagen.py:177
+#: modules\knecht_deltagen.py:170
 msgid "DeltaGen Verbindungsversuch ({!s}/{!s}) in {!s} Sekunden..."
 msgstr ""
 
-#: modules\knecht_deltagen.py:205
+#: modules\knecht_deltagen.py:198
 msgid "Prüfe Verbindung..."
 msgstr ""
 
-#: modules\knecht_deltagen.py:213
+#: modules\knecht_deltagen.py:206
 msgid "Sperre Viewer Fenster"
 msgstr ""
 
-#: modules\knecht_deltagen.py:399
+#: modules\knecht_deltagen.py:405
 msgid "Es läuft bereits eine DeltaGen Sende Operation! Vorgang abwarten oder abbrechen und anschließend erneut versuchen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:430
+#: modules\knecht_deltagen.py:447
+msgid "Kopieren"
+msgstr ""
+
+#: modules\knecht_deltagen.py:456
 msgid "DeltaGen Sende Operation beendet."
 msgstr ""
 
-#: modules\knecht_deltagen.py:433
+#: modules\knecht_deltagen.py:459
 msgid "Konnte <b>keine Verbindung</b> zu einer DeltaGen Instanz mit geladener Szene herstellen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:438
+#: modules\knecht_deltagen.py:464
 msgid "DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>"
 msgstr ""
 
-#: modules\knecht_deltagen.py:440
+#: modules\knecht_deltagen.py:466
 msgid "DeltaGen Sende Operation <b>abgebrochen.</b>"
 msgstr ""
 
-#: modules\knecht_deltagen.py:449
+#: modules\knecht_deltagen.py:475
 msgid "{0} {1} gesendet"
 msgstr ""
 
-#: modules\knecht_deltagen.py:537
+#: modules\knecht_deltagen.py:563
 msgid "Auswählen"
 msgstr ""
 
-#: modules\knecht_deltagen.py:541
+#: modules\knecht_deltagen.py:567
 msgid "Senden an DeltaGen abgeschlossen:<br /><i>{}</i>"
 msgstr ""
 
@@ -1864,87 +1888,124 @@ msgstr ""
 msgid "Konnte unkonvertierte Bilddatei nicht verschieben: {}"
 msgstr ""
 
-#: modules\knecht_render.py:93
-msgid "RenderKnecht Render Log erstellt am "
+#: modules\knecht_plmxml.py:78
+msgid ""
+"DeltaGen Szene stimmt nicht mit PlmXml überein. Fehlende Knoten:\n"
 msgstr ""
 
-#: modules\knecht_render.py:94
-msgid "Erzeuge Bild mit Namen:"
+#: modules\knecht_plmxml.py:83
+msgid ""
+"\n"
+"..und {} weitere Knoten."
+msgstr ""
+
+#: modules\knecht_plmxml.py:84
+msgid ""
+"\n"
+"Diese Prüfung kann in den DeltaGen Optionen deaktiviert werden."
+msgstr ""
+
+#: modules\knecht_plmxml.py:88
+msgid "DeltaGen Szene erfolgreich mit PlmXml abgeglichen."
+msgstr ""
+
+#: modules\knecht_plmxml.py:90
+msgid "Konnte DeltaGen Szene nicht mit PlmXml abgleichen. Keine Verbindung zum AsConnector2."
+msgstr ""
+
+#: modules\knecht_plmxml.py:100
+msgid "Konfiguriere PlmXml Instanz"
+msgstr ""
+
+#: modules\knecht_plmxml.py:116
+msgid "Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur."
 msgstr ""
 
 #: modules\knecht_render.py:95
+msgid "RenderKnecht Render Log erstellt am "
+msgstr ""
+
+#: modules\knecht_render.py:96
+msgid "Erzeuge Bild mit Namen:"
+msgstr ""
+
+#: modules\knecht_render.py:97
 msgid "Varianten:"
 msgstr ""
 
-#: modules\knecht_render.py:190
+#: modules\knecht_render.py:192
 msgid "Ungültige Auflösungseinstellungen in {}"
 msgstr ""
 
-#: modules\knecht_render.py:195
+#: modules\knecht_render.py:197
 msgid "Die folgenden Ausgabepfade sind zu lang, Rendering wird abgebrochen. {}{}"
 msgstr ""
 
-#: modules\knecht_render.py:201
+#: modules\knecht_render.py:203
 msgid "Die Render Presets enthalten ungültige Ausgabepfade. Rendering wird abgebrochen. {}{}"
 msgstr ""
 
-#: modules\knecht_render.py:233
+#: modules\knecht_render.py:235
 msgid "{} Rendering von {} Bildern abgeschlossen in {}"
 msgstr ""
 
-#: modules\knecht_render.py:250
+#: modules\knecht_render.py:253
 msgid "Sende Varianten..."
 msgstr ""
 
 #: modules\knecht_render.py:260
+msgid "Sende Shot Varianten..."
+msgstr ""
+
+#: modules\knecht_render.py:270
 msgid "Sende Einstellungen..."
 msgstr ""
 
-#: modules\knecht_render.py:294 modules\knecht_render.py:379
+#: modules\knecht_render.py:308 modules\knecht_render.py:392
 msgid "Konvertiere Bilddaten..."
 msgstr ""
 
-#: modules\knecht_render.py:360 modules\knecht_render.py:361
+#: modules\knecht_render.py:373 modules\knecht_render.py:374
 msgid "Prüfe Bilddaten..."
 msgstr ""
 
-#: modules\knecht_render.py:365 modules\knecht_render.py:366
+#: modules\knecht_render.py:378 modules\knecht_render.py:379
 msgid "Rendering erzeugt."
 msgstr ""
 
-#: modules\knecht_render.py:371
+#: modules\knecht_render.py:384
 msgid "Erzeuge nächstes Bild in {}..."
 msgstr ""
 
-#: modules\knecht_render.py:412
+#: modules\knecht_render.py:425
 msgid "Bild Konvertierung: {}"
 msgstr ""
 
-#: modules\knecht_render.py:421
+#: modules\knecht_render.py:434
 msgid "Render Vorgang abgebrochen.{}Konnte keine Verbindung zu einer DeltaGen Instanz herstellen."
 msgstr ""
 
-#: modules\knecht_render.py:460
+#: modules\knecht_render.py:473
 msgid "Bilddaten konnten nicht als gültiges Bild verifiziert werden.{}"
 msgstr ""
 
-#: modules\knecht_render.py:472
+#: modules\knecht_render.py:485
 msgid "Bilddaten wurden erfolgreich verifiziert: {}"
 msgstr ""
 
-#: modules\knecht_render.py:482
+#: modules\knecht_render.py:495
 msgid "{0}Datei konnte nicht als gültige Bilddatei verfiziert werden: {1}{0}"
 msgstr ""
 
-#: modules\knecht_render.py:525
+#: modules\knecht_render.py:538
 msgid "{} Einstellungen - "
 msgstr ""
 
-#: modules\knecht_render.py:526
+#: modules\knecht_render.py:539
 msgid "Sampling: {} - Res: "
 msgstr ""
 
-#: modules\knecht_render.py:527
+#: modules\knecht_render.py:540
 msgid "{}px - Ext: "
 msgstr ""
 

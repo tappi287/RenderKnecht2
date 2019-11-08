@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2019-10-22 09:53+0200\n"
-"PO-Revision-Date: 2019-10-22 10:02+0200\n"
+"POT-Creation-Date: 2019-11-08 16:24+0100\n"
+"PO-Revision-Date: 2019-11-08 16:30+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -271,7 +271,7 @@ msgstr "Choose POS Variants Xml ..."
 msgid "Excel Dateien (*.xlsx);"
 msgstr "Excel files (*.xlsx);"
 
-#: modules/gui/widgets\fakom_dialog.py:99 modules/gui/widgets\file_dialog.py:27
+#: modules/gui/widgets\fakom_dialog.py:99 modules/gui/widgets\file_dialog.py:28
 msgid "Excel Dateien *.xlsx auswaehlen"
 msgstr "Choose Excel Files *.xlsx"
 
@@ -284,34 +284,42 @@ msgid "Variants *.XML auswaehlen"
 msgstr "Select Variants * .XML"
 
 #: modules/gui/widgets\file_dialog.py:27
+msgid "PlmXml *.XML auswaehlen"
+msgstr "Select PlmXml *.plmxml"
+
+#: modules/gui/widgets\file_dialog.py:27
+msgid "PlmXml Dateien (*.plmxml)"
+msgstr "PlmXml Files (*.plmxml)"
+
+#: modules/gui/widgets\file_dialog.py:28
 msgid "Excel Dateien (*.xlsx)"
 msgstr "Excel Files (*.xlsx)"
 
-#: modules/gui/widgets\file_dialog.py:28
+#: modules/gui/widgets\file_dialog.py:29
 msgid "Variant CMD Dateien (*.cmd)"
 msgstr "Variant CMD Files (*.cmd)"
 
-#: modules/gui/widgets\file_dialog.py:28
+#: modules/gui/widgets\file_dialog.py:29
 msgid "Variants *.CMD auswaehlen"
 msgstr "Select Variants *.CMD"
 
-#: modules/gui/widgets\file_dialog.py:29
+#: modules/gui/widgets\file_dialog.py:30
 msgid "DeltaGen POS Varianten *.xml oder *.pos auswaehlen"
 msgstr "Select DeltaGen POS variants *.xml or *.pos"
 
-#: modules/gui/widgets\file_dialog.py:30
+#: modules/gui/widgets\file_dialog.py:31
 msgid "DeltaGen POS Datei (*.xml;*.pos)"
 msgstr "DeltaGen POS File (*.xml;*.pos)"
 
-#: modules/gui/widgets\file_dialog.py:31
+#: modules/gui/widgets\file_dialog.py:32
 msgid "RK Session Dateien (*.rksession)"
 msgstr "RK Session Files (* .rksession)"
 
-#: modules/gui/widgets\file_dialog.py:31
+#: modules/gui/widgets\file_dialog.py:32
 msgid "Session *.rksession auswaehlen"
 msgstr "Choose *.rksession file"
 
-#: modules/gui/widgets\file_dialog.py:32
+#: modules/gui/widgets\file_dialog.py:33
 msgid "Verzeichnis auswaehlen ..."
 msgstr "Select directory ..."
 
@@ -425,14 +433,18 @@ msgid "Ausgabe Objekt\tDefiniert einen Ausgabepfad"
 msgstr "Output node\tDefines an Output directory"
 
 #: modules/gui/widgets\menu_create.py:68
+msgid "PlmXml Objekt\tDefiniert einen Pfad zur PlmXml Datei"
+msgstr "PlmXml Object\tDefines a path to an PlmXml file"
+
+#: modules/gui/widgets\menu_create.py:70
 msgid "Kamera Objekt\tEnthält 3DS DeltaGen Kameradaten"
 msgstr "Camera Object\tContains 3DS DeltaGen Camera Data"
 
-#: modules/gui/widgets\menu_create.py:70
+#: modules/gui/widgets\menu_create.py:72
 msgid "Separator\tNicht-interagierbares Ordnungselement"
 msgstr "Separator\tNon-interactable order element"
 
-#: modules/gui/widgets\menu_create.py:107
+#: modules/gui/widgets\menu_create.py:109
 msgid "DeltaGen_Kamera_{:03d}"
 msgstr "DeltaGen_Camera_{:03d}"
 
@@ -440,25 +452,29 @@ msgstr "DeltaGen_Camera_{:03d}"
 msgid "DeltaGen"
 msgstr "DeltaGen"
 
-#: modules/gui/widgets\menu_deltagen.py:46
+#: modules/gui/widgets\menu_deltagen.py:41
 msgid "Reset senden"
 msgstr "Send reset"
 
-#: modules/gui/widgets\menu_deltagen.py:49
+#: modules/gui/widgets\menu_deltagen.py:44
 msgid "Freeze Viewer"
 msgstr "Freeze Viewer"
 
-#: modules/gui/widgets\menu_deltagen.py:52
+#: modules/gui/widgets\menu_deltagen.py:47
 msgid "Varianten State Check"
 msgstr "Variants State Check"
 
-#: modules/gui/widgets\menu_deltagen.py:55
+#: modules/gui/widgets\menu_deltagen.py:50
 msgid "State Check im Baum anzeigen"
 msgstr "Show state check in the tree"
 
-#: modules/gui/widgets\menu_deltagen.py:59
+#: modules/gui/widgets\menu_deltagen.py:54
 msgid "Zuletzt gesendetes Preset als Overlay anzeigen"
 msgstr "Show last sent Preset as overlay"
+
+#: modules/gui/widgets\menu_deltagen.py:59
+msgid "DeltaGen Szene vor dem konfigurieren mit PlmXml abgleichen."
+msgstr "Validate DeltaGen scene before configuring it with PlmXml."
 
 #: modules/gui/widgets\menu_edit.py:23
 msgid "Bearbeiten"
@@ -1112,7 +1128,7 @@ msgid "Variantenbaum"
 msgstr "Variants Tree"
 
 #: modules/gui\main_ui.py:60 modules/gui\ui_resource.py:121
-#: modules\knecht_render.py:643
+#: modules\knecht_render.py:657
 msgid "Renderliste"
 msgstr "Render Queue"
 
@@ -1360,7 +1376,7 @@ msgstr "Changes the global DeltaGen viewer background color. This setting will a
 msgid "Bricht laufende Sendung an DeltaGen ab."
 msgstr "Cancel running DeltaGen variants send operation."
 
-#: modules/gui\ui_translations.py:116 modules\knecht_render.py:674
+#: modules/gui\ui_translations.py:116 modules\knecht_render.py:688
 msgid "Rendering"
 msgstr "Rendering"
 
@@ -1408,7 +1424,7 @@ msgstr "Convert images to PNG"
 msgid "Konvertiert die ausgegebenen Bilder nach dem Render Vorgang in PNG."
 msgstr "Converts the created images to PNG after rendering."
 
-#: modules/gui\ui_translations.py:143 modules\knecht_render.py:308
+#: modules/gui\ui_translations.py:143 modules\knecht_render.py:322
 msgid "Rendering starten"
 msgstr "Start rendering"
 
@@ -1542,7 +1558,7 @@ msgstr "Switch of the Shot Variant Set"
 
 #: modules/itemview\editor_create.py:64
 msgid "Setzt das globale Sampling Level. Benutzt Clamping Einstellungen der geladenen Szene!"
-msgstr "Sets the global sampling level. Uses the Clamping Settings of the loaded Scene."
+msgstr "Sets the global sampling level. Uses the Clamping Settings of the loaded Scene!"
 
 #: modules/itemview\editor_create.py:66
 msgid "Datei Erweiterung"
@@ -1593,12 +1609,16 @@ msgid "PRN_Lederumfang"
 msgstr "PRN_Leather Circumference"
 
 #: modules/itemview\editor_create.py:92
+msgid "Ausgabe Pfad"
+msgstr "Output Path"
+
+#: modules/itemview\editor_create.py:92 modules/itemview\editor_create.py:95
 msgid "<Kein Pfad gesetzt>"
 msgstr "<No valid path>"
 
-#: modules/itemview\editor_create.py:92
-msgid "Ausgabe Pfad"
-msgstr "Output Path"
+#: modules/itemview\editor_create.py:95
+msgid "PlmXml Datei"
+msgstr "PlmXml File"
 
 #: modules/itemview\editor_undo.py:187
 msgid "Elemente hinzufügen"
@@ -1612,11 +1632,11 @@ msgstr "Remove elements"
 msgid "verschieben"
 msgstr "move"
 
-#: modules/itemview\item_edit_undo.py:76
+#: modules/itemview\item_edit_undo.py:77
 msgid "{0} ändern {1} ..."
 msgstr "{0} change to {1} ..."
 
-#: modules/itemview\item_edit_undo.py:82
+#: modules/itemview\item_edit_undo.py:83
 msgid "{0} für {1} ändern {2} ..."
 msgstr "Change {0} for {1} into {2} ..."
 
@@ -1780,51 +1800,55 @@ msgstr "The request to the database did not result in any result."
 msgid "Netzwerkverbindung konnte nicht beendet werden. Bitte warten und in einer Minute erneut versuchen."
 msgstr "Network connection could not be terminated. Please wait and try again in a minute."
 
-#: modules\knecht_deltagen.py:162
+#: modules\knecht_deltagen.py:155
 msgid "DeltaGen Verbindung erfolgreich verifiziert."
 msgstr "DeltaGen connection successfully verified."
 
-#: modules\knecht_deltagen.py:177
+#: modules\knecht_deltagen.py:170
 msgid "DeltaGen Verbindungsversuch ({!s}/{!s}) in {!s} Sekunden..."
 msgstr "DeltaGen connection attempt ({!s}/{!s}) in {!s} seconds ..."
 
-#: modules\knecht_deltagen.py:205
+#: modules\knecht_deltagen.py:198
 msgid "Prüfe Verbindung..."
 msgstr "Checking connection..."
 
-#: modules\knecht_deltagen.py:213
+#: modules\knecht_deltagen.py:206
 msgid "Sperre Viewer Fenster"
 msgstr "Lock viewer window"
 
-#: modules\knecht_deltagen.py:399
+#: modules\knecht_deltagen.py:405
 msgid "Es läuft bereits eine DeltaGen Sende Operation! Vorgang abwarten oder abbrechen und anschließend erneut versuchen."
 msgstr "DeltaGen send operation already running! Wait or cancel the running operation."
 
-#: modules\knecht_deltagen.py:430
+#: modules\knecht_deltagen.py:447
+msgid "Kopieren"
+msgstr "Copy"
+
+#: modules\knecht_deltagen.py:456
 msgid "DeltaGen Sende Operation beendet."
 msgstr "DeltaGen Send Operation finished."
 
-#: modules\knecht_deltagen.py:433
+#: modules\knecht_deltagen.py:459
 msgid "Konnte <b>keine Verbindung</b> zu einer DeltaGen Instanz mit geladener Szene herstellen."
 msgstr "Could not <b> connect </ b> to a DeltaGen instance with a loaded scene."
 
-#: modules\knecht_deltagen.py:438
+#: modules\knecht_deltagen.py:464
 msgid "DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>"
 msgstr "DeltaGen command could not be sent. <b> No connection. </ b>"
 
-#: modules\knecht_deltagen.py:440
+#: modules\knecht_deltagen.py:466
 msgid "DeltaGen Sende Operation <b>abgebrochen.</b>"
 msgstr "DeltaGen Send Operation <b> aborted. </ B>"
 
-#: modules\knecht_deltagen.py:449
+#: modules\knecht_deltagen.py:475
 msgid "{0} {1} gesendet"
 msgstr "{0} {1} sent"
 
-#: modules\knecht_deltagen.py:537
+#: modules\knecht_deltagen.py:563
 msgid "Auswählen"
 msgstr "Select"
 
-#: modules\knecht_deltagen.py:541
+#: modules\knecht_deltagen.py:567
 msgid "Senden an DeltaGen abgeschlossen:<br /><i>{}</i>"
 msgstr "Send operation to DeltaGen finished:<br /><i>{}</i>"
 
@@ -1860,87 +1884,127 @@ msgstr "Couldn't create image file {}: {}"
 msgid "Konnte unkonvertierte Bilddatei nicht verschieben: {}"
 msgstr "Couldn't move unconverted image file: {}"
 
-#: modules\knecht_render.py:93
+#: modules\knecht_plmxml.py:78
+msgid "DeltaGen Szene stimmt nicht mit PlmXml überein. Fehlende Knoten:\n"
+msgstr "DeltaGen scene does not match PlmXml. Missing nodes:\n"
+
+#: modules\knecht_plmxml.py:83
+msgid ""
+"\n"
+"..und {} weitere Knoten."
+msgstr ""
+"\n"
+"and {} additional nodes."
+
+#: modules\knecht_plmxml.py:84
+msgid ""
+"\n"
+"Diese Prüfung kann in den DeltaGen Optionen deaktiviert werden."
+msgstr ""
+"\n"
+"This check can be disabled in the DeltaGen options."
+
+#: modules\knecht_plmxml.py:88
+msgid "DeltaGen Szene erfolgreich mit PlmXml abgeglichen."
+msgstr "DeltaGen scene successfully matched with PlmXml."
+
+#: modules\knecht_plmxml.py:90
+msgid "Konnte DeltaGen Szene nicht mit PlmXml abgleichen. Keine Verbindung zum AsConnector2."
+msgstr "Could not match DeltaGen scene with PlmXml. No connection to AsConnector2."
+
+#: modules\knecht_plmxml.py:100
+msgid "Konfiguriere PlmXml Instanz"
+msgstr "Configure PlmXml Instance"
+
+#: modules\knecht_plmxml.py:116
+msgid "Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur."
+msgstr "Validating DeltaGen scene against PlmXml structure."
+
+#: modules\knecht_render.py:95
 msgid "RenderKnecht Render Log erstellt am "
 msgstr "RenderKnecht render log created on "
 
-#: modules\knecht_render.py:94
+#: modules\knecht_render.py:96
 msgid "Erzeuge Bild mit Namen:"
 msgstr "Create picture with name:"
 
-#: modules\knecht_render.py:95
+#: modules\knecht_render.py:97
 msgid "Varianten:"
 msgstr "Variants:"
 
-#: modules\knecht_render.py:190
+#: modules\knecht_render.py:192
 msgid "Ungültige Auflösungseinstellungen in {}"
 msgstr "Invalid resolution settings in {}"
 
-#: modules\knecht_render.py:195
+#: modules\knecht_render.py:197
 msgid "Die folgenden Ausgabepfade sind zu lang, Rendering wird abgebrochen. {}{}"
 msgstr "The following output paths are too long, rendering will be canceled. {}{}"
 
-#: modules\knecht_render.py:201
+#: modules\knecht_render.py:203
 msgid "Die Render Presets enthalten ungültige Ausgabepfade. Rendering wird abgebrochen. {}{}"
 msgstr "The render presets contain invalid output paths. Rendering is canceled. {}{}"
 
-#: modules\knecht_render.py:233
+#: modules\knecht_render.py:235
 msgid "{} Rendering von {} Bildern abgeschlossen in {}"
 msgstr "{} Rendering of {} images completed in {}"
 
-#: modules\knecht_render.py:250
+#: modules\knecht_render.py:253
 msgid "Sende Varianten..."
 msgstr "Send variants ..."
 
 #: modules\knecht_render.py:260
+msgid "Sende Shot Varianten..."
+msgstr "Sending Shot Variants..."
+
+#: modules\knecht_render.py:270
 msgid "Sende Einstellungen..."
 msgstr "Send settings ..."
 
-#: modules\knecht_render.py:294 modules\knecht_render.py:379
+#: modules\knecht_render.py:308 modules\knecht_render.py:392
 msgid "Konvertiere Bilddaten..."
 msgstr "Convert image data ..."
 
-#: modules\knecht_render.py:360 modules\knecht_render.py:361
+#: modules\knecht_render.py:373 modules\knecht_render.py:374
 msgid "Prüfe Bilddaten..."
 msgstr "Checking image data..."
 
-#: modules\knecht_render.py:365 modules\knecht_render.py:366
+#: modules\knecht_render.py:378 modules\knecht_render.py:379
 msgid "Rendering erzeugt."
 msgstr "Rendering generated."
 
-#: modules\knecht_render.py:371
+#: modules\knecht_render.py:384
 msgid "Erzeuge nächstes Bild in {}..."
 msgstr "Creating next image in {}..."
 
-#: modules\knecht_render.py:412
+#: modules\knecht_render.py:425
 msgid "Bild Konvertierung: {}"
 msgstr "Image conversion: {}"
 
-#: modules\knecht_render.py:421
+#: modules\knecht_render.py:434
 msgid "Render Vorgang abgebrochen.{}Konnte keine Verbindung zu einer DeltaGen Instanz herstellen."
 msgstr "Render operation canceled.{}Could not connect to a DeltaGen instance."
 
-#: modules\knecht_render.py:460
+#: modules\knecht_render.py:473
 msgid "Bilddaten konnten nicht als gültiges Bild verifiziert werden.{}"
 msgstr "File could not be validated as a valid image file: {}"
 
-#: modules\knecht_render.py:472
+#: modules\knecht_render.py:485
 msgid "Bilddaten wurden erfolgreich verifiziert: {}"
 msgstr "Image data has been successfully verified: {}"
 
-#: modules\knecht_render.py:482
+#: modules\knecht_render.py:495
 msgid "{0}Datei konnte nicht als gültige Bilddatei verfiziert werden: {1}{0}"
 msgstr "{0}File could not be verified as valid image file: {1}{0}"
 
-#: modules\knecht_render.py:525
+#: modules\knecht_render.py:538
 msgid "{} Einstellungen - "
 msgstr "{} Settings - "
 
-#: modules\knecht_render.py:526
+#: modules\knecht_render.py:539
 msgid "Sampling: {} - Res: "
 msgstr "Sampling: {} - Res: "
 
-#: modules\knecht_render.py:527
+#: modules\knecht_render.py:540
 msgid "{}px - Ext: "
 msgstr "{}px - Ext: "
 

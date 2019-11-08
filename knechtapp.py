@@ -28,8 +28,7 @@ InfoMessage.mail = 'tapper.stefan@gmail.com'
 InfoMessage.cred = ['Python Community', 'PyCharm Community Edition', 'Stackoverflow', 'PySide Docs']
 
 # TODO: Rename, Renumber Images from different RenderPresets
-# TODO: Reset missing emitted on RenderPreset Drop
-# TODO: ItemEditUndo fails on item edit in filtered view
+# TODO: Clearing filter on item edit refactoring
 
 
 def initialize_log_listener(logging_queue):
