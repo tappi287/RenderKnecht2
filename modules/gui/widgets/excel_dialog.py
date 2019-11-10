@@ -231,7 +231,7 @@ class ExcelImportDialog(QDialog):
             f.open(QIODevice.ReadOnly)
             data: QByteArray = f.readAll()
             data: bytes = data.data()
-            Settings.load_from_bytes(self.PrDefaultFilter, data)
+            Settings.load_json_from_bytes(self.PrDefaultFilter, data)
         except Exception as e:
             LOGGER.error(e)
         finally:

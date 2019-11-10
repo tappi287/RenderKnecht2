@@ -52,7 +52,7 @@ class KnechtXmlReader:
         # Store error message
         self.error = str()
 
-    def read_xml(self, file: Union[Path, str]) -> KnechtItem:
+    def read_xml(self, file: Union[Path, str, bytes]) -> KnechtItem:
         """ Read RenderKnecht Xml and return list of KnechtItem's
 
             Stores Xml read errors in class attribute errors.

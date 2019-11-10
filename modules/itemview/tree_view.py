@@ -272,7 +272,7 @@ class KnechtTreeView(QTreeView):
             if not self.isExpanded(idx):
                 self.expand(idx)
 
-    def clear_filter(self):
+    def clear_filter(self, collapse: bool=True):
         """
             Clear the current filter, collapse all items, expand selections and current index.
             Re-Apply permanent type filtering.
@@ -290,7 +290,9 @@ class KnechtTreeView(QTreeView):
             highlight_selection = False
 
         self.model().clear_filter()
-        self.collapseAll()
+
+        if collapse:
+            self.collapseAll()
 
         if highlight_selection:
             self.editor.selection.highlight_selection()

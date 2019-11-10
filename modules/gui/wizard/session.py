@@ -110,7 +110,7 @@ class WizardSession:
             f.open(QIODevice.ReadOnly)
             data: QByteArray = f.readAll()
             data: bytes = data.data()
-            Settings.load_from_bytes(PrJsonData, data)
+            Settings.load_json_from_bytes(PrJsonData, data)
         except Exception as e:
             LOGGER.error(e)
         finally:

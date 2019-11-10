@@ -28,7 +28,6 @@ InfoMessage.mail = 'tapper.stefan@gmail.com'
 InfoMessage.cred = ['Python Community', 'PyCharm Community Edition', 'Stackoverflow', 'PySide Docs']
 
 # TODO: Rename, Renumber Images from different RenderPresets
-# TODO: Clearing filter on item edit refactoring
 
 
 def initialize_log_listener(logging_queue):

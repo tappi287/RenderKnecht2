@@ -47,7 +47,7 @@ class Settings:
             setattr(obj, key, attr)
 
     @staticmethod
-    def load_from_bytes(obj, data: bytes):
+    def load_json_from_bytes(obj, data: bytes):
         load_dict = ujson.loads(data)
 
         for key, attr in load_dict.items():

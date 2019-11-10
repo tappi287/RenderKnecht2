@@ -29,10 +29,11 @@ class XmlWorkThreadSignals(QObject):
 
 
 class XmlWorkThread(Thread):
-    def __init__(self, file: Path, queue: Queue, open_xml: bool=True):
+    def __init__(self, file: Union[Path, str], queue: Queue, xml_data: bytes=b'', open_xml: bool=True):
         super(XmlWorkThread, self).__init__()
         self.load_mode = open_xml
         self.file = file
+        self.xml_data = xml_data
         self.queue = queue
 
         self.signals = XmlWorkThreadSignals()
@@ -42,10 +43,17 @@ class XmlWorkThread(Thread):
         if self.load_mode:
             self.load_xml()
         else:
-            pass
+            self.load_from_bytes()
 
     def load_xml(self):
         root_item, error_str = KnechtOpenXml.read_xml(self.file)
+        self.xml_items_loaded.emit()
+        self.queue.put(
+            (root_item, error_str, self.file)
+            )
+
+    def load_from_bytes(self):
+        root_item, error_str = KnechtOpenXml.read_xml(self.xml_data)
         self.xml_items_loaded.emit()
         self.queue.put(
             (root_item, error_str, self.file)

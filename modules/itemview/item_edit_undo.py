@@ -38,7 +38,8 @@ class ViewItemEditUndo(QObject):
         self.org_view_edit(index, trigger, event)
 
         if trigger & self.view.editTriggers():
-            self.view.clear_filter()
+            self.view.clear_filter(collapse=False)
+
             # Save data previous to editing
             self.previous_data = index.data()
             # Save currently edited index

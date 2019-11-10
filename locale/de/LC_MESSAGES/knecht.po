@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-11-08 16:24+0100\n"
+"POT-Creation-Date: 2019-11-09 21:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -327,7 +327,7 @@ msgstr ""
 msgid "Verzeichnis auswaehlen ..."
 msgstr ""
 
-#: modules/gui/widgets\help_page.py:27 modules/gui/widgets\welcome_page.py:56
+#: modules/gui/widgets\help_page.py:27 modules/gui/widgets\welcome_page.py:68
 #: modules/gui\ui_translations.py:50
 msgid "Dokumentation"
 msgstr ""
@@ -389,7 +389,7 @@ msgid "abgeschlossen am: "
 msgstr ""
 
 #: modules/gui/widgets\menu_create.py:25
-#: modules/gui/widgets\welcome_page.py:36
+#: modules/gui/widgets\welcome_page.py:40
 msgid "Erstellen"
 msgstr ""
 
@@ -588,7 +588,7 @@ msgid "Keine Einträge vorhanden"
 msgstr ""
 
 #: modules/gui/widgets\menu_import.py:37
-#: modules/gui/widgets\welcome_page.py:46 modules/gui/wizard\data_import.py:43
+#: modules/gui/widgets\welcome_page.py:50 modules/gui/wizard\data_import.py:43
 msgid "Import"
 msgstr ""
 
@@ -873,27 +873,35 @@ msgstr ""
 msgid "Spalte"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:30
+#: modules/gui/widgets\welcome_page.py:34
 msgid "Willkommen"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:32
+#: modules/gui/widgets\welcome_page.py:36
 msgid "RenderKnecht v{}"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:37
+#: modules/gui/widgets\welcome_page.py:41
 msgid "Kürzlich verwendet"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:39
+#: modules/gui/widgets\welcome_page.py:43
 msgid "Neues Dokument"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:42
+#: modules/gui/widgets\welcome_page.py:46
 msgid "Dokument öffnen"
 msgstr ""
 
-#: modules/gui/widgets\welcome_page.py:53 modules/gui/wizard\start.py:28
+#: modules/gui/widgets\welcome_page.py:54
+msgid "Knecht PlmXml Vorlage erzeugen"
+msgstr ""
+
+#: modules/gui/widgets\welcome_page.py:58
+msgid "Knecht Vorlage erzeugen"
+msgstr ""
+
+#: modules/gui/widgets\welcome_page.py:65 modules/gui/wizard\start.py:28
 #: modules/gui/wizard\wizard.py:30
 msgid "Preset Wizard"
 msgstr ""
@@ -1639,11 +1647,11 @@ msgstr ""
 msgid "verschieben"
 msgstr ""
 
-#: modules/itemview\item_edit_undo.py:77
+#: modules/itemview\item_edit_undo.py:78
 msgid "{0} ändern {1} ..."
 msgstr ""
 
-#: modules/itemview\item_edit_undo.py:83
+#: modules/itemview\item_edit_undo.py:84
 msgid "{0} für {1} ändern {2} ..."
 msgstr ""
 
@@ -1705,11 +1713,11 @@ msgstr ""
 msgid "Datei ist bereits geöffnet."
 msgstr ""
 
-#: modules/itemview\xml.py:89
+#: modules/itemview\xml.py:97
 msgid "Kann nicht auf die gewählte Datei zugreifen."
 msgstr ""
 
-#: modules/itemview\xml.py:108
+#: modules/itemview\xml.py:116
 msgid "Allgemeiner Fehler beim laden der Daten."
 msgstr ""
 

@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2019-11-08 16:24+0100\n"
-"PO-Revision-Date: 2019-11-08 16:30+0100\n"
+"POT-Creation-Date: 2019-11-09 21:44+0100\n"
+"PO-Revision-Date: 2019-11-09 21:48+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: modules/gui/widgets\db_dialog.py:60
 msgid "Datapool Projekte"
@@ -323,7 +323,7 @@ msgstr "Choose *.rksession file"
 msgid "Verzeichnis auswaehlen ..."
 msgstr "Select directory ..."
 
-#: modules/gui/widgets\help_page.py:27 modules/gui/widgets\welcome_page.py:56
+#: modules/gui/widgets\help_page.py:27 modules/gui/widgets\welcome_page.py:68
 #: modules/gui\ui_translations.py:50
 msgid "Dokumentation"
 msgstr "Documentation"
@@ -384,7 +384,7 @@ msgstr "Render process is already running."
 msgid "abgeschlossen am: "
 msgstr "finished on: "
 
-#: modules/gui/widgets\menu_create.py:25 modules/gui/widgets\welcome_page.py:36
+#: modules/gui/widgets\menu_create.py:25 modules/gui/widgets\welcome_page.py:40
 msgid "Erstellen"
 msgstr "Create"
 
@@ -581,7 +581,7 @@ msgstr "Save as.."
 msgid "Keine Einträge vorhanden"
 msgstr "No entries"
 
-#: modules/gui/widgets\menu_import.py:37 modules/gui/widgets\welcome_page.py:46
+#: modules/gui/widgets\menu_import.py:37 modules/gui/widgets\welcome_page.py:50
 #: modules/gui/wizard\data_import.py:43
 msgid "Import"
 msgstr "Import"
@@ -701,7 +701,7 @@ msgstr "Discard tree content"
 
 #: modules/gui/widgets\menu_tree.py:103
 msgid "Soll der Bauminhalt von<br/><i>{}</i><br/>wirklich vollständig <b>verworfen</b> werden?"
-msgstr "Do you want to <b>completely discard</b> the Contents of: <br><i>{}</i>"
+msgstr "Do you want to <b>completely discard</b> the Contents of: <br><i>{}</i>?"
 
 #: modules/gui/widgets\menu_tree.py:125
 msgid "{} vollständig verwerfen"
@@ -866,27 +866,35 @@ msgstr "Search"
 msgid "Spalte"
 msgstr "Column"
 
-#: modules/gui/widgets\welcome_page.py:30
+#: modules/gui/widgets\welcome_page.py:34
 msgid "Willkommen"
 msgstr "Welcome"
 
-#: modules/gui/widgets\welcome_page.py:32
+#: modules/gui/widgets\welcome_page.py:36
 msgid "RenderKnecht v{}"
 msgstr "RenderKnecht v{}"
 
-#: modules/gui/widgets\welcome_page.py:37
+#: modules/gui/widgets\welcome_page.py:41
 msgid "Kürzlich verwendet"
 msgstr "Recent documents"
 
-#: modules/gui/widgets\welcome_page.py:39
+#: modules/gui/widgets\welcome_page.py:43
 msgid "Neues Dokument"
 msgstr "New document"
 
-#: modules/gui/widgets\welcome_page.py:42
+#: modules/gui/widgets\welcome_page.py:46
 msgid "Dokument öffnen"
 msgstr "Open document"
 
-#: modules/gui/widgets\welcome_page.py:53 modules/gui/wizard\start.py:28
+#: modules/gui/widgets\welcome_page.py:54
+msgid "Knecht PlmXml Vorlage erzeugen"
+msgstr "Create Knecht PlmXml template"
+
+#: modules/gui/widgets\welcome_page.py:58
+msgid "Knecht Vorlage erzeugen"
+msgstr "Create Knecht template"
+
+#: modules/gui/widgets\welcome_page.py:65 modules/gui/wizard\start.py:28
 #: modules/gui/wizard\wizard.py:30
 msgid "Preset Wizard"
 msgstr "Preset Wizard"
@@ -1632,11 +1640,11 @@ msgstr "Remove elements"
 msgid "verschieben"
 msgstr "move"
 
-#: modules/itemview\item_edit_undo.py:77
+#: modules/itemview\item_edit_undo.py:78
 msgid "{0} ändern {1} ..."
 msgstr "{0} change to {1} ..."
 
-#: modules/itemview\item_edit_undo.py:83
+#: modules/itemview\item_edit_undo.py:84
 msgid "{0} für {1} ändern {2} ..."
 msgstr "Change {0} for {1} into {2} ..."
 
@@ -1696,11 +1704,11 @@ msgstr "Error - Can not find already opened file within document tabulators."
 msgid "Datei ist bereits geöffnet."
 msgstr "File is already opened."
 
-#: modules/itemview\xml.py:89
+#: modules/itemview\xml.py:97
 msgid "Kann nicht auf die gewählte Datei zugreifen."
 msgstr "Can not access the chosen file."
 
-#: modules/itemview\xml.py:108
+#: modules/itemview\xml.py:116
 msgid "Allgemeiner Fehler beim laden der Daten."
 msgstr "General error while loading the data."
 
@@ -1773,7 +1781,7 @@ msgid ""
 "Kann keine Verbindung zur Datenbank herstellen!\n"
 "{}"
 msgstr ""
-"Can not connect to database!\n"
+"Cannot connect to the database!\n"
 "{}"
 
 #: modules\knecht_datapool.py:255
@@ -1781,7 +1789,7 @@ msgid ""
 "Kann Datenbank nicht finden!\n"
 "{}"
 msgstr ""
-"Can not locate database!\n"
+"Can't find database!\n"
 "{}"
 
 #: modules\knecht_datapool.py:257
@@ -1894,7 +1902,7 @@ msgid ""
 "..und {} weitere Knoten."
 msgstr ""
 "\n"
-"and {} additional nodes."
+".. and {} other nodes."
 
 #: modules\knecht_plmxml.py:84
 msgid ""
