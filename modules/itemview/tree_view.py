@@ -3,8 +3,8 @@ from pathlib import Path
 from typing import List
 
 from PySide2.QtCore import QModelIndex, QTimer, Qt, Signal, Slot
-from PySide2.QtWidgets import QAbstractItemView, QLineEdit, QMenu, QTreeView, QUndoGroup, QUndoStack, QWidget, \
-    QApplication
+from PySide2.QtWidgets import QAbstractItemView, QApplication, QLineEdit, QMenu, QTreeView, QUndoGroup, QUndoStack, \
+    QWidget
 
 from modules.globals import UNDO_LIMIT
 from modules.gui.animation import BgrAnimation
@@ -13,6 +13,7 @@ from modules.gui.widgets.progress_overlay import ProgressOverlay, ShowTreeViewPr
 from modules.itemview.delegates import KnechtValueDelegate
 from modules.itemview.editor import KnechtEditor
 from modules.itemview.item_edit_undo import ViewItemEditUndo
+from modules.itemview.model import KnechtSortFilterProxyModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.tree_dragdrop import KnechtDragDrop
 from modules.itemview.tree_view_utils import setup_header_layout
@@ -280,7 +281,7 @@ class KnechtTreeView(QTreeView):
             If called a second time without a prior filter set. Collapse items and do not highlight selections.
             Eg. when user hits Esc twice to collapse all items.
         """
-        LOGGER.debug('Clearing filter: %s', self.model().filterRegExp())
+        LOGGER.debug('Clearing filter: %s %s', self.model().filterRegExp(), type(self.model()))
 
         if not self.model().filterRegExp().isEmpty():
             # Expand and highlight current selection if we return from a filter action
@@ -289,7 +290,8 @@ class KnechtTreeView(QTreeView):
             # Collapse all items if no previous filter set
             highlight_selection = False
 
-        self.model().clear_filter()
+        if type(self.model()) == KnechtSortFilterProxyModel:
+            self.model().clear_filter()
 
         if collapse:
             self.collapseAll()
@@ -300,7 +302,7 @@ class KnechtTreeView(QTreeView):
         if self.filter_text_widget:
             self.filter_text_widget.setText('')
 
-        if self.__permanent_type_filter:
+        if self.__permanent_type_filter and type(self.model()) == KnechtSortFilterProxyModel:
             self.model().set_type_filter(self.__permanent_type_filter)
             self.model().clear_filter()
             self.model().apply_last_filter()

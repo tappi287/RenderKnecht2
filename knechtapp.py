@@ -19,7 +19,7 @@ if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     print('Using high dpi Pixmaps')
 
-VERSION = '1.3'
+VERSION = '1.31'
 
 InfoMessage.ver = VERSION
 InfoMessage.lic = 'GPL v3'
@@ -28,6 +28,8 @@ InfoMessage.mail = 'tapper.stefan@gmail.com'
 InfoMessage.cred = ['Python Community', 'PyCharm Community Edition', 'Stackoverflow', 'PySide Docs']
 
 # TODO: Rename, Renumber Images from different RenderPresets
+# TODO: item deletion buggy, eg. load plm xml template, delete variants, but not ref, in preset
+# TODO: delete newly created top level rows -> could not remove row
 
 
 def initialize_log_listener(logging_queue):

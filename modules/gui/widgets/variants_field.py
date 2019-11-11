@@ -77,12 +77,12 @@ class VariantInputFields(QObject):
         new_item = self.add_variant_item(variant_set_str, variant_str)
         self.add_items([new_item])
 
+    def add_items(self, items):
+        self.view.editor.create_top_level_rows(items)
+
         # Clear Input field
         self.ui.plainTextEdit_addVariant_Setname.clear()
         self.ui.plainTextEdit_addVariant_Variant.clear()
-
-    def add_items(self, items):
-        self.view.editor.create_top_level_rows(items)
 
     @staticmethod
     def add_variant_item(name: str, value: str, order: int=0) -> KnechtItem:
