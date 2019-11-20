@@ -1,4 +1,6 @@
 from pathlib import Path
+from typing import Union
+
 from knechtapp import VERSION
 from subprocess import Popen
 from private.sftp import Remote
@@ -25,14 +27,72 @@ DIST_EXE_DIR = "RenderKnecht2"
 REMOTE_DIR = '/knecht2'
 
 
-def get_inno_setup_console_mode_compiler_path():
-    reg = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
-    key = winreg.OpenKey(reg, r"SOFTWARE\Classes\InnoSetupScriptFile\shell\Compile\command", 0, winreg.KEY_READ)
-    value = winreg.EnumValue(key, 0)[1]  # '"C:\\Program Files (x86)\\Inno Setup 6\\Compil32.exe" /cc "%1"'
-    value = value[0:value.find('/cc') - 1]  # '"C:\\Program Files (x86)\\Inno Setup 6\\Compil32.exe"'
-    value = value.replace('"', '')  # 'C:\\Program Files (x86)\\Inno Setup 6\\Compil32.exe'
+class FindInnoSetup:
+    inno_console_compiler_name = "ISCC.exe"
 
-    return Path(value).parent / "ISCC.exe"  # 'C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe'
+    @staticmethod
+    def _open_registry():
+        return winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
+
+    @classmethod
+    def _get_by_inno_studio_compiler_option(cls, reg) -> Union[None, Path]:
+        """ Find the key set by Inno Studio when compiler path set in options"""
+        try:
+            key = winreg.OpenKey(reg, r"SOFTWARE\Classes\InnoSetupScriptFile\shell\Compile\command", 0, winreg.KEY_READ)
+        except OSError:
+            return
+
+        value = winreg.EnumValue(key, 0)[1]  # "C:\\Program Files (x86)\\Inno Setup 6\\Compil32.exe" /cc "%1"
+        value = value[0:value.find('/cc') - 1]  # "C:\\Program Files (x86)\\Inno Setup 6\\Compil32.exe"
+        return Path(value.replace('"', '')).parent
+
+    @classmethod
+    def _get_by_inno_setup_uninstall_key(cls, reg) -> Union[None, Path]:
+        """ Find by either Inno Setup 5 or 6 Uninstall Key """
+        keys = [r"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Inno Setup 5_is1",
+                r"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Inno Setup 6_is1"]
+        key = None
+
+        while keys:
+            try:
+                key = winreg.OpenKey(reg, keys.pop(), 0, winreg.KEY_READ)
+            except OSError:
+                pass
+
+        if key is None:
+            return
+
+        idx, name, value = 0, str(), str()
+        while 1:
+            try:
+                name, value, __ = winreg.EnumValue(key, idx)
+            except OSError:
+                # Will break when no more sub key values are available
+                return
+
+            idx += 1
+            if name == 'InstallLocation' and value:
+                break
+
+        return Path(value.replace('"', ''))
+
+    @classmethod
+    def compiler_path(cls) -> Union[None, Path]:
+        methods = [cls._get_by_inno_setup_uninstall_key, cls._get_by_inno_studio_compiler_option]
+        reg = cls._open_registry()
+
+        value = None
+        while methods:
+            m = methods.pop()
+            value = m(reg)
+
+            if value is not None:
+                break
+
+        if value is None:
+            return
+
+        return value / cls.inno_console_compiler_name  # eg. 'C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe'
 
 
 def update_manifest_version():
@@ -121,7 +181,12 @@ def main(process: int=0):
                 print('Added app folder: ', src_dir.name)
 
     if process in (1, 2):
-        args = [get_inno_setup_console_mode_compiler_path().as_posix(), ISS_FILE]
+        iss_path = FindInnoSetup.compiler_path()
+        if iss_path is None or not iss_path.exists():
+            print('Could not find Inno Setup compiler path.')
+            return
+
+        args = [FindInnoSetup.compiler_path().as_posix(), ISS_FILE]
         print('\nRunning Inno Setup console-mode compiler...\n', args)
         p = Popen(args, cwd=Path(__file__).parent)
         p.wait()
