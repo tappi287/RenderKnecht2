@@ -25,14 +25,14 @@ DIST_EXE_DIR = "RenderKnecht2"
 REMOTE_DIR = '/knecht2'
 
 
-def get_inno_executable_path():
+def get_inno_setup_console_mode_compiler_path():
     reg = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
-    key = winreg.OpenKey(reg, r"SOFTWARE\Classes\InnoSetupScriptFile\shell\open\command", 0, winreg.KEY_READ)
-    value = winreg.EnumValue(key, 0)[1]  # "C:\\Program Files (x86)\\Inno Script Studio\\ISStudio.exe" "%1"
-    value = value.split(' "')[0]  # "C:\\Program Files (x86)\\Inno Script Studio\\ISStudio.exe"
-    value = value.replace('"', '')
+    key = winreg.OpenKey(reg, r"SOFTWARE\Classes\InnoSetupScriptFile\shell\Compile\command", 0, winreg.KEY_READ)
+    value = winreg.EnumValue(key, 0)[1]  # '"C:\\Program Files (x86)\\Inno Setup 6\\Compil32.exe" /cc "%1"'
+    value = value[0:value.find('/cc') - 1]  # '"C:\\Program Files (x86)\\Inno Setup 6\\Compil32.exe"'
+    value = value.replace('"', '')  # 'C:\\Program Files (x86)\\Inno Setup 6\\Compil32.exe'
 
-    return Path(value)
+    return Path(value).parent / "ISCC.exe"  # 'C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe'
 
 
 def update_manifest_version():
@@ -121,12 +121,12 @@ def main(process: int=0):
                 print('Added app folder: ', src_dir.name)
 
     if process in (1, 2):
-        print('\nRunning Inno Studio Setup Script...')
-        args = [get_inno_executable_path().as_posix(), '-compile', ISS_FILE]
+        args = [get_inno_setup_console_mode_compiler_path().as_posix(), ISS_FILE]
+        print('\nRunning Inno Setup console-mode compiler...\n', args)
         p = Popen(args, cwd=Path(__file__).parent)
         p.wait()
 
-        print('Inno Script Studio result: ' + str(p.returncode))
+        print('Inno Setup console-mode compiler result: ' + str(p.returncode))
 
         if p.returncode != 0:
             print('Inno Script Studio encountered an error!')
