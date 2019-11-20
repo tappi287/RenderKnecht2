@@ -52,6 +52,9 @@ def calculate_render_time(render_preset: KnechtRenderPreset) -> float:
     if CPU_COUNT == 12:
         # We exactly know the speed of current gen 12c CPUs @~4GHz
         cpu_factor = 0.004
+    if CPU_COUNT == 128:
+        # We exactly know the speed of AMD EPYC 7702P 64c CPU @~3GHz
+        cpu_factor = 0.00054
 
     try:
         res_x = int(render_preset.settings.get('resolution').split(' ')[0])

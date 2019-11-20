@@ -47,7 +47,7 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
+        <y>-297</y>
         <width>481</width>
         <height>606</height>
        </rect>
@@ -440,6 +440,8 @@ QGroupBox::title {
               </property>
               <property name="text">
                <string>&lt;ul&gt;
+&lt;li&gt;be less pessimistic about render times when encountering EPYC machines&lt;/li&gt;
+&lt;li&gt;fix a crash when trying to find and replace escaped character sequences&lt;/li&gt;
 &lt;li&gt;update POS Schnuffi displaying complete PosXml actionlist contents, ability to export edited actionLists as PosXml&lt;/li&gt;
 &lt;li&gt;added AsConnector PlmXml switching support, see updated documentation&lt;/li&gt;
 &lt;li&gt;various fixes for: Preset Wizard item handling, item id connection; item undo deletion&lt;/li&gt;
