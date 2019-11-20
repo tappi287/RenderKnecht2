@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 lxml = "*"
 numpy = "==1.16.2"
-pyside2 = "*"
+pyside2 = "==5.13.2"
 pandas = "*"
 xlrd = "*"
 requests = "*"

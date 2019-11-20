@@ -1,6 +1,6 @@
 import re
 
-from PySide2.QtCore import QModelIndex, QPoint, QRect, QSortFilterProxyModel, Qt, Slot
+from PySide2.QtCore import QModelIndex, QPoint, QRect, QSortFilterProxyModel, Qt, Slot, QRegularExpression
 from PySide2.QtWidgets import QAbstractItemView, QCheckBox, QComboBox, QDialog, QLabel, QLineEdit, QPushButton, \
     QTreeView, QUndoCommand
 
@@ -245,7 +245,7 @@ class SearchDialog(QDialog):
             flags = re.IGNORECASE
 
         try:
-            new_text = re.sub(search_txt, replace_txt, item_text, flags=flags)
+            new_text = re.sub(QRegularExpression.escape(search_txt), replace_txt, item_text, flags=flags)
         except Exception as e:
             LOGGER.error(e)
             return
