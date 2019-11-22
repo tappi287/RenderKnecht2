@@ -1,7 +1,7 @@
 from bisect import bisect_left
 from typing import List, Union
 
-from PySide2.QtCore import QModelIndex, QObject, QUuid, Signal
+from PySide2.QtCore import QModelIndex, QObject, QUuid, Signal, Qt
 
 from modules.itemview.item import KnechtItem
 from modules.itemview.model import KnechtModel
@@ -34,10 +34,26 @@ class KnechtCollectVariants(QObject):
         self.view = view
         self.recursion_depth = 0
 
+    @staticmethod
+    def _camera_item_override(index, variants) -> KnechtVariantList:
+        """ When directly collecting a camera item, knecht-setting send_camera_data should
+            be ignored. knecht_deltagen module will only check variant commands of type camera_command
+        """
+        if index.siblingAtColumn(Kg.TYPE).data(Qt.DisplayRole) == Kg.xml_tag_by_user_type[Kg.camera_item]:
+            for v in variants.variants:
+                if v.item_type == 'camera_command':
+                    v.item_type = 'command'
+
+        return variants
+
     def collect_current_index(self, collect_reset: bool=True) -> KnechtVariantList:
         """ Collect variants from the current model index """
         index, __ = self.view.editor.get_current_selection()
-        return self.collect_index(index, collect_reset)
+
+        variants = self.collect_index(index, collect_reset)
+        variants = self._camera_item_override(index, variants)
+
+        return variants
 
     def collect_index(self, index: QModelIndex, collect_reset: bool=True) -> KnechtVariantList:
         """ Collect variants from the given model index """
@@ -158,7 +174,7 @@ class KnechtCollectVariants(QObject):
                 except Exception as e:
                     LOGGER.warning('Camera Info Tag Value does not match %s\n%s', camera_value, e)
 
-                variants.add(index, camera_tag, camera_cmd, 'command')
+                variants.add(index, camera_tag, camera_cmd, 'camera_command')
 
                 LOGGER.debug('Collecting Camera Command %s: %s', camera_tag, camera_cmd)
 

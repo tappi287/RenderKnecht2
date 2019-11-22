@@ -150,6 +150,7 @@ class KnechtSettings:
         freeze_viewer=True,
         reset=True,
         check_variants=True,
+        send_camera_data=True,
         display_variant_check=False,
         long_render_timeout=False,
         viewer_size='1280 720',

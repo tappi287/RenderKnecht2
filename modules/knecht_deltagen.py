@@ -50,6 +50,7 @@ class CommunicateDeltaGen(Thread):
     # Default Options
     freeze_viewer: bool = True
     check_variants: bool = True
+    send_camera_data: bool = True
     long_render_timeout: bool = True
     display_check: bool = False
     viewer_size: str = '1280 720'
@@ -112,11 +113,12 @@ class CommunicateDeltaGen(Thread):
 
         :param KnechtSettings.dg knecht_dg_settings: DeltaGen Settings attribute of KnechtSettings class
         """
-        self.freeze_viewer: bool = knecht_dg_settings['freeze_viewer']
-        self.check_variants: bool = knecht_dg_settings['check_variants']
+        self.freeze_viewer: bool = knecht_dg_settings.get('freeze_viewer')
+        self.check_variants: bool = knecht_dg_settings.get('check_variants')
+        self.send_camera_data: bool = knecht_dg_settings.get('send_camera_data')
         self.long_render_timeout: bool = knecht_dg_settings.get('long_render_timeout')
-        self.display_check: bool = knecht_dg_settings['display_variant_check']
-        self.viewer_size: str = knecht_dg_settings['viewer_size']
+        self.display_check: bool = knecht_dg_settings.get('display_variant_check')
+        self.viewer_size: str = knecht_dg_settings.get('viewer_size')
 
     @Slot()
     def start_send_operation(self):
@@ -244,6 +246,10 @@ class CommunicateDeltaGen(Thread):
 
         if variant.item_type == 'command':
             # Look-up new command variants
+            variant_str = f'{variant.value};'
+        elif variant.item_type == 'camera_command':
+            if not self.send_camera_data:
+                return
             variant_str = f'{variant.value};'
         else:
             # Extract variant set and value

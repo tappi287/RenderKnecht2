@@ -28,7 +28,8 @@ class DeltaGenMenu(QMenu):
         super(DeltaGenMenu, self).__init__(menu_name, ui)
         self.ui = ui
 
-        self.reset, self.freeze, self.check, self.display, self.display_overlay = None, None, None, None, None
+        self.reset, self.freeze, self.check = None, None, None
+        self.send_camera, self.display, self.display_overlay = None, None, None
         self.validate_plmxml = None
 
         self.setup_deltagen_menu()
@@ -45,6 +46,9 @@ class DeltaGenMenu(QMenu):
 
         # ---- Variants State Check On/Off ----
         self.check = self._setup_checkable_action(_('Varianten State Check'), True, self.toggle_variants_state_check)
+
+        # ---- Send Camera Data On/Off ----
+        self.send_camera = self._setup_checkable_action(_('Kamera Daten übertragen'), True, self.toggle_camera_send)
 
         # ---- Display State Check On/Off ----
         self.display = self._setup_checkable_action(_('State Check im Baum anzeigen'), False,
@@ -77,6 +81,7 @@ class DeltaGenMenu(QMenu):
         self.reset.setChecked(KnechtSettings.dg.get('reset'))
         self.freeze.setChecked(KnechtSettings.dg.get('freeze_viewer'))
         self.check.setChecked(KnechtSettings.dg.get('check_variants'))
+        self.send_camera.setChecked(KnechtSettings.dg.get('send_camera_data'))
         self.display.setChecked(KnechtSettings.dg.get('display_variant_check'))
         self.display_overlay.setChecked(KnechtSettings.dg.get('display_send_finished_overlay'))
         self.validate_plmxml.setChecked(KnechtSettings.dg.get('validate_plmxml_scene'))
@@ -105,6 +110,10 @@ class DeltaGenMenu(QMenu):
     @Slot(bool)
     def toggle_validate_plmxml(self, checked: bool):
         KnechtSettings.dg['validate_plmxml_scene'] = checked
+
+    @Slot(bool)
+    def toggle_camera_send(self, checked: bool):
+        KnechtSettings.dg['send_camera_data'] = checked
 
     def enable_menus(self, enabled: bool=True):
         for a in self.menu.actions():
