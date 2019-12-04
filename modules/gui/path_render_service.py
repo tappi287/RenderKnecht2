@@ -239,7 +239,7 @@ class PathRenderService(QtCore.QObject):
 
         self.service_host = result
         self.ovr.display(_('Render Service erfolgreich verbunden.<br>'), 2000)
-        self.send_message('GREETINGS_2')
+        self.send_message('GREETINGS_3')
         self.send_message('GET_RENDERER')
 
     def update_scene_file(self, scene_path: Path):
@@ -381,7 +381,7 @@ class PathRenderService(QtCore.QObject):
             return
 
         # Path to scene file eg. C:/some_dir/some_file.csb
-        scene_file = Path(job.file)
+        scene_file = Path(job.remote_file)
         # Create render file name some_file_render.mb
         render_file = Path(scene_file.stem + '_render.mb')
         # Create the path to the render file C:/some_dir/some_file_render.mb
@@ -715,7 +715,7 @@ def update_job_manager_widget(job, widget):
     creation_date = creation_date.strftime('%d.%m.%Y %H:%M')
 
     # Create widget item
-    item_values = ['00', job.title, job.file, job.render_dir, job.status_name,
+    item_values = ['00', job.title, job.remote_file, job.render_dir, job.status_name,
                    creation_date, expires, job.client, str(job.remote_index)]
     item = QtWidgets.QTreeWidgetItem(widget, item_values)
     item.setText(0, f'{widget.topLevelItemCount():02d}')
