@@ -147,6 +147,10 @@ class KnechtEditorCopyPaste(QObject):
                               src_model: KnechtModel, referenced_items: List[KnechtItem],
                               different_origin: bool, view_origin, move_undo_chain):
         """ Paste/drop to renderTree will always create top level items without references """
+        if self.view is view_origin:
+            # Ignore copy operations inside render view
+            return
+
         referenced_items = list()
         presets = list()
         render_presets = list()
