@@ -87,8 +87,6 @@ class IconRsc:
             new_icon = cls._get_icon_from_resource(icon_key)
             cls.icon_storage[icon_key] = new_icon
 
-        # TODO: ToolTip translations
-
         # --- Update UI Buttons ---
         # Objects styled inside QtDesigner
         ui_btns = [

@@ -136,7 +136,6 @@ class UiViewManager(ViewManager):
     @Slot(object)
     def clear_render_presets(self, view: KnechtTreeView):
         """ Clear render presets from the render tab of the provided view """
-        # TODO: Clearing view with render presets in render queue results in undo unreachable
         self.ui.renderTree.editor.clear_view_render_presets(view)
         view.undo_stack.setActive(True)
 

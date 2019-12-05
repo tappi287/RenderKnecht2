@@ -134,8 +134,6 @@ class TreeContextMenu(QMenu):
 
         self.aboutToShow.connect(self.update_actions)
 
-        # TODO: Add Actions expand all, collapse all, clear filter
-
         # Install context menu event filter
         self.view.installEventFilter(self)
 
