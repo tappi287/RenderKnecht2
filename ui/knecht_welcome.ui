@@ -49,7 +49,7 @@
         <x>0</x>
         <y>-297</y>
         <width>481</width>
-        <height>606</height>
+        <height>619</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -440,6 +440,9 @@ QGroupBox::title {
               </property>
               <property name="text">
                <string>&lt;ul&gt;
+&lt;li&gt;accept nemo.configurator.api.getAveString() style strings in variants input field&lt;/li&gt;
+&lt;li&gt;fix critical excel data transfer bug&lt;/li&gt;
+&lt;li&gt;add Image Conversion action to file menu&lt;/li&gt;
 &lt;li&gt;update pfad_aeffchen client&lt;/li&gt;
 &lt;li&gt;add DeltaGen option to transfer camera data, will be ignored if directly selecting camera_items&lt;/li&gt;
 &lt;li&gt;be less pessimistic about render times when encountering EPYC machines&lt;/li&gt;

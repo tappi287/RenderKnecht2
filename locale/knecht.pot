@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-12-06 16:08+0100\n"
+"POT-Creation-Date: 2019-12-09 17:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,12 +63,12 @@ msgstr ""
 msgid "wagenbauteil Id"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:170 modules/gui\path_render_service.py:124
-msgid "Erstellt"
-msgstr ""
-
 #: modules/gui/widgets\db_dialog.py:170 modules/itemview\model_globals.py:22
 msgid "Name"
+msgstr ""
+
+#: modules/gui/widgets\db_dialog.py:170 modules\path_render_service.py:124
+msgid "Erstellt"
 msgstr ""
 
 #: modules/gui/widgets\db_dialog.py:232
@@ -368,23 +368,23 @@ msgstr ""
 msgid "  0: Aktueller Zustand des Dokuments"
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:80
+#: modules/gui/widgets\main_ui_widgets.py:79
 msgid "Geschätzte Renderzeit ({} CPUs/GI)"
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:87
+#: modules/gui/widgets\main_ui_widgets.py:86
 msgid "Ausgabe Verzeichnis auswählen ..."
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:123
+#: modules/gui/widgets\main_ui_widgets.py:136
 msgid "Fehler beim sammeln der Preset Varianten. Einige Inhalte der Render Presets existieren nicht mehr."
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:131
+#: modules/gui/widgets\main_ui_widgets.py:144
 msgid "Es läuft bereits ein Render Vorgang."
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:153
+#: modules/gui/widgets\main_ui_widgets.py:166
 msgid "abgeschlossen am: "
 msgstr ""
 
@@ -765,7 +765,7 @@ msgstr ""
 msgid "Hide ID columns"
 msgstr ""
 
-#: modules/gui/widgets\menu_view.py:21 modules/gui/widgets\search_dialog.py:57
+#: modules/gui/widgets\menu_view.py:21 modules/gui/widgets\search_dialog.py:56
 msgid "Ansicht"
 msgstr ""
 
@@ -876,28 +876,28 @@ msgstr ""
 msgid "Suchen und Ersetzen"
 msgstr ""
 
-#: modules/gui/widgets\search_dialog.py:61
+#: modules/gui/widgets\search_dialog.py:60
 msgid "Finden"
 msgstr ""
 
-#: modules/gui/widgets\search_dialog.py:65
-#: modules/gui/widgets\search_dialog.py:80
+#: modules/gui/widgets\search_dialog.py:64
+#: modules/gui/widgets\search_dialog.py:79
 msgid "Ersetzen"
 msgstr ""
 
-#: modules/gui/widgets\search_dialog.py:69
+#: modules/gui/widgets\search_dialog.py:68
 msgid "Alle Ersetzen"
 msgstr ""
 
-#: modules/gui/widgets\search_dialog.py:73
+#: modules/gui/widgets\search_dialog.py:72
 msgid "Groß-/Kleinschreibung beachten"
 msgstr ""
 
-#: modules/gui/widgets\search_dialog.py:82
+#: modules/gui/widgets\search_dialog.py:81
 msgid "Suchen"
 msgstr ""
 
-#: modules/gui/widgets\search_dialog.py:84
+#: modules/gui/widgets\search_dialog.py:83
 msgid "Spalte"
 msgstr ""
 
@@ -1171,7 +1171,7 @@ msgid "Variantenbaum"
 msgstr ""
 
 #: modules/gui\main_ui.py:60 modules/gui\ui_resource.py:119
-#: modules\knecht_render.py:660
+#: modules\knecht_render.py:661
 msgid "Renderliste"
 msgstr ""
 
@@ -1179,163 +1179,7 @@ msgstr ""
 msgid "Die Varianten enthalten keine Reset Schaltung! Die zu sendenden Varianten werden mit vorangegangen Schaltungen kollidieren."
 msgstr ""
 
-#: modules/gui\path_render_service.py:36
-msgid "Status prüfen"
-msgstr ""
-
-#: modules/gui\path_render_service.py:37
-msgid "Render Dienst im lokalen Netzwerk suchen"
-msgstr ""
-
-#: modules/gui\path_render_service.py:85
-msgid "Benutze die Szeneneinstellung der Maya Binary Szene. Crypto Material AOV muss vorhanden sein!"
-msgstr ""
-
-#: modules/gui\path_render_service.py:106
-msgid "Ausgabe Verzeichnis auswählen"
-msgstr ""
-
-#: modules/gui\path_render_service.py:123
-msgid "Ausgabeverzeichnis"
-msgstr ""
-
-#: modules/gui\path_render_service.py:123
-msgid "Fortschritt"
-msgstr ""
-
-#: modules/gui\path_render_service.py:123
-msgid "Job Titel"
-msgstr ""
-
-#: modules/gui\path_render_service.py:123
-msgid "Szenendatei"
-msgstr ""
-
-#: modules/gui\path_render_service.py:124
-msgid "Klient"
-msgstr ""
-
-#: modules/gui\path_render_service.py:124
-msgid "Läuft ab"
-msgstr ""
-
-#: modules/gui\path_render_service.py:124
-msgid "Remote Index"
-msgstr ""
-
-#: modules/gui\path_render_service.py:214
-msgid "Suche nach Dienst im lokalen Netzwerk."
-msgstr ""
-
-#: modules/gui\path_render_service.py:230
-msgid "Pfad Äffchen Render Dienst gefunden<br>IP: <i>{}</i>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:236
-msgid "Kein Pfad Äffchen Render Dienst im lokalen Netzwerk gefunden"
-msgstr ""
-
-#: modules/gui\path_render_service.py:241
-msgid "Render Service erfolgreich verbunden.<br>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:247
-msgid "Szenen Datei gesetzt:<br><i>{}</i>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:252
-msgid "Ungültiger / Nicht existenter Szenen-Pfad angegeben."
-msgstr ""
-
-#: modules/gui\path_render_service.py:258
-msgid " Setze vorherigen Szenenpfad."
-msgstr ""
-
-#: modules/gui\path_render_service.py:259
-msgid "Vorherigen Szenenpfad gesetzt:<br><i>{}</i>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:262
-msgid "Ungültigen Szenenpfad verworfen. Kein Szenen-Pfad gesetzt."
-msgstr ""
-
-#: modules/gui\path_render_service.py:268
-msgid "Ausgabeverzeichnis gesetzt:<br><i>{}</i>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:277
-msgid "CSB Import Option gesetzt: <i>ignoreHiddenObject={}</i>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:287
-msgid "Maya Prozess Option gesetzt: <i>maya_delete_hidden={}</i>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:297
-msgid "Maya Prozess Option gesetzt: <i>use_scene_settings={}</i>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:314
-msgid "<b>Ungültige Job Daten:</b><br>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:326
-msgid "{} übertragen für {}<br>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:359
-msgid "Verzeichnis existiert nicht.<br>{}<br>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:397
-msgid "Fehler: Datei {} konnte nicht entfernt werden.<br>{}<br>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:402
-msgid "Datei {} <b>existiert nicht mehr oder kann nicht gefunden werden.</b><br>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:406
-msgid "Datei {} wurde entfernt."
-msgstr ""
-
-#: modules/gui\path_render_service.py:456
-msgid "<b>{}</b><br><i>Die bereits ausgegebenen Bilddaten werden in einem PSD zusammengestellt und der Job wird abgeschlossen. Dies kann wenige Minuten dauern.</i><br>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:486
-msgid "<b>Render Service Warteschlange fertiggestellt.</b><br><i>Automatische Job Manager Updates wurden ausgeschaltet.</i><br>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:542
-msgid "<span style=\"color:red;\"><b>Verbindung zum Render Dienst getrennt.</b></span><br>"
-msgstr ""
-
-#: modules/gui\path_render_service.py:590
-msgid "Empfange: "
-msgstr ""
-
-#: modules/gui\path_render_service.py:592
-msgid "Sende   : "
-msgstr ""
-
-#: modules/gui\path_render_service.py:604
-msgid "Job Titel darf nur Buchstaben, Zahlen, Binde- oder _strich enthalten."
-msgstr ""
-
-#: modules/gui\path_render_service.py:711
-msgid "Abgelaufen."
-msgstr ""
-
-#: modules/gui\path_render_service.py:727
-msgid "Pfad öffnen"
-msgstr ""
-
-#: modules/gui\path_render_service.py:733
-msgid "Ausgabe öffnen"
-msgstr ""
-
-#: modules/gui\ui_resource.py:106 modules/gui\ui_translations.py:186
+#: modules/gui\ui_resource.py:106 modules/gui\ui_translations.py:188
 msgid "Job übertragen"
 msgstr ""
 
@@ -1343,7 +1187,7 @@ msgstr ""
 msgid "Variantenliste"
 msgstr ""
 
-#: modules/gui\ui_resource.py:120 modules/gui\ui_translations.py:154
+#: modules/gui\ui_resource.py:120 modules/gui\ui_translations.py:156
 msgid "Pfad Render Dienst"
 msgstr ""
 
@@ -1404,131 +1248,135 @@ msgid "Fügt eingegebenen Text der Varianten Liste hinzu."
 msgstr ""
 
 #: modules/gui\ui_translations.py:105
-msgid "Viewer Größe"
+msgid "Schnellzugriff auf das DeltaGen Optionen Menü."
 msgstr ""
 
 #: modules/gui\ui_translations.py:107
-msgid "Ändert die Viewer Größe der Szene der aktiven DeltaGen Instanz."
+msgid "Viewer"
 msgstr ""
 
 #: modules/gui\ui_translations.py:109
+msgid "Ändert die Viewer Größe der Szene der aktiven DeltaGen Instanz."
+msgstr ""
+
+#: modules/gui\ui_translations.py:111
 msgid "Ändert die globale DeltaGen Viewer Hintergrund Farbe. Diese Einstellung wird optional auch für das Rendering verwendet."
 msgstr ""
 
-#: modules/gui\ui_translations.py:112
+#: modules/gui\ui_translations.py:114
 msgid "Bricht laufende Sendung an DeltaGen ab."
 msgstr ""
 
-#: modules/gui\ui_translations.py:116 modules\job.py:13
-#: modules\knecht_render.py:691
+#: modules/gui\ui_translations.py:118 modules\job.py:13
+#: modules\knecht_render.py:692
 msgid "Rendering"
 msgstr ""
 
-#: modules/gui\ui_translations.py:118
+#: modules/gui\ui_translations.py:120
 msgid "Schätzt anhand horizontaler Auflösung, vorhandener CPU Kerne und Sampling die Renderzeit in Global Illumination."
 msgstr ""
 
-#: modules/gui\ui_translations.py:123
+#: modules/gui\ui_translations.py:125
 msgid "Pfad zum Ausgabe Ordner. Wenn kein Pfad angegeben wird, wird der Render Vorgang abgebrochen."
 msgstr ""
 
-#: modules/gui\ui_translations.py:126
+#: modules/gui\ui_translations.py:128
 msgid "Datei Dialog um Ausgabe Ordner festzulegen."
 msgstr ""
 
-#: modules/gui\ui_translations.py:128
+#: modules/gui\ui_translations.py:130
 msgid "Feedbackloop pro Variante"
 msgstr ""
 
-#: modules/gui\ui_translations.py:130
+#: modules/gui\ui_translations.py:132
 msgid "Verhindert unter Umständen das Ausbleiben von Variantenschaltungen wenn DeltaGen bei aktiviertem RT/GI lange Zeit nicht ansprechbereit ist."
 msgstr ""
 
-#: modules/gui\ui_translations.py:133
+#: modules/gui\ui_translations.py:135
 msgid "Viewer Hintergrund einstellen"
 msgstr ""
 
-#: modules/gui\ui_translations.py:134
+#: modules/gui\ui_translations.py:136
 msgid "Verwendet die Viewer Hintergrundfarbe aus dem DeltaGen Einstellungsbereich für die Bildausgabe."
 msgstr ""
 
-#: modules/gui\ui_translations.py:137
+#: modules/gui\ui_translations.py:139
 msgid "Render Preset Unterordner erstellen"
 msgstr ""
 
-#: modules/gui\ui_translations.py:138
+#: modules/gui\ui_translations.py:140
 msgid "Erstellt einen Unterordner benannt nach dem Render Preset."
 msgstr ""
 
-#: modules/gui\ui_translations.py:140
+#: modules/gui\ui_translations.py:142
 msgid "Bilder zu PNG konvertieren"
 msgstr ""
 
-#: modules/gui\ui_translations.py:141
+#: modules/gui\ui_translations.py:143
 msgid "Konvertiert die ausgegebenen Bilder nach dem Render Vorgang in PNG."
 msgstr ""
 
-#: modules/gui\ui_translations.py:143 modules\knecht_render.py:325
+#: modules/gui\ui_translations.py:145 modules\knecht_render.py:325
 msgid "Rendering starten"
 msgstr ""
 
-#: modules/gui\ui_translations.py:144
+#: modules/gui\ui_translations.py:146
 msgid "Startet den Render Vorgang."
 msgstr ""
 
-#: modules/gui\ui_translations.py:147
+#: modules/gui\ui_translations.py:149
 msgid "Bricht laufenden Render Vorgang ab. DeltaGen wird den zuletzt erhaltenen Render Befehl unabhängig hiervon durchführen."
 msgstr ""
 
-#: modules/gui\ui_translations.py:152
+#: modules/gui\ui_translations.py:154
 msgid "Job Manager aktualisieren."
 msgstr ""
 
-#: modules/gui\ui_translations.py:156
+#: modules/gui\ui_translations.py:158
 msgid "Online Hilfe zum Pfad Render Service aufrufen."
 msgstr ""
 
-#: modules/gui\ui_translations.py:158
+#: modules/gui\ui_translations.py:160
 msgid "Verbindung zum Render Service herstellen oder beenden."
 msgstr ""
 
-#: modules/gui\ui_translations.py:160
+#: modules/gui\ui_translations.py:162
 msgid "Joberstellung"
 msgstr ""
 
-#: modules/gui\ui_translations.py:162
+#: modules/gui\ui_translations.py:164
 msgid "Job Namen eingeben (optional)"
 msgstr ""
 
-#: modules/gui\ui_translations.py:164
+#: modules/gui\ui_translations.py:166
 msgid "Ausgabe Verzeichnis"
 msgstr ""
 
-#: modules/gui\ui_translations.py:166
+#: modules/gui\ui_translations.py:168
 msgid "Szenendatei - CSB Datei *.csb oder MayaBinary *.mb"
 msgstr ""
 
-#: modules/gui\ui_translations.py:172
+#: modules/gui\ui_translations.py:174
 msgid "Maya versteckte Objekte löschen"
 msgstr ""
 
-#: modules/gui\ui_translations.py:174
+#: modules/gui\ui_translations.py:176
 msgid "Bei Problemen mit verschachtelten, versteckten Instanzen deaktivieren. Erhöht die Renderzeit bei großen Szenen auf TAGE!!!"
 msgstr ""
 
-#: modules/gui\ui_translations.py:177
+#: modules/gui\ui_translations.py:179
 msgid "CSB Verstecke Objekte ignorieren"
 msgstr ""
 
-#: modules/gui\ui_translations.py:179
+#: modules/gui\ui_translations.py:181
 msgid "Dem CSB Importer befehlen versteckte Objekte zu ignorieren. Beschleunigt den Importvorgang enorm. Bei Problemen deaktivieren."
 msgstr ""
 
-#: modules/gui\ui_translations.py:182
+#: modules/gui\ui_translations.py:184
 msgid "Renderer:"
 msgstr ""
 
-#: modules/gui\ui_translations.py:184
+#: modules/gui\ui_translations.py:186
 msgid "Den zu verwendenden Renderer wählen."
 msgstr ""
 
@@ -2136,5 +1984,161 @@ msgstr ""
 
 #: modules\knecht_update.py:303
 msgid "Version {} ist bereit zur Installation."
+msgstr ""
+
+#: modules\path_render_service.py:36
+msgid "Status prüfen"
+msgstr ""
+
+#: modules\path_render_service.py:37
+msgid "Render Dienst im lokalen Netzwerk suchen"
+msgstr ""
+
+#: modules\path_render_service.py:85
+msgid "Benutze die Szeneneinstellung der Maya Binary Szene. Crypto Material AOV muss vorhanden sein!"
+msgstr ""
+
+#: modules\path_render_service.py:106
+msgid "Ausgabe Verzeichnis auswählen"
+msgstr ""
+
+#: modules\path_render_service.py:123
+msgid "Ausgabeverzeichnis"
+msgstr ""
+
+#: modules\path_render_service.py:123
+msgid "Fortschritt"
+msgstr ""
+
+#: modules\path_render_service.py:123
+msgid "Job Titel"
+msgstr ""
+
+#: modules\path_render_service.py:123
+msgid "Szenendatei"
+msgstr ""
+
+#: modules\path_render_service.py:124
+msgid "Klient"
+msgstr ""
+
+#: modules\path_render_service.py:124
+msgid "Läuft ab"
+msgstr ""
+
+#: modules\path_render_service.py:124
+msgid "Remote Index"
+msgstr ""
+
+#: modules\path_render_service.py:214
+msgid "Suche nach Dienst im lokalen Netzwerk."
+msgstr ""
+
+#: modules\path_render_service.py:230
+msgid "Pfad Äffchen Render Dienst gefunden<br>IP: <i>{}</i>"
+msgstr ""
+
+#: modules\path_render_service.py:236
+msgid "Kein Pfad Äffchen Render Dienst im lokalen Netzwerk gefunden"
+msgstr ""
+
+#: modules\path_render_service.py:241
+msgid "Render Service erfolgreich verbunden.<br>"
+msgstr ""
+
+#: modules\path_render_service.py:247
+msgid "Szenen Datei gesetzt:<br><i>{}</i>"
+msgstr ""
+
+#: modules\path_render_service.py:252
+msgid "Ungültiger / Nicht existenter Szenen-Pfad angegeben."
+msgstr ""
+
+#: modules\path_render_service.py:258
+msgid " Setze vorherigen Szenenpfad."
+msgstr ""
+
+#: modules\path_render_service.py:259
+msgid "Vorherigen Szenenpfad gesetzt:<br><i>{}</i>"
+msgstr ""
+
+#: modules\path_render_service.py:262
+msgid "Ungültigen Szenenpfad verworfen. Kein Szenen-Pfad gesetzt."
+msgstr ""
+
+#: modules\path_render_service.py:268
+msgid "Ausgabeverzeichnis gesetzt:<br><i>{}</i>"
+msgstr ""
+
+#: modules\path_render_service.py:277
+msgid "CSB Import Option gesetzt: <i>ignoreHiddenObject={}</i>"
+msgstr ""
+
+#: modules\path_render_service.py:287
+msgid "Maya Prozess Option gesetzt: <i>maya_delete_hidden={}</i>"
+msgstr ""
+
+#: modules\path_render_service.py:297
+msgid "Maya Prozess Option gesetzt: <i>use_scene_settings={}</i>"
+msgstr ""
+
+#: modules\path_render_service.py:314
+msgid "<b>Ungültige Job Daten:</b><br>"
+msgstr ""
+
+#: modules\path_render_service.py:326
+msgid "{} übertragen für {}<br>"
+msgstr ""
+
+#: modules\path_render_service.py:359
+msgid "Verzeichnis existiert nicht.<br>{}<br>"
+msgstr ""
+
+#: modules\path_render_service.py:397
+msgid "Fehler: Datei {} konnte nicht entfernt werden.<br>{}<br>"
+msgstr ""
+
+#: modules\path_render_service.py:402
+msgid "Datei {} <b>existiert nicht mehr oder kann nicht gefunden werden.</b><br>"
+msgstr ""
+
+#: modules\path_render_service.py:406
+msgid "Datei {} wurde entfernt."
+msgstr ""
+
+#: modules\path_render_service.py:456
+msgid "<b>{}</b><br><i>Die bereits ausgegebenen Bilddaten werden in einem PSD zusammengestellt und der Job wird abgeschlossen. Dies kann wenige Minuten dauern.</i><br>"
+msgstr ""
+
+#: modules\path_render_service.py:486
+msgid "<b>Render Service Warteschlange fertiggestellt.</b><br><i>Automatische Job Manager Updates wurden ausgeschaltet.</i><br>"
+msgstr ""
+
+#: modules\path_render_service.py:542
+msgid "<span style=\"color:red;\"><b>Verbindung zum Render Dienst getrennt.</b></span><br>"
+msgstr ""
+
+#: modules\path_render_service.py:590
+msgid "Empfange: "
+msgstr ""
+
+#: modules\path_render_service.py:592
+msgid "Sende   : "
+msgstr ""
+
+#: modules\path_render_service.py:604
+msgid "Job Titel darf nur Buchstaben, Zahlen, Binde- oder _strich enthalten."
+msgstr ""
+
+#: modules\path_render_service.py:711
+msgid "Abgelaufen."
+msgstr ""
+
+#: modules\path_render_service.py:727
+msgid "Pfad öffnen"
+msgstr ""
+
+#: modules\path_render_service.py:733
+msgid "Ausgabe öffnen"
 msgstr ""
 

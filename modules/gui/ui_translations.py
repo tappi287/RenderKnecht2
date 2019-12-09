@@ -99,10 +99,12 @@ def translate_main_ui(ui):
     ui.pushButton_addVariant.setStatusTip(_('Fügt eingegebenen Text der Varianten Liste hinzu.'))
 
     # --- DeltaGen Controller ---
-    ui.deltaGenBox: QGroupBox
-    ui.deltaGenBox.setTitle('DeltaGen')
+    ui.dg_expand_btn: QPushButton
+    ui.dg_expand_btn.setText('DeltaGen')
+    ui.pushButton_Options: QPushButton
+    ui.pushButton_Options.setStatusTip(_('Schnellzugriff auf das DeltaGen Optionen Menü.'))
     ui.label_ViewerSize: QLabel
-    ui.label_ViewerSize.setText(_('Viewer Größe'))
+    ui.label_ViewerSize.setText(_('Viewer'))
     ui.comboBox_ViewerSize: QComboBox
     ui.comboBox_ViewerSize.setStatusTip(_('Ändert die Viewer Größe der Szene der aktiven DeltaGen Instanz.'))
     ui.pushButton_Bgr: QColorButton

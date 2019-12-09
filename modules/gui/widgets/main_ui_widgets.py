@@ -1,19 +1,18 @@
-from pathlib import Path
 from datetime import datetime, timedelta
+from pathlib import Path
 
 from PySide2.QtCore import QObject, QTimer, Slot
 from PySide2.QtWidgets import QPushButton
 
 from modules.gui.gui_utils import MouseDblClickFilter
-from modules.gui.path_render_service import PathRenderService
-from modules.gui.ui_generic_tab import GenericTabWidget
+from modules.gui.widgets.expandable_widget import KnechtExpandableWidget
 from modules.gui.widgets.path_util import SetDirectoryPath
 from modules.gui.widgets.variants_field import VariantInputFields
-from modules.gui.widgets.welcome_page import KnechtWelcome
 from modules.knecht_render import CPU_COUNT, KnechtRenderThread
 from modules.knecht_utils import time_string
 from modules.language import get_translation
 from modules.log import init_logging
+from modules.path_render_service import PathRenderService
 from modules.settings import KnechtSettings
 
 LOGGER = init_logging(__name__)
@@ -90,11 +89,25 @@ class MainWindowWidgets(QObject):
         self.render_path.set_path(KnechtSettings.app.get('render_path'))
         self.render_path.path_changed.connect(self.render_path_changed)
 
+        # ---- Setup DeltaGen Expandable widget ----
+        KnechtExpandableWidget(self.ui.dg_expand_widget, self.ui.dg_expand_btn, self.ui.dg_sub_expand_widget)
+        self.ui.dg_expand_btn.released.connect(self.dg_expand_toggle)
+        self.ui.dg_expand_btn.toggle()
+        self.ui.pushButton_Options: QPushButton
+        self.ui.pushButton_Options.setMenu(self.ui.main_menu.dg_menu)
+
         # ---- Variant UI functionality ----
         VariantInputFields(ui)
 
         # ---- Path Render Service ----
         self.path_render_service = PathRenderService(ui.app, ui)
+
+    @Slot()
+    def dg_expand_toggle(self):
+        if self.ui.dg_expand_btn.isChecked():
+            self.ui.dg_sub_expand_widget.show()
+        else:
+            self.ui.dg_sub_expand_widget.hide()
 
     @Slot()
     def clear_document_view(self):

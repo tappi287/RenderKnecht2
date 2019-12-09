@@ -628,11 +628,11 @@ class KnechtRender(QObject):
 
         # Connect GUI Elements
         self.ui.pushButton_abortRender.released.connect(self.abort)
-
         self.error_message_box = GenericErrorBox(self.ui)
 
     def start_rendering(self, render_presets: List[KnechtRenderPreset]):
         self.send_dg.set_rendering_mode(True)
+        self.ui.dg_expand_widget.setEnabled(False)
         self.ui.pushButton_abortRender.setEnabled(True)
 
         # Render Thread
@@ -647,6 +647,7 @@ class KnechtRender(QObject):
     @Slot(int)
     def finish_rendering(self, result: int=KnechtRenderThread.Result.not_set):
         self.send_dg.set_rendering_mode(False)
+        self.ui.dg_expand_widget.setEnabled(True)
         self.send_dg.restore_viewer()
 
         self._update_progress(0)

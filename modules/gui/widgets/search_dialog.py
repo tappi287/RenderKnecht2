@@ -52,7 +52,6 @@ class SearchDialog(QDialog):
 
         # --- Collapse/Expand View ---
         self.expand = KnechtExpandableWidget(self, self.expand_btn, self.search_view)
-        self.expand.expand_height = self.expand_height
 
         self.lbl_expand.setText(_('Ansicht'))
 

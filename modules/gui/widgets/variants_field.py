@@ -10,6 +10,8 @@ LOGGER = init_logging(__name__)
 
 
 class VariantInputFields(QObject):
+    lead_trail_remove = ('"', ' ', '_', '-', '\n')  # Leading/Trailing characters to remove
+
     def __init__(self, ui):
         """ Functionality of the variant tab
 
@@ -36,9 +38,9 @@ class VariantInputFields(QObject):
         variant_set_str = self.ui.plainTextEdit_addVariant_Setname.text()
 
         # Remove trailing or leading spaces, line breaks etc.
-        if variant_set_str[-1:] in (' ', '_', '-', '\n'):
+        if variant_set_str[-1:] in self.lead_trail_remove:
             variant_set_str = variant_set_str[:-1]
-        if variant_set_str[:1] in (' ', '_', '-', '\n'):
+        if variant_set_str[:1] in self.lead_trail_remove:
             variant_set_str = variant_set_str[1:]
 
         LOGGER.debug(variant_set_str)
@@ -61,6 +63,8 @@ class VariantInputFields(QObject):
             variant_set_str = variant_set_str.replace('\r\n', ' ')
         if '\n' in variant_set_str:
             variant_set_str = variant_set_str.replace('\n', ' ')
+        if ',' in variant_set_str:
+            variant_set_str = variant_set_str.replace(',', ' ')
 
         items = self.add_multiple_line_style_strings(variant_set_str, variant_str)
         if items:
