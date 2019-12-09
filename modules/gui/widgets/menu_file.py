@@ -9,6 +9,7 @@ from modules.gui.widgets.menu_import import ImportMenu
 from modules.gui.widgets.path_util import path_exists
 from modules.gui.widgets.progress_overlay import ShowTreeViewProgressMessage
 from modules.itemview.model import KnechtModel
+from modules.knecht_image import KnechtImage
 from modules.knecht_update import start_app
 from modules.settings import KnechtSettings
 from modules.gui.ui_view_manager import UiViewManager
@@ -136,6 +137,11 @@ class FileMenu(QObject):
         if not path_exists(self.schnuffi_app):
             LOGGER.info('KnechtViewer executable could not be found: %s', self.schnuffi_app.as_posix())
             start_schnuffi_app.setEnabled(False)
+
+        img_conv = QAction(_('Bilddaten konvertieren ...'))
+        img_conv.triggered.connect(self.convert_image_directory)
+        img_conv.setIcon(IconRsc.get_icon('render'))
+        self.menu.insertAction(insert_before, img_conv)
 
         self.menu.insertSeparator(insert_before)
 
@@ -298,6 +304,36 @@ class FileMenu(QObject):
             # User wants to abort save as
             return False
         return True
+
+    def convert_image_directory(self):
+        img_dir = FileDialog.open_dir(self.ui, None)
+
+        if not img_dir or not path_exists(img_dir):
+            self.ui.msg(_('Zu konvertierendes Verzeichnis ist nicht erreichbar.'), 8000)
+            return
+
+        img_dir = Path(img_dir)
+        out_dir = img_dir / 'converted'
+
+        try:
+            out_dir.mkdir(exist_ok=True)
+        except Exception as e:
+            self.ui.msg(_('Konnte Bild Konvertierung Ausgabeverzeichnis nicht erstellen.'), 8000)
+            LOGGER.warning(e)
+
+        img_converter = KnechtImage(self)
+        img_converter.conversion_result.connect(self._conversion_result)
+
+        if img_converter.convert_directory(img_dir, out_dir):
+            self.ui.msg(_('Bildkonvertierung gestartet.<br /><i>{}</i>').format(img_dir), 5000)
+        else:
+            self.ui.msg(_('Bildkonvertierung konnte nicht gestartet werden. Keine konvertierbaren Dateien gefunden.'),
+                        10000)
+
+    def _conversion_result(self, result: str):
+        result = result.replace('\n', '<br />')
+        title = _("Ergebnis der Bildkonvertierung:")
+        self.ui.overlay.display_confirm(f'<b>{title}</b><br />{result}', (('[X]', None), ))
 
     def update_recent_files_menu(self):
         self.recent_menu.clear()

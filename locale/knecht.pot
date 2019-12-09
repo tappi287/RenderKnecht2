@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-11-09 21:44+0100\n"
+"POT-Creation-Date: 2019-12-06 16:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -457,27 +457,31 @@ msgstr ""
 msgid "DeltaGen"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:41
+#: modules/gui/widgets\menu_deltagen.py:42
 msgid "Reset senden"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:44
+#: modules/gui/widgets\menu_deltagen.py:45
 msgid "Freeze Viewer"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:47
+#: modules/gui/widgets\menu_deltagen.py:48
 msgid "Varianten State Check"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:50
-msgid "State Check im Baum anzeigen"
+#: modules/gui/widgets\menu_deltagen.py:51
+msgid "Kamera Daten übertragen"
 msgstr ""
 
 #: modules/gui/widgets\menu_deltagen.py:54
+msgid "State Check im Baum anzeigen"
+msgstr ""
+
+#: modules/gui/widgets\menu_deltagen.py:58
 msgid "Zuletzt gesendetes Preset als Overlay anzeigen"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:59
+#: modules/gui/widgets\menu_deltagen.py:63
 msgid "DeltaGen Szene vor dem konfigurieren mit PlmXml abgleichen."
 msgstr ""
 
@@ -527,63 +531,87 @@ msgstr ""
 msgid "Selektion aufheben\tStrg+D"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:52
+#: modules/gui/widgets\menu_file.py:53
 msgid "Zuletzt geöffnet"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:93
+#: modules/gui/widgets\menu_file.py:94
 msgid "Neu\tStrg+N"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:99
+#: modules/gui/widgets\menu_file.py:100
 msgid "Öffnen\tStrg+O"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:109
+#: modules/gui/widgets\menu_file.py:110
 msgid "Speichern\tStrg+S"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:115
+#: modules/gui/widgets\menu_file.py:116
 msgid "Speichern unter ...\tStrg+Shift+S"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:124
+#: modules/gui/widgets\menu_file.py:125
 msgid "KnechtViewer starten"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:132
+#: modules/gui/widgets\menu_file.py:133
 msgid "POS Schnuffi starten"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:149
+#: modules/gui/widgets\menu_file.py:141
+msgid "Bilddaten konvertieren ..."
+msgstr ""
+
+#: modules/gui/widgets\menu_file.py:155
 msgid "Neues_Dokument_{:02d}.xml"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:202
+#: modules/gui/widgets\menu_file.py:208
 msgid "Datei gespeichert:{0}{1:.3}s"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:229
+#: modules/gui/widgets\menu_file.py:235
 msgid "Daten werden gelesen"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:249
+#: modules/gui/widgets\menu_file.py:255
 msgid "{0} in {1:.3}s geladen."
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:291
+#: modules/gui/widgets\menu_file.py:297
 msgid "Zieldatei zum Speichern festlegen?"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:292
+#: modules/gui/widgets\menu_file.py:298
 msgid "Die Datei: <i>{}</i><br>Pfad: <i>{}</i><br>wurde entfernt oder existiert nicht mehr.<br><br>Neue Zieldatei zum Speichern festlegen?"
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:297
+#: modules/gui/widgets\menu_file.py:303
 msgid "Speichern unter.."
 msgstr ""
 
-#: modules/gui/widgets\menu_file.py:306 modules/gui/wizard\menus.py:77
+#: modules/gui/widgets\menu_file.py:312
+msgid "Zu konvertierendes Verzeichnis ist nicht erreichbar."
+msgstr ""
+
+#: modules/gui/widgets\menu_file.py:321
+msgid "Konnte Bild Konvertierung Ausgabeverzeichnis nicht erstellen."
+msgstr ""
+
+#: modules/gui/widgets\menu_file.py:328
+msgid "Bildkonvertierung gestartet.<br /><i>{}</i>"
+msgstr ""
+
+#: modules/gui/widgets\menu_file.py:330
+msgid "Bildkonvertierung konnte nicht gestartet werden. Keine konvertierbaren Dateien gefunden."
+msgstr ""
+
+#: modules/gui/widgets\menu_file.py:335
+msgid "Ergebnis der Bildkonvertierung:"
+msgstr ""
+
+#: modules/gui/widgets\menu_file.py:342 modules/gui/wizard\menus.py:77
 msgid "Keine Einträge vorhanden"
 msgstr ""
 
@@ -816,7 +844,7 @@ msgstr ""
 #: modules/gui/widgets\message_box.py:69
 #: modules/gui/widgets\message_box.py:114 modules/gui/wizard\wizard.py:48
 #: modules/gui/wizard\wizard.py:189 modules/gui\main_app.py:150
-#: modules/gui\main_app.py:169
+#: modules/gui\main_app.py:169 modules\job.py:15
 msgid "Abbrechen"
 msgstr ""
 
@@ -874,7 +902,7 @@ msgid "Spalte"
 msgstr ""
 
 #: modules/gui/widgets\welcome_page.py:34
-msgid "Willkommen"
+msgid "Start"
 msgstr ""
 
 #: modules/gui/widgets\welcome_page.py:36
@@ -1142,8 +1170,8 @@ msgstr ""
 msgid "Variantenbaum"
 msgstr ""
 
-#: modules/gui\main_ui.py:60 modules/gui\ui_resource.py:121
-#: modules\knecht_render.py:657
+#: modules/gui\main_ui.py:60 modules/gui\ui_resource.py:119
+#: modules\knecht_render.py:660
 msgid "Renderliste"
 msgstr ""
 
@@ -1307,15 +1335,15 @@ msgstr ""
 msgid "Ausgabe öffnen"
 msgstr ""
 
-#: modules/gui\ui_resource.py:108 modules/gui\ui_translations.py:186
+#: modules/gui\ui_resource.py:106 modules/gui\ui_translations.py:186
 msgid "Job übertragen"
 msgstr ""
 
-#: modules/gui\ui_resource.py:120
+#: modules/gui\ui_resource.py:118
 msgid "Variantenliste"
 msgstr ""
 
-#: modules/gui\ui_resource.py:122 modules/gui\ui_translations.py:154
+#: modules/gui\ui_resource.py:120 modules/gui\ui_translations.py:154
 msgid "Pfad Render Dienst"
 msgstr ""
 
@@ -1391,7 +1419,8 @@ msgstr ""
 msgid "Bricht laufende Sendung an DeltaGen ab."
 msgstr ""
 
-#: modules/gui\ui_translations.py:116 modules\knecht_render.py:688
+#: modules/gui\ui_translations.py:116 modules\job.py:13
+#: modules\knecht_render.py:691
 msgid "Rendering"
 msgstr ""
 
@@ -1439,7 +1468,7 @@ msgstr ""
 msgid "Konvertiert die ausgegebenen Bilder nach dem Render Vorgang in PNG."
 msgstr ""
 
-#: modules/gui\ui_translations.py:143 modules\knecht_render.py:322
+#: modules/gui\ui_translations.py:143 modules\knecht_render.py:325
 msgid "Rendering starten"
 msgstr ""
 
@@ -1515,7 +1544,7 @@ msgstr ""
 msgid "Neues_Dokument.xml"
 msgstr ""
 
-#: modules/gui\ui_view_manager.py:144
+#: modules/gui\ui_view_manager.py:143
 msgid "Kann Beschäftigten nicht entlassen. Verstoß gegen Arbeitnehmerschutzgesetz festgestellt."
 msgstr ""
 
@@ -1737,6 +1766,54 @@ msgstr ""
 msgid "Fehler beim schreiben der Datei: {}"
 msgstr ""
 
+#: modules\job.py:12
+msgid "Datentransfer"
+msgstr ""
+
+#: modules\job.py:12
+msgid "Szene wird vorbereitet"
+msgstr ""
+
+#: modules\job.py:12
+msgid "Warteschlange"
+msgstr ""
+
+#: modules\job.py:13
+msgid "Bilderkennung"
+msgstr ""
+
+#: modules\job.py:14
+msgid "Abgebrochen"
+msgstr ""
+
+#: modules\job.py:14
+msgid "Abgeschlossen"
+msgstr ""
+
+#: modules\job.py:14
+msgid "Fehlgeschlagen"
+msgstr ""
+
+#: modules\job.py:15
+msgid "Ans Ende der Warteschlange"
+msgstr ""
+
+#: modules\job.py:15
+msgid "Zum Anfang der Warteschlange"
+msgstr ""
+
+#: modules\job.py:16
+msgid "Ausführen"
+msgstr ""
+
+#: modules\job.py:108
+msgid "Unbekannt"
+msgstr ""
+
+#: modules\job.py:150
+msgid "{0:03d}/{1:03d} Layer erstellt"
+msgstr ""
+
 #: modules\knecht_camera.py:51
 msgid "DeltaGen Kamera Sichtfeld: Angle"
 msgstr ""
@@ -1812,55 +1889,55 @@ msgstr ""
 msgid "Netzwerkverbindung konnte nicht beendet werden. Bitte warten und in einer Minute erneut versuchen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:155
+#: modules\knecht_deltagen.py:157
 msgid "DeltaGen Verbindung erfolgreich verifiziert."
 msgstr ""
 
-#: modules\knecht_deltagen.py:170
+#: modules\knecht_deltagen.py:172
 msgid "DeltaGen Verbindungsversuch ({!s}/{!s}) in {!s} Sekunden..."
 msgstr ""
 
-#: modules\knecht_deltagen.py:198
+#: modules\knecht_deltagen.py:200
 msgid "Prüfe Verbindung..."
 msgstr ""
 
-#: modules\knecht_deltagen.py:206
+#: modules\knecht_deltagen.py:208
 msgid "Sperre Viewer Fenster"
 msgstr ""
 
-#: modules\knecht_deltagen.py:405
+#: modules\knecht_deltagen.py:411
 msgid "Es läuft bereits eine DeltaGen Sende Operation! Vorgang abwarten oder abbrechen und anschließend erneut versuchen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:447
+#: modules\knecht_deltagen.py:453
 msgid "Kopieren"
 msgstr ""
 
-#: modules\knecht_deltagen.py:456
+#: modules\knecht_deltagen.py:462
 msgid "DeltaGen Sende Operation beendet."
 msgstr ""
 
-#: modules\knecht_deltagen.py:459
+#: modules\knecht_deltagen.py:465
 msgid "Konnte <b>keine Verbindung</b> zu einer DeltaGen Instanz mit geladener Szene herstellen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:464
+#: modules\knecht_deltagen.py:470
 msgid "DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>"
 msgstr ""
 
-#: modules\knecht_deltagen.py:466
+#: modules\knecht_deltagen.py:472
 msgid "DeltaGen Sende Operation <b>abgebrochen.</b>"
 msgstr ""
 
-#: modules\knecht_deltagen.py:475
+#: modules\knecht_deltagen.py:481
 msgid "{0} {1} gesendet"
 msgstr ""
 
-#: modules\knecht_deltagen.py:563
+#: modules\knecht_deltagen.py:569
 msgid "Auswählen"
 msgstr ""
 
-#: modules\knecht_deltagen.py:567
+#: modules\knecht_deltagen.py:573
 msgid "Senden an DeltaGen abgeschlossen:<br /><i>{}</i>"
 msgstr ""
 
@@ -1929,91 +2006,91 @@ msgstr ""
 msgid "Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur."
 msgstr ""
 
-#: modules\knecht_render.py:95
+#: modules\knecht_render.py:98
 msgid "RenderKnecht Render Log erstellt am "
 msgstr ""
 
-#: modules\knecht_render.py:96
+#: modules\knecht_render.py:99
 msgid "Erzeuge Bild mit Namen:"
 msgstr ""
 
-#: modules\knecht_render.py:97
+#: modules\knecht_render.py:100
 msgid "Varianten:"
 msgstr ""
 
-#: modules\knecht_render.py:192
+#: modules\knecht_render.py:195
 msgid "Ungültige Auflösungseinstellungen in {}"
 msgstr ""
 
-#: modules\knecht_render.py:197
+#: modules\knecht_render.py:200
 msgid "Die folgenden Ausgabepfade sind zu lang, Rendering wird abgebrochen. {}{}"
 msgstr ""
 
-#: modules\knecht_render.py:203
+#: modules\knecht_render.py:206
 msgid "Die Render Presets enthalten ungültige Ausgabepfade. Rendering wird abgebrochen. {}{}"
 msgstr ""
 
-#: modules\knecht_render.py:235
+#: modules\knecht_render.py:238
 msgid "{} Rendering von {} Bildern abgeschlossen in {}"
 msgstr ""
 
-#: modules\knecht_render.py:253
+#: modules\knecht_render.py:256
 msgid "Sende Varianten..."
 msgstr ""
 
-#: modules\knecht_render.py:260
+#: modules\knecht_render.py:263
 msgid "Sende Shot Varianten..."
 msgstr ""
 
-#: modules\knecht_render.py:270
+#: modules\knecht_render.py:273
 msgid "Sende Einstellungen..."
 msgstr ""
 
-#: modules\knecht_render.py:308 modules\knecht_render.py:392
+#: modules\knecht_render.py:311 modules\knecht_render.py:395
 msgid "Konvertiere Bilddaten..."
 msgstr ""
 
-#: modules\knecht_render.py:373 modules\knecht_render.py:374
+#: modules\knecht_render.py:376 modules\knecht_render.py:377
 msgid "Prüfe Bilddaten..."
 msgstr ""
 
-#: modules\knecht_render.py:378 modules\knecht_render.py:379
+#: modules\knecht_render.py:381 modules\knecht_render.py:382
 msgid "Rendering erzeugt."
 msgstr ""
 
-#: modules\knecht_render.py:384
+#: modules\knecht_render.py:387
 msgid "Erzeuge nächstes Bild in {}..."
 msgstr ""
 
-#: modules\knecht_render.py:425
+#: modules\knecht_render.py:428
 msgid "Bild Konvertierung: {}"
 msgstr ""
 
-#: modules\knecht_render.py:434
+#: modules\knecht_render.py:437
 msgid "Render Vorgang abgebrochen.{}Konnte keine Verbindung zu einer DeltaGen Instanz herstellen."
 msgstr ""
 
-#: modules\knecht_render.py:473
+#: modules\knecht_render.py:476
 msgid "Bilddaten konnten nicht als gültiges Bild verifiziert werden.{}"
 msgstr ""
 
-#: modules\knecht_render.py:485
+#: modules\knecht_render.py:488
 msgid "Bilddaten wurden erfolgreich verifiziert: {}"
 msgstr ""
 
-#: modules\knecht_render.py:495
+#: modules\knecht_render.py:498
 msgid "{0}Datei konnte nicht als gültige Bilddatei verfiziert werden: {1}{0}"
 msgstr ""
 
-#: modules\knecht_render.py:538
+#: modules\knecht_render.py:541
 msgid "{} Einstellungen - "
 msgstr ""
 
-#: modules\knecht_render.py:539
+#: modules\knecht_render.py:542
 msgid "Sampling: {} - Res: "
 msgstr ""
 
-#: modules\knecht_render.py:540
+#: modules\knecht_render.py:543
 msgid "{}px - Ext: "
 msgstr ""
 

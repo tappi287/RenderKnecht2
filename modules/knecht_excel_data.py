@@ -78,7 +78,7 @@ class ExcelDataToKnechtData:
             column_data = model_rows[c].unique()
 
             if column_data:
-                column_data = column_data[0]
+                column_data = str(column_data[0])
             else:
                 continue
 
