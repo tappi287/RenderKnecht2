@@ -47,7 +47,7 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-297</y>
+        <y>0</y>
         <width>481</width>
         <height>619</height>
        </rect>
@@ -440,6 +440,7 @@ QGroupBox::title {
               </property>
               <property name="text">
                <string>&lt;ul&gt;
+&lt;li&gt;KnechtViewer DeltaGen Viewer sync massivley improved, can send image CameraData&lt;/li&gt;
 &lt;li&gt;accept nemo.configurator.api.getAveString() style strings in variants input field&lt;/li&gt;
 &lt;li&gt;fix critical excel data transfer bug&lt;/li&gt;
 &lt;li&gt;add Image Conversion action to file menu&lt;/li&gt;
@@ -452,7 +453,6 @@ QGroupBox::title {
 &lt;li&gt;various fixes for: Preset Wizard item handling, item id connection; item undo deletion&lt;/li&gt;
 &lt;li&gt;Presets drop/paste on Render tree will auto-create a render preset + fixed some undo oddities&lt;/li&gt;
 &lt;li&gt;added standalone POS Schnuffi to compare differences between models/their XMLs&lt;/li&gt;
-&lt;li&gt;added standalone KnechtViewer for pixel perfect comparsions of images vs. DeltaGen Viewer&lt;/li&gt;
 &lt;li&gt;drop xml/rksession/xlsx documents on ui or trees to open&lt;/li&gt;
 &lt;li&gt;add document tab context with ability to copy paths&lt;/li&gt;
 &lt;li&gt;Datapool Image entry import&lt;/li&gt;
