@@ -5,8 +5,7 @@ from requests import Response
 
 from modules.language import get_translation
 from modules.log import init_logging
-from modules.plmxml.globals import AS_CONNECTOR_API_URL, AS_CONNECTOR_IP, AS_CONNECTOR_NS, AS_CONNECTOR_PORT, \
-    AS_CONNECTOR_XMLNS
+from modules.plmxml.globals import PlmXmlGlobals as Pg
 from modules.plmxml.objects import MaterialTarget, NodeInfo
 
 LOGGER = init_logging(__name__)
@@ -37,10 +36,11 @@ class AsConnectorRequest:
     xsd = "http://www.w3.org/2001/XMLSchema"
     xsi = "http://www.w3.org/2001/XMLSchema-instance"
     
-    ns_map = {'xsd': xsd, 'xsi': xsi, None: AS_CONNECTOR_NS}
+    ns_map = {'xsd': xsd, 'xsi': xsi, None: Pg.AS_CONNECTOR_NS}
     
-    base_url = f'http://{AS_CONNECTOR_IP}:{AS_CONNECTOR_PORT}/{AS_CONNECTOR_API_URL}///'
-    base_header = {'Content-Type': 'application/xml', 'Host': f'http://{AS_CONNECTOR_IP}:{AS_CONNECTOR_PORT}'}
+    base_url = f'http://{Pg.AS_CONNECTOR_IP}:{Pg.AS_CONNECTOR_PORT}' \
+               f'/{Pg.AS_CONNECTOR_API_URL}///'
+    base_header = {'Content-Type': 'application/xml', 'Host': f'http://{Pg.AS_CONNECTOR_IP}:{Pg.AS_CONNECTOR_PORT}'}
 
     def __init__(self):
         self._request = None
@@ -140,7 +140,7 @@ class AsConnectorRequest:
 
 
 class AsMaterialConnectToTargetsRequest(AsConnectorRequest):
-    response_xpath = f'{AS_CONNECTOR_XMLNS}returnVal'
+    response_xpath = f'{Pg.AS_CONNECTOR_XMLNS}returnVal'
 
     def __init__(self,
                  target_materials: Union[Iterator, List[MaterialTarget]],
@@ -195,7 +195,7 @@ class AsMaterialConnectToTargetsRequest(AsConnectorRequest):
 
 
 class AsNodeSetVisibleRequest(AsConnectorRequest):
-    response_xpath = f'{AS_CONNECTOR_XMLNS}returnVal'
+    response_xpath = f'{Pg.AS_CONNECTOR_XMLNS}returnVal'
 
     def __init__(self, nodes: Union[List[NodeInfo], Iterator], visible=False):
         super(AsNodeSetVisibleRequest, self).__init__()
@@ -231,7 +231,7 @@ class AsNodeSetVisibleRequest(AsConnectorRequest):
 
 
 class AsGetVersionInfoRequest(AsConnectorRequest):
-    response_xpath = f'{AS_CONNECTOR_XMLNS}returnVal'
+    response_xpath = f'{Pg.AS_CONNECTOR_XMLNS}returnVal'
 
     def __init__(self):
         """ Create a Version Info request
@@ -266,7 +266,7 @@ class AsGetVersionInfoRequest(AsConnectorRequest):
 
 
 class AsNodeGetSelection(AsConnectorRequest):
-    response_xpath = f'{AS_CONNECTOR_XMLNS}returnVal/'
+    response_xpath = f'{Pg.AS_CONNECTOR_XMLNS}returnVal/'
     
     def __init__(self):
         super(AsNodeGetSelection, self).__init__()
@@ -289,7 +289,7 @@ class AsNodeGetSelection(AsConnectorRequest):
 
 
 class AsSceneGetStructureRequest(AsConnectorRequest):
-    response_xpath = f'{AS_CONNECTOR_XMLNS}returnVal/'
+    response_xpath = f'{Pg.AS_CONNECTOR_XMLNS}returnVal/'
 
     def __init__(self, start_node: NodeInfo, types: List[str]=None):
         """ Get all child nodes from given startNode, use as_id=root, parent_node_id=root for the complete scene

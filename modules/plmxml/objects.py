@@ -4,7 +4,7 @@ from xml.etree import ElementTree as Et
 
 from lxml import etree as Et
 
-from modules.plmxml import PLM_XML_NAMESPACE
+from modules.plmxml.globals import PlmXmlGlobals
 from modules.plmxml.utils import pr_tags_to_reg_ex, create_attribute_child_tag, \
     create_user_attributes_elements_from_dict, find_text_attribute, find_user_attributes_in_element
 from modules.language import get_translation
@@ -43,7 +43,7 @@ class MaterialTarget:
 
 class LookLibrary:
     debug_conflicts = False  # Will intentionally place some conflicts
-    look_lib_xpath = f"{PLM_XML_NAMESPACE}UserData/{PLM_XML_NAMESPACE}UserValue"
+    look_lib_xpath = f"{PlmXmlGlobals.NAMESPACE}UserData/{PlmXmlGlobals.NAMESPACE}UserValue"
 
     def __init__(self):
         """ Plm Xml Look Library

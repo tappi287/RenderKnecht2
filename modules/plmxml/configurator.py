@@ -1,7 +1,9 @@
 import re
 from typing import Tuple, List
 
-from modules.plmxml import PlmXml, pr_tags_to_reg_ex, NodeInfo
+from modules.plmxml.utils import pr_tags_to_reg_ex
+from modules.plmxml.objects import NodeInfo
+from modules.plmxml import PlmXml
 from modules.plmxml.connector import AsConnectorConnection
 from modules.plmxml.request import AsNodeSetVisibleRequest, AsMaterialConnectToTargetsRequest, \
     AsSceneGetStructureRequest

@@ -5,7 +5,7 @@ from lxml import etree as Et
 from modules.knecht_objects import KnechtVariantList
 from modules.language import get_translation
 from modules.log import init_logging
-from modules.plmxml.globals import AS_CONNECTOR_XMLNS as AS_XMLNS
+from modules.plmxml.globals import PlmXmlGlobals as Pg
 
 LOGGER = init_logging(__name__)
 
@@ -108,7 +108,7 @@ def create_user_attributes_elements_from_dict(parent, attrib_dict):
 
 
 def find_text_attribute(child, attr_name) -> str:
-    found_attribute = child.find(f'{AS_XMLNS}{attr_name}')
+    found_attribute = child.find(f'{Pg.AS_CONNECTOR_XMLNS}{attr_name}')
     if found_attribute is not None:
         return found_attribute.text
     else:
@@ -118,14 +118,14 @@ def find_text_attribute(child, attr_name) -> str:
 def find_user_attributes_in_element(child):
     """ Helper to find the UserAttributeArray """
     user_attribute_dict = dict()
-    user_attributes = child.find(f'{AS_XMLNS}UserAttributes')
+    user_attributes = child.find(f'{Pg.AS_CONNECTOR_XMLNS}UserAttributes')
 
     if user_attributes is None:
         return user_attribute_dict
 
     for ua in user_attributes:
-        ua_key = ua.find(f'{AS_XMLNS}Key')
-        ua_value = ua.find(f'{AS_XMLNS}Value')
+        ua_key = ua.find(f'{Pg.AS_CONNECTOR_XMLNS}Key')
+        ua_value = ua.find(f'{Pg.AS_CONNECTOR_XMLNS}Value')
 
         if ua_key is not None and ua_value is not None:
             user_attribute_dict[ua_key.text] = ua_value.text
