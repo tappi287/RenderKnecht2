@@ -77,7 +77,7 @@ class KnechtUpdatePlmXml(Thread):
         if request_successful and missing_nodes:
             scene_result = _('DeltaGen Szene stimmt nicht mit PlmXml überein. Fehlende Knoten:\n')
             scene_result += '\n'.join(
-                [f'Name: {m.product_instance.name} LincId: {m.product_instance.linc_id}' for m in missing_nodes[:20]]
+                [f'Name: {m.name} LincId: {m.linc_id}' for m in missing_nodes[:20]]
                 )
             if len(missing_nodes) > 20:
                 scene_result += _('\n..und {} weitere Knoten.').format(len(missing_nodes[20:]))
