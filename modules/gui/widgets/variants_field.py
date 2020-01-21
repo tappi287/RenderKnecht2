@@ -4,6 +4,7 @@ from PySide2.QtCore import QObject, QTimer, Slot
 
 from modules.itemview.item import KnechtItem
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
+from modules.knecht_camera import KnechtImageCameraInfo
 from modules.log import init_logging
 
 LOGGER = init_logging(__name__)
@@ -95,21 +96,51 @@ class VariantInputFields(QObject):
 
         return KnechtItem(data=tuple(data))
 
-    def add_renderknecht_style_strings(self, variant_set_str: str) -> Union[bool, List[KnechtItem]]:
-        # Text contains semicolons, guess as old RenderKnecht Syntax: "variant state;"
-        if ';' in variant_set_str:
-            items = list()
-            for var in variant_set_str.split(';'):
-                var = var.split(' ', 2)
+    @staticmethod
+    def _lookup_camera_items(variant_set: list, cam_info: dict) -> bool:
+        """
+            Update camera info if pasted knecht-style strings contain eg:
+                rtt_Camera_FOV FOV CAMERA 12.1234;
+                rtt_Camera_Position POS CAMERA 0.000 0.000 0.000;
+                rtt_Camera_Orientation ORIENT CAMERA 0.00 0.00 0.00 180.1234;
+        """
+        cam_key = variant_set[0]
+        cam_value = ' '.join([v for v in variant_set[1:]])[:-1]  # variant_set[1:] = ['FOV', 'CAMERA 12.123']
+        cam_cmds = KnechtImageCameraInfo.rtt_camera_cmds
+        if cam_key in cam_cmds:
+            cam_rem = cam_cmds[cam_key].format('', '', '', '').rstrip(' ')  # 'FOV CAMERA {0}' -> 'FOV CAMERA'
+            cam_value = cam_value.replace(cam_rem + ' ', '')  # 'FOV CAMERA 12.123' -> '12.123'
 
-                if var[0] != '':
-                    if len(var) > 1:
-                        if var[1] != '':
-                            new_item = self.add_variant_item(var[0], var[1], len(items))
-                            items.append(new_item)
-
-            return items
+            # Update Camera Info dict
+            cam_info[cam_key] = cam_value.replace(' ', ', ')  # 'rtt_camera_FOV': '12.123'
+            return True
         return False
+
+    def add_renderknecht_style_strings(self, variant_set_str: str) -> List[KnechtItem]:
+        items, cam_info = list(), dict()
+        # If text contains semicolons, guess as old RenderKnecht Syntax: "variant state;"
+        if ';' not in variant_set_str:
+            return items
+
+        for var in variant_set_str.split(';'):
+            var = var.split(' ', 2)
+
+            if var[0] != '':
+                if len(var) > 1:
+                    if var[1] != '':
+                        # -- Extract Camera Info
+                        if self._lookup_camera_items(var, cam_info):
+                            continue
+                        # -- Extract Variant_Set Variant_Value
+                        new_item = self.add_variant_item(var[0], var[1], len(items))
+                        items.append(new_item)
+
+        # Create camera item from extracted camera_info dict
+        if cam_info:
+            cam_item = self.view.editor.create.create_camera_item(f'pasted_Camera_{len(items):03d}', cam_info)
+            items.append(cam_item)
+
+        return items
 
     def add_multiple_line_style_strings(self, variant_set_str: str, variant_str: str) -> Union[bool, List[KnechtItem]]:
         # Text contains spaces, create multiple lines
