@@ -111,7 +111,6 @@ class KnechtEditorCopyPaste(QObject):
 
         # Copy only accepted items for this view
         items = self._filter_accepted_item_types(items)
-
         if not items:
             return
 
@@ -124,6 +123,9 @@ class KnechtEditorCopyPaste(QObject):
         referenced_items = self.editor.util.collect_referenced_items(destination, different_origin,
                                                                      view_origin, items, src_model)
         items = self.editor.util.remove_duplicates(items, referenced_items)
+        items = self.editor.util.remove_pasted_resets(items, destination)
+        if not items:
+            return
 
         paste_args = (items, current_src_index, src_model, referenced_items,
                       different_origin, view_origin, move_undo_chain)

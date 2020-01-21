@@ -124,10 +124,14 @@ class KnechtEditorCreate(QObject):
         :param child_items: The items from which to create the preset
         :return:
         """
+        # - Remove Reset items
+        child_items = self.editor.util.remove_pasted_resets(child_items, 1)
         # -- Create User Preset --
         return self.add_item(ItemTemplates.preset, child_items, create_id=True)
 
     def create_render_preset_from_items(self, child_items: List[KnechtItem]):
+        # - Remove Reset items
+        child_items = self.editor.util.remove_pasted_resets(child_items, 1)
         # -- Create Render Preset --
         return self.add_item(ItemTemplates.render, child_items)
 

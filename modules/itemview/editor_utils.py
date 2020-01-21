@@ -217,6 +217,18 @@ class KnechtEditorUtilities:
         del copied_items
         return items
 
+    @staticmethod
+    def remove_pasted_resets(copied_items: List[KnechtItem], destination: int) -> List[KnechtItem]:
+        """ Remove Reset presets pasted to item level """
+        if destination == 0:
+            return copied_items
+
+        rem_items = [i for i in copied_items if i.data(Kg.TYPE) == 'reset']
+        for item in rem_items:
+            copied_items.remove(item)
+
+        return copied_items
+
     def convert_clipboard(self, items: List[KnechtItem], src_index: QModelIndex, view_origin) -> List[KnechtItem]:
         """ When pasting to item level, convert top level items to references. """
         top_level_items = list()
