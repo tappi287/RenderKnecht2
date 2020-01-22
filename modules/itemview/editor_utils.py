@@ -220,7 +220,7 @@ class KnechtEditorUtilities:
     @staticmethod
     def remove_pasted_resets(copied_items: List[KnechtItem], destination: int) -> List[KnechtItem]:
         """ Remove Reset presets pasted to item level """
-        if destination == 0:
+        if destination == 0 or not copied_items:
             return copied_items
 
         rem_items = [i for i in copied_items if i.data(Kg.TYPE) == 'reset']
