@@ -31,7 +31,7 @@ def get_current_parent_index(model, parent_idx, parent_position):
 
 
 def get_current_index(model, parent_idx, parent_position, position,
-                      debug: bool=False, log_txt: str = '') -> Tuple[QModelIndex, QModelIndex]:
+                      debug: bool = False, log_txt: str = '') -> Tuple[QModelIndex, QModelIndex]:
     """
         Update the parent index - this preserves the correct parent index even
         if the parent has been deleted and undone.
@@ -194,28 +194,6 @@ class TreeChainCommand(QtWidgets.QUndoCommand):
     def undo(self):
         self.chain_worker.initialize_worker(is_undo=True)
 
-    """
-    def redo(self):
-        self.started()
-        for cmd in self.iterate_children():
-            cmd.redo()
-        self.finished()
-
-    def undo(self):
-        self.started()
-        for cmd in self.iterate_children(forward=False):
-            cmd.undo()
-        self.finished()
-
-    def iterate_children(self, forward=True):
-        if forward:
-            for c in range(0, self.childCount()):
-                yield self.child(c)
-        else:
-            for c in range(self.childCount()-1, -1, -1):
-                yield self.child(c)
-    """
-
 
 class TreeCommand(QtWidgets.QUndoCommand):
     """
@@ -252,17 +230,14 @@ class TreeCommand(QtWidgets.QUndoCommand):
         current_idx, new_parent_idx = self.get_current_index('Redo')
 
         if self.add:
-            if self.previous_remove_failed:
-                # Do not add item if previous remove failed
-                self.previous_remove_failed = False
-                return
-
             new_idx = self.editor.command_insert_row(self.model, current_idx, new_parent_idx, self.item)
             self.position = new_idx.row()
             self.parent_position = new_idx.parent().row()
         else:
-            if not self.editor.command_remove_row(current_idx, self.model):
-                self.previous_remove_failed = True
+            if not current_idx.isValid():
+                current_idx = self.model.get_index_from_item(self.item)
+
+            self.editor.command_remove_row(current_idx, self.model)
             self.item.setData(0, f'{int(self.item.data(0)) - 1:03d}')
 
         self.editor.iterator.order_items(new_parent_idx)
@@ -271,14 +246,11 @@ class TreeCommand(QtWidgets.QUndoCommand):
         current_idx, new_parent_idx = self.get_current_index('Undo')
 
         if self.add:
-            if not self.editor.command_remove_row(current_idx, self.model):
-                self.previous_remove_failed = True
-        else:
-            if self.previous_remove_failed:
-                # Do not add item if previous remove failed
-                self.previous_remove_failed = False
-                return
+            if not current_idx.isValid():
+                current_idx = self.model.get_index_from_item(self.item)
 
+            self.editor.command_remove_row(current_idx, self.model)
+        else:
             new_idx = self.editor.command_insert_row(self.model, current_idx, new_parent_idx, self.item)
             if self.debug:
                 LOGGER.debug('Undo created new_idx @%03dP%03d', new_idx.row(), new_idx.parent().row())
