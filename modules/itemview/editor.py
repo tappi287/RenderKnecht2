@@ -128,8 +128,14 @@ class KnechtEditor(QObject):
                 return
 
         # TODO: Removing items created with mismatching proxy/src index causes trouble,
-        # moving those items fixes the issue
+        """
+        Steps to reproduce with empty doc
 
+            1. create 3 user presets with menu>create>user preset
+            2. move 2nd preset to last position, this will create the mismatching indices
+            3. select 3rd + 2nd preset and delete
+            4. -> could not remove row!        
+        """
         index_ls, model = self.get_selection()
 
         if not index_ls:
