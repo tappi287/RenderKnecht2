@@ -90,7 +90,8 @@ class CreatePo:
     @classmethod
     def read_current_po(cls, po_file, pot_file):
         msg_dict = dict()
-        current_msgid = None
+        current_msgid, current_msgstr = str(), str()
+        ismsgstr: bool = False
 
         with open(po_file, 'r', encoding=ENCODING_VAL) as f:
             msg_dict['file_data'] = f.readlines()
@@ -100,17 +101,22 @@ class CreatePo:
 
         for line in msg_dict['file_data']:
             if line.startswith('msgid'):
+                ismsgstr = False
+                msg_dict[current_msgid] = current_msgstr
                 current_msgid = cls.prepare_msg_line(line)
                 continue
 
-            # Fix pot file created with msgid separated by a line
+            # Fix pot file created with msgid/msgstr separated by a line
             # msgid ""
             # "Actual msgid"
-            if line.startswith('"') and current_msgid == '':
-                current_msgid = cls.prepare_msg_line(line)
+            if line.startswith('"') and not ismsgstr:
+                current_msgid += cls.prepare_msg_line(line)
+            elif line.startswith('"') and ismsgstr:
+                current_msgstr += cls.prepare_msg_line(line)
 
             if line.startswith('msgstr') and current_msgid:
-                msg_dict[current_msgid] = cls.prepare_msg_line(line)
+                ismsgstr = True
+                current_msgstr = cls.prepare_msg_line(line)
 
         msg_dict['file_data'] = None
         # os.rename(po_file, os.path.join(po_file, '.old'))

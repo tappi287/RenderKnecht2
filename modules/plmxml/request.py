@@ -190,6 +190,10 @@ class AsMaterialConnectToTargetsRequest(AsConnectorRequest):
 
         if result:
             LOGGER.debug('AsConnector successfully updated requested Materials.')
+        else:
+            LOGGER.error('AsConnector update material request failed!')
+            self.error = _('Fehler beim senden von {} Anfrage.\nAsConnector konnte Materialien nicht '
+                           'aktualisieren.').format(self.__class__.__name__)
 
         return result
 
@@ -350,3 +354,103 @@ class AsSceneGetStructureRequest(AsConnectorRequest):
 
         self.result = nodes
         return True
+
+
+class AsSceneGetActiveRequest(AsConnectorRequest):
+    response_xpath = f'{Pg.AS_CONNECTOR_XMLNS}returnVal'
+
+    def __init__(self):
+        """ Get the name of the currently active scene.
+        :returns: The name of the active scene as string
+        :rtype: str
+        """
+        super(AsSceneGetActiveRequest, self).__init__()
+        self.url = 'scene/get/active'
+
+        self.result = str()
+        self._set_request()
+
+    def _set_request(self):
+        e = self._create_request_root_element('Scene', 'GetActive')
+        self.request = e
+
+    def _read_response(self, r_xml: Et._Element) -> bool:
+        result = False
+
+        for e in r_xml.iterfind(self.response_xpath):
+            if e.text:
+                result = True
+                self.result = e.text
+
+        if result:
+            LOGGER.debug('AsConnector SceneGetActive request successful. Found scene %s', self.result)
+
+        return result
+
+
+class AsSceneGetAllRequest(AsConnectorRequest):
+    response_xpath = f'{Pg.AS_CONNECTOR_XMLNS}returnVal/{Pg.AS_CONNECTOR_XMLNS}Scene/{Pg.AS_CONNECTOR_XMLNS}Name'
+
+    def __init__(self):
+        """ Returns a list of all scene names.
+
+        :returns: List[str] Retrieve all scenes from the authoring system.
+        """
+        super(AsSceneGetAllRequest, self).__init__()
+        self.url = 'scene/get/all'
+
+        self.result: List[str] = list()
+        self._set_request()
+
+    def _set_request(self):
+        e = self._create_request_root_element('Scene', 'GetAll')
+        self.request = e
+
+    def _read_response(self, r_xml: Et._Element) -> bool:
+        result = False
+        self.result: List[str] = list()
+
+        for e in r_xml.iterfind(self.response_xpath):
+            if e.text:
+                result = True
+                self.result.append(e.text)
+
+        if result:
+            LOGGER.debug('AsConnector SceneGetAll request successful. Found scenes %s', self.result)
+
+        return result
+
+
+class AsSceneSetActiveRequest(AsConnectorRequest):
+    response_xpath = f'{Pg.AS_CONNECTOR_XMLNS}returnVal'
+
+    def __init__(self, scene_name: str):
+        """ Request the scene with name: <scene_name> to be set active.
+
+        :param str scene_name: The name of the scene to set active
+        :returns: bool true if successfully set
+        :rtype: bool
+        """
+        super(AsSceneSetActiveRequest, self).__init__()
+        self.url = 'scene/set/active'
+        self._set_request(scene_name)
+
+    def _set_request(self, scene_name: str):
+        e = self._create_request_root_element('Scene', 'SetActive')
+        n = Et.SubElement(e, 'name')
+        m = Et.SubElement(n, 'string')
+        m.text = scene_name
+
+        self.request = e
+
+    def _read_response(self, r_xml: Et._Element) -> bool:
+        result = True
+
+        for e in r_xml.iterfind(self.response_xpath):
+            if e.text != 'true':
+                result = False
+
+        if result:
+            LOGGER.debug('AsConnector successfully set active scene.')
+
+        return result

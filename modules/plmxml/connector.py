@@ -49,7 +49,7 @@ class AsConnectorConnection:
             r = requests.post(
                 as_request.get_url(), data=as_request.to_bytes(), headers=as_request.get_header(), timeout=10
                 )
-        except requests.ConnectionError or requests.Timeout or requests.ReadTimeout as e:
+        except Exception as e:
             LOGGER.error('Error connecting to AsConnector! %s', e)
             err = str(e)
 

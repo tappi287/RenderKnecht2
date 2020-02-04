@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>503</width>
-    <height>297</height>
+    <width>613</width>
+    <height>731</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,8 +48,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>481</width>
-        <height>630</height>
+        <width>604</width>
+        <height>731</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -440,6 +440,7 @@ QGroupBox::title {
               </property>
               <property name="text">
                <string>&lt;ul&gt;
+&lt;li&gt;add more AsConnector error handling + set active scene menu&lt;/li&gt;
 &lt;li&gt;pasting camera strings to variant field will create Camera Item&lt;/li&gt;
 &lt;li&gt;KnechtViewer DeltaGen Viewer sync massivley improved, can send image CameraData&lt;/li&gt;
 &lt;li&gt;accept nemo.configurator.api.getAveString() style strings in variants input field&lt;/li&gt;

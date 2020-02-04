@@ -302,6 +302,8 @@ class SendToDeltaGen(QObject):
 
     abort_operation = Signal()
 
+    active_scene_result = Signal(str, list)  # AsConnector Set/GetActiveScene results
+
     def __init__(self, ui):
         """ Controls the DeltaGen communication thread.
             Only one, no concurrent, send operations will be allowed.
@@ -337,6 +339,7 @@ class SendToDeltaGen(QObject):
         self.plm_xml_controller.send_finished.connect(self._send_operation_finished)
         self.plm_xml_controller.progress.connect(self._update_progress)
         self.plm_xml_controller.plmxml_result.connect(self._plm_xml_finished)
+        self.plm_xml_controller.scene_active_result.connect(self._request_active_scene_result)
 
         # Prepare Send Thread
         self.dg = CommunicateDeltaGen()
@@ -387,6 +390,22 @@ class SendToDeltaGen(QObject):
     def send_command(self, command: str):
         self.transfer_command.emit(command)
 
+    def send_active_scene_request(self, set_active_scene_name: str=None):
+        """ Send a AsConnector Request for a list of available scenes + str of currently active scene
+            and, if set, request the provided <set_active_scene_name> to be set as active scene.
+
+            plm_xml_controller.scene_result str, List[str] will be emitted.
+            plm_xml_controller.no_connection will be emitted
+
+        :param str set_active_scene_name: Leave blank to just request list of scenes, set to scene name
+                                          to request this as active scene
+        """
+        self.plm_xml_controller.start_get_set_active_scenes(set_active_scene_name)
+
+    def _request_active_scene_result(self, active_scene: str, scenes: list):
+        if active_scene and scenes:
+            self._update_status(_('AsConnector aktive Szene: {}').format(active_scene))
+
     def size_viewer(self, size: str=''):
         """ Resize the DeltaGen Viewer with size param or GUI ComboBox setting
 
@@ -427,8 +446,7 @@ class SendToDeltaGen(QObject):
 
     def _send_as_connector(self, variant_ls: KnechtVariantList):
         self.plm_xml_controller.variants_ls = variant_ls
-        self.plm_xml_controller.start()
-
+        self.plm_xml_controller.start_configuration()
 
     @Slot(int)
     def _send_operation_finished(self, result: int):

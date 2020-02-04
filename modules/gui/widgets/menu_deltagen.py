@@ -1,11 +1,12 @@
-from PySide2.QtCore import QTimer, Slot
+from PySide2.QtCore import Slot
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QAction, QMenu
 
-from modules.settings import KnechtSettings
 from modules.gui.ui_resource import IconRsc
+from modules.gui.widgets.menu_asscene import AsSceneMenu
 from modules.language import get_translation
 from modules.log import init_logging
+from modules.settings import KnechtSettings
 
 LOGGER = init_logging(__name__)
 
@@ -16,8 +17,6 @@ _ = lang.gettext
 
 
 class DeltaGenMenu(QMenu):
-    new_document_count = 0
-    load_save_mgr = None
 
     def __init__(self, ui, menu_name: str = _('DeltaGen')):
         """ Setup the DeltaGen MainMenu setting KnechtSettings for DeltaGen communication
@@ -31,6 +30,7 @@ class DeltaGenMenu(QMenu):
         self.reset, self.freeze, self.check = None, None, None
         self.send_camera, self.display, self.display_overlay = None, None, None
         self.validate_plmxml = None
+        self.as_scene_menu = QMenu()
 
         self.setup_deltagen_menu()
 
@@ -61,6 +61,11 @@ class DeltaGenMenu(QMenu):
         # ---- Validate DeltaGen Scene vs PlmXml before switching configurations
         self.validate_plmxml = self._setup_checkable_action(
             _('DeltaGen Szene vor dem konfigurieren mit PlmXml abgleichen.'), True, self.toggle_validate_plmxml)
+
+        # --- As Connector choose active scene menu ---
+        self.as_scene_menu.deleteLater()
+        self.as_scene_menu = AsSceneMenu(self.ui, _('AsConnector aktive Szene:'))
+        self.addMenu(self.as_scene_menu)
 
         self._apply_settings()
 

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-12-09 17:00+0100\n"
+"POT-Creation-Date: 2020-02-03 19:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -388,6 +388,23 @@ msgstr ""
 msgid "abgeschlossen am: "
 msgstr ""
 
+#: modules/gui/widgets\menu_asscene.py:18
+#: modules/gui/widgets\menu_deltagen.py:21
+msgid "DeltaGen"
+msgstr ""
+
+#: modules/gui/widgets\menu_asscene.py:52
+msgid "AsConnector unterstützt nur Schaltungen in zuletzt geladener Szene! Diese Funktion ist experimentell."
+msgstr ""
+
+#: modules/gui/widgets\menu_asscene.py:56
+msgid "Keine AsConnector Verbindung oder keine Szenen geöffnet."
+msgstr ""
+
+#: modules/gui/widgets\menu_asscene.py:59
+msgid "AsConnector Szenen angefordert, einen Moment."
+msgstr ""
+
 #: modules/gui/widgets\menu_create.py:25
 #: modules/gui/widgets\welcome_page.py:40
 msgid "Erstellen"
@@ -453,10 +470,6 @@ msgstr ""
 msgid "DeltaGen_Kamera_{:03d}"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:22
-msgid "DeltaGen"
-msgstr ""
-
 #: modules/gui/widgets\menu_deltagen.py:42
 msgid "Reset senden"
 msgstr ""
@@ -483,6 +496,10 @@ msgstr ""
 
 #: modules/gui/widgets\menu_deltagen.py:63
 msgid "DeltaGen Szene vor dem konfigurieren mit PlmXml abgleichen."
+msgstr ""
+
+#: modules/gui/widgets\menu_deltagen.py:67
+msgid "AsConnector aktive Szene:"
 msgstr ""
 
 #: modules/gui/widgets\menu_edit.py:23
@@ -1520,7 +1537,7 @@ msgstr ""
 msgid "Elemente entfernen"
 msgstr ""
 
-#: modules/itemview\editor_undo.py:301
+#: modules/itemview\editor_undo.py:273
 msgid "verschieben"
 msgstr ""
 
@@ -1753,51 +1770,55 @@ msgstr ""
 msgid "Sperre Viewer Fenster"
 msgstr ""
 
-#: modules\knecht_deltagen.py:411
+#: modules\knecht_deltagen.py:407
+msgid "AsConnector aktive Szene: {}"
+msgstr ""
+
+#: modules\knecht_deltagen.py:430
 msgid "Es läuft bereits eine DeltaGen Sende Operation! Vorgang abwarten oder abbrechen und anschließend erneut versuchen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:453
+#: modules\knecht_deltagen.py:471
 msgid "Kopieren"
 msgstr ""
 
-#: modules\knecht_deltagen.py:462
+#: modules\knecht_deltagen.py:480
 msgid "DeltaGen Sende Operation beendet."
 msgstr ""
 
-#: modules\knecht_deltagen.py:465
+#: modules\knecht_deltagen.py:483
 msgid "Konnte <b>keine Verbindung</b> zu einer DeltaGen Instanz mit geladener Szene herstellen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:470
+#: modules\knecht_deltagen.py:488
 msgid "DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>"
 msgstr ""
 
-#: modules\knecht_deltagen.py:472
+#: modules\knecht_deltagen.py:490
 msgid "DeltaGen Sende Operation <b>abgebrochen.</b>"
 msgstr ""
 
-#: modules\knecht_deltagen.py:481
+#: modules\knecht_deltagen.py:499
 msgid "{0} {1} gesendet"
 msgstr ""
 
-#: modules\knecht_deltagen.py:569
+#: modules\knecht_deltagen.py:587
 msgid "Auswählen"
 msgstr ""
 
-#: modules\knecht_deltagen.py:573
+#: modules\knecht_deltagen.py:591
 msgid "Senden an DeltaGen abgeschlossen:<br /><i>{}</i>"
 msgstr ""
 
-#: modules\knecht_excel.py:274
+#: modules\knecht_excel.py:223
 msgid "Datei exisitiert nicht: {}"
 msgstr ""
 
-#: modules\knecht_excel.py:290
+#: modules\knecht_excel.py:239
 msgid "Die Arbeitsblätter für PR-Optionen oder Modelle enthalten keine Daten oder konnten nicht gelesen werden."
 msgstr ""
 
-#: modules\knecht_excel.py:432
+#: modules\knecht_excel.py:381
 msgid "Es wurden nicht alle benötigten Arbeitsblätter gefunden {}. Es fehlen: {}"
 msgstr ""
 
@@ -1821,36 +1842,36 @@ msgstr ""
 msgid "Konnte unkonvertierte Bilddatei nicht verschieben: {}"
 msgstr ""
 
-#: modules\knecht_plmxml.py:78
+#: modules\knecht_plmxml.py:171
 msgid ""
 "DeltaGen Szene stimmt nicht mit PlmXml überein. Fehlende Knoten:\n"
 msgstr ""
 
-#: modules\knecht_plmxml.py:83
+#: modules\knecht_plmxml.py:176
 msgid ""
 "\n"
 "..und {} weitere Knoten."
 msgstr ""
 
-#: modules\knecht_plmxml.py:84
+#: modules\knecht_plmxml.py:177
 msgid ""
 "\n"
 "Diese Prüfung kann in den DeltaGen Optionen deaktiviert werden."
 msgstr ""
 
-#: modules\knecht_plmxml.py:88
+#: modules\knecht_plmxml.py:181
 msgid "DeltaGen Szene erfolgreich mit PlmXml abgeglichen."
 msgstr ""
 
-#: modules\knecht_plmxml.py:90
+#: modules\knecht_plmxml.py:183
 msgid "Konnte DeltaGen Szene nicht mit PlmXml abgleichen. Keine Verbindung zum AsConnector2."
 msgstr ""
 
-#: modules\knecht_plmxml.py:100
+#: modules\knecht_plmxml.py:193
 msgid "Konfiguriere PlmXml Instanz"
 msgstr ""
 
-#: modules\knecht_plmxml.py:116
+#: modules\knecht_plmxml.py:209
 msgid "Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur."
 msgstr ""
 

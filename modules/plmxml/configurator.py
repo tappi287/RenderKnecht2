@@ -89,12 +89,14 @@ class PlmXmlConfigurator:
             if not req_result:
                 result = False
                 self.errors.append(as_conn.error)
+                LOGGER.debug('%s', as_conn.error)
 
         # -- Update Materials
         req_result = as_conn.request(self.create_material_connect_to_targets_request())
 
         if not req_result or not result:
             self.errors.append(as_conn.error)
+            LOGGER.debug('%s', as_conn.error)
             return False
 
         return True

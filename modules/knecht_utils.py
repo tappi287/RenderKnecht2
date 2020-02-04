@@ -64,7 +64,7 @@ def search_list_indices(ls: list, value):
 
 def list_class_values(obj) -> dict:
     if not hasattr(obj, '__dict__'):
-        return []
+        return dict()
 
     class_dict = dict()
 

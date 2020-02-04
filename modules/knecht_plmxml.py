@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 from queue import Queue
 from threading import Thread
+from typing import Tuple
 
 from PySide2.QtCore import QObject, Signal, Slot
 
@@ -12,6 +13,8 @@ from modules.language import get_translation
 from modules.log import init_logging, setup_logging, setup_log_queue_listener
 from modules.plmxml import PlmXml
 from modules.plmxml.configurator import PlmXmlConfigurator
+from modules.plmxml.connector import AsConnectorConnection
+from modules.plmxml.request import AsSceneSetActiveRequest, AsSceneGetAllRequest, AsSceneGetActiveRequest
 from modules.plmxml.utils import create_pr_string_from_variants
 # from private.plmxml_example_data import example_pr_string, plm_xml_file
 
@@ -29,26 +32,116 @@ class KnechtPlmXmlController(QObject):
     status = Signal(str)
     progress = Signal(int)
     plmxml_result = Signal(str)
+    scene_active_result = Signal(str, list)
 
     def __init__(self, variants_ls: KnechtVariantList):
         super(KnechtPlmXmlController, self).__init__()
         self.variants_ls = variants_ls
         self.send_in_progress = False
+        self.active_scene = ''
 
         self.send_finished.connect(self._thread_finished)
+        self.scene_active_result.connect(self._active_scene_result)
 
-    def start(self):
+    def start_configuration(self):
+        """ Skip for now, active scene has to last loaded scene
+            or AsConnector will send garbage.
+        if not self.active_scene:
+            self.plmxml_result.emit(
+                _('Keine aktive Szene gesetzt. Bitte aktive AsConnector '
+                  'Szene im DeltaGen Menü auswählen.')
+            )
+            return
+        """
+
         t = KnechtUpdatePlmXml(self)
         t.start()
 
         self.send_in_progress = True
+
+    def start_get_set_active_scenes(self, set_active_scene: str=None):
+        """ Request a list of available scene + str of currently active scene
+            and, if set, request the provided <set_active_scene> to be set as active scene.
+            Will emit Signal scene_result on success or no connection otherwise.
+
+        :param str set_active_scene: Scene name of the scene to set active
+        """
+        t = KnechtUpdateActiveScene(self, set_active_scene)
+        t.start()
+
+    def _active_scene_result(self, active_scene: str):
+        self.active_scene = active_scene
 
     def _thread_finished(self, result: int):
         LOGGER.debug('KnechtUpdatePlmXml thread finished with result:\n%s', result)
         self.send_in_progress = False
 
 
-class KnechtUpdatePlmXmlSignals(QObject):
+class _KnechtUpdateActiveSceneSignals(QObject):
+    no_connection = Signal()
+    scene_result = Signal(str, list)
+
+
+class KnechtUpdateActiveScene(Thread):
+    def __init__(self, controller, set_active_scene: str=None):
+        """ Run request to get all scenes + currently active scene.
+            If set_active_scene provided, request this scene_name to be set as active.
+
+        :param KnechtPlmXmlController controller: thread controller
+        :param str set_active_scene: either a scene name or empty string/none for no SetActive scene request
+        """
+        super(KnechtUpdateActiveScene, self).__init__()
+        self.signals = _KnechtUpdateActiveSceneSignals()
+        self.set_active_scene = set_active_scene or ''
+        self.controller = controller
+
+    def _setup_signals(self):
+        self.signals.no_connection.connect(self.controller.no_connection)
+        self.signals.scene_result.connect(self.controller.scene_active_result)
+
+    def start(self) -> None:
+        self._setup_signals()
+        active_scene, scene_list = self._request_scene_list()
+
+        # -- Emit Results
+        self.signals.scene_result.emit(active_scene, scene_list)
+
+        if not active_scene and not scene_list:
+            self.signals.no_connection.emit()
+            return
+
+        if self.set_active_scene:
+            result = self._set_scene_active_request(self.set_active_scene)
+            if not result:
+                self.signals.no_connection.emit()
+
+    @staticmethod
+    def _set_scene_active_request(scene_name: str):
+        """ Request AsConnector to set scene with scene_name active """
+        as_conn = AsConnectorConnection()
+        set_active_req = AsSceneSetActiveRequest(scene_name)
+        return as_conn.request(set_active_req)
+
+    @staticmethod
+    def _request_scene_list() -> Tuple[str, list]:
+        as_conn = AsConnectorConnection()
+        get_all_req = AsSceneGetAllRequest()
+        result = as_conn.request(get_all_req)
+
+        if not result:
+            return str(), list()
+
+        get_active_scene_req = AsSceneGetActiveRequest()
+        result = as_conn.request(get_active_scene_req)
+        if not result:
+            return str(), list()
+
+        active_scene = get_active_scene_req.result
+        scenes = get_all_req.result
+        return active_scene, scenes
+
+
+class _KnechtUpdatePlmXmlSignals(QObject):
     send_finished = Signal(int)
     no_connection = Signal()
     status = Signal(str)
@@ -61,7 +154,7 @@ class KnechtUpdatePlmXml(Thread):
         super(KnechtUpdatePlmXml, self).__init__()
         self.controller = controller
         self.variants_ls = controller.variants_ls
-        self.signals = KnechtUpdatePlmXmlSignals()
+        self.signals = _KnechtUpdatePlmXmlSignals()
 
     def _setup_signals(self):
         self.signals.send_finished.connect(self.controller.send_finished)

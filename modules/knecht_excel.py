@@ -1,16 +1,11 @@
-import shutil
 from pathlib import Path
-from tempfile import mkdtemp
 from time import time
 from typing import List, Tuple, Union
-from zipfile import ZIP_LZMA, ZipFile
 
 import pandas as pd
 
-from modules.globals import get_settings_dir
 from modules.gui.widgets.path_util import path_exists
-from modules.knecht_utils import list_class_values, CreateZip
-from modules.knecht_fakom import FakomData
+from modules.knecht_utils import list_class_values
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -175,52 +170,6 @@ class ExcelData:
         if self.pr_options.empty or self.models.empty:
             return False
         return True
-
-    """ Obsolete with KnData """
-    def save_to_zip(self, file_path: Path=None) -> bool:
-        if file_path is None:
-            out_zip = Path(get_settings_dir()) / 'Excel_data.zip'
-        else:
-            out_zip = file_path
-
-        tmp_dir = CreateZip.create_tmp_dir()
-
-        for file_name, df in zip(self.file_names, (self.pr_options, self.packages, self.models)):
-            csv_file = Path(tmp_dir) / file_name
-
-            try:
-                df.to_csv(csv_file.as_posix())
-            except Exception as e:
-                LOGGER.error(e)
-                return False
-
-        return CreateZip.save_dir_to_zip(tmp_dir, out_zip)
-
-    """ Obsolete with KnData """
-    def load_from_zip(self, file_path: Path=None) -> bool:
-        if file_path is None:
-            in_zip = Path(get_settings_dir()) / 'Excel_data.zip'
-
-            if not path_exists(in_zip):
-                return False
-        else:
-            in_zip = file_path
-
-        try:
-            with ZipFile(in_zip, 'r') as zip_file:
-                for file_name, sheet_type in zip(self.file_names, (self.map.Pr, self.map.Packages, self.map.Models)):
-                    with zip_file.open(file_name) as csv_file:
-                        self._load_csv(csv_file, sheet_type)
-        except Exception as e:
-            LOGGER.error(e)
-            return False
-
-        return True
-
-    def _load_csv(self, csv_file, sheet_type):
-        df = pd.read_csv(csv_file, index_col=0)
-        self.add_worksheet(Worksheet(csv_file.name, sheet_type, df))
-        LOGGER.debug('Loaded dataframe with columns: %s', df.columns)
 
     def add_worksheet(self, worksheet: Worksheet):
         if worksheet.sheet_type == self.map.Pr:
