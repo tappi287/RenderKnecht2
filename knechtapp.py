@@ -19,7 +19,7 @@ if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     print('Using high dpi Pixmaps')
 
-VERSION = '1.372'
+VERSION = '1.373'
 
 InfoMessage.ver = VERSION
 InfoMessage.lic = 'GPL v3'
@@ -27,6 +27,10 @@ InfoMessage.auth = 'Stefan Tapper'
 InfoMessage.mail = 'tapper.stefan@gmail.com'
 InfoMessage.cred = ['Python Community', 'PyCharm Community Edition', 'Stackoverflow', 'PySide Docs']
 
+# TODO: Implement PlmXml QA LookLibrary Targets != AsConnector2.targetGetAllNames
+# should find Targets that are listed inside PlmXml but not available inside the DG Scene
+# maybe even catch the error before configuring to prevent AsConnector Exception resulting
+# in incomplete configurations.
 # TODO: Rename, Renumber Images from different RenderPresets
 # TODO: item deletion buggy, eg. load plm xml template, delete variants, but not ref, in preset
 # TODO: delete newly created top level rows -> could not remove row

@@ -338,7 +338,7 @@ class SendToDeltaGen(QObject):
         self.plm_xml_controller.no_connection.connect(self._no_connection)
         self.plm_xml_controller.send_finished.connect(self._send_operation_finished)
         self.plm_xml_controller.progress.connect(self._update_progress)
-        self.plm_xml_controller.plmxml_result.connect(self._plm_xml_finished)
+        self.plm_xml_controller.plmxml_result.connect(self._plm_xml_display_result)
         self.plm_xml_controller.scene_active_result.connect(self._request_active_scene_result)
 
         # Prepare Send Thread
@@ -378,12 +378,13 @@ class SendToDeltaGen(QObject):
             self.display_view = self.ui.variantTree
 
         self.abort_btn.setEnabled(True)
-        
+
+        self.transfer_options.emit(KnechtSettings.dg)
+
         if variant_ls.plm_xml_path is not None:
             self._send_as_connector(variant_ls)
             return
         
-        self.transfer_options.emit(KnechtSettings.dg)
         self.transfer_variants.emit(variant_ls)
         self.dg.start_send_operation()
         
@@ -459,7 +460,7 @@ class SendToDeltaGen(QObject):
         if not self.rendering:
             self.ui.app.alert(self.ui, 0)
 
-    def _plm_xml_finished(self, result: str):
+    def _plm_xml_display_result(self, result: str):
         """ Additional PlmXml finished operations, send_operation_finished will also be called """
         def copy_to_clipboard():
             self.ui.app.clipboard().setText(result)
