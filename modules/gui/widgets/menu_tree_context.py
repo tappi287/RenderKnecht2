@@ -57,6 +57,9 @@ class TreeContextMenu(QMenu):
         copy_pr = QAction(IconRsc.get_icon('options'), _('PR String in Zwischenablage kopieren'), self)
         copy_pr.triggered.connect(self.copy_strings_to_clipboard)
         self.addAction(copy_pr)
+        copy_li = QAction(IconRsc.get_icon('assignment'), _('Linc String in Zwischenablage kopieren'), self)
+        copy_li.triggered.connect(self.copy_linc_string_to_clipboard)
+        self.addAction(copy_li)
         self.addSeparator()
 
         # ---- Create preset from selected actions ----
@@ -167,6 +170,15 @@ class TreeContextMenu(QMenu):
         pr_string = ''
         for variant in variants.variants:
             pr_string += f'{variant.name} {variant.value};'
+
+        self.ui.app.clipboard().setText(pr_string)
+
+    def copy_linc_string_to_clipboard(self):
+        variants = self.view.editor.collect.collect_current_index(collect_reset=False)
+
+        pr_string = ''
+        for variant in variants.variants:
+            pr_string += f'+{variant.name}'
 
         self.ui.app.clipboard().setText(pr_string)
 
