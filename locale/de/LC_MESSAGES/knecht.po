@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-02-03 19:13+0100\n"
+"POT-Creation-Date: 2020-02-06 12:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -535,7 +535,7 @@ msgid "Einfügen\tStrg+V"
 msgstr ""
 
 #: modules/gui/widgets\menu_edit.py:86
-#: modules/gui/widgets\menu_tree_context.py:79
+#: modules/gui/widgets\menu_tree_context.py:88
 #: modules/gui/wizard\preset.py:296
 msgid "Selektierte Zeilen entfernen\tEntf"
 msgstr ""
@@ -686,7 +686,7 @@ msgid "Sprache"
 msgstr ""
 
 #: modules/gui/widgets\menu_tab_context.py:21
-#: modules/gui/widgets\menu_tree_context.py:27
+#: modules/gui/widgets\menu_tree_context.py:30
 msgid "Baum Kontextmenü"
 msgstr ""
 
@@ -758,27 +758,35 @@ msgstr ""
 msgid "{} vollständig verwerfen"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:41
+#: modules/gui/widgets\menu_tree_context.py:44
 msgid "Senden an DeltaGen"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:42
+#: modules/gui/widgets\menu_tree_context.py:45
 msgid "Selektierte Bauminhalte als Variantenschaltung mit vorherigem Reset an DeltaGen senden."
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:49
+#: modules/gui/widgets\menu_tree_context.py:52
 msgid "Ohne Reset an DeltaGen senden"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:50
+#: modules/gui/widgets\menu_tree_context.py:53
 msgid "Selektierte Bauminhalte ohne einen Reset an DeltaGen senden."
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:57
+#: modules/gui/widgets\menu_tree_context.py:60
 msgid "PR String in Zwischenablage kopieren"
 msgstr ""
 
-#: modules/gui/widgets\menu_tree_context.py:92
+#: modules/gui/widgets\menu_tree_context.py:63
+msgid "Linc String in Zwischenablage kopieren"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree_context.py:66
+msgid "PlmXml Materialien anzeigen"
+msgstr ""
+
+#: modules/gui/widgets\menu_tree_context.py:101
 msgid "Hide ID columns"
 msgstr ""
 
@@ -887,6 +895,14 @@ msgstr ""
 
 #: modules/gui/widgets\path_util.py:169
 msgid "< Gültigen Pfad eingeben >"
+msgstr ""
+
+#: modules/gui/widgets\plmxml_materials_page.py:30
+msgid "PlmXml Materialien"
+msgstr ""
+
+#: modules/gui/widgets\plmxml_materials_page.py:35
+msgid " Quell Materialien"
 msgstr ""
 
 #: modules/gui/widgets\search_dialog.py:45
@@ -1770,43 +1786,43 @@ msgstr ""
 msgid "Sperre Viewer Fenster"
 msgstr ""
 
-#: modules\knecht_deltagen.py:407
+#: modules\knecht_deltagen.py:408
 msgid "AsConnector aktive Szene: {}"
 msgstr ""
 
-#: modules\knecht_deltagen.py:430
+#: modules\knecht_deltagen.py:431
 msgid "Es läuft bereits eine DeltaGen Sende Operation! Vorgang abwarten oder abbrechen und anschließend erneut versuchen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:471
+#: modules\knecht_deltagen.py:472
 msgid "Kopieren"
 msgstr ""
 
-#: modules\knecht_deltagen.py:480
+#: modules\knecht_deltagen.py:481
 msgid "DeltaGen Sende Operation beendet."
 msgstr ""
 
-#: modules\knecht_deltagen.py:483
+#: modules\knecht_deltagen.py:484
 msgid "Konnte <b>keine Verbindung</b> zu einer DeltaGen Instanz mit geladener Szene herstellen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:488
+#: modules\knecht_deltagen.py:489
 msgid "DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>"
 msgstr ""
 
-#: modules\knecht_deltagen.py:490
+#: modules\knecht_deltagen.py:491
 msgid "DeltaGen Sende Operation <b>abgebrochen.</b>"
 msgstr ""
 
-#: modules\knecht_deltagen.py:499
+#: modules\knecht_deltagen.py:500
 msgid "{0} {1} gesendet"
 msgstr ""
 
-#: modules\knecht_deltagen.py:587
+#: modules\knecht_deltagen.py:588
 msgid "Auswählen"
 msgstr ""
 
-#: modules\knecht_deltagen.py:591
+#: modules\knecht_deltagen.py:592
 msgid "Senden an DeltaGen abgeschlossen:<br /><i>{}</i>"
 msgstr ""
 
@@ -1842,36 +1858,42 @@ msgstr ""
 msgid "Konnte unkonvertierte Bilddatei nicht verschieben: {}"
 msgstr ""
 
-#: modules\knecht_plmxml.py:171
+#: modules\knecht_plmxml.py:170
 msgid ""
 "DeltaGen Szene stimmt nicht mit PlmXml überein. Fehlende Knoten:\n"
 msgstr ""
 
-#: modules\knecht_plmxml.py:176
+#: modules\knecht_plmxml.py:175
 msgid ""
 "\n"
 "..und {} weitere Knoten."
 msgstr ""
 
-#: modules\knecht_plmxml.py:177
+#: modules\knecht_plmxml.py:176
 msgid ""
 "\n"
 "Diese Prüfung kann in den DeltaGen Optionen deaktiviert werden."
 msgstr ""
 
-#: modules\knecht_plmxml.py:181
+#: modules\knecht_plmxml.py:180
 msgid "DeltaGen Szene erfolgreich mit PlmXml abgeglichen."
 msgstr ""
 
-#: modules\knecht_plmxml.py:183
+#: modules\knecht_plmxml.py:182
 msgid "Konnte DeltaGen Szene nicht mit PlmXml abgleichen. Keine Verbindung zum AsConnector2."
 msgstr ""
 
-#: modules\knecht_plmxml.py:193
+#: modules\knecht_plmxml.py:185
+msgid ""
+"\n"
+"Die folgenden Material Targets fehlen oder sind nicht geladen:\n"
+msgstr ""
+
+#: modules\knecht_plmxml.py:196
 msgid "Konfiguriere PlmXml Instanz"
 msgstr ""
 
-#: modules\knecht_plmxml.py:209
+#: modules\knecht_plmxml.py:212
 msgid "Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur."
 msgstr ""
 

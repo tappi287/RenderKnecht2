@@ -6,14 +6,17 @@ from PySide2.QtGui import QDesktopServices, QKeySequence
 from PySide2.QtWidgets import QAction, QActionGroup, QMenu, QPushButton
 
 from modules.globals import get_settings_dir
+from modules.gui.ui_generic_tab import GenericTabWidget
 from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.menu_create import CreateMenu
 from modules.gui.widgets.menu_tree import TreeMenu
 from modules.gui.widgets.path_util import path_exists
+from modules.gui.widgets.plmxml_materials_page import KnechtPlmXmlMaterialsPage
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.knecht_update import restart_knecht_app
 from modules.language import get_translation
 from modules.log import init_logging
+from modules.plmxml import PlmXml
 
 LOGGER = init_logging(__name__)
 
@@ -60,6 +63,9 @@ class TreeContextMenu(QMenu):
         copy_li = QAction(IconRsc.get_icon('assignment'), _('Linc String in Zwischenablage kopieren'), self)
         copy_li.triggered.connect(self.copy_linc_string_to_clipboard)
         self.addAction(copy_li)
+        show_plmxml_mats = QAction(IconRsc.get_icon('assignment'), _('PlmXml Materialien anzeigen'), self)
+        show_plmxml_mats.triggered.connect(self.show_plmxml_materials)
+        self.addAction(show_plmxml_mats)
         self.addSeparator()
 
         # ---- Create preset from selected actions ----
@@ -181,6 +187,21 @@ class TreeContextMenu(QMenu):
             pr_string += f'+{variant.name}'
 
         self.ui.app.clipboard().setText(pr_string)
+
+    def show_plmxml_materials(self):
+        index, src_model = self.view.editor.get_current_selection()
+        current_item = src_model.get_item(index)
+
+        if current_item.userType != Kg.plmxml_item:
+            return
+        else:
+            plmxml_file = Path(current_item.data(Kg.VALUE))
+            if not path_exists(plmxml_file):
+                return
+
+        plmxml = PlmXml(plmxml_file)
+        plmxml_page = KnechtPlmXmlMaterialsPage(self.ui, plmxml)
+        GenericTabWidget(self.ui, plmxml_page)
 
     def hide_id_columns(self):
         self.view.hideColumn(Kg.REF)

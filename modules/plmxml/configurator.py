@@ -177,9 +177,10 @@ class PlmXmlConfigurator:
 
         # --- Report Missing Material Targets ---
         if invalid_material_targets:
-            self.status_msg += f'\n\nThe Scene has missing/unloaded material targets:\n' \
-                               f'{"; ".join([m.name for m in invalid_material_targets])}' \
-                               f'\nThese targets have been ignored while configuring.'
+            self.status_msg += '\n\n'
+            self.status_msg += _('Die Szene enthält ungeladene/fehlende Material Targets:')
+            self.status_msg += f'\n{"; ".join([m.name for m in invalid_material_targets])}\n'
+            self.status_msg += _('Diese wurden bei der Konfiguration ignoriert.')
 
         return AsMaterialConnectToTargetsRequest(valid_material_targets)
 
@@ -193,14 +194,17 @@ class PlmXmlConfigurator:
         return False
 
     def _set_status_msg(self):
-        self.status_msg += f'Updating PlmXml Configuration. Found ' \
-                          f'{len([t for t in self.plmxml.look_lib.iterate_active_targets()])} ' \
-                          f'Materials to update and ' \
-                          f'{len([p for p in self.plmxml.iterate_configurable_nodes()])} objects to ' \
-                          f'update their visibility.'
+        self.status_msg += _('Aktualisiere PlmXml Konfiguration. ')
+        self.status_msg += f'{len([t for t in self.plmxml.look_lib.iterate_active_targets()])} '
+        self.status_msg += _('Materialien zum aktualisieren und ')
+        self.status_msg += f'{len([p for p in self.plmxml.iterate_configurable_nodes()])} '
+        self.status_msg += _('Objekte zur Änderung der Sichtbarkeit gefunden.')
+
         not_updated = [t.name for t in self.plmxml.look_lib.materials.values() if not t.visible_variant]
-        self.status_msg += f'The following {len(not_updated)} Materials did not match the config ' \
-                           f'and will not be updated:\n{"; ".join(not_updated)}'
+        self.status_msg += '\n'
+        self.status_msg += _('Die folgenden {} Materialien erzielten keine Treffer ').format(len(not_updated))
+        self.status_msg += _('in der Konfiguration. Sie werden nicht aktualisiert:')
+        self.status_msg += f'\n{"; ".join(not_updated)}'
 
     def _parse_plmxml_against_config(self):
         # -- Geometry
