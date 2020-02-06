@@ -24,6 +24,9 @@ class MaterialVariant:
         self.pr_tags = pr_tags
         self.desc = desc
 
+    def __repr__(self):
+        return f'{self.name}: {self.pr_tags} {self.desc};'
+
 
 class MaterialTarget:
     def __init__(self, name, material_variants: list):
@@ -39,6 +42,11 @@ class MaterialTarget:
     @visible_variant.setter
     def visible_variant(self, value: Union[None, MaterialVariant]):
         self._visible_variant = value
+
+    def __repr__(self):
+        return f'{self.name} ' \
+               f'{[v for v in self.variants]} | ' \
+               f'Active Variant: {self._visible_variant}'
 
 
 class LookLibrary:
@@ -183,12 +191,13 @@ class LookLibrary:
         return MaterialTarget(target_name, material_variants)
 
 
-class NodeInfo:
-    class Types:
-        enumerations = ['UNKNOWN', 'SHAPE', 'GROUP', 'SPOTLIGHT', 'POINTLIGHT', 'DIRECTIONALLIGHT', 'LOCALSURROUNDING',
-                        'SWITCH', 'LOD', 'FILE', 'LOCATOR', 'LIGHTCOLLECTOR', 'SOUND', 'LIGHTEMITTER', 'FX', 'CAMERA',
-                        'BODY', 'SHELL']
+class NodeInfoTypes:
+    enumerations = ['UNKNOWN', 'SHAPE', 'GROUP', 'SPOTLIGHT', 'POINTLIGHT', 'DIRECTIONALLIGHT', 'LOCALSURROUNDING',
+                    'SWITCH', 'LOD', 'FILE', 'LOCATOR', 'LIGHTCOLLECTOR', 'SOUND', 'LIGHTEMITTER', 'FX', 'CAMERA',
+                    'BODY', 'SHELL']
 
+
+class NodeInfo:
     def __init__(self, plmxml_id: str='', linc_id: str='', part_ref: str='', name: str='', user_data: dict=None,
                  as_id: str='', parent_node_id: str='', node_info_type: str='UNKNOWN', material_name: str=''):
         """ Represents ProductInstances in PlmXml and NodeInfo nodes in AsConnector
@@ -201,7 +210,7 @@ class NodeInfo:
         :param str as_id: AsConnector ID when node was read out from AsConnector REST Api, seems to be session bound
         :param str parent_node_id: when node was read out from AsConnector REST Api
         :param str node_info_type: One of Types.enumerations, maybe read this out from PlmXml UserData LINC_NODE_TYPE!?
-        :param material_name: when node was read out from AsConnector REST Api
+        :param str material_name: when node was read out from AsConnector REST Api
         """
         self.user_data = user_data if user_data else dict()
         self.plmxml_id = plmxml_id
@@ -235,10 +244,10 @@ class NodeInfo:
         return self.user_data.get('PR_TAGS')
 
     def _validate_node_info_type(self, value: str):
-        if value not in self.Types.enumerations:
+        if value not in NodeInfoTypes.enumerations:
             LOGGER.warning('NodeInfo created with invalid type setting: %s; Setting default value: %s',
-                           value, self.Types.enumerations[0])
-            return self.Types.enumerations[0]
+                           value, NodeInfoTypes.enumerations[0])
+            return NodeInfoTypes.enumerations[0]
         else:
             return value
 

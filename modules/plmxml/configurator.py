@@ -1,12 +1,12 @@
 import re
-from typing import Tuple, List
+from typing import Tuple, List, Set
 
 from modules.plmxml.utils import pr_tags_to_reg_ex
-from modules.plmxml.objects import NodeInfo
+from modules.plmxml.objects import NodeInfo, MaterialTarget
 from modules.plmxml import PlmXml
 from modules.plmxml.connector import AsConnectorConnection
 from modules.plmxml.request import AsNodeSetVisibleRequest, AsMaterialConnectToTargetsRequest, \
-    AsSceneGetStructureRequest
+    AsSceneGetStructureRequest, AsTargetGetAllNamesRequest
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -39,16 +39,27 @@ class PlmXmlConfigurator:
         self.config = config
         self._parse_plmxml_against_config()
 
-    def validate_scene_vs_plmxml(self) -> Tuple[bool, List[NodeInfo]]:
-        """
+    def validate_scene_vs_plmxml(self) -> Tuple[bool, List[NodeInfo], Set[str]]:
+        """ Validate the currently loaded Scene versus
+            the PlmXml. Report missing Nodes/Parts and missing material targets.
 
-        :rtype: bool, list
-        :return: Request was successful, List of missing nodes
+            Return as invalid if missing Nodes encountered. Missing targets can
+            occur due to unloaded parts and will not set status to invalid.
+
+            Note:
+             If scene was saved with "Save Structure as..", DeltaGen will also
+             save the scene materials regardless of loaded assemblies.
+             There could be target materials in the scene that are not bound to any meshes.
+             Therefore they will not be reported but still be invalid.
+
+        :return: Request was un/-successful, List of missing nodes, set of missing/unloaded target materials
+        :rtype: bool, List[NodeInfo], Set[str]
         """
         missing_nodes: List[NodeInfo] = list()
-
+        missing_target_names: Set[str] = set()
         as_conn = AsConnectorConnection()
 
+        # ---- Validate scene structure ----
         # -- Create GetSceneStructureRequest
         root_node_dummy = NodeInfo(as_id='root', parent_node_id='root')
         scene_request = AsSceneGetStructureRequest(root_node_dummy)
@@ -56,7 +67,7 @@ class PlmXmlConfigurator:
 
         if not request_result:
             # Request failed
-            return False, missing_nodes
+            return False, missing_nodes, missing_target_names
 
         # -- Create List of LincId's in the scene
         scene_linc_ids = {n.linc_id for n in scene_request.result}
@@ -65,10 +76,54 @@ class PlmXmlConfigurator:
             if node.linc_id not in scene_linc_ids:
                 missing_nodes.append(node)
 
-        LOGGER.debug('Validate Scene vs PlmXml Result: %s nodes are missing.', len(missing_nodes))
+        # ---- Validate active, available Material Targets ----
+        # This depends on a loaded DeltaGen Scene with all csb Parts that have Targets loaded.
+        # Therefore we do not declare the scene plmxml relation invalid if
+        # we find missing targets and just report them instead.
+        #
+        # -- Read Scene Materials from SceneStructureRequest
+        avail_scene_targets = {n.material_name for n in scene_request.result if n.material_name}
+        plmxml_target_names = set(self.plmxml.look_lib.materials.keys())
+        missing_target_names = plmxml_target_names.difference(avail_scene_targets)
+        LOGGER.debug('Target Material Difference: %s', missing_target_names)
+
+        # -- Get Invalid Material Targets
+        _, missing_target_names = self._get_valid_material_targets()
+
+        LOGGER.debug('Validate Scene vs PlmXml Result: %s nodes are missing. '
+                     '%s Material Targets are missing or unloaded.', len(missing_nodes), len(missing_target_names))
 
         # Request successful, missing LincId's
-        return True, missing_nodes
+        return True, missing_nodes, missing_target_names
+
+    def _get_valid_material_targets(self) -> Tuple[List[MaterialTarget], List[MaterialTarget]]:
+        """ This will acquire the materials from the scene and compare it to
+            the list of active target materials in the PlmXml.
+
+             --- Important!---
+             This requires an PlmXml which looklib attribute is
+             configured (self._update_plmxml_look_library)! Otherwise no
+             active targets can be iterated!
+
+             A more general/independent of configuration validation is done
+             in the self.validate_scene_vs_plmxml but can be omitted by the user.
+             (Because it takes quite some time)
+        """
+        as_conn = AsConnectorConnection()
+
+        # ---- Get Scene Materials ----
+        get_material_names_req = AsTargetGetAllNamesRequest()
+        result = as_conn.request(get_material_names_req)
+        valid_targets, missing_targets = list(), list()
+
+        if result:
+            for target in self.plmxml.look_lib.iterate_active_targets():
+                if target.name not in get_material_names_req.result:
+                    missing_targets.append(target)
+                else:
+                    valid_targets.append(target)
+
+        return valid_targets, missing_targets
 
     def request_delta_gen_update(self) -> bool:
         """ Send requests to AsConnector2 to update the DeltaGen scene with the current configuration
@@ -118,7 +173,15 @@ class PlmXmlConfigurator:
         return visible_request, invisible_request
 
     def create_material_connect_to_targets_request(self) -> AsMaterialConnectToTargetsRequest:
-        return AsMaterialConnectToTargetsRequest(self.plmxml.look_lib.iterate_active_targets())
+        valid_material_targets, invalid_material_targets = self._get_valid_material_targets()
+
+        # --- Report Missing Material Targets ---
+        if invalid_material_targets:
+            self.status_msg += f'\n\nThe Scene has missing/unloaded material targets:\n' \
+                               f'{"; ".join([m.name for m in invalid_material_targets])}' \
+                               f'\nThese targets have been ignored while configuring.'
+
+        return AsMaterialConnectToTargetsRequest(valid_material_targets)
 
     def _match(self, pr_tags) -> bool:
         """ Match a PR Tag against the current configuration string """
@@ -130,7 +193,7 @@ class PlmXmlConfigurator:
         return False
 
     def _set_status_msg(self):
-        self.status_msg = f'Updating PlmXml Configuration. Found ' \
+        self.status_msg += f'Updating PlmXml Configuration. Found ' \
                           f'{len([t for t in self.plmxml.look_lib.iterate_active_targets()])} ' \
                           f'Materials to update and ' \
                           f'{len([p for p in self.plmxml.iterate_configurable_nodes()])} objects to ' \
@@ -150,6 +213,13 @@ class PlmXmlConfigurator:
                 n.visible = False
 
         # -- Materials
+        self._update_plmxml_look_library()
+
+        # -- Print result
+        self._set_status_msg()
+
+    def _update_plmxml_look_library(self):
+        # -- Materials
         # -- Reset visible variants
         self.plmxml.look_lib.reset()
 
@@ -164,6 +234,3 @@ class PlmXmlConfigurator:
 
                 if self.plmxml.debug:
                     LOGGER.debug(f'Switching Material {target.name[:40]:40} -> {variant.name}')
-
-        # -- Print result
-        self._set_status_msg()

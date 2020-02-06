@@ -6,7 +6,7 @@ from requests import Response
 from modules.language import get_translation
 from modules.log import init_logging
 from modules.plmxml.globals import PlmXmlGlobals as Pg
-from modules.plmxml.objects import MaterialTarget, NodeInfo
+from modules.plmxml.objects import MaterialTarget, NodeInfo, NodeInfoTypes
 
 LOGGER = init_logging(__name__)
 
@@ -111,7 +111,7 @@ class AsConnectorRequest:
             LOGGER.debug('AsConnector response to %s was OK.\n%s', self.__class__.__name__, text)
             return self._read_response(e)
         else:
-            LOGGER.error('Error while sending request:\n%s', self.to_string())
+            LOGGER.error('Error while sending request to %s:\n%s', self.get_url(), self.to_string())
             LOGGER.error('AsConnector result:\n%s', r.text)
             return self._read_error_response(r)
 
@@ -294,6 +294,7 @@ class AsNodeGetSelection(AsConnectorRequest):
 
 class AsSceneGetStructureRequest(AsConnectorRequest):
     response_xpath = f'{Pg.AS_CONNECTOR_XMLNS}returnVal/'
+    deep_response_xpath = f'{Pg.AS_CONNECTOR_XMLNS}returnVal//'
 
     def __init__(self, start_node: NodeInfo, types: List[str]=None):
         """ Get all child nodes from given startNode, use as_id=root, parent_node_id=root for the complete scene
@@ -304,7 +305,6 @@ class AsSceneGetStructureRequest(AsConnectorRequest):
         """
         super(AsSceneGetStructureRequest, self).__init__()
         self.url = 'scene/get/structure'
-
         self.result: List[NodeInfo] = list()
 
         self._set_request(start_node, types or list())
@@ -314,7 +314,7 @@ class AsSceneGetStructureRequest(AsConnectorRequest):
             # Default setting
             types = ['GROUP', 'FILE']
         else:
-            invalid_types = [t for t in types if t not in NodeInfo.Types.enumerations]
+            invalid_types = [t for t in types if t not in NodeInfoTypes.enumerations]
 
             for t in invalid_types:
                 LOGGER.error('%s requested with invalid type: %s', self.__class__.__name__, t)
@@ -452,5 +452,37 @@ class AsSceneSetActiveRequest(AsConnectorRequest):
 
         if result:
             LOGGER.debug('AsConnector successfully set active scene.')
+
+        return result
+
+
+class AsTargetGetAllNamesRequest(AsConnectorRequest):
+    response_xpath = f'{Pg.AS_CONNECTOR_XMLNS}returnVal/'
+
+    def __init__(self):
+        """ Retrieve the names of all targets in the scene.
+
+        Result: The list with all target names.
+        ResultType: List[str]
+        """
+        super(AsTargetGetAllNamesRequest, self).__init__()
+        self.url = 'material/getallnames'
+        self._set_request()
+
+    def _set_request(self, ):
+        e = self._create_request_root_element('Target', 'GetAllNames')
+        self.request = e
+
+    def _read_response(self, r_xml: Et._Element) -> bool:
+        result = True
+        self.result = list()
+
+        for e in r_xml.iterfind(self.response_xpath):
+            if e.text:
+                self.result.append(e.text)
+
+        if self.result:
+            result = True
+            LOGGER.debug('AsConnector successfully got all material names from scene.')
 
         return result

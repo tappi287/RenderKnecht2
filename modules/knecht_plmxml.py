@@ -1,21 +1,20 @@
-import logging
 from pathlib import Path
-from queue import Queue
 from threading import Thread
 from typing import Tuple
 
-from PySide2.QtCore import QObject, Signal, Slot
+from PySide2.QtCore import QObject, Signal
 
 from modules import KnechtSettings
-from modules.globals import DeltaGenResult, MAIN_LOGGER_NAME
+from modules.globals import DeltaGenResult
 from modules.knecht_objects import KnechtVariantList
 from modules.language import get_translation
-from modules.log import init_logging, setup_logging, setup_log_queue_listener
+from modules.log import init_logging
 from modules.plmxml import PlmXml
 from modules.plmxml.configurator import PlmXmlConfigurator
 from modules.plmxml.connector import AsConnectorConnection
 from modules.plmxml.request import AsSceneSetActiveRequest, AsSceneGetAllRequest, AsSceneGetActiveRequest
 from modules.plmxml.utils import create_pr_string_from_variants
+
 # from private.plmxml_example_data import example_pr_string, plm_xml_file
 
 LOGGER = init_logging(__name__)
@@ -165,7 +164,7 @@ class KnechtUpdatePlmXml(Thread):
 
     @staticmethod
     def _validate_scene(conf: PlmXmlConfigurator):
-        request_successful, missing_nodes = conf.validate_scene_vs_plmxml()
+        request_successful, missing_nodes, missing_targets = conf.validate_scene_vs_plmxml()
 
         if request_successful and missing_nodes:
             scene_result = _('DeltaGen Szene stimmt nicht mit PlmXml überein. Fehlende Knoten:\n')
@@ -181,6 +180,10 @@ class KnechtUpdatePlmXml(Thread):
             scene_result = _('DeltaGen Szene erfolgreich mit PlmXml abgeglichen.')
         else:
             scene_result = _('Konnte DeltaGen Szene nicht mit PlmXml abgleichen. Keine Verbindung zum AsConnector2.')
+
+        if missing_targets:
+            scene_result += _('\nDie folgenden Material Targets fehlen oder sind nicht geladen:\n')
+            scene_result += f'{"; ".join(missing_targets)}'
 
         return True, scene_result
 
@@ -226,45 +229,3 @@ class KnechtUpdatePlmXml(Thread):
         if result == DeltaGenResult.send_success:
             self.signals.plmxml_result.emit(conf.status_msg)
         self.signals.send_finished.emit(result)
-
-
-# -----------------------------------------------------
-# Everything below is for executing this as test script
-"""
-def _initialize_log_listener(logging_queue):
-    global LOGGER
-    LOGGER = init_logging(MAIN_LOGGER_NAME)
-
-    # This will move all handlers from LOGGER to the queue listener
-    ll = setup_log_queue_listener(LOGGER, logging_queue)
-
-    return ll
-
-
-if __name__ == '__main__':
-    log_queue = Queue()
-    setup_logging(log_queue)
-    log_listener = _initialize_log_listener(log_queue)
-    log_listener.start()
-
-    # -- Parse a PlmXml file, collecting product instances and LookLibrary
-    plm_xml = PlmXml(plm_xml_file)
-
-    # -- Let the User enter a PR String for testing
-    LOGGER.info('Enter PR String(leave blank for example string):')
-    pr_string = input('>>>:')
-
-    if not pr_string:
-        pr_string = example_pr_string
-
-    # -- Configure the PlmXml product instances and LookLibrary with a configuration string
-    config = PlmXmlConfigurator(plm_xml, pr_string)
-
-    # -- Request to show the updated configuration in DeltaGen, will block
-    if not config.request_delta_gen_update():
-        for err in config.errors:
-            LOGGER.error(err)
-
-    log_listener.stop()
-    logging.shutdown()
-"""
