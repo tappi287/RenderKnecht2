@@ -1,6 +1,7 @@
+from PySide2 import QtCore
 from PySide2.QtCore import Slot
 from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QAction, QMenu
+from PySide2.QtWidgets import QAction, QMenu, QActionGroup, QApplication
 
 from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.menu_asscene import AsSceneMenu
@@ -28,6 +29,10 @@ class DeltaGenMenu(QMenu):
         self.ui = ui
 
         self.reset, self.freeze, self.check = None, None, None
+
+        self.hidden_actions = QActionGroup(self)
+        self.hidden_actions.setVisible(False)
+
         self.send_camera, self.display, self.display_overlay = None, None, None
         self.validate_plmxml = None
         self.as_scene_menu = QMenu()
@@ -35,7 +40,7 @@ class DeltaGenMenu(QMenu):
         self.setup_deltagen_menu()
 
         # Apply settings before showing
-        self.aboutToShow.connect(self._apply_settings)
+        self.aboutToShow.connect(self._menu_about_to_show)
 
     def setup_deltagen_menu(self):
         # ---- Reset On/Off ----
@@ -60,26 +65,42 @@ class DeltaGenMenu(QMenu):
 
         # ---- Validate DeltaGen Scene vs PlmXml before switching configurations
         self.validate_plmxml = self._setup_checkable_action(
-            _('DeltaGen Szene vor dem konfigurieren mit PlmXml abgleichen.'), True, self.toggle_validate_plmxml)
+            _('DeltaGen Szene vor dem konfigurieren mit PlmXml abgleichen.'), True,
+            self.toggle_validate_plmxml, self.hidden_actions)
 
         # --- As Connector choose active scene menu ---
         self.as_scene_menu.deleteLater()
         self.as_scene_menu = AsSceneMenu(self.ui, _('AsConnector aktive Szene:'))
         self.addMenu(self.as_scene_menu)
+        self.as_scene_menu.menuAction().setActionGroup(self.hidden_actions)
 
         self._apply_settings()
 
-    def _setup_checkable_action(self, name: str, checked: bool, target: object):
+    def _setup_checkable_action(self, name: str, checked: bool, target: object, action_grp: QActionGroup=None):
         check_icon = IconRsc.get_icon('check_box_empty')
         check_icon.addPixmap(IconRsc.get_pixmap('check_box'), QIcon.Normal, QIcon.On)
 
-        action = QAction(check_icon, name, self)
+        if action_grp:
+            action = QAction(check_icon, name, action_grp)
+        else:
+            action = QAction(check_icon, name, self)
         action.setCheckable(True)
         action.setChecked(checked)
         action.triggered.connect(target)
         self.addAction(action)
 
         return action
+
+    def _menu_about_to_show(self):
+        """ Setup method before menu is visible """
+        # Hide hidden actions
+        self.hidden_actions.setVisible(False)
+
+        # Show hidden actions with Ctrl Key
+        if QApplication.keyboardModifiers() & QtCore.Qt.ControlModifier:
+            self.hidden_actions.setVisible(True)
+
+        self._apply_settings()
 
     def _apply_settings(self):
         """ Apply saved settings """
