@@ -4,9 +4,10 @@ import shutil
 from pathlib import Path
 from socket import AF_INET, SOCK_DGRAM, socket, timeout
 from tempfile import mkdtemp
+from threading import Thread
 from zipfile import ZIP_LZMA, ZipFile
 
-from PySide2.QtCore import QThread, Signal
+from PySide2.QtCore import Signal, QObject
 
 from modules.globals import get_settings_dir, SocketAddress
 from modules.language import get_translation
@@ -172,8 +173,13 @@ def get_service_address():
     return service_address
 
 
-class GetPfadAeffchenService(QThread):
+class GetPfadAeffchenServiceSignals(QObject):
     result = Signal(object)
+
+
+class GetPfadAeffchenService(Thread):
+    signals = GetPfadAeffchenServiceSignals()
+    result = signals.result
     service_address = None
 
     def __init__(self):

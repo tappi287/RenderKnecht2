@@ -6,7 +6,10 @@ import pickle
 import json
 import re
 from pathlib import Path
+from threading import Thread, Event
+
 from PySide2 import QtCore, QtWidgets
+from PySide2.QtCore import QObject
 from PySide2.QtGui import QDesktopServices
 from queue import Queue
 from datetime import datetime, timedelta
@@ -156,6 +159,8 @@ class PathRenderService(QtCore.QObject):
         # Service address
         self.service_host = None
         self.send_thread = None
+        self.send_thread_exit = Event()
+
         self.msg_queue = Queue(maxsize=64)
         self.keep_alive_timer.timeout.connect(self.end_send_thread)
 
@@ -192,12 +197,16 @@ class PathRenderService(QtCore.QObject):
 
     def end_send_thread(self):
         if self.send_thread:
-            if self.send_thread.isRunning() and self.msg_queue.empty():
-                self.send_thread.requestInterruption()
+            if self.send_thread.is_alive():
+                self.send_thread_exit.set()
                 self.msg_queue.put(('EndThread', False))
 
                 LOGGER.info('Path Render Service send thread shutting down.')
-                self.send_thread.wait(msecs=15000)
+                try:
+                    self.send_thread.join(timeout=15)
+                except Exception as e:
+                    LOGGER.error('Could not join send thread! %s', e)
+
                 self.send_thread = None
 
     def search_service(self):
@@ -551,18 +560,13 @@ class PathRenderService(QtCore.QObject):
         address = (self.service_host, SocketAddress.service_port)
 
         if not self.send_thread:
-            self.send_thread = SocketSendMessage(address, self.msg_queue)
+            self.send_thread = SocketSendMessage(address, self.msg_queue, self.send_thread_exit)
             # Send result strings to status browser
             self.send_thread.result.connect(self.update_status)
             # Send result bytes data to update job method
             self.send_thread.job_data_result.connect(self.update_job_data)
             self.send_thread.enable_send_btn.connect(self.enable_job_btn)
             self.send_thread.not_responding.connect(self.service_unavailable)
-
-            # self.send_thread.green_on.connect(self.ui.led_ovr.green_on)
-            # self.send_thread.green_off.connect(self.ui.led_ovr.green_off)
-            # self.send_thread.yellow_on.connect(self.ui.led_ovr.yellow_on)
-            # self.send_thread.yellow_off.connect(self.ui.led_ovr.yellow_off)
 
             # Start send thread
             self.send_thread.start()
@@ -631,59 +635,59 @@ class PathRenderService(QtCore.QObject):
         QDesktopServices.openUrl(link)
 
 
-class SocketSendMessage(QtCore.QThread):
+class SocketSendMessageSignals(QObject):
     result = QtCore.Signal(str)
     job_data_result = QtCore.Signal(object)
     enable_send_btn = QtCore.Signal()
     not_responding = QtCore.Signal()
 
-    green_on = QtCore.Signal()
-    green_off = QtCore.Signal()
-    yellow_on = QtCore.Signal()
-    yellow_off = QtCore.Signal()
+
+class SocketSendMessage(Thread):
+    # --- Signals ---
+    signals = SocketSendMessageSignals()
+
+    result = signals.result
+    job_data_result = signals.job_data_result
+    enable_send_btn = signals.enable_send_btn
+    not_responding = signals.not_responding
 
     timeout = 10
 
-    def __init__(self, address, message_queue):
+    def __init__(self, address, message_queue: Queue, exit_event: Event):
         super(SocketSendMessage, self).__init__()
         self.address = address
-        self.sock = None
         self.msg_queue = message_queue
+        self.exit_event = exit_event
 
     def run(self):
-        while not self.isInterruptionRequested():
+        while not self.exit_event.is_set():
             msg, is_job_data = self.msg_queue.get()
             if msg == 'EndThread':
                 break
             self.send_message(msg, is_job_data)
+            LOGGER.debug('Send thread returned from send_message.')
 
         LOGGER.debug('Send thread ended.')
 
     def send_message(self, data, is_job_data):
         # Socket was closed, re-connect
         host, port = self.address
-        self.sock = Ncat(host, port, socket_timeout=self.timeout)
-        # Connect NC signals to LED's
-        self.sock.signals.send_start.connect(self.green_on)
-        self.sock.signals.send_end.connect(self.green_off)
-        self.sock.signals.recv_start.connect(self.yellow_on)
-        self.sock.signals.recv_end.connect(self.yellow_off)
-        self.sock.signals.connect_start.connect(self.green_on)
-        self.sock.signals.connect_end.connect(self.green_off)
+        sock = Ncat(host, port, socket_timeout=self.timeout)
 
-        self.sock.connect()
-
-        self.sock.send(data)
+        LOGGER.debug('Connecting to socket.')
+        sock.connect()
+        LOGGER.debug('Sending data on socket.')
+        sock.send(data)
 
         if is_job_data:
             # Receive JSON dict data or empty byte object
-            response = self.sock.receive_job_data(timeout=self.timeout, end=b'End-Of-Job-Data')
+            response = sock.receive_job_data(timeout=self.timeout, end=b'End-Of-Job-Data')
         else:
             # Receive string or empty string
-            response = self.sock.receive_short_timeout(timeout=self.timeout)
+            response = sock.receive_short_timeout(timeout=self.timeout)
 
         # Close socket, server will only respond once
-        self.sock.close()
+        sock.close()
 
         # Empty response means nothing received, None response means connection lost
         if response is None:

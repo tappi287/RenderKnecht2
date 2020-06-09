@@ -7,6 +7,8 @@ from modules.log import init_logging
 
 LOGGER = init_logging(__name__)
 
+DEBUG = False
+
 # Default parameters for Ncat class
 # They shall not be modified. Provide the class instance with different parameters instead.
 _TCP_IP = 'localhost'
@@ -113,7 +115,12 @@ class Ncat:
         # Send loop
         while total_sent < msg_len:
             try:
+                if DEBUG:
+                    LOGGER.debug('Sending data on socket: %s', msg[total_sent:])
                 sent = self.sock.send(msg[total_sent:])
+
+                if DEBUG:
+                    LOGGER.debug('Data send.')
             except Exception as e:
                 LOGGER.error('Sending failed! - %s', e)
 
@@ -199,12 +206,19 @@ class Ncat:
 
             # recv something
             try:
+                if DEBUG:
+                    LOGGER.debug('Socket starting to receiving data')
                 data = self.sock.recv(self.buf)
+
+                if DEBUG and data:
+                    LOGGER.debug('Socket received data: %s', data)
 
                 if data:
                     total_data.append(data.decode(self.enc))
                     begin = time.time()
                 else:
+                    if DEBUG:
+                        LOGGER.debug('Socket received no data.')
                     # sleep for sometime to indicate a gap
                     time.sleep(0.01)
             except Exception as e:
@@ -229,7 +243,11 @@ class Ncat:
                 return None
 
             try:
+                if DEBUG:
+                    LOGGER.debug('Socket receiving Job data.')
                 data = self.sock.recv(8192)
+                if DEBUG:
+                    LOGGER.debug('Socket received Job data.')
             except Exception as e:
                 LOGGER.error(e)
                 self.signals.recv_end.emit()
@@ -267,6 +285,8 @@ class Ncat:
             return
         LOGGER.info('closing socket.')
         self.sock.close()
+        if DEBUG:
+            LOGGER.info('Socket closed.')
 
     def deltagen_is_alive(self, timeout=3):
         """
