@@ -213,12 +213,8 @@ class PathRenderService(QtCore.QObject):
         if self.service_host:
             self.send_message('GET_STATUS')
             return
-        """
-        self.ui.led_ovr.led(1, 2)
-        self.ui.led_ovr.led(2, 2, timer=100)
-        self.ui.led_ovr.yellow_on()
-        """
-        if not self.search_thread.isRunning():
+
+        if not self.search_thread.is_alive():
             self.ui.pathJobSendBtn.setEnabled(False)
             self.update_status(_('Suche nach Dienst im lokalen Netzwerk.'), 2)
             self.search_thread.start()

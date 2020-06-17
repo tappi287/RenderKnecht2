@@ -88,7 +88,8 @@ class PlmXmlConfigurator:
         LOGGER.debug('Target Material Difference: %s', missing_target_names)
 
         # -- Get Invalid Material Targets
-        _, missing_target_names = self._get_valid_material_targets()
+        _, missing_targets = self._get_valid_material_targets()
+        missing_target_names = {t.name for t in missing_targets if t.name}
 
         LOGGER.debug('Validate Scene vs PlmXml Result: %s nodes are missing. '
                      '%s Material Targets are missing or unloaded.', len(missing_nodes), len(missing_target_names))
