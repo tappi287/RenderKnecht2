@@ -51,6 +51,7 @@ class PlmXml:
         name = n.attrib.get(Pg.PRODUCT_INSTANCE_TAGS.get('name'))
         part_ref = n.attrib.get(Pg.PRODUCT_INSTANCE_TAGS.get('part_ref'))
 
+        # -- Check ProductInstance Id for duplicates
         if instance_id in self.nodes:
             LOGGER.warning('ProductInstance with id: %s already exists and will be overwritten!', instance_id)
 

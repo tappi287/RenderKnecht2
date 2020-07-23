@@ -1,4 +1,5 @@
-from typing import Iterator, List, Union
+from pathlib import Path, WindowsPath
+from typing import Iterator, List, Union, Dict
 
 from lxml import etree as Et
 from requests import Response
@@ -286,7 +287,29 @@ class AsNodeGetSelection(AsConnectorRequest):
         e = r_xml.find(self.response_xpath)
 
         if e is not None:
-            self.result = NodeInfo.get_node_from_element(e)
+            self.result = NodeInfo.get_node_from_as_connector_element(e)
+            return True
+        else:
+            return False
+
+
+class AsGetSelectedNodeEventRequest(AsConnectorRequest):
+    response_xpath = f'{Pg.AS_CONNECTOR_XMLNS}returnVal/'
+
+    def __init__(self):
+        """ GetSelectedNodeEventRequest """
+        super(AsGetSelectedNodeEventRequest, self).__init__()
+        self.url = 'event/selected'
+        self._set_request()
+
+    def _set_request(self):
+        e = self._create_request_root_element('GetSelectedNode', 'Event')
+        self.request = e
+
+    def _read_response(self, r_xml: Et._Element) -> bool:
+        e = r_xml.find(self.response_xpath)
+
+        if e is not None:
             return True
         else:
             return False
@@ -305,12 +328,12 @@ class AsSceneGetStructureRequest(AsConnectorRequest):
         """
         super(AsSceneGetStructureRequest, self).__init__()
         self.url = 'scene/get/structure'
-        self.result: List[NodeInfo] = list()
+        self.result: Dict[str, NodeInfo] = dict()
 
         self._set_request(start_node, types or list())
 
     def _set_request(self, start_node: NodeInfo, types: List[str]):
-        if not types:
+        if types is None:
             # Default setting
             types = ['GROUP', 'FILE']
         else:
@@ -331,11 +354,11 @@ class AsSceneGetStructureRequest(AsConnectorRequest):
         # -</node>
 
         # -<types>
-        types = Et.SubElement(e, 'types')
+        types_element = Et.SubElement(e, 'types')
 
         for t in types:
             # --<NodeInfoType>
-            nt = Et.SubElement(types, 'NodeInfoType')
+            nt = Et.SubElement(types_element, 'NodeInfoType')
             nt.text = t
             # --</NodeInfoType>
         # -</types>
@@ -347,13 +370,61 @@ class AsSceneGetStructureRequest(AsConnectorRequest):
         if r_xml is None:
             return False
 
-        nodes = list()
         for n in r_xml.iterfind(self.response_xpath):
-            node = NodeInfo.get_node_from_element(n)
-            nodes.append(node)
+            node = NodeInfo.get_node_from_as_connector_element(n)
+            self.result[node.knecht_id or node.as_id] = node
 
-        self.result = nodes
         return True
+
+
+class AsSceneLoadRequest(AsConnectorRequest):
+    response_xpath = f'{Pg.AS_CONNECTOR_XMLNS}returnVal'
+
+    def __init__(self, scene_path: Path, close_active_sessions: bool = False, load_assemblies: bool = False):
+        """ Load a Scene with AsConnector
+        :returns: The name of the active scene as string
+        :rtype: str
+        """
+        super(AsSceneLoadRequest, self).__init__()
+        self.url = 'scene/load'
+
+        self.result = str()
+        self.expected_result = 'true'
+        self.scene_path = scene_path
+
+        self._set_request(close_active_sessions, load_assemblies)
+
+    def _set_request(self, close_active_sessions, load_assemblies):
+        e = self._create_request_root_element('Scene', 'Load')
+        self.request = e
+
+        # -<path>
+        n = Et.SubElement(e, 'path')
+        n.text = str(WindowsPath(self.scene_path))
+
+        # -closeActiveSessions>
+        c = Et.SubElement(e, 'closeActiveSessions')
+        c.text = str(close_active_sessions).lower()
+
+        # -<loadAssemblies>
+        l = Et.SubElement(e, 'loadAssemblies')
+        l.text = str(load_assemblies).lower()
+
+        self.request = e
+
+    def _read_response(self, r_xml: Et._Element) -> bool:
+        result = False
+
+        for e in r_xml.iterfind(self.response_xpath):
+            if e.text:
+                self.result = e.text
+                if self.result == self.expected_result:
+                    result = True
+
+        if result:
+            LOGGER.debug('AsConnector SceneLoad request successful: %s', self.result)
+
+        return result
 
 
 class AsSceneGetActiveRequest(AsConnectorRequest):

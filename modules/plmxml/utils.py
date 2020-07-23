@@ -115,7 +115,7 @@ def find_text_attribute(child, attr_name) -> str:
         return ""
 
 
-def find_user_attributes_in_element(child):
+def find_user_attributes_in_element(child) -> dict:
     """ Helper to find the UserAttributeArray """
     user_attribute_dict = dict()
     user_attributes = child.find(f'{Pg.AS_CONNECTOR_XMLNS}UserAttributes')

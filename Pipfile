@@ -9,6 +9,7 @@ url = "https://piwigo.ilikeviecher.com/ftp-upload/packages/"
 verify_ssl = true
 
 [packages]
+openimageio = {version="*", index="piwigo"}
 lxml = "*"
 numpy = "==1.18.4"
 pyside2 = "==5.15.0"
@@ -18,7 +19,6 @@ requests = "==2.23.0"
 bottleneck = "*"
 jsonpickle = "*"
 ujson = "*"
-openimageio = {version="*", index="piwigo"}
 mysql-connector = "*"
 setuptools = "*"
 

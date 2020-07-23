@@ -1,14 +1,14 @@
 import re
-from typing import Tuple, List, Set
+from typing import Tuple, List, Set, Dict
 
-from modules.plmxml.utils import pr_tags_to_reg_ex
-from modules.plmxml.objects import NodeInfo, MaterialTarget
-from modules.plmxml import PlmXml
-from modules.plmxml.connector import AsConnectorConnection
-from modules.plmxml.request import AsNodeSetVisibleRequest, AsMaterialConnectToTargetsRequest, \
-    AsSceneGetStructureRequest, AsTargetGetAllNamesRequest
 from modules.language import get_translation
 from modules.log import init_logging
+from modules.plmxml import PlmXml
+from modules.plmxml.connector import AsConnectorConnection
+from modules.plmxml.objects import NodeInfo, MaterialTarget
+from modules.plmxml.request import AsNodeSetVisibleRequest, AsMaterialConnectToTargetsRequest, \
+    AsSceneGetStructureRequest, AsTargetGetAllNamesRequest
+from modules.plmxml.utils import pr_tags_to_reg_ex
 
 LOGGER = init_logging(__name__)
 
@@ -39,6 +39,15 @@ class PlmXmlConfigurator:
         self.config = config
         self._parse_plmxml_against_config()
 
+    def _update_plmxml_with_as_connector_nodes(self, scene_get_structure_result_nodes: Dict[str, NodeInfo]):
+        idx = 0
+        for node in self.plmxml.iterate_configurable_nodes():
+            if node.knecht_id in scene_get_structure_result_nodes:
+                node.as_id = scene_get_structure_result_nodes.get(node.knecht_id).as_id
+                idx += 1
+
+        LOGGER.debug('Updated AsConnector Scene Ids of %s PlmXml Nodes', idx)
+
     def validate_scene_vs_plmxml(self) -> Tuple[bool, List[NodeInfo], Set[str]]:
         """ Validate the currently loaded Scene versus
             the PlmXml. Report missing Nodes/Parts and missing material targets.
@@ -62,18 +71,18 @@ class PlmXmlConfigurator:
         # ---- Validate scene structure ----
         # -- Create GetSceneStructureRequest
         root_node_dummy = NodeInfo(as_id='root', parent_node_id='root')
-        scene_request = AsSceneGetStructureRequest(root_node_dummy)
+        scene_request = AsSceneGetStructureRequest(root_node_dummy, list())
         request_result = as_conn.request(scene_request)
 
         if not request_result:
             # Request failed
             return False, missing_nodes, missing_target_names
 
-        # -- Create List of LincId's in the scene
-        scene_linc_ids = {n.linc_id for n in scene_request.result}
+        # -- Update As Connector Id's
+        self._update_plmxml_with_as_connector_nodes(scene_request.result)
 
         for node in self.plmxml.iterate_configurable_nodes():
-            if node.linc_id not in scene_linc_ids:
+            if node.knecht_id not in scene_request.result:
                 missing_nodes.append(node)
 
         # ---- Validate active, available Material Targets ----
@@ -82,7 +91,7 @@ class PlmXmlConfigurator:
         # we find missing targets and just report them instead.
         #
         # -- Read Scene Materials from SceneStructureRequest
-        avail_scene_targets = {n.material_name for n in scene_request.result if n.material_name}
+        avail_scene_targets = {n.material_name for n in scene_request.result.values() if n.material_name}
         plmxml_target_names = set(self.plmxml.look_lib.materials.keys())
         missing_target_names = plmxml_target_names.difference(avail_scene_targets)
         LOGGER.debug('Target Material Difference: %s', missing_target_names)
@@ -111,6 +120,8 @@ class PlmXmlConfigurator:
              (Because it takes quite some time)
         """
         as_conn = AsConnectorConnection()
+        if not as_conn.check_connection():
+            return list(), list()
 
         # ---- Get Scene Materials ----
         get_material_names_req = AsTargetGetAllNamesRequest()
@@ -133,7 +144,8 @@ class PlmXmlConfigurator:
         """
         as_conn, result = AsConnectorConnection(), True
 
-        if not as_conn.connected:
+        # Check Connection
+        if not as_conn.check_connection():
             self.errors.append(as_conn.error)
             return False
 
@@ -168,8 +180,8 @@ class PlmXmlConfigurator:
                 invisible_nodes.append(p)
 
         # -- Create the actual NodeSetVisibleRequest objects
-        visible_request = AsNodeSetVisibleRequest(visible_nodes, True)
         invisible_request = AsNodeSetVisibleRequest(invisible_nodes, False)
+        visible_request = AsNodeSetVisibleRequest(visible_nodes, True)
 
         return visible_request, invisible_request
 

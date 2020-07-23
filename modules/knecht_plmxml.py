@@ -28,7 +28,7 @@ _ = lang.gettext
 class KnechtPlmXmlController(QObject):
     send_finished = Signal(int)
     no_connection = Signal()
-    status = Signal(str)
+    status = Signal(str, int)
     progress = Signal(int)
     plmxml_result = Signal(str)
     scene_active_result = Signal(str, list)
@@ -118,12 +118,18 @@ class KnechtUpdateActiveScene(Thread):
     def _set_scene_active_request(scene_name: str):
         """ Request AsConnector to set scene with scene_name active """
         as_conn = AsConnectorConnection()
+        if not as_conn.check_connection():
+            return False
+
         set_active_req = AsSceneSetActiveRequest(scene_name)
         return as_conn.request(set_active_req)
 
     @staticmethod
     def _request_scene_list() -> Tuple[str, list]:
         as_conn = AsConnectorConnection()
+        if not as_conn.check_connection():
+            return str(), list()
+
         get_all_req = AsSceneGetAllRequest()
         result = as_conn.request(get_all_req)
 
@@ -143,7 +149,7 @@ class KnechtUpdateActiveScene(Thread):
 class _KnechtUpdatePlmXmlSignals(QObject):
     send_finished = Signal(int)
     no_connection = Signal()
-    status = Signal(str)
+    status = Signal(str, int)
     progress = Signal(int)
     plmxml_result = Signal(str)
 
@@ -177,7 +183,7 @@ class KnechtUpdatePlmXml(Thread):
 
             return False, scene_result
         elif request_successful and not missing_nodes:
-            scene_result = _('DeltaGen Szene erfolgreich mit PlmXml abgeglichen.')
+            scene_result = _('DeltaGen Szenenstruktur erfolgreich mit PlmXml Struktur abgeglichen.')
         else:
             scene_result = _('Konnte DeltaGen Szene nicht mit PlmXml abgleichen. Keine Verbindung zum AsConnector2.')
 
@@ -193,7 +199,7 @@ class KnechtUpdatePlmXml(Thread):
         result = DeltaGenResult.send_success
         file = Path(self.variants_ls.plm_xml_path)
 
-        self.signals.status.emit(_('Konfiguriere PlmXml Instanz'))
+        self.signals.status.emit(_('Konfiguriere PlmXml Instanz'), 2000)
 
         # -- Parse a PlmXml file, collecting product instances and LookLibrary
         plm_xml_instance = PlmXml(file)
@@ -208,16 +214,15 @@ class KnechtUpdatePlmXml(Thread):
         conf = PlmXmlConfigurator(plm_xml_instance, create_pr_string_from_variants(self.variants_ls))
 
         # -- Validate Scene
-        if KnechtSettings.dg.get('validate_plmxml_scene'):
-            self.signals.status.emit(_('Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur.'))
-            scene_valid, scene_result = self._validate_scene(conf)
+        self.signals.status.emit(_('Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur.'), 2000)
+        scene_valid, scene_result = self._validate_scene(conf)
 
-            if not scene_valid:
-                self.signals.plmxml_result.emit(scene_result)
-                self.signals.send_finished.emit(DeltaGenResult.cmd_failed)
-                return
-            else:
-                self.signals.status.emit(scene_result)
+        if not scene_valid:
+            self.signals.plmxml_result.emit(scene_result)
+            self.signals.send_finished.emit(DeltaGenResult.cmd_failed)
+            return
+        else:
+            self.signals.status.emit(scene_result, 4000)
 
         # -- Request to show the updated configuration in DeltaGen, will block
         if not conf.request_delta_gen_update():

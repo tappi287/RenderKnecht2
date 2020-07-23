@@ -2,7 +2,7 @@ import requests
 
 from modules.language import get_translation
 from modules.log import init_logging
-from modules.plmxml.request import AsConnectorRequest, AsGetVersionInfoRequest
+from modules.plmxml.request import AsConnectorRequest, AsGetVersionInfoRequest, AsGetSelectedNodeEventRequest
 
 LOGGER = init_logging(__name__)
 
@@ -19,8 +19,6 @@ class AsConnectorConnection:
         self._connected = False
         self.error = str()
 
-        self._check_connection()
-
     @property
     def connected(self):
         return self._connected
@@ -29,11 +27,13 @@ class AsConnectorConnection:
     def connected(self, value: bool):
         self._connected = value
 
-    def _check_connection(self) -> bool:
+    def check_connection(self) -> bool:
+        selected_event = AsGetSelectedNodeEventRequest()
+        selected_result = self.request(selected_event)
         version_request = AsGetVersionInfoRequest()
         result = self.request(version_request)
 
-        if result:
+        if result and selected_result:
             self.connected = True
             LOGGER.debug(f'Connected to AsConnector {version_request.result}')
         else:

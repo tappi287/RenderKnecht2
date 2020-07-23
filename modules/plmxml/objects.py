@@ -198,8 +198,9 @@ class NodeInfoTypes:
 
 
 class NodeInfo:
-    def __init__(self, plmxml_id: str='', linc_id: str='', part_ref: str='', name: str='', user_data: dict=None,
-                 as_id: str='', parent_node_id: str='', node_info_type: str='UNKNOWN', material_name: str=''):
+    def __init__(self, plmxml_id: str='', linc_id: str='', knecht_id: str='', part_ref: str='', name: str='',
+                 user_data: dict=None, as_id: str='', parent_node_id: str='',
+                 node_info_type: str='UNKNOWN', material_name: str=''):
         """ Represents ProductInstances in PlmXml and NodeInfo nodes in AsConnector
 
         :param str plmxml_id: PlmXml document xml ProductInstance id attribute
@@ -218,6 +219,10 @@ class NodeInfo:
             self.linc_id = linc_id
         else:
             self.linc_id = self.user_data.get('LINC_ID') or ""
+        if knecht_id:
+            self.knecht_id = knecht_id
+        else:
+            self.knecht_id = f'{self.user_data.get("LINC_ID", "")}{self.user_data.get("PART_KEY", "")}'
         self.part_ref = part_ref
         self.name = name
         self.as_id = as_id
@@ -272,19 +277,20 @@ class NodeInfo:
         return node_info_element
 
     @staticmethod
-    def get_node_from_element(e: Et._Element):
+    def get_node_from_as_connector_element(e: Et._Element):
         """ Get NodeInfo instance from an AsConnectorResponse XML element """
-        linc_id = find_text_attribute(e, "LincId")
+        user_attribute_array = find_user_attributes_in_element(e)
+        as_id = find_text_attribute(e, 'AsId')
+        linc_id = user_attribute_array.get('LINC_ID') or find_text_attribute(e, 'LincId')  # Not unique, WTF!?
         name = find_text_attribute(e, "Name")
         parent_node_id = find_text_attribute(e, "ParentNodeId")
         node_info_type = find_text_attribute(e, "NodeInfoType")
+        material_name = find_text_attribute(e, "MaterialName")
 
         if node_info_type == "":
             node_info_type = "UNKNOWN"
 
-        material_name = find_text_attribute(e, "MaterialName")
-        user_attribute_array = find_user_attributes_in_element(e)
-        as_id = find_text_attribute(e, 'AsId')
+        knecht_id = f'{linc_id}{user_attribute_array.get("PART_KEY", "")}'
 
-        return NodeInfo(as_id=as_id, user_data=user_attribute_array, parent_node_id=parent_node_id, name=name,
-                        linc_id=linc_id, node_info_type=node_info_type, material_name=material_name)
+        return NodeInfo(as_id=as_id, knecht_id=knecht_id, user_data=user_attribute_array, parent_node_id=parent_node_id,
+                        name=name, linc_id=linc_id, node_info_type=node_info_type, material_name=material_name)
