@@ -9,7 +9,7 @@ url = "https://piwigo.ilikeviecher.com/ftp-upload/packages/"
 verify_ssl = true
 
 [packages]
-openimageio = {version="*", index="piwigo"}
+openimageio = {version="==2.1.16", index="piwigo"}
 lxml = "*"
 numpy = "==1.18.4"
 pyside2 = "==5.15.0"
