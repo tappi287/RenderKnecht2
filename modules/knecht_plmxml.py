@@ -199,7 +199,7 @@ class KnechtUpdatePlmXml(Thread):
         result = DeltaGenResult.send_success
         file = Path(self.variants_ls.plm_xml_path)
 
-        self.signals.status.emit(_('Konfiguriere PlmXml Instanz'), 2000)
+        self.signals.status.emit(_('Konfiguriere PlmXml Instanz'), 4000)
 
         # -- Parse a PlmXml file, collecting product instances and LookLibrary
         plm_xml_instance = PlmXml(file)
@@ -214,17 +214,16 @@ class KnechtUpdatePlmXml(Thread):
         conf = PlmXmlConfigurator(plm_xml_instance, create_pr_string_from_variants(self.variants_ls))
 
         # -- Validate Scene
-        self.signals.status.emit(_('Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur.'), 2000)
+        self.signals.status.emit(_('Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur ...'), 8000)
         scene_valid, scene_result = self._validate_scene(conf)
 
         if not scene_valid:
             self.signals.plmxml_result.emit(scene_result)
             self.signals.send_finished.emit(DeltaGenResult.cmd_failed)
             return
-        else:
-            self.signals.status.emit(scene_result, 4000)
 
         # -- Request to show the updated configuration in DeltaGen, will block
+        self.signals.status.emit(_('Konfiguriere DeltaGen Szenenstruktur ...'), 8000)
         if not conf.request_delta_gen_update():
             errors = '\n'.join(conf.errors)
             LOGGER.error(errors)

@@ -1,5 +1,5 @@
 import re
-from typing import Tuple, List, Set, Dict
+from typing import Tuple, List, Set, Dict, Optional
 
 from modules.language import get_translation
 from modules.log import init_logging
@@ -31,6 +31,9 @@ class PlmXmlConfigurator:
         self.errors = list()
 
         self.status_msg = str()
+
+        self._valid_targets: List[MaterialTarget] = list()
+        self._missing_targets: List[MaterialTarget] = list()
 
         # Parse PlmXml against config on initialisation
         self._parse_plmxml_against_config()
@@ -85,17 +88,6 @@ class PlmXmlConfigurator:
             if node.knecht_id not in scene_request.result:
                 missing_nodes.append(node)
 
-        # ---- Validate active, available Material Targets ----
-        # This depends on a loaded DeltaGen Scene with all csb Parts that have Targets loaded.
-        # Therefore we do not declare the scene plmxml relation invalid if
-        # we find missing targets and just report them instead.
-        #
-        # -- Read Scene Materials from SceneStructureRequest
-        avail_scene_targets = {n.material_name for n in scene_request.result.values() if n.material_name}
-        plmxml_target_names = set(self.plmxml.look_lib.materials.keys())
-        missing_target_names = plmxml_target_names.difference(avail_scene_targets)
-        LOGGER.debug('Target Material Difference: %s', missing_target_names)
-
         # -- Get Invalid Material Targets
         _, missing_targets = self._get_valid_material_targets()
         missing_target_names = {t.name for t in missing_targets if t.name}
@@ -110,6 +102,11 @@ class PlmXmlConfigurator:
         """ This will acquire the materials from the scene and compare it to
             the list of active target materials in the PlmXml.
 
+            --- Important ---
+            This will not find MaterialTargets with mismatching names!
+            Eg. MatTarget and MatTarget_1 will not report an error even though the actual target geometry may has
+            the wrong Material MatTarget_1 assigned.
+
              --- Important!---
              This requires an PlmXml which looklib attribute is
              configured (self._update_plmxml_look_library)! Otherwise no
@@ -119,6 +116,9 @@ class PlmXmlConfigurator:
              in the self.validate_scene_vs_plmxml but can be omitted by the user.
              (Because it takes quite some time)
         """
+        if len(self._valid_targets) > 0:
+            return self._valid_targets, self._missing_targets
+
         as_conn = AsConnectorConnection()
         if not as_conn.check_connection():
             return list(), list()
