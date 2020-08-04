@@ -280,6 +280,12 @@ class KnechtRenderThread(Thread):
             self.viewer_color.emit()
             self._await_dg_result()
 
+        # --- Send fake variants to make sure DeltaGen is alive and ready
+        self.send_variants.emit(KnechtVariantList())
+        if not self._await_dg_result():
+            self.abort_no_connection()
+            return
+
         # --- Send Rendering command
         # Create img file name and final output path
         img_file_name = f'{name}{render_preset.settings.get("file_extension")}'
