@@ -110,8 +110,7 @@ class LookLibrary:
                 for pr_tag in pr_tags:
                     match = re.search(pr_tags_to_reg_ex(variant.pr_tags), pr_tag)
                     if match:
-                        conflicting_variants.append(f'{variant.name} - {variant.pr_tags} '
-                                                    f'is also matching {match.group(0)}')
+                        conflicting_variants.append(f'{variant} is also matching {match.group(0)}')
                 pr_tags.add(variant.pr_tags)
 
             if conflicting_variants:
@@ -248,7 +247,8 @@ class NodeInfo:
     def pr_tags(self):
         return self.user_data.get('PR_TAGS')
 
-    def _validate_node_info_type(self, value: str):
+    @staticmethod
+    def _validate_node_info_type(value: str):
         if value not in NodeInfoTypes.enumerations:
             LOGGER.warning('NodeInfo created with invalid type setting: %s; Setting default value: %s',
                            value, NodeInfoTypes.enumerations[0])

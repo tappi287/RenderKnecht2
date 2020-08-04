@@ -13,7 +13,7 @@ _ = lang.gettext
 
 
 class AsConnectorConnection:
-    timeout = 10
+    timeout = 60
 
     def __init__(self):
         self._connected = False
@@ -47,7 +47,7 @@ class AsConnectorConnection:
 
         try:
             r = requests.post(
-                as_request.get_url(), data=as_request.to_bytes(), headers=as_request.get_header(), timeout=10
+                as_request.get_url(), data=as_request.to_bytes(), headers=as_request.get_header(), timeout=self.timeout
                 )
         except Exception as e:
             LOGGER.error('Error connecting to AsConnector! %s', e)
