@@ -30,7 +30,7 @@ class AsConnectorConnection:
 
     def check_connection(self) -> bool:
         selected_event = AsGetSelectedNodeEventRequest()
-        selected_result = self.request(selected_event)
+        selected_result = self.request(selected_event, False)
         version_request = AsGetVersionInfoRequest()
         result = self.request(version_request)
 
@@ -43,10 +43,10 @@ class AsConnectorConnection:
 
         return result
 
-    def request(self, as_request: AsConnectorRequest) -> bool:
+    def request(self, as_request: AsConnectorRequest, retry: bool = True) -> bool:
         r, err, tries, result = None, str(), 0, False
 
-        while not result and (tries := tries + 1) < self.num_retries:
+        while not result and retry and (tries := tries + 1) < self.num_retries:
             try:
                 r = requests.post(
                     as_request.get_url(), data=as_request.to_bytes(), headers=as_request.get_header(), timeout=self.timeout

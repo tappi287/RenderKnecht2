@@ -1,5 +1,5 @@
 import re
-from typing import Tuple, List, Set, Dict, Optional
+from typing import Tuple, List, Set, Dict
 
 from modules.language import get_translation
 from modules.log import init_logging
