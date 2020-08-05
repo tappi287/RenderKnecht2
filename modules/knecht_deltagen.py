@@ -2,6 +2,7 @@ import time
 from threading import Event, Thread
 from typing import Union
 
+import socketio
 from PySide2.QtCore import QObject, QTimer, Signal, Slot, Qt, QUuid
 from PySide2.QtGui import QColor
 from PySide2.QtWidgets import QComboBox, QPushButton
@@ -31,6 +32,7 @@ class CommunicateDeltaGenSignals(QObject):
     send_finished = Signal(int)
     no_connection = Signal()
     status = Signal(str)
+    socketio_status = Signal(str)
     progress = Signal(int)
     variant_status = Signal(KnechtVariant)
 
@@ -65,8 +67,12 @@ class CommunicateDeltaGen(Thread):
     send_finished = signals.send_finished
     no_connection = signals.no_connection
     status = signals.status
+    socketio_status = signals.socketio_status
     progress = signals.progress
     variant_status = signals.variant_status
+
+    # --- SocketIO --
+    sio = None
 
     def __init__(self):
         super(CommunicateDeltaGen, self).__init__()
@@ -80,6 +86,10 @@ class CommunicateDeltaGen(Thread):
         """ Thread loop running until exit_event set. As soon as a new send operation
             is scheduled, loop will pick up send operation on next loop cycle.
         """
+        self.sio = socketio.Client(reconnection_attempts=5,
+                                   reconnection_delay=30,
+                                   reconnection_delay_max=60)
+
         while not self.exit_event.is_set():
             if self.send_operation_in_progress:
                 LOGGER.debug('CommunicateDeltaGen Thread starts Variants Send operation.')
@@ -91,8 +101,30 @@ class CommunicateDeltaGen(Thread):
                 self._send_command_operation(self.command_ls.pop(0))
 
             self.exit_event.wait(timeout=0.8)
+        self.close_socket_io()
 
         LOGGER.debug('CommunicateDeltaGen Thread returned from run loop.')
+
+    def start_socket_io(self):
+        if not self.sio.connected:
+            host = f"{KnechtSettings.wolke.get('host')}:{KnechtSettings.wolke.get('port', '80')}"
+            self.socketio_status.emit(f'Connecting to {host}')
+            self.sio.connect(host)
+        self.sio.emit('client_connected', {'app': 'RenderKnecht'})
+
+        @self.sio.event
+        def connect():
+            LOGGER.info('Connected')
+            self.socketio_status.emit('Connected')
+
+        @self.sio.event
+        def disconnect():
+            LOGGER.info('Disconnected')
+            self.socketio_status.emit('Disconnected')
+
+    def close_socket_io(self):
+        if self.sio.connected:
+            self.sio.disconnect()
 
     @Slot(bool)
     def set_rendering_mode(self, val: bool):
@@ -304,6 +336,10 @@ class SendToDeltaGen(QObject):
 
     active_scene_result = Signal(str, list)  # AsConnector Set/GetActiveScene results
 
+    # -- SocketIO Knechtwolke --
+    start_socketio = Signal()
+    socketio_status = Signal(str)
+
     def __init__(self, ui):
         """ Controls the DeltaGen communication thread.
             Only one, no concurrent, send operations will be allowed.
@@ -350,6 +386,7 @@ class SendToDeltaGen(QObject):
         self.dg.send_finished.connect(self._send_operation_finished)
         self.dg.progress.connect(self._update_progress)
         self.dg.variant_status.connect(self._update_variant_status)
+        self.dg.socketio_status.connect(self.socketio_status)
 
         # Prepare thread inbound signals
         self.transfer_variants.connect(self.dg.set_variants_ls)
@@ -358,6 +395,7 @@ class SendToDeltaGen(QObject):
         self.transfer_rendering_mode.connect(self.dg.set_rendering_mode)
         self.abort_operation.connect(self.dg.abort)
         self.restore_viewer_cmd.connect(self.dg.restore_viewer)
+        self.start_socketio.connect(self.dg.start_socket_io)
 
         self.dg.start()
 

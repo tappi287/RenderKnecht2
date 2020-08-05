@@ -6,6 +6,7 @@ from PySide2.QtWidgets import QPushButton
 
 from modules.gui.gui_utils import MouseDblClickFilter
 from modules.gui.widgets.expandable_widget import KnechtExpandableWidget
+from modules.gui.widgets.knechtwolke import KnechtWolkeUi
 from modules.gui.widgets.path_util import SetDirectoryPath
 from modules.gui.widgets.variants_field import VariantInputFields
 from modules.knecht_render import CPU_COUNT, KnechtRenderThread
@@ -101,6 +102,9 @@ class MainWindowWidgets(QObject):
 
         # ---- Path Render Service ----
         self.path_render_service = PathRenderService(ui.app, ui)
+
+        # ---- KnechtWolke Ui ---
+        self.knechtwolke_ui = KnechtWolkeUi(ui)
 
     @Slot()
     def dg_expand_toggle(self):

@@ -1601,6 +1601,86 @@ p, li { white-space: pre-wrap; }
               </item>
              </layout>
             </widget>
+            <widget class="QWidget" name="KnechtWolke">
+             <attribute name="icon">
+              <iconset resource="res/gui_resource.qrc">
+               <normaloff>:/main/kw_icon.png</normaloff>:/main/kw_icon.png</iconset>
+             </attribute>
+             <attribute name="title">
+              <string/>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_9">
+              <item>
+               <widget class="QLabel" name="pageDescription">
+                <property name="text">
+                 <string>Verbindung zur KnechtWolke herstellen um PR-Strings aus der Wolke zu senden.</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QGridLayout" name="gridLayout_2">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="hostLabel">
+                  <property name="text">
+                   <string>Host</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QLabel" name="portLabel">
+                  <property name="text">
+                   <string>Port</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_3">
+                  <property name="text">
+                   <string>User</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLineEdit" name="userEdit"/>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLineEdit" name="hostEdit"/>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QLineEdit" name="portEdit"/>
+                </item>
+                <item row="2" column="0" colspan="2">
+                 <widget class="QCheckBox" name="autostartCheckBox">
+                  <property name="text">
+                   <string>Beim Anwendungsstart automatisch verbinden</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_10">
+                <item>
+                 <widget class="QLabel" name="connectLabel">
+                  <property name="text">
+                   <string>Verbindung herstellen</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="connectBtn">
+                  <property name="text">
+                   <string>Verbinden</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QTextBrowser" name="textBrowser"/>
+              </item>
+             </layout>
+            </widget>
            </widget>
           </item>
           <item>

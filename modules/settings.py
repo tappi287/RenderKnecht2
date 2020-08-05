@@ -159,6 +159,11 @@ class KnechtSettings:
         display_send_finished_overlay=False,
         validate_plmxml_scene=True,
         )
+    wolke = dict(
+        user='UserName',
+        host='http://localhost',
+        port='5000'
+        )
     fakom = dict(
         last_pos_file='',
         last_xlsx_file='',
@@ -184,13 +189,15 @@ class KnechtSettings:
         default_settings['app'].update(cls.app)
         default_settings['dg'] = dict()
         default_settings['dg'].update(cls.dg)
+        default_settings['wolke'] = dict()
+        default_settings['wolke'].update(cls.wolke)
 
         Settings.load(KnechtSettings, file)
 
         # Update settings attributes with default settings if
         # eg. setting not available in previous versions
         for settings_key, settings_dict in default_settings.items():
-            if settings_key not in ['app', 'dg']:
+            if settings_key not in ['app', 'dg', 'wolke']:
                 continue
 
             settings_attr = dict()

@@ -117,7 +117,8 @@ class IconRsc:
         tab_attributes = {
             0: ('options', _('Variantenliste')),  # Variants List
             1: ('img', _('Renderliste')),  # Render List
-            2: ('pfad_aeffchen', _('Pfad Render Dienst')),  # Path Render Service
+            2: ('pfad_aeffchen', ''),  # Path Render Service
+            3: ('kw_icon', '')  # KnechtWolke
             }
 
         for tab_idx in range(0, ui.tabWidget.count()):
