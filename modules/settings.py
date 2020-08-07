@@ -162,7 +162,8 @@ class KnechtSettings:
     wolke = dict(
         user='UserName',
         host='http://localhost',
-        port='5000'
+        port='5000',
+        files=dict(),
         )
     fakom = dict(
         last_pos_file='',
@@ -206,6 +207,8 @@ class KnechtSettings:
                 settings_attr = cls.app
             elif settings_key == 'dg':
                 settings_attr = cls.dg
+            elif settings_key == 'wolke':
+                settings_attr = cls.wolke
 
             for k, v in settings_dict.items():
                 if k not in settings_attr:

@@ -1,9 +1,10 @@
 from datetime import datetime
 
-from PySide2.QtCore import QObject, QTimer
+from PySide2.QtCore import QObject, QTimer, Signal
 from PySide2.QtWidgets import QLineEdit, QTextBrowser
 
 from modules import KnechtSettings
+from modules.knecht_objects import KnechtVariantList
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -27,8 +28,6 @@ class KnechtWolkeUi(QObject):
         """
         super(KnechtWolkeUi, self).__init__(ui)
         self.ui = ui
-        self.ui.pageDescription.setText(_('Verbindung zur KnechtWolke herstellen um PR-Strings aus der Wolke zu senden.'))
-        self.ui.autostartCheckBox.setText(_('Beim Anwendungsstart automatisch verbinden'))
         self.ui.connectLabel.setText(_('Verbindung herstellen'))
 
         # --- Prepare Host/Port/User edit ---
@@ -43,10 +42,60 @@ class KnechtWolkeUi(QObject):
         # -- Connect Button --
         self.ui.connectBtn.setText(_('Verbinden'))
         self.ui.connectBtn.pressed.connect(self.wolke_connect)
+        self.ui.disconnectBtn.setText(_('Trennen'))
+        self.ui.disconnectBtn.pressed.connect(self.wolke_disconnect)
+        self.ui.disconnectBtn.setEnabled(False)
+
+        # -- Autostart --
+        self.ui.autostartCheckBox.setText(_('Beim Anwendungsstart automatisch verbinden'))
+        self.ui.autostartCheckBox.setChecked(KnechtSettings.wolke.get('autostart', False))
+        self.ui.autostartCheckBox.toggled.connect(self.toggle_autostart)
+
+        self.ui_elements = (self.ui.hostEdit, self.ui.portEdit, self.ui.userEdit, self.ui.connectBtn)
 
         # -- Setup Text Browser --
         self.txt: QTextBrowser = self.ui.textBrowser
         QTimer.singleShot(1000, self.delayed_setup)
+
+        # -- Warning --
+        self.txt.append(_('<b>ACHTUNG</b> Dieses Feature ist noch nicht für den produktiv Einsatz freigegeben. '
+                          'Sockenströme verursachen weltumspannende Interpretierer Sperren! '
+                          'Die Anwendung kann bei Verwendung jederzeit unvorhergesehen hängen. Vor dem testen '
+                          'wichtige Dokumente sichern!'))
+
+    def delayed_setup(self):
+        self.ui.app.send_dg.socketio_status.connect(self.update_txt)
+        self.ui.app.send_dg.socketio_connected.connect(self.connected)
+        self.ui.app.send_dg.socketio_disconnected.connect(self.disconnected)
+        self.ui.app.send_dg.socketio_send_variants.connect(self._send_variants)
+
+        if KnechtSettings.wolke.get('autostart', False):
+            self.wolke_connect()
+
+    def connected(self):
+        for ui_element in self.ui_elements:
+            ui_element.setEnabled(False)
+        self.ui.connectBtn.setText(_('Verbunden'))
+        self.ui.disconnectBtn.setEnabled(True)
+
+    def disconnected(self):
+        for ui_element in self.ui_elements:
+            ui_element.setEnabled(True)
+        self.ui.connectBtn.setText(_('Verbinden'))
+        self.ui.disconnectBtn.setEnabled(False)
+
+    def _check_debounce(self) -> bool:
+        if not self.debounce.isActive():
+            self.debounce.start()
+            return True
+        return False
+
+    def _send_variants(self, variant_ls: KnechtVariantList):
+        self.ui.app.send_dg.send_variants(variant_ls)
+
+    @staticmethod
+    def toggle_autostart(v: bool):
+        KnechtSettings.wolke['autostart'] = v
 
     @staticmethod
     def update_host(host):
@@ -60,11 +109,13 @@ class KnechtWolkeUi(QObject):
     def update_user(user):
         KnechtSettings.wolke['user'] = user
 
-    def delayed_setup(self):
-        self.ui.app.send_dg.socketio_status.connect(self.update_txt)
-
     def wolke_connect(self):
-        self.ui.app.send_dg.start_socketio.emit()
+        if self._check_debounce():
+            self.ui.app.send_dg.start_socketio.emit()
+
+    def wolke_disconnect(self):
+        if self._check_debounce():
+            self.ui.app.send_dg.stop_socketio.emit()
 
     def update_txt(self, message):
         current_time = datetime.now().strftime('(%H:%M:%S)')
