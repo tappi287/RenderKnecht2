@@ -163,6 +163,7 @@ class KnechtSettings:
         user='UserName',
         host='http://localhost',
         port='5000',
+        token='',
         files=dict(),
         )
     fakom = dict(

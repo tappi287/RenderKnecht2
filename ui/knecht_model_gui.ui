@@ -1649,6 +1649,20 @@ p, li { white-space: pre-wrap; }
                   </property>
                  </widget>
                 </item>
+                <item row="1" column="3">
+                 <widget class="QLineEdit" name="tokenEdit">
+                  <property name="echoMode">
+                   <enum>QLineEdit::PasswordEchoOnEdit</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QLabel" name="portLabel_2">
+                  <property name="text">
+                   <string>Token</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </item>
               <item>

@@ -37,61 +37,60 @@ class WolkeServer:
         self._setup_socketio_events()
 
     def _setup_socketio_events(self):
-        @self.sio.event
-        def connect():
-            LOGGER.info('Connected')
-            self.sio.emit('client_connected', {'app': 'RenderKnecht', 'user': KnechtSettings.wolke.get('user')})
+        @self.sio.on('connect')
+        def on_connect():
+            LOGGER.info('Connected to SocketIO Server')
             self.connected_signal.emit()
             self.status_signal.emit(f'Connected to socketio server')
 
-        @self.sio.event
-        def user_unknown():
-            self.status_signal.emit(f'User {KnechtSettings.wolke.get("user")} could not be found by the Server.')
-            self.disconnect_wolke()
-
-        @self.sio.event
-        def client_id_created(data):
+        @self.sio.on('client_id_created')
+        def on_client_id_created(data):
             self.id = data.get('id')
             self.status_signal.emit(f'Connected as {self.id}')
 
-        @self.sio.event
-        def disconnect():
+        @self.sio.on('disconnect')
+        def on_disconnect():
             LOGGER.info('Disconnected')
             self.disconnected_signal.emit()
             self.status_signal.emit('Disconnected')
 
-        @self.sio.event
-        def send_pr_string(data):
+        @self.sio.on('send_pr_string')
+        def on_send_pr_string(data):
             LOGGER.debug('Received PR-String send event with data: %s', data)
-            url = f"{self.host}:{self.port}{data.get('url')}"
-            file_hash = data.get("hash")
-            self.status_signal.emit(f'Received PR-String send event with data:<br />'
-                                    f'{data.get("result")}<br />'
-                                    f'{file_hash}<br />'
-                                    f'{url}')
+            self.send_pr_string(data)
 
-            # -- Prepare/download PlmXml file
-            if file_hash not in KnechtSettings.wolke.get('files'):
-                if not self.download(url, file_hash):
-                    return
-            file = Path(KnechtSettings.wolke.get('files', dict())[file_hash])
-            if not file.is_file():
-                self.status_signal.emit('PlmXml file found in settings but not on disk!')
+    def send_pr_string(self, data: dict):
+        url = f"{self.host}:{self.port}{data.get('url')}"
+        file_hash = data.get("hash")
+        self.status_signal.emit(f'Received PR-String send event with data:<br />'
+                                f'{data.get("name")}<br />'
+                                f'PR-String: {len(data.get("result").split("+"))}<br />'
+                                f'File Hash: {file_hash}<br />'
+                                f'File Url: {url}')
+
+        # -- Prepare/download PlmXml file
+        if file_hash not in KnechtSettings.wolke.get('files'):
+            if not self.download(url, file_hash):
                 return
 
-            # -- Prepare Variants
-            variants = KnechtVariantList()
-            variants.plm_xml_path = file.as_posix()
-            variants.preset_name = data.get('name')
-            for pr in data.get('result').split('+'):
-                if pr == '':
-                    continue
-                variants.add(self.empty_model_index, pr, pr)
+        file = Path(KnechtSettings.wolke.get('files', dict())[file_hash])
+        if not file.is_file():
+            self.status_signal.emit('PlmXml file found in settings but not on disk!')
+            return
 
-            # -- Send Variants
-            if variants.variants:
-                self.status_signal.emit('Triggered send operation')
-                self.send_variants.emit(variants)
+        # -- Prepare Variants
+        variants = KnechtVariantList()
+        variants.plm_xml_path = file.as_posix()
+        variants.preset_name = data.get('name')
+        for pr in data.get('result').split('+'):
+            if pr == '':
+                continue
+            variants.add(self.empty_model_index, pr, pr)
+
+        # -- Send Variants
+        if variants.variants:
+            self.status_signal.emit('Triggered send operation')
+            self.send_variants.emit(variants)
 
     def download(self, url, file_hash) -> bool:
         output_dir = Path(get_settings_dir()) / 'plmxml_temp'
@@ -113,7 +112,7 @@ class WolkeServer:
                 f.write(r.content)
 
             if not plmxml_file.is_file():
-                self.status_signal.emit(f"Could not save download file {plmxml_file}")
+                self.status_signal.emit(f"Could not save downloaded file {plmxml_file}")
                 return False
 
             KnechtSettings.wolke.get('files', dict())[file_hash] = plmxml_file.as_posix()
@@ -121,6 +120,18 @@ class WolkeServer:
         except Exception as e:
             LOGGER.error(e)
             self.status_signal.emit(f'Failed to save downloaded file from {url}')
+
+        return True
+
+    @staticmethod
+    def _create_send_data(data: dict = None):
+        send_data = {
+            'app'  : 'RenderKnecht', 'user': KnechtSettings.wolke.get('user'),
+            'token': KnechtSettings.wolke.get("token")}
+
+        if data:
+            send_data.update(data)
+        return send_data
 
     def connect_wolke(self):
         if not self.sio.connected:
@@ -130,16 +141,17 @@ class WolkeServer:
             self.status_signal.emit(f'Connecting to {host} as {KnechtSettings.wolke.get("user")}')
 
             try:
-                self.sio.connect(host)
+                self.sio.connect(host, headers=self._create_send_data())
             except Exception as e:
                 LOGGER.error('Error connecting to socketio Server: %s', e)
                 self.status_signal.emit(f'<b>Could not connect to {host}: {e}</b>')
-                self.status_signal.emit(f'Check that you entered the correct address and that the server '
+                self.status_signal.emit(f'Navigate to your KnechtWolke User Profile and transfer the settings here. '
+                                        f'Check that you entered the correct address and that the server '
                                         f'is available from your LAN. Also add this app to your Firewall white list.')
 
     def disconnect_wolke(self):
         if self.sio.connected:
-            self.sio.emit('client_disconnected', {'app': 'RenderKnecht', 'user': KnechtSettings.wolke.get('user')})
+            self.sio.emit('client_disconnected', self._create_send_data())
             self.sio.disconnect()
             self.disconnected_signal.emit()
             self.status_signal.emit('Disconnected')

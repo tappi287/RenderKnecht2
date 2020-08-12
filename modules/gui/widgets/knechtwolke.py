@@ -34,10 +34,12 @@ class KnechtWolkeUi(QObject):
         self.ui.hostEdit.setText(KnechtSettings.wolke.get('host'))
         self.ui.portEdit.setText(KnechtSettings.wolke.get('port'))
         self.ui.userEdit.setText(KnechtSettings.wolke.get('user'))
+        self.ui.tokenEdit.setText(KnechtSettings.wolke.get('token'))
 
         self.ui.hostEdit.textChanged.connect(self.update_host)
         self.ui.portEdit.textChanged.connect(self.update_port)
         self.ui.userEdit.textChanged.connect(self.update_user)
+        self.ui.tokenEdit.textChanged.connect(self.update_token)
 
         # -- Connect Button --
         self.ui.connectBtn.setText(_('Verbinden'))
@@ -108,6 +110,10 @@ class KnechtWolkeUi(QObject):
     @staticmethod
     def update_user(user):
         KnechtSettings.wolke['user'] = user
+
+    @staticmethod
+    def update_token(token):
+        KnechtSettings.wolke['token'] = token
 
     def wolke_connect(self):
         if self._check_debounce():

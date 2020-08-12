@@ -24,7 +24,5 @@ setuptools = "*"
 python-socketio = {extras = ["client"],version = "*"}
 
 [dev-packages]
-jupyter = "*"
-tornado = "==5.1.1"
 paramiko = "*"
-pyinstaller = {git = "https://github.com/pyinstaller/pyinstaller.git"}
+pyinstaller = "*"

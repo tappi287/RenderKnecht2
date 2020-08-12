@@ -2,7 +2,6 @@ import time
 from threading import Event, Thread
 from typing import Union
 
-import socketio
 from PySide2.QtCore import QObject, QTimer, Signal, Slot, Qt, QUuid
 from PySide2.QtGui import QColor
 from PySide2.QtWidgets import QComboBox, QPushButton
