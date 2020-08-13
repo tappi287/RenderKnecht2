@@ -1,6 +1,7 @@
 import logging
 import multiprocessing
 import sys
+import signal
 from multiprocessing import Queue
 
 from PySide2.QtCore import Qt
@@ -19,7 +20,7 @@ if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     print('Using high dpi Pixmaps')
 
-VERSION = '1.395'
+VERSION = '1.4'
 
 InfoMessage.ver = VERSION
 InfoMessage.lic = 'GPL v3'
@@ -98,6 +99,10 @@ def main():
     app.setApplicationName('RenderKnecht')
     app.setApplicationDisplayName(app.applicationName())
     app.setApplicationVersion(VERSION)
+
+    # Register the signal handlers
+    signal.signal(signal.SIGTERM, app.quit)
+    signal.signal(signal.SIGINT, app.quit)
 
     result = app.exec_()
 

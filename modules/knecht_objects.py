@@ -1,20 +1,15 @@
-import re
 import time
 from pathlib import Path
 from typing import List, Tuple, Union
 
-from PySide2.QtCore import QModelIndex, QUuid
+from PySide2.QtCore import QModelIndex
 
 from modules.gui.widgets.path_util import path_exists
 from modules.knecht_fakom import FakomData
+from modules.knecht_utils import create_file_safe_name
 from modules.log import init_logging
 
 LOGGER = init_logging(__name__)
-
-
-def create_file_safe_name(filename: str) -> str:
-    """ Replace any non alphanumeric characters from a string expect minus/underscore/period """
-    return re.sub('[^\\w\\-_\\.]', '_', filename)
 
 
 class KnechtVariant:

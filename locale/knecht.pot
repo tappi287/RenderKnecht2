@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-02-06 12:33+0100\n"
+"POT-Creation-Date: 2020-08-13 15:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,7 +67,7 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: modules/gui/widgets\db_dialog.py:170 modules\path_render_service.py:124
+#: modules/gui/widgets\db_dialog.py:170 modules\path_render_service.py:127
 msgid "Erstellt"
 msgstr ""
 
@@ -368,28 +368,52 @@ msgstr ""
 msgid "  0: Aktueller Zustand des Dokuments"
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:79
+#: modules/gui/widgets\knechtwolke.py:38
+msgid "Verbindung herstellen"
+msgstr ""
+
+#: modules/gui/widgets\knechtwolke.py:52 modules/gui/widgets\knechtwolke.py:95
+msgid "Verbinden"
+msgstr ""
+
+#: modules/gui/widgets\knechtwolke.py:54
+msgid "Trennen"
+msgstr ""
+
+#: modules/gui/widgets\knechtwolke.py:59
+msgid "Beim Anwendungsstart automatisch verbinden"
+msgstr ""
+
+#: modules/gui/widgets\knechtwolke.py:70
+msgid "<b>ACHTUNG</b> Dieses Feature ist noch nicht für den produktiv Einsatz freigegeben. Sockenströme verursachen weltumspannende Interpretierer Sperren! Die Anwendung kann bei Verwendung jederzeit unvorhergesehen hängen. Vor dem testen wichtige Dokumente sichern!"
+msgstr ""
+
+#: modules/gui/widgets\knechtwolke.py:89
+msgid "Verbunden"
+msgstr ""
+
+#: modules/gui/widgets\main_ui_widgets.py:80
 msgid "Geschätzte Renderzeit ({} CPUs/GI)"
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:86
+#: modules/gui/widgets\main_ui_widgets.py:87
 msgid "Ausgabe Verzeichnis auswählen ..."
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:136
+#: modules/gui/widgets\main_ui_widgets.py:140
 msgid "Fehler beim sammeln der Preset Varianten. Einige Inhalte der Render Presets existieren nicht mehr."
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:144
+#: modules/gui/widgets\main_ui_widgets.py:148
 msgid "Es läuft bereits ein Render Vorgang."
 msgstr ""
 
-#: modules/gui/widgets\main_ui_widgets.py:166
+#: modules/gui/widgets\main_ui_widgets.py:170
 msgid "abgeschlossen am: "
 msgstr ""
 
 #: modules/gui/widgets\menu_asscene.py:18
-#: modules/gui/widgets\menu_deltagen.py:21
+#: modules/gui/widgets\menu_deltagen.py:22
 msgid "DeltaGen"
 msgstr ""
 
@@ -470,35 +494,35 @@ msgstr ""
 msgid "DeltaGen_Kamera_{:03d}"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:42
+#: modules/gui/widgets\menu_deltagen.py:47
 msgid "Reset senden"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:45
+#: modules/gui/widgets\menu_deltagen.py:50
 msgid "Freeze Viewer"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:48
+#: modules/gui/widgets\menu_deltagen.py:53
 msgid "Varianten State Check"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:51
+#: modules/gui/widgets\menu_deltagen.py:56
 msgid "Kamera Daten übertragen"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:54
+#: modules/gui/widgets\menu_deltagen.py:59
 msgid "State Check im Baum anzeigen"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:58
+#: modules/gui/widgets\menu_deltagen.py:63
 msgid "Zuletzt gesendetes Preset als Overlay anzeigen"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:63
+#: modules/gui/widgets\menu_deltagen.py:68
 msgid "DeltaGen Szene vor dem konfigurieren mit PlmXml abgleichen."
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:67
+#: modules/gui/widgets\menu_deltagen.py:73
 msgid "AsConnector aktive Szene:"
 msgstr ""
 
@@ -897,11 +921,11 @@ msgstr ""
 msgid "< Gültigen Pfad eingeben >"
 msgstr ""
 
-#: modules/gui/widgets\plmxml_materials_page.py:30
+#: modules/gui/widgets\plmxml_materials_page.py:28
 msgid "PlmXml Materialien"
 msgstr ""
 
-#: modules/gui/widgets\plmxml_materials_page.py:35
+#: modules/gui/widgets\plmxml_materials_page.py:33
 msgid " Quell Materialien"
 msgstr ""
 
@@ -1204,7 +1228,7 @@ msgid "Variantenbaum"
 msgstr ""
 
 #: modules/gui\main_ui.py:60 modules/gui\ui_resource.py:119
-#: modules\knecht_render.py:661
+#: modules\knecht_render.py:667
 msgid "Renderliste"
 msgstr ""
 
@@ -1218,10 +1242,6 @@ msgstr ""
 
 #: modules/gui\ui_resource.py:118
 msgid "Variantenliste"
-msgstr ""
-
-#: modules/gui\ui_resource.py:120 modules/gui\ui_translations.py:156
-msgid "Pfad Render Dienst"
 msgstr ""
 
 #: modules/gui\ui_translations.py:34
@@ -1301,7 +1321,7 @@ msgid "Bricht laufende Sendung an DeltaGen ab."
 msgstr ""
 
 #: modules/gui\ui_translations.py:118 modules\job.py:13
-#: modules\knecht_render.py:692
+#: modules\knecht_render.py:698
 msgid "Rendering"
 msgstr ""
 
@@ -1349,7 +1369,7 @@ msgstr ""
 msgid "Konvertiert die ausgegebenen Bilder nach dem Render Vorgang in PNG."
 msgstr ""
 
-#: modules/gui\ui_translations.py:145 modules\knecht_render.py:325
+#: modules/gui\ui_translations.py:145 modules\knecht_render.py:331
 msgid "Rendering starten"
 msgstr ""
 
@@ -1363,6 +1383,10 @@ msgstr ""
 
 #: modules/gui\ui_translations.py:154
 msgid "Job Manager aktualisieren."
+msgstr ""
+
+#: modules/gui\ui_translations.py:156
+msgid "Pfad Render Dienst"
 msgstr ""
 
 #: modules/gui\ui_translations.py:158
@@ -1770,59 +1794,59 @@ msgstr ""
 msgid "Netzwerkverbindung konnte nicht beendet werden. Bitte warten und in einer Minute erneut versuchen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:157
+#: modules\knecht_deltagen.py:183
 msgid "DeltaGen Verbindung erfolgreich verifiziert."
 msgstr ""
 
-#: modules\knecht_deltagen.py:172
+#: modules\knecht_deltagen.py:198
 msgid "DeltaGen Verbindungsversuch ({!s}/{!s}) in {!s} Sekunden..."
 msgstr ""
 
-#: modules\knecht_deltagen.py:200
+#: modules\knecht_deltagen.py:226
 msgid "Prüfe Verbindung..."
 msgstr ""
 
-#: modules\knecht_deltagen.py:208
+#: modules\knecht_deltagen.py:234
 msgid "Sperre Viewer Fenster"
 msgstr ""
 
-#: modules\knecht_deltagen.py:408
+#: modules\knecht_deltagen.py:451
 msgid "AsConnector aktive Szene: {}"
 msgstr ""
 
-#: modules\knecht_deltagen.py:431
+#: modules\knecht_deltagen.py:474
 msgid "Es läuft bereits eine DeltaGen Sende Operation! Vorgang abwarten oder abbrechen und anschließend erneut versuchen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:472
+#: modules\knecht_deltagen.py:515
 msgid "Kopieren"
 msgstr ""
 
-#: modules\knecht_deltagen.py:481
+#: modules\knecht_deltagen.py:524
 msgid "DeltaGen Sende Operation beendet."
 msgstr ""
 
-#: modules\knecht_deltagen.py:484
+#: modules\knecht_deltagen.py:527
 msgid "Konnte <b>keine Verbindung</b> zu einer DeltaGen Instanz mit geladener Szene herstellen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:489
+#: modules\knecht_deltagen.py:532
 msgid "DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>"
 msgstr ""
 
-#: modules\knecht_deltagen.py:491
+#: modules\knecht_deltagen.py:534
 msgid "DeltaGen Sende Operation <b>abgebrochen.</b>"
 msgstr ""
 
-#: modules\knecht_deltagen.py:500
+#: modules\knecht_deltagen.py:543
 msgid "{0} {1} gesendet"
 msgstr ""
 
-#: modules\knecht_deltagen.py:588
+#: modules\knecht_deltagen.py:631
 msgid "Auswählen"
 msgstr ""
 
-#: modules\knecht_deltagen.py:592
+#: modules\knecht_deltagen.py:635
 msgid "Senden an DeltaGen abgeschlossen:<br /><i>{}</i>"
 msgstr ""
 
@@ -1858,43 +1882,47 @@ msgstr ""
 msgid "Konnte unkonvertierte Bilddatei nicht verschieben: {}"
 msgstr ""
 
-#: modules\knecht_plmxml.py:170
+#: modules\knecht_plmxml.py:176
 msgid ""
 "DeltaGen Szene stimmt nicht mit PlmXml überein. Fehlende Knoten:\n"
 msgstr ""
 
-#: modules\knecht_plmxml.py:175
+#: modules\knecht_plmxml.py:181
 msgid ""
 "\n"
 "..und {} weitere Knoten."
 msgstr ""
 
-#: modules\knecht_plmxml.py:176
+#: modules\knecht_plmxml.py:182
 msgid ""
 "\n"
 "Diese Prüfung kann in den DeltaGen Optionen deaktiviert werden."
 msgstr ""
 
-#: modules\knecht_plmxml.py:180
-msgid "DeltaGen Szene erfolgreich mit PlmXml abgeglichen."
+#: modules\knecht_plmxml.py:186
+msgid "DeltaGen Szenenstruktur erfolgreich mit PlmXml Struktur abgeglichen."
 msgstr ""
 
-#: modules\knecht_plmxml.py:182
+#: modules\knecht_plmxml.py:188
 msgid "Konnte DeltaGen Szene nicht mit PlmXml abgleichen. Keine Verbindung zum AsConnector2."
 msgstr ""
 
-#: modules\knecht_plmxml.py:185
+#: modules\knecht_plmxml.py:191
 msgid ""
 "\n"
 "Die folgenden Material Targets fehlen oder sind nicht geladen:\n"
 msgstr ""
 
-#: modules\knecht_plmxml.py:196
+#: modules\knecht_plmxml.py:202
 msgid "Konfiguriere PlmXml Instanz"
 msgstr ""
 
-#: modules\knecht_plmxml.py:212
-msgid "Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur."
+#: modules\knecht_plmxml.py:217
+msgid "Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur ..."
+msgstr ""
+
+#: modules\knecht_plmxml.py:226
+msgid "Konfiguriere DeltaGen Szenenstruktur ..."
 msgstr ""
 
 #: modules\knecht_render.py:98
@@ -1937,51 +1965,51 @@ msgstr ""
 msgid "Sende Einstellungen..."
 msgstr ""
 
-#: modules\knecht_render.py:311 modules\knecht_render.py:395
+#: modules\knecht_render.py:317 modules\knecht_render.py:401
 msgid "Konvertiere Bilddaten..."
 msgstr ""
 
-#: modules\knecht_render.py:376 modules\knecht_render.py:377
+#: modules\knecht_render.py:382 modules\knecht_render.py:383
 msgid "Prüfe Bilddaten..."
 msgstr ""
 
-#: modules\knecht_render.py:381 modules\knecht_render.py:382
+#: modules\knecht_render.py:387 modules\knecht_render.py:388
 msgid "Rendering erzeugt."
 msgstr ""
 
-#: modules\knecht_render.py:387
+#: modules\knecht_render.py:393
 msgid "Erzeuge nächstes Bild in {}..."
 msgstr ""
 
-#: modules\knecht_render.py:428
+#: modules\knecht_render.py:434
 msgid "Bild Konvertierung: {}"
 msgstr ""
 
-#: modules\knecht_render.py:437
+#: modules\knecht_render.py:443
 msgid "Render Vorgang abgebrochen.{}Konnte keine Verbindung zu einer DeltaGen Instanz herstellen."
 msgstr ""
 
-#: modules\knecht_render.py:476
+#: modules\knecht_render.py:482
 msgid "Bilddaten konnten nicht als gültiges Bild verifiziert werden.{}"
 msgstr ""
 
-#: modules\knecht_render.py:488
+#: modules\knecht_render.py:494
 msgid "Bilddaten wurden erfolgreich verifiziert: {}"
 msgstr ""
 
-#: modules\knecht_render.py:498
+#: modules\knecht_render.py:504
 msgid "{0}Datei konnte nicht als gültige Bilddatei verfiziert werden: {1}{0}"
 msgstr ""
 
-#: modules\knecht_render.py:541
+#: modules\knecht_render.py:547
 msgid "{} Einstellungen - "
 msgstr ""
 
-#: modules\knecht_render.py:542
+#: modules\knecht_render.py:548
 msgid "Sampling: {} - Res: "
 msgstr ""
 
-#: modules\knecht_render.py:543
+#: modules\knecht_render.py:549
 msgid "{}px - Ext: "
 msgstr ""
 
@@ -1991,6 +2019,54 @@ msgstr ""
 
 #: modules\knecht_session.py:282
 msgid "Sitzungswiederherstellung abgeschlossen"
+msgstr ""
+
+#: modules\knecht_socketio.py:46
+msgid "Verbunden zum SteckbuchseReinRaus Server"
+msgstr ""
+
+#: modules\knecht_socketio.py:51
+msgid "Verbunden als {}"
+msgstr ""
+
+#: modules\knecht_socketio.py:57 modules\knecht_socketio.py:202
+msgid "Verbindung getrennt."
+msgstr ""
+
+#: modules\knecht_socketio.py:72
+msgid "Erhielt Transfer Presets Ereignis mit Daten:"
+msgstr ""
+
+#: modules\knecht_socketio.py:95
+msgid "Erhielt Senden PR-String Ereignis mit Daten:"
+msgstr ""
+
+#: modules\knecht_socketio.py:133
+msgid "PlmXml Datei Eintrag gefunden aber keine lokale Datei vorhanden!"
+msgstr ""
+
+#: modules\knecht_socketio.py:148
+msgid "Konnte Datei nicht heruterladen von: {}"
+msgstr ""
+
+#: modules\knecht_socketio.py:158
+msgid "Konnte Download Datei nicht finden: {}"
+msgstr ""
+
+#: modules\knecht_socketio.py:165
+msgid "Konnte Download Datei nicht speichern: {}"
+msgstr ""
+
+#: modules\knecht_socketio.py:184
+msgid "Verbinde mit {} als {}"
+msgstr ""
+
+#: modules\knecht_socketio.py:190
+msgid "<b>Konnte nicht verbinden mit {}: {}</b>"
+msgstr ""
+
+#: modules\knecht_socketio.py:192
+msgid "Navigieren Sie zu Ihrer KnechtWolke Benutzer Profil and transferieren sie die Einstellungen hier. Prüfen Sie die korrekte Adresse eingegeben zu haben und das jener Server verfügbar ist von Ihrem lokalen Bereichsnetz. Tun Sie auch diese App zu Ihrer Feuerwalzenweißliste hinzu."
 msgstr ""
 
 #: modules\knecht_update.py:216
@@ -2029,135 +2105,135 @@ msgstr ""
 msgid "Version {} ist bereit zur Installation."
 msgstr ""
 
-#: modules\path_render_service.py:36
+#: modules\path_render_service.py:39
 msgid "Status prüfen"
 msgstr ""
 
-#: modules\path_render_service.py:37
+#: modules\path_render_service.py:40
 msgid "Render Dienst im lokalen Netzwerk suchen"
 msgstr ""
 
-#: modules\path_render_service.py:85
+#: modules\path_render_service.py:88
 msgid "Benutze die Szeneneinstellung der Maya Binary Szene. Crypto Material AOV muss vorhanden sein!"
 msgstr ""
 
-#: modules\path_render_service.py:106
+#: modules\path_render_service.py:109
 msgid "Ausgabe Verzeichnis auswählen"
 msgstr ""
 
-#: modules\path_render_service.py:123
+#: modules\path_render_service.py:126
 msgid "Ausgabeverzeichnis"
 msgstr ""
 
-#: modules\path_render_service.py:123
+#: modules\path_render_service.py:126
 msgid "Fortschritt"
 msgstr ""
 
-#: modules\path_render_service.py:123
+#: modules\path_render_service.py:126
 msgid "Job Titel"
 msgstr ""
 
-#: modules\path_render_service.py:123
+#: modules\path_render_service.py:126
 msgid "Szenendatei"
 msgstr ""
 
-#: modules\path_render_service.py:124
+#: modules\path_render_service.py:127
 msgid "Klient"
 msgstr ""
 
-#: modules\path_render_service.py:124
+#: modules\path_render_service.py:127
 msgid "Läuft ab"
 msgstr ""
 
-#: modules\path_render_service.py:124
+#: modules\path_render_service.py:127
 msgid "Remote Index"
 msgstr ""
 
-#: modules\path_render_service.py:214
+#: modules\path_render_service.py:219
 msgid "Suche nach Dienst im lokalen Netzwerk."
 msgstr ""
 
-#: modules\path_render_service.py:230
+#: modules\path_render_service.py:235
 msgid "Pfad Äffchen Render Dienst gefunden<br>IP: <i>{}</i>"
 msgstr ""
 
-#: modules\path_render_service.py:236
+#: modules\path_render_service.py:241
 msgid "Kein Pfad Äffchen Render Dienst im lokalen Netzwerk gefunden"
 msgstr ""
 
-#: modules\path_render_service.py:241
+#: modules\path_render_service.py:246
 msgid "Render Service erfolgreich verbunden.<br>"
 msgstr ""
 
-#: modules\path_render_service.py:247
+#: modules\path_render_service.py:252
 msgid "Szenen Datei gesetzt:<br><i>{}</i>"
 msgstr ""
 
-#: modules\path_render_service.py:252
+#: modules\path_render_service.py:257
 msgid "Ungültiger / Nicht existenter Szenen-Pfad angegeben."
 msgstr ""
 
-#: modules\path_render_service.py:258
+#: modules\path_render_service.py:263
 msgid " Setze vorherigen Szenenpfad."
 msgstr ""
 
-#: modules\path_render_service.py:259
+#: modules\path_render_service.py:264
 msgid "Vorherigen Szenenpfad gesetzt:<br><i>{}</i>"
 msgstr ""
 
-#: modules\path_render_service.py:262
+#: modules\path_render_service.py:267
 msgid "Ungültigen Szenenpfad verworfen. Kein Szenen-Pfad gesetzt."
 msgstr ""
 
-#: modules\path_render_service.py:268
+#: modules\path_render_service.py:273
 msgid "Ausgabeverzeichnis gesetzt:<br><i>{}</i>"
 msgstr ""
 
-#: modules\path_render_service.py:277
+#: modules\path_render_service.py:282
 msgid "CSB Import Option gesetzt: <i>ignoreHiddenObject={}</i>"
 msgstr ""
 
-#: modules\path_render_service.py:287
+#: modules\path_render_service.py:292
 msgid "Maya Prozess Option gesetzt: <i>maya_delete_hidden={}</i>"
 msgstr ""
 
-#: modules\path_render_service.py:297
+#: modules\path_render_service.py:302
 msgid "Maya Prozess Option gesetzt: <i>use_scene_settings={}</i>"
 msgstr ""
 
-#: modules\path_render_service.py:314
+#: modules\path_render_service.py:319
 msgid "<b>Ungültige Job Daten:</b><br>"
 msgstr ""
 
-#: modules\path_render_service.py:326
+#: modules\path_render_service.py:331
 msgid "{} übertragen für {}<br>"
 msgstr ""
 
-#: modules\path_render_service.py:359
+#: modules\path_render_service.py:364
 msgid "Verzeichnis existiert nicht.<br>{}<br>"
 msgstr ""
 
-#: modules\path_render_service.py:397
+#: modules\path_render_service.py:402
 msgid "Fehler: Datei {} konnte nicht entfernt werden.<br>{}<br>"
 msgstr ""
 
-#: modules\path_render_service.py:402
+#: modules\path_render_service.py:407
 msgid "Datei {} <b>existiert nicht mehr oder kann nicht gefunden werden.</b><br>"
 msgstr ""
 
-#: modules\path_render_service.py:406
+#: modules\path_render_service.py:411
 msgid "Datei {} wurde entfernt."
 msgstr ""
 
-#: modules\path_render_service.py:456
+#: modules\path_render_service.py:461
 msgid "<b>{}</b><br><i>Die bereits ausgegebenen Bilddaten werden in einem PSD zusammengestellt und der Job wird abgeschlossen. Dies kann wenige Minuten dauern.</i><br>"
 msgstr ""
 
-#: modules\path_render_service.py:486
+#: modules\path_render_service.py:491
 msgid "<b>Render Service Warteschlange fertiggestellt.</b><br><i>Automatische Job Manager Updates wurden ausgeschaltet.</i><br>"
 msgstr ""
 
-#: modules\path_render_service.py:542
+#: modules\path_render_service.py:547
 msgid "<span style=\"color:red;\"><b>Verbindung zum Render Dienst getrennt.</b></span><br>"
 msgstr ""
 

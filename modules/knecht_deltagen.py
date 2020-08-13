@@ -36,6 +36,7 @@ class CommunicateDeltaGenSignals(QObject):
     socketio_discon = Signal()
     socketio_conn = Signal()
     socketio_send_var = Signal(KnechtVariantList)
+    socketio_transfer = Signal(dict)
     progress = Signal(int)
     variant_status = Signal(KnechtVariant)
 
@@ -74,6 +75,7 @@ class CommunicateDeltaGen(Thread):
     socketio_disconn = signals.socketio_discon
     socketio_conn = signals.socketio_conn
     socketio_send_var = signals.socketio_send_var
+    socketio_transfer = signals.socketio_transfer
     progress = signals.progress
     variant_status = signals.variant_status
 
@@ -93,7 +95,7 @@ class CommunicateDeltaGen(Thread):
             is scheduled, loop will pick up send operation on next loop cycle.
         """
         self.wolke = WolkeServer(self.socketio_status, self.socketio_conn, self.socketio_disconn,
-                                 self.socketio_send_var)
+                                 self.socketio_send_var, self.socketio_transfer)
 
         while not self.exit_event.is_set():
             if self.send_operation_in_progress:
@@ -335,6 +337,7 @@ class SendToDeltaGen(QObject):
     socketio_connected = Signal()
     socketio_disconnected = Signal()
     socketio_send_variants = Signal(KnechtVariantList)
+    socketio_transfer_variants = Signal(dict)
 
     def __init__(self, ui):
         """ Controls the DeltaGen communication thread.
@@ -386,6 +389,7 @@ class SendToDeltaGen(QObject):
         self.dg.socketio_conn.connect(self.socketio_connected)
         self.dg.socketio_disconn.connect(self.socketio_disconnected)
         self.dg.socketio_send_var.connect(self.socketio_send_variants)
+        self.dg.socketio_transfer.connect(self.socketio_transfer_variants)
 
         # Prepare thread inbound signals
         self.transfer_variants.connect(self.dg.set_variants_ls)
