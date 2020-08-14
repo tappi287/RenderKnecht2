@@ -14,7 +14,7 @@ from modules.itemview.tree_view import KnechtTreeView
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.knecht_plmxml import KnechtPlmXmlController
 from modules.knecht_socket import Ncat
-from modules.knecht_socketio import WolkeServer
+from modules.knecht_socketio import WolkeController
 from modules.knecht_objects import KnechtVariant, KnechtVariantList
 from modules.language import get_translation
 from modules.log import init_logging
@@ -80,22 +80,31 @@ class CommunicateDeltaGen(Thread):
     variant_status = signals.variant_status
 
     # --- SocketIO --
-    wolke = None
+    wolke_controller = None
 
-    def __init__(self):
+    def __init__(self, ui):
         super(CommunicateDeltaGen, self).__init__()
+        self.app = ui.app
+
         # --- External event to end thread ---
         self.exit_event = Event()
 
         # --- Socket Communication Class ---
         self.nc = Ncat(DG_TCP_IP, DG_TCP_PORT)
 
+        self.socketio_exit = Event()
+        self.socketio_connect_event = Event()
+        self.socketio_disconn_event = Event()
+
     def run(self):
         """ Thread loop running until exit_event set. As soon as a new send operation
             is scheduled, loop will pick up send operation on next loop cycle.
         """
-        self.wolke = WolkeServer(self.socketio_status, self.socketio_conn, self.socketio_disconn,
-                                 self.socketio_send_var, self.socketio_transfer)
+        self.wolke_controller = WolkeController(self.app, self.socketio_exit, self.socketio_connect_event,
+                                                self.socketio_disconn_event,self.socketio_status,
+                                                self.socketio_conn, self.socketio_disconn,
+                                                self.socketio_send_var, self.socketio_transfer)
+        self.wolke_controller.start()
 
         while not self.exit_event.is_set():
             if self.send_operation_in_progress:
@@ -108,17 +117,23 @@ class CommunicateDeltaGen(Thread):
                 self._send_command_operation(self.command_ls.pop(0))
 
             self.exit_event.wait(timeout=0.8)
-        self.close_socket_io()
 
+        self.close_socket_io()
         LOGGER.debug('CommunicateDeltaGen Thread returned from run loop.')
 
     def start_socket_io(self):
         """ Called by user from GUI menu """
-        self.wolke.connect_wolke()
+        self.socketio_connect_event.set()
+
+    def disconnect_socket_io(self):
+        """ Called by user from GUI menu """
+        self.socketio_disconn_event.set()
 
     def close_socket_io(self):
         """ Called upon thread end """
-        self.wolke.disconnect_wolke()
+        LOGGER.info('Requesting WolkeServer thread to exit.')
+        self.socketio_exit.set()
+        self.wolke_controller.join(timeout=18)
 
     @Slot(bool)
     def set_rendering_mode(self, val: bool):
@@ -377,7 +392,7 @@ class SendToDeltaGen(QObject):
         self.plm_xml_controller.scene_active_result.connect(self._request_active_scene_result)
 
         # Prepare Send Thread
-        self.dg = CommunicateDeltaGen()
+        self.dg = CommunicateDeltaGen(self.ui)
 
         # Prepare thread outbound signals
         self.dg.status.connect(self._update_status)
@@ -399,7 +414,7 @@ class SendToDeltaGen(QObject):
         self.abort_operation.connect(self.dg.abort)
         self.restore_viewer_cmd.connect(self.dg.restore_viewer)
         self.start_socketio.connect(self.dg.start_socket_io)
-        self.stop_socketio.connect(self.dg.close_socket_io)
+        self.stop_socketio.connect(self.dg.disconnect_socket_io)
 
         self.dg.start()
 

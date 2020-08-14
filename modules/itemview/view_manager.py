@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Union, Tuple, List
+from typing import Union, Tuple
 
 from PySide2.QtCore import QObject, Qt, Signal, Slot
 from PySide2.QtWidgets import QApplication, QLineEdit, QTabWidget, QTreeView, QVBoxLayout, QWidget, QUndoGroup

@@ -12,7 +12,7 @@ from modules.globals import DeltaGenResult
 from modules.gui.widgets.message_box import GenericErrorBox
 from modules.gui.widgets.path_util import path_exists
 from modules.itemview.tree_view import KnechtTreeView
-from modules.knecht_deltagen import CommunicateDeltaGen, SendToDeltaGen
+from modules.knecht_deltagen import SendToDeltaGen
 from modules.knecht_image import KnechtImage, OpenImageUtil
 from modules.knecht_utils import time_string
 from modules.knecht_objects import KnechtRenderPreset, KnechtVariantList

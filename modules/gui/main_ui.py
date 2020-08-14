@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Union
 
 from PySide2.QtCore import QTimer, Qt, Signal
 from PySide2.QtGui import QIcon, QPixmap, QDragEnterEvent, QDropEvent

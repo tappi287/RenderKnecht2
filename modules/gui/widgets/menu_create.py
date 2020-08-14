@@ -1,10 +1,9 @@
-from typing import List, Union
+from typing import Union
 
-from PySide2.QtCore import Slot, Qt
+from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QMainWindow, QMenu, QAction, QActionGroup
 
 from modules.gui.ui_resource import IconRsc
-from modules.idgen import KnechtUuidGenerator as Kid
 from modules.itemview.editor_create import ItemTemplates
 from modules.itemview.item import KnechtItem
 from modules.itemview.model_globals import KnechtModelGlobals as Kg

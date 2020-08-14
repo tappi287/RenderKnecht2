@@ -1,10 +1,9 @@
 from PySide2 import QtWidgets
 
-from modules.gui.ui_resource import IconRsc
 from modules.knecht_update import restart_knecht_app
 from modules.settings import KnechtSettings
 from modules.gui.gui_utils import ConnectCall
-from modules.gui.widgets.message_box import GenericMsgBox, AskToContinue
+from modules.gui.widgets.message_box import AskToContinue
 from modules.language import get_translation
 from modules.log import init_logging
 

@@ -1,4 +1,4 @@
-from typing import Iterator, Tuple, Generator
+from typing import Tuple
 from PySide2.QtCore import QModelIndex, Qt
 
 from modules.itemview.item import KnechtItem

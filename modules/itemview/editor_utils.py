@@ -2,12 +2,10 @@ from typing import List, Tuple
 
 from PySide2.QtCore import QModelIndex, QUuid, Qt
 
-from modules.idgen import KnechtUuidGenerator
 from modules.itemview.item import KnechtItem
 from modules.itemview.model import KnechtModel
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.model_update import UpdateModel
-from modules.knecht_camera import KnechtImageCameraInfo
 from modules.language import get_translation
 from modules.log import init_logging
 

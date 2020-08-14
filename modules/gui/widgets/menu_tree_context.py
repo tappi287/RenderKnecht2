@@ -3,7 +3,7 @@ from pathlib import Path
 from PySide2 import QtCore
 from PySide2.QtCore import QUrl
 from PySide2.QtGui import QDesktopServices, QKeySequence
-from PySide2.QtWidgets import QAction, QActionGroup, QMenu, QPushButton
+from PySide2.QtWidgets import QAction, QActionGroup, QMenu
 
 from modules.globals import get_settings_dir
 from modules.gui.ui_generic_tab import GenericTabWidget

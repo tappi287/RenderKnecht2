@@ -1,4 +1,3 @@
-from PySide2.QtCore import QObject
 from PySide2.QtWidgets import QAction, QMenu, QPushButton
 
 from modules.gui.ui_resource import IconRsc

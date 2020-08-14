@@ -1,6 +1,6 @@
 from PySide2.QtCore import QTimer, Qt, QEvent, QObject
-from PySide2.QtGui import QIcon, QKeySequence
-from PySide2.QtWidgets import QPushButton, QTreeView, QWizardPage, QWizard, QLineEdit, QMenu, QAction
+from PySide2.QtGui import QIcon
+from PySide2.QtWidgets import QPushButton, QTreeView, QWizardPage, QLineEdit, QMenu, QAction
 
 from modules.globals import Resource
 from modules.gui.gui_utils import SetupWidget, replace_widget
@@ -10,7 +10,6 @@ from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.model_update import UpdateModel
 from modules.itemview.tree_view import KnechtTreeView
 from modules.itemview.tree_view_utils import KnechtTreeViewShortcuts
-from modules.knecht_objects import KnTrim
 from modules.language import get_translation
 from modules.log import init_logging
 

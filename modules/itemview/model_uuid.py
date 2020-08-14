@@ -1,6 +1,6 @@
 from typing import Iterable, Iterator, Tuple, Union, List
 
-from PySide2.QtCore import QModelIndex, QObject, QSortFilterProxyModel, QUuid, Slot
+from PySide2.QtCore import QModelIndex, QObject, QSortFilterProxyModel, QUuid
 
 from modules.idgen import is_valid_uuid
 from modules.itemview.item import KnechtItem

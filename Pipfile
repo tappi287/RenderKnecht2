@@ -22,6 +22,7 @@ ujson = "*"
 mysql-connector = "*"
 setuptools = "*"
 python-socketio = {extras = ["client"],version = "*"}
+knecht-socketio-client = {version = "*",index = "piwigo"}
 
 [dev-packages]
 paramiko = "*"

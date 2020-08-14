@@ -1,11 +1,11 @@
 from pathlib import Path
 from threading import Thread
 
-from PySide2.QtCore import QByteArray, QEvent, QFile, QIODevice, QObject, QTimer, Qt, Signal, Slot
-from PySide2.QtWidgets import QAction, QCheckBox, QDialog, QGroupBox, QLabel, QLineEdit, QMenu, QTabWidget, QTreeView
+from PySide2.QtCore import QByteArray, QFile, QIODevice, QObject, QTimer, Qt, Signal, Slot
+from PySide2.QtWidgets import QCheckBox, QDialog, QGroupBox, QLabel, QLineEdit, QTabWidget
 
 from modules.globals import Resource
-from modules.gui.gui_utils import SetupWidget, replace_widget
+from modules.gui.gui_utils import SetupWidget
 from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.message_box import AskToContinue, GenericMsgBox
 from modules.gui.widgets.path_util import path_exists
@@ -15,8 +15,8 @@ from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.itemview.model_update import UpdateModel
 from modules.itemview.tree_view import KnechtTreeView
 from modules.itemview.tree_view_checkable import KnechtTreeViewCheckable
-from modules.itemview.tree_view_utils import KnechtTreeViewShortcuts, setup_header_layout
-from modules.knecht_excel import ExcelData, ExcelReader
+from modules.itemview.tree_view_utils import setup_header_layout
+from modules.knecht_excel import ExcelReader
 from modules.knecht_excel_data import ExcelDataToKnechtData
 from modules.knecht_fakom import FakomReader, FakomData
 from modules.knecht_objects import KnData

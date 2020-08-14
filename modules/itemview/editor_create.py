@@ -1,8 +1,7 @@
 from typing import List, Union
 
-from PySide2.QtCore import QObject, Qt, QTimer
+from PySide2.QtCore import QObject, Qt
 
-from modules.gui.clipboard import TreeClipboard
 from modules.idgen import KnechtUuidGenerator as Kid, KnechtUuidGenerator
 from modules.itemview.item import KnechtItem
 from modules.itemview.model_globals import KnechtModelGlobals as Kg

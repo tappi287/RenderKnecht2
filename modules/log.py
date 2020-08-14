@@ -1,12 +1,10 @@
-import sys
-from pathlib import Path
 import logging
 import logging.config
-
+import sys
 from logging.handlers import QueueHandler, QueueListener
-from PySide2.QtCore import QObject, Signal
+from pathlib import Path
 
-from modules.globals import get_settings_dir, LOG_FILE_NAME, FROZEN, MAIN_LOGGER_NAME, DEV_LOGGER_NAME
+from modules.globals import DEV_LOGGER_NAME, FROZEN, LOG_FILE_NAME, MAIN_LOGGER_NAME, get_settings_dir
 
 
 def setup_logging(logging_queue, overwrite_level: str=None):
@@ -81,7 +79,10 @@ def setup_logging(logging_queue, overwrite_level: str=None):
             # Module loggers
             ''              : {
                 'handlers': ['queueHandler'], 'propagate': False, 'level': log_level,
-                }
+                },
+            'socketio_proc' : {
+                'handlers': ['queueHandler'], 'propagate': False, 'level': log_level,
+                },
             }
         }
 
@@ -118,30 +119,6 @@ def init_logging(logger_name):
           sys._getframe().f_back.f_code.co_name, '- Level:', logging.getLevelName(logger.getEffectiveLevel()))
 
     return logger
-
-
-class _HandlerSignal(QObject):
-    log_message = Signal(str)
-
-
-class QPlainTextEditHandler(logging.Handler):
-    """ Log handler that appends text to QPlainTextEdit """
-
-    def __init__(self):
-        super(QPlainTextEditHandler, self).__init__()
-        self.Signal_cls = _HandlerSignal()
-        self.log_message = self.Signal_cls.log_message
-
-    def emit(self, record):
-        msg = None
-
-        try:
-            msg = self.format(record)
-            self.log_message.emit(msg)
-        except Exception as e:
-            # MS Visual Studio 15.4.x BUG ?, channel is not defined
-            print(e)
-            pass
 
 
 class LoggerDummy:

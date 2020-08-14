@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5236df2c3f95e00ba63b5f52de24e6248d20f7e4bf0ef5013a490b04bafa90c2"
+            "sha256": "90c461dbf1afa1b13542c1c0c3dd9a04c4b80b9c87826f204ca3a795cd0c2556"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -61,6 +61,13 @@
             ],
             "index": "pypi",
             "version": "==1.4.1"
+        },
+        "knecht-socketio-client": {
+            "hashes": [
+                "sha256:c810281914bab04eb402b4f3eca775882191ff543f0dccfea622cf3d86a4633b"
+            ],
+            "index": "piwigo",
+            "version": "==0.9"
         },
         "lxml": {
             "hashes": [
@@ -290,6 +297,13 @@
         }
     },
     "develop": {
+        "altgraph": {
+            "hashes": [
+                "sha256:1f05a47122542f97028caf78775a095fbe6a2699b5089de8477eb583167d69aa",
+                "sha256:c623e5f3408ca61d4016f23a681b9adb100802ca3e3da5e718915a9e4052cebe"
+            ],
+            "version": "==0.17"
+        },
         "bcrypt": {
             "hashes": [
                 "sha256:0258f143f3de96b7c14f762c770f5fc56ccd72f8a1857a451c1cd9a655d9ac89",
@@ -371,6 +385,12 @@
             ],
             "version": "==3.0"
         },
+        "future": {
+            "hashes": [
+                "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"
+            ],
+            "version": "==0.18.2"
+        },
         "paramiko": {
             "hashes": [
                 "sha256:920492895db8013f6cc0179293147f830b8c7b21fdfc839b6bad760c27459d9f",
@@ -378,6 +398,12 @@
             ],
             "index": "pypi",
             "version": "==2.7.1"
+        },
+        "pefile": {
+            "hashes": [
+                "sha256:a5d6e8305c6b210849b47a6174ddf9c452b2888340b8177874b862ba6c207645"
+            ],
+            "version": "==2019.4.18"
         },
         "pycparser": {
             "hashes": [
@@ -387,8 +413,18 @@
             "version": "==2.20"
         },
         "pyinstaller": {
-            "git": "https://github.com/pyinstaller/pyinstaller.git",
-            "ref": "4249a7347f6b81aba9825ded8addb92ee0f85ea9"
+            "hashes": [
+                "sha256:970beb07115761d5e4ec317c1351b712fd90ae7f23994db914c633281f99bab0"
+            ],
+            "index": "pypi",
+            "version": "==4.0"
+        },
+        "pyinstaller-hooks-contrib": {
+            "hashes": [
+                "sha256:5b6e06ba6072499189f5b8e1623d5f0414962941aac370ee4f842de25455be5b",
+                "sha256:74936d044f319cd7a9dca322b46a818fcb6e2af1c67af62e8a6a3121eb2863d2"
+            ],
+            "version": "==2020.7"
         },
         "pynacl": {
             "hashes": [
@@ -410,6 +446,13 @@
                 "sha256:f8851ab9041756003119368c1e6cd0b9c631f46d686b3904b18c0139f4419f80"
             ],
             "version": "==1.4.0"
+        },
+        "pywin32-ctypes": {
+            "hashes": [
+                "sha256:24ffc3b341d457d48e8922352130cf2644024a4ff09762a2261fd34c36ee5942",
+                "sha256:9dc2d991b3479cc2df15930958b674a48a227d5361d413827a4cfd0b5876fc98"
+            ],
+            "version": "==0.2.0"
         },
         "six": {
             "hashes": [

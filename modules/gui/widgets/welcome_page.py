@@ -1,13 +1,13 @@
 import time
 from pathlib import Path
 
-from PySide2.QtCore import QEvent, Qt, QTimer, QFile, QIODevice, QByteArray
-from PySide2.QtWidgets import QPushButton, QVBoxLayout, QWidget, QGroupBox, QCommandLinkButton
+from PySide2.QtCore import Qt, QTimer, QFile, QIODevice, QByteArray
+from PySide2.QtWidgets import QPushButton, QVBoxLayout, QWidget, QGroupBox
 
 from modules import KnechtSettings
 from modules.globals import Resource
 from modules.gui.gui_utils import SetupWidget
-from modules.itemview.xml import SaveLoadController, XmlWorkThread
+from modules.itemview.xml import XmlWorkThread
 from modules.language import get_translation
 from modules.log import init_logging
 

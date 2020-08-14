@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from PySide2.QtCore import Signal, Slot, QObject, QEvent
+from PySide2.QtCore import Signal, Slot
 from PySide2.QtWidgets import QDialog, QGroupBox, QLabel, QLineEdit, QToolButton
 
 from modules import KnechtSettings

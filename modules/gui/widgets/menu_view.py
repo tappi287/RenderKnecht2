@@ -3,7 +3,7 @@ from PySide2.QtWidgets import QMenu, QAction, QActionGroup
 from modules.gui.widgets.message_box import AskToContinue
 from modules.knecht_update import restart_knecht_app
 from modules.settings import KnechtSettings
-from modules.gui.ui_resource import FontRsc, IconRsc
+from modules.gui.ui_resource import FontRsc
 from modules.language import get_translation
 from modules.log import init_logging
 

@@ -1,4 +1,4 @@
-from PySide2.QtCore import QTimer, Slot
+from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QMenu, QAction, QActionGroup, QMainWindow
 
 from modules.gui.ui_resource import IconRsc

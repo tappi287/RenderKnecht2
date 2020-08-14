@@ -3,7 +3,6 @@ import time
 from datetime import datetime
 from pathlib import Path
 from typing import List
-import concurrent.futures
 
 from PySide2.QtCore import QObject, QTimer, Signal
 from PySide2.QtWidgets import QTextBrowser
@@ -66,7 +65,7 @@ class KnechtWolkeUi(QObject):
         self.ui.autostartCheckBox.setChecked(KnechtSettings.wolke.get('autostart', False))
         self.ui.autostartCheckBox.toggled.connect(self.toggle_autostart)
 
-        self.ui_elements = (self.ui.hostEdit, self.ui.portEdit, self.ui.userEdit, self.ui.connectBtn)
+        self.ui_elements = (self.ui.hostEdit, self.ui.portEdit, self.ui.userEdit, self.ui.connectBtn, self.ui.tokenEdit)
 
         self.model_loaded.connect(self.ui.main_menu.file_menu.model_loaded)
 
@@ -75,11 +74,12 @@ class KnechtWolkeUi(QObject):
         QTimer.singleShot(1000, self.delayed_setup)
 
         # -- Warning --
+        """ no longer applies
         self.txt.append(_('<b>ACHTUNG</b> Dieses Feature ist noch nicht für den produktiv Einsatz freigegeben. '
                           'Sockenströme verursachen weltumspannende Interpretierer Sperren! '
                           'Die Anwendung kann bei Verwendung jederzeit unvorhergesehen hängen. Vor dem testen '
                           'wichtige Dokumente sichern!'))
-
+        """
     def delayed_setup(self):
         self.ui.app.send_dg.socketio_status.connect(self.update_txt)
         self.ui.app.send_dg.socketio_connected.connect(self.connected)
@@ -134,6 +134,7 @@ class KnechtWolkeUi(QObject):
 
         plmxml_item = self._create_top_level_item(root_item, ItemTemplates.plmxml)
         plmxml_item.setData(Kg.VALUE, plmxml_path)
+        plmxml_item.setData(Kg.NAME, Path(plmxml_path).name)
 
         root_item.append_item_child(plmxml_item)
         sep = self._create_top_level_item(root_item, ItemTemplates.separator)
@@ -210,6 +211,8 @@ class KnechtWolkeUi(QObject):
         item = template
         item = item.copy()
         item.setData(Kg.ORDER, f'{root_item.childCount():03d}')
+        if template == ItemTemplates.separator:
+            return item
         item.setData(Kg.ID, Kid.create_id())
         return item
 

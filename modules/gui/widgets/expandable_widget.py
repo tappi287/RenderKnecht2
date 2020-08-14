@@ -1,5 +1,5 @@
 from PySide2.QtCore import QAbstractAnimation, QEasingCurve, QPropertyAnimation, QSize, QObject
-from PySide2.QtWidgets import QPushButton, QWidget, QDialog
+from PySide2.QtWidgets import QPushButton, QWidget
 
 from modules.language import get_translation
 from modules.log import init_logging

@@ -1,11 +1,13 @@
 import re
+from multiprocessing import Queue
 from pathlib import Path
-from typing import Optional
-from multiprocessing import process, Queue
+from queue import Empty
+from threading import Event, Thread
+from typing import Optional, Union
 
 import requests
-import socketio
 from PySide2.QtCore import QModelIndex, Signal
+from knecht_socketio_client import SocketProcess
 
 from modules import KnechtSettings
 from modules.globals import get_settings_dir
@@ -21,15 +23,26 @@ lang.install()
 _ = lang.gettext
 
 
-class WolkeServer:
+def get_queue(queue, timeout: int = 1) -> Optional[Union[str, dict, None]]:
+    try:
+        return queue.get(timeout=timeout)
+    except Empty:
+        pass
+
+
+# noinspection PyUnresolvedReferences
+class WolkeController(Thread):
     empty_model_index = QModelIndex()
 
-    def __init__(self, status_signal: Signal, connected_signal: Signal, disconnected_signal: Signal,
+    def __init__(self, app, exit_event: Event, connect_event: Event, disconnect_event: Event,
+                 status_signal: Signal, connected_signal: Signal, disconnected_signal: Signal,
                  send_var_signal: Signal, transfer_signal: Signal):
-        self.sio = socketio.Client(reconnection=False)
-        self.id = str()
-        self.host = ''
-        self.port = ''
+        super(WolkeController, self).__init__()
+        self.app = app
+
+        self.exit_event = exit_event
+        self.connect_event = connect_event
+        self.disconnect_event = disconnect_event
 
         self.status_signal = status_signal
         self.connected_signal = connected_signal
@@ -37,38 +50,85 @@ class WolkeServer:
         self.send_variants = send_var_signal
         self.transfer_variants = transfer_signal
 
-        self._setup_socketio_events()
+        self.in_queue = Queue()
+        self.cmd_queue = Queue()
 
-    def _setup_socketio_events(self):
-        @self.sio.on('connect')
-        def on_connect():
+    def run(self):
+        s = SocketProcess(self.app.logging_queue, self.in_queue, self.cmd_queue)
+
+        while not self.exit_event.is_set():
+            # -- Process incoming app events
+            if self.connect_event.is_set():
+                if not s.is_alive():
+                    s.start()
+                self.connect_wolke()
+            if self.disconnect_event.is_set():
+                self.disconnect_wolke()
+
+            # -- Process SocketIo Events
+            event_contents = get_queue(self.in_queue)
+            if event_contents:
+                self._process_socketio_events(event_contents)
+
+            self.exit_event.wait(2)
+
+        self.cmd_queue.put(dict(cmd='shutdown'))
+        s.join(timeout=10)
+
+    def connect_wolke(self):
+        self.cmd_queue.put(
+            {'cmd': 'connect', 'data': {'host': KnechtSettings.wolke.get('host'),
+                                        'port': KnechtSettings.wolke.get('port'),
+                                        'user': KnechtSettings.wolke.get('user'),
+                                        'token': KnechtSettings.wolke.get("token")}}
+            )
+        self.status_signal.emit(_('Verbinde mit {} als {}').format(KnechtSettings.wolke.get('host'),
+                                                                   KnechtSettings.wolke.get("user")))
+        self.connect_event.clear()
+
+    def disconnect_wolke(self):
+        self.cmd_queue.put({'cmd': 'disconnect'})
+        self.disconnect_event.clear()
+
+    def connect_failed(self):
+        LOGGER.error('Error connecting to socketio Server: ')
+        self.status_signal.emit(_('<b>Konnte nicht verbinden mit {}</b>').format(KnechtSettings.wolke.get('host')))
+        self.status_signal.emit(
+            _('Navigieren Sie zu Ihrer KnechtWolke Benutzer Profil and transferieren sie die '
+              'Einstellungen hier. Prüfen Sie die korrekte Adresse eingegeben zu haben '
+              'und das jener Server verfügbar ist von Ihrem lokalen Bereichsnetz. '
+              'Tun Sie auch diese App zu Ihrer Feuerwalzenweißliste hinzu.'))
+
+    def _process_socketio_events(self, e: dict):
+        event = e.get('event', '')
+        data = e.get('data', dict())
+
+        if event == 'connect':
             LOGGER.info('Connected to SocketIO Server')
             self.connected_signal.emit()
             self.status_signal.emit(_('Verbunden zum SteckbuchseReinRaus Server'))
-
-        @self.sio.on('client_id_created')
-        def on_client_id_created(data):
-            self.id = data.get('id')
-            self.status_signal.emit(_('Verbunden als {}').format(self.id))
-
-        @self.sio.on('disconnect')
-        def on_disconnect():
-            LOGGER.info('Disconnected')
+        # -- Connect Failed
+        elif event == 'connect_failed':
+            self.connect_failed()
+        # -- Disconnected
+        elif event in ('disconnect_success', 'disconnect'):
+            LOGGER.info('Disconnected from SocketIO Server.')
             self.disconnected_signal.emit()
             self.status_signal.emit(_('Verbindung getrennt.'))
-
-        @self.sio.on('send_pr_string')
-        def on_send_pr_string(data):
+        # -- Client Id created
+        elif event == 'client_id_created':
+            self.status_signal.emit(_('Verbunden als {}').format(data.get('id')))
+        # -- Send PR-String
+        elif event == 'send_pr_string':
             LOGGER.debug('Received PR-String send event with data: %s', data)
             self.send_pr_string(data)
-
-        @self.sio.on('transfer_presets')
-        def on_transfer_presets(data):
+        # -- Transfer Preset
+        elif event == 'transfer_presets':
             LOGGER.debug('Received Transfer Presets event with data: %s', data)
             self.transfer_presets(data)
 
     def transfer_presets(self, data: dict):
-        url = f"{self.host}:{self.port}{data.get('url')}"
+        url = f"{KnechtSettings.wolke.get('host')}:{KnechtSettings.wolke.get('port')}{data.get('url')}"
         file_hash = data.get("hash")
         self.status_signal.emit(_('Erhielt Transfer Presets Ereignis mit Daten:') +
                                 f'<br />{data.get("document_label")} '
@@ -91,7 +151,7 @@ class WolkeServer:
             self.transfer_variants.emit({'label': data.get('document_label'), 'presets': presets})
 
     def send_pr_string(self, data: dict):
-        url = f"{self.host}:{self.port}{data.get('url')}"
+        url = f"{KnechtSettings.wolke.get('host')}:{KnechtSettings.wolke.get('port')}{data.get('url')}"
         file_hash = data.get("hash")
         self.status_signal.emit(_('Erhielt Senden PR-String Ereignis mit Daten:') +
                                 f'<br />{data.get("name")}<br />'
@@ -166,38 +226,3 @@ class WolkeServer:
             self.status_signal.emit(_('Konnte Download Datei nicht speichern: {}').format(url))
 
         return True
-
-    @staticmethod
-    def _create_send_data(data: dict = None):
-        send_data = {
-            'app'  : 'RenderKnecht', 'user': KnechtSettings.wolke.get('user'),
-            'token': KnechtSettings.wolke.get("token")}
-
-        if data:
-            send_data.update(data)
-        return send_data
-
-    def connect_wolke(self):
-        if not self.sio.connected:
-            self.host = KnechtSettings.wolke.get('host')
-            self.port = KnechtSettings.wolke.get('port')
-            host = f"{self.host}:{self.port}"
-            self.status_signal.emit(_('Verbinde mit {} als {}').format(host, KnechtSettings.wolke.get("user")))
-
-            try:
-                self.sio.connect(host, headers=self._create_send_data())
-            except Exception as e:
-                LOGGER.error('Error connecting to socketio Server: %s', e)
-                self.status_signal.emit(_('<b>Konnte nicht verbinden mit {}: {}</b>').format(host, e))
-                self.status_signal.emit(
-                    _('Navigieren Sie zu Ihrer KnechtWolke Benutzer Profil and transferieren sie die '
-                      'Einstellungen hier. Prüfen Sie die korrekte Adresse eingegeben zu haben '
-                      'und das jener Server verfügbar ist von Ihrem lokalen Bereichsnetz. '
-                      'Tun Sie auch diese App zu Ihrer Feuerwalzenweißliste hinzu.'))
-
-    def disconnect_wolke(self):
-        if self.sio.connected:
-            self.sio.emit('client_disconnected', self._create_send_data())
-            self.sio.disconnect()
-            self.disconnected_signal.emit()
-            self.status_signal.emit(_('Verbindung getrennt.'))

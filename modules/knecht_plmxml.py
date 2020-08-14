@@ -4,7 +4,6 @@ from typing import Tuple
 
 from PySide2.QtCore import QObject, Signal
 
-from modules import KnechtSettings
 from modules.globals import DeltaGenResult
 from modules.knecht_objects import KnechtVariantList
 from modules.language import get_translation

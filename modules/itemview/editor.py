@@ -1,7 +1,6 @@
 from typing import List
 
-from PySide2.QtCore import QItemSelectionModel, QModelIndex, QObject, Qt
-from PySide2.QtWidgets import QTreeView
+from PySide2.QtCore import QItemSelectionModel, QModelIndex, QObject
 
 from modules.itemview.editor_collect import KnechtCollectVariants
 from modules.itemview.editor_copypaste import KnechtEditorCopyPaste

@@ -1,8 +1,7 @@
 import logging
-import multiprocessing
 import sys
 import signal
-from multiprocessing import Queue
+from multiprocessing import Queue, freeze_support
 
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QApplication
@@ -20,7 +19,7 @@ if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     print('Using high dpi Pixmaps')
 
-VERSION = '1.4'
+VERSION = '1.41'
 
 InfoMessage.ver = VERSION
 InfoMessage.lic = 'GPL v3'
@@ -28,6 +27,7 @@ InfoMessage.auth = 'Stefan Tapper'
 InfoMessage.mail = 'tapper.stefan@gmail.com'
 InfoMessage.cred = ['Python Community', 'PyCharm Community Edition', 'Stackoverflow', 'PySide Docs']
 
+# TODO: Shutdown SocketIO Client before GUI is locked while closing
 # TODO: Implement PlmXml QA LookLibrary Targets != AsConnector2.targetGetAllNames
 # should find Targets that are listed inside PlmXml but not available inside the DG Scene
 # maybe even catch the error before configuring to prevent AsConnector Exception resulting
@@ -64,7 +64,6 @@ def shutdown(log_listener):
 def main():
     s = SingleInstance(flavor_id='RenderKnecht2instance')  # will sys.exit(-1) if other instance is running
 
-    multiprocessing.freeze_support()
     if FROZEN:
         # Set Exception hook
         sys.excepthook = KnechtExceptionHook.exception_hook
@@ -122,4 +121,5 @@ def main():
 
 
 if __name__ == '__main__':
+    freeze_support()  # it is important to have this line exactly here << !!!
     main()
