@@ -171,7 +171,7 @@ class KnechtWolkeUi(QObject):
 
         #  - Viewsets -
         views = list()
-        for shot in ('Shot_05', 'Shot_06'):
+        for shot in ('Shot-05', 'Shot-06'):
             view = self._create_top_level_item(root_item, ItemTemplates.viewset)
             view.setData(Kg.NAME, f'Viewset_{shot}')
             view.child(0).setData(Kg.VALUE, shot)

@@ -133,7 +133,7 @@ class CommunicateDeltaGen(Thread):
         """ Called upon thread end """
         LOGGER.info('Requesting WolkeServer thread to exit.')
         self.socketio_exit.set()
-        self.wolke_controller.join(timeout=18)
+        self.wolke_controller.join(timeout=5)
 
     @Slot(bool)
     def set_rendering_mode(self, val: bool):
@@ -340,6 +340,7 @@ class SendToDeltaGen(QObject):
 
     restore_viewer_cmd = Signal()
     operation_result = Signal(int)
+    threads_finished = Signal()
 
     abort_operation = Signal()
 
@@ -567,6 +568,8 @@ class SendToDeltaGen(QObject):
             self.dg.exit_event.set()
             LOGGER.debug('Joining DeltaGen communication Thread.')
             self.dg.join(timeout=10)
+
+        self.threads_finished.emit()
 
     def _setup_main_gui(self):
         """ Setup the quick access controls in MainWindow """

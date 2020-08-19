@@ -82,6 +82,7 @@ class KnechtApp(QtWidgets.QApplication):
         # -- Show main window --
         self.ui.show()
 
+        self.ready_to_quit = False
         self.aboutToQuit.connect(self.about_to_quit)
 
         splash.finish(self.ui)
@@ -173,7 +174,7 @@ class KnechtApp(QtWidgets.QApplication):
 
         if confirm_close:
             self.save_session()
-            self.quit()
+            self.about_to_quit()
 
     def init_session(self):
         self.session_handler = KnechtSession(self.ui, idle_save=True)
@@ -215,6 +216,7 @@ class KnechtApp(QtWidgets.QApplication):
         self.ui.system_tray.hide()
         self.ui.system_tray.deleteLater()
 
+        self.send_dg.threads_finished.connect(self.quit)
         self.send_dg.end_thread()
 
     def set_default_style(self):
