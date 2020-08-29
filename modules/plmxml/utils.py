@@ -25,6 +25,34 @@ def create_pr_string_from_variants(variants_ls: KnechtVariantList) -> str:
     return pr_conf
 
 
+def _split_not_pr_tag(t):
+    """ Split incoming PR-Tag Part ABC!DEF or !DEF or DEF
+        => ABC!DEF -> (?=.*\bABC\b)(?!.*\bDEF\b)
+        => !DEF -> (?!.*\bDEF\b)
+        => DEF -> (?=.*\bDEF\b)
+
+    :param t: input PR-Tag part
+    :return: Reg-Ex pattern
+    """
+    if '!' in t and t[0] != '!':
+        # Case were NOT operator -is not- separated by +
+        # t = ABC!DEF
+        n_ex = f'(?=.*\\b{t.split("!")[0]}\\b)'
+        for n in t.split('!')[1:]:
+            n_ex += f'(?!.*\\b{n}\\b)'
+    elif t[0] == '!':
+        # Case were NOT operator -is- separated by +
+        # ABC+!DEF
+        # t = !DEF
+        n_ex = f'(?!.*\\b{t[1:]}\\b)'
+    else:
+        # Case with -no- NOT operator
+        # t = DEF
+        n_ex = f'(?=.*\\b{t}\\b)'
+
+    return n_ex
+
+
 def pr_tags_to_reg_ex(pr_tags: Union[None, str]) -> str:
     """ Convert PR_TAGS to RegEx pattern that can be matched against a complete configuration string.
 
@@ -36,6 +64,7 @@ def pr_tags_to_reg_ex(pr_tags: Union[None, str]) -> str:
     :param str pr_tags: String of PR_TAGS
     :return: Return a regex pattern that can be matched against a configuration string
     """
+
     pattern = ''
 
     if not pr_tags or pr_tags is None:
@@ -66,10 +95,10 @@ def pr_tags_to_reg_ex(pr_tags: Union[None, str]) -> str:
             #
             if '/' in w:
                 for s in w.split('/'):
-                    s_ex += f'(?=.*\\b{s}\\b)|'
+                    s_ex += f'{_split_not_pr_tag(s)}|'
                 s_ex = f'({s_ex[:-1]})'
             elif w:
-                r_ex = f'(?=.*\\b{w}\\b)'
+                r_ex = _split_not_pr_tag(w)
 
             tag_pattern += r_ex + s_ex
 
