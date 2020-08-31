@@ -425,7 +425,7 @@ class SendToDeltaGen(QObject):
         self.finished_queue = list()
 
     def send_variants(self, variant_ls: KnechtVariantList, view: Union[KnechtTreeView, None]=None):
-        LOGGER.debug('Received variants:', variant_ls)
+        LOGGER.debug('Received variants: %s', variant_ls)
         if self.is_running():
             return
 

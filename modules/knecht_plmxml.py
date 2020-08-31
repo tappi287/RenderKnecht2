@@ -3,16 +3,15 @@ from threading import Thread
 from typing import Tuple
 
 from PySide2.QtCore import QObject, Signal
+from plmxml import PlmXml
 
 from modules.globals import DeltaGenResult
 from modules.knecht_objects import KnechtVariantList
 from modules.language import get_translation
 from modules.log import init_logging
-from modules.plmxml import PlmXml
-from modules.plmxml.configurator import PlmXmlConfigurator
-from modules.plmxml.connector import AsConnectorConnection
-from modules.plmxml.request import AsSceneSetActiveRequest, AsSceneGetAllRequest, AsSceneGetActiveRequest
-from modules.plmxml.utils import create_pr_string_from_variants
+from modules.asconnector.configurator import PlmXmlConfigurator
+from modules.asconnector.connector import AsConnectorConnection
+from modules.asconnector.request import AsSceneSetActiveRequest, AsSceneGetAllRequest, AsSceneGetActiveRequest
 
 # from private.plmxml_example_data import example_pr_string, plm_xml_file
 
@@ -232,3 +231,12 @@ class KnechtUpdatePlmXml(Thread):
         if result == DeltaGenResult.send_success:
             self.signals.plmxml_result.emit(conf.status_msg)
         self.signals.send_finished.emit(result)
+
+
+def create_pr_string_from_variants(variants_ls: KnechtVariantList) -> str:
+    pr_conf = ''
+
+    for variant in variants_ls.variants:
+        pr_conf += f'+{variant.name}'
+
+    return pr_conf

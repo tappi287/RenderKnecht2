@@ -1,14 +1,15 @@
 import re
 from typing import Tuple, List, Set, Dict
 
+from plmxml import PlmXml
+from plmxml.objects import NodeInfo, MaterialTarget
+from plmxml.utils import pr_tags_to_reg_ex
+
 from modules.language import get_translation
 from modules.log import init_logging
-from modules.plmxml import PlmXml
-from modules.plmxml.connector import AsConnectorConnection
-from modules.plmxml.objects import NodeInfo, MaterialTarget
-from modules.plmxml.request import AsNodeSetVisibleRequest, AsMaterialConnectToTargetsRequest, \
+from modules.asconnector.connector import AsConnectorConnection
+from modules.asconnector.request import AsNodeSetVisibleRequest, AsMaterialConnectToTargetsRequest, \
     AsSceneGetStructureRequest, AsTargetGetAllNamesRequest
-from modules.plmxml.utils import pr_tags_to_reg_ex
 
 LOGGER = init_logging(__name__)
 

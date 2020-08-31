@@ -3,11 +3,11 @@ from typing import Iterator, List, Union, Dict
 
 from lxml import etree as Et
 from requests import Response
+from plmxml.globals import PlmXmlGlobals as Pg
+from plmxml.objects import MaterialTarget, NodeInfo, NodeInfoTypes
 
 from modules.language import get_translation
 from modules.log import init_logging
-from modules.plmxml.globals import PlmXmlGlobals as Pg
-from modules.plmxml.objects import MaterialTarget, NodeInfo, NodeInfoTypes
 
 LOGGER = init_logging(__name__)
 

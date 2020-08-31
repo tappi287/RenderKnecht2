@@ -5,7 +5,7 @@ from modules.globals import Resource
 from modules.gui.gui_utils import SetupWidget
 from modules.language import get_translation
 from modules.log import init_logging
-from modules.plmxml import PlmXml
+from plmxml import PlmXml
 
 LOGGER = init_logging(__name__)
 

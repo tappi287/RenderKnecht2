@@ -23,6 +23,7 @@ mysql-connector = "*"
 setuptools = "*"
 python-socketio = {extras = ["client"],version = "*"}
 knecht-socketio-client = {version = "*",index = "piwigo"}
+plmxml = {version = "*",index = "piwigo"}
 
 [dev-packages]
 paramiko = "*"

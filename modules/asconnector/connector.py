@@ -2,7 +2,7 @@ import requests
 
 from modules.language import get_translation
 from modules.log import init_logging
-from modules.plmxml.request import AsConnectorRequest, AsGetVersionInfoRequest, AsGetSelectedNodeEventRequest
+from modules.asconnector.request import AsConnectorRequest, AsGetVersionInfoRequest, AsGetSelectedNodeEventRequest
 
 LOGGER = init_logging(__name__)
 

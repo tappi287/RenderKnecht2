@@ -15,10 +15,10 @@ from modules.itemview.tree_view import KnechtTreeView
 from modules.knecht_deltagen import SendToDeltaGen
 from modules.knecht_image import KnechtImage, OpenImageUtil
 from modules.knecht_utils import time_string
+from modules.knecht_plmxml import create_pr_string_from_variants
 from modules.knecht_objects import KnechtRenderPreset, KnechtVariantList
 from modules.language import get_translation
 from modules.log import init_logging
-from modules.plmxml.utils import create_pr_string_from_variants
 from modules.settings import KnechtSettings
 
 LOGGER = init_logging(__name__)

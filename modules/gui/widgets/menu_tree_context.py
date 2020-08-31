@@ -16,7 +16,7 @@ from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.knecht_update import restart_knecht_app
 from modules.language import get_translation
 from modules.log import init_logging
-from modules.plmxml import PlmXml
+from plmxml import PlmXml
 
 LOGGER = init_logging(__name__)
 
