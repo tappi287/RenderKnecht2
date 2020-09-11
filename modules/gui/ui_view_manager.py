@@ -27,7 +27,7 @@ class UiViewManager(ViewManager):
                        'Diese werden durch Schließen des Dokumentes aus der Zwischenablage <b>entfernt</b>.')
     close_clip_ok = _('Schließen')
 
-    def __init__(self, ui, initial_tree_view):
+    def __init__(self, ui):
         self.ui = ui
         self.app = ui.app
 
@@ -39,9 +39,7 @@ class UiViewManager(ViewManager):
 
         # Validate camera_item values on initial view creation
         self.view_updated.connect(KnechtImageCameraInfo.validate_camera_items)
-
         self.view_about_to_be_removed.connect(self.remove_view)
-        self.setup_initial_tab_view(initial_tree_view)
 
     def setup_initial_tab_view(self, initial_tree_view):
         new_view = self.replace_tree_view(initial_tree_view)

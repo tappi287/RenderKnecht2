@@ -12,7 +12,7 @@ verify_ssl = true
 openimageio = {version = "==2.1.16",index = "piwigo"}
 lxml = "*"
 numpy = "==1.18.4"
-pyside2 = "==5.15.0"
+pyside2 = "==5.15.1"
 pandas = "*"
 xlrd = "*"
 requests = "==2.23.0"

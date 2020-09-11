@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from PySide2.QtWidgets import QWidget
+from PySide2.QtWidgets import QWidget, QTabWidget
 from PySide2.QtCore import QObject, QSize, QPropertyAnimation, QEasingCurve, QAbstractAnimation, Property
 from PySide2.QtGui import QColor, QPalette
 
@@ -106,6 +106,47 @@ class BgrAnimation(QObject):
             LOGGER.debug('Error setting widget background color: %s', e)
 
     backColor = Property(QColor, _get_back_color, _set_back_color)
+
+
+class TabBgrAnimation(BgrAnimation):
+    def __init__(self, tab_widget):
+        """ Animate the background color of the last tab of a tabwidget
+
+        :param tab_widget:
+        """
+        widget = tab_widget
+        if type(tab_widget) is QTabWidget:
+            widget = tab_widget.tabBar()
+            LOGGER.debug('Tab Bar: %s', widget)
+
+        self.style = '''
+            QTabBar::tab:last {{ background-color: {}; 
+                                 border: 1px solid rgb(221, 221, 221); padding-left: 15px;}}
+            QTabBar::tab:last:selected {{ background-color: rgb(255, 255, 255);}}
+            QTabBar::tab:last:hover {{ background-color: rgb(216, 234, 249);}}
+        '''
+
+        super(TabBgrAnimation, self).__init__(widget, tuple())
+
+        # -- Overwrite color_anim --
+        #    makes sure we do not animate backColor wihich would actually change tabWidgets
+        #    background.
+        self.color_anim = QPropertyAnimation(self, b'styleAnim')
+        self.color_anim.setEasingCurve(QEasingCurve.InOutSine)
+        self._setup_blink()
+
+    def _get_back_color(self):
+        return self.color
+
+    def _set_back_color(self, color):
+        self.color = color
+        qss_color = f'rgba({color.red()}, {color.green()}, {color.blue()}, {color.alpha()})'
+        try:
+            self.widget.setStyleSheet(self.style.format(qss_color))
+        except AttributeError as e:
+            LOGGER.debug('Error setting widget background color: %s', e)
+
+    styleAnim = Property(QColor, _get_back_color, _set_back_color)
 
 
 class AnimatedButton:

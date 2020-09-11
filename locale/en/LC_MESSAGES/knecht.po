@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-08-13 15:21+0200\n"
-"PO-Revision-Date: 2020-08-13 15:26+0200\n"
+"POT-Creation-Date: 2020-09-11 18:57+0200\n"
+"PO-Revision-Date: 2020-09-11 19:02+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -364,27 +364,24 @@ msgstr "  0: Loaded state of the document"
 msgid "  0: Aktueller Zustand des Dokuments"
 msgstr "  0: Current state of the document"
 
-#: modules/gui/widgets\knechtwolke.py:38
+#: modules/gui/widgets\knechtwolke.py:43
 msgid "Verbindung herstellen"
 msgstr "Connect"
 
-#: modules/gui/widgets\knechtwolke.py:52 modules/gui/widgets\knechtwolke.py:95
+#: modules/gui/widgets\knechtwolke.py:57 modules/gui/widgets\knechtwolke.py:103
+#: modules/gui\ui_resource.py:107
 msgid "Verbinden"
 msgstr "Connect"
 
-#: modules/gui/widgets\knechtwolke.py:54
+#: modules/gui/widgets\knechtwolke.py:59 modules/gui\ui_resource.py:108
 msgid "Trennen"
 msgstr "Disconnect"
 
-#: modules/gui/widgets\knechtwolke.py:59
+#: modules/gui/widgets\knechtwolke.py:64
 msgid "Beim Anwendungsstart automatisch verbinden"
 msgstr "Automatically connect when the application starts"
 
-#: modules/gui/widgets\knechtwolke.py:70
-msgid "<b>ACHTUNG</b> Dieses Feature ist noch nicht für den produktiv Einsatz freigegeben. Sockenströme verursachen weltumspannende Interpretierer Sperren! Die Anwendung kann bei Verwendung jederzeit unvorhergesehen hängen. Vor dem testen wichtige Dokumente sichern!"
-msgstr "<b>ATTENTION</b> This feature is not yet released for productive use. Sock streams cause worldwide interpreters to block! The application may hang unexpectedly at any time when used. Back up important documents before testing!"
-
-#: modules/gui/widgets\knechtwolke.py:89
+#: modules/gui/widgets\knechtwolke.py:97
 msgid "Verbunden"
 msgstr "Connected"
 
@@ -396,15 +393,23 @@ msgstr "Estimated Render time ({} CPUs/GI)"
 msgid "Ausgabe Verzeichnis auswählen ..."
 msgstr "Choose output directory ..."
 
-#: modules/gui/widgets\main_ui_widgets.py:140
+#: modules/gui/widgets\main_ui_widgets.py:111
+msgid "Mitteilungen der Anwendung werden hier aufgelistet."
+msgstr "Messages from the application are listed here."
+
+#: modules/gui/widgets\main_ui_widgets.py:112
+msgid "<h4>Mitteilungen Browser</h4>"
+msgstr "<h4>Message Browser</h4>"
+
+#: modules/gui/widgets\main_ui_widgets.py:145
 msgid "Fehler beim sammeln der Preset Varianten. Einige Inhalte der Render Presets existieren nicht mehr."
 msgstr "Error collecting the preset variants. Some of the content of the Render Presets no longer exists."
 
-#: modules/gui/widgets\main_ui_widgets.py:148
+#: modules/gui/widgets\main_ui_widgets.py:153
 msgid "Es läuft bereits ein Render Vorgang."
 msgstr "Render process is already running."
 
-#: modules/gui/widgets\main_ui_widgets.py:170
+#: modules/gui/widgets\main_ui_widgets.py:175
 msgid "abgeschlossen am: "
 msgstr "finished on: "
 
@@ -425,67 +430,67 @@ msgstr "No AsConnector Connection or no Scene loaded."
 msgid "AsConnector Szenen angefordert, einen Moment."
 msgstr "AsConnector scenes requested. This will take a Moment."
 
-#: modules/gui/widgets\menu_create.py:25 modules/gui/widgets\welcome_page.py:40
+#: modules/gui/widgets\menu_create.py:24 modules/gui/widgets\welcome_page.py:40
 msgid "Erstellen"
 msgstr "Create"
 
-#: modules/gui/widgets\menu_create.py:36
+#: modules/gui/widgets\menu_create.py:35
 msgid "User Preset aus Selektion"
 msgstr "User preset from selection"
 
-#: modules/gui/widgets\menu_create.py:44
+#: modules/gui/widgets\menu_create.py:43
 msgid "Render Preset aus Selektion"
 msgstr "Render preset from selection"
 
-#: modules/gui/widgets\menu_create.py:50
+#: modules/gui/widgets\menu_create.py:49
 msgid "Render Preset\tEnthält User Presets, Viewsets und Rendereinstellungen"
 msgstr "Render Preset\tContains User Presets, Viewsets and Render Settings"
 
-#: modules/gui/widgets\menu_create.py:52
+#: modules/gui/widgets\menu_create.py:51
 msgid "User Preset\tEnthält Varianten und/oder Referenzen"
 msgstr "User Preset\tContains Variants and or References"
 
-#: modules/gui/widgets\menu_create.py:54
+#: modules/gui/widgets\menu_create.py:53
 msgid "Viewset\tEnthält **eine** Shot Variante"
 msgstr "Viewset\tContains **only one** Shot Variant"
 
-#: modules/gui/widgets\menu_create.py:56
+#: modules/gui/widgets\menu_create.py:55
 msgid "Reset\tVarianten für eine Resetschaltung"
 msgstr "Reset\tVariants for reset switches"
 
-#: modules/gui/widgets\menu_create.py:58
+#: modules/gui/widgets\menu_create.py:57
 msgid "Trimline Preset\tVarianten für eine Serienschaltung"
 msgstr "Trimline Preset\tVariants for standard equipment"
 
-#: modules/gui/widgets\menu_create.py:60
+#: modules/gui/widgets\menu_create.py:59
 msgid "Paket Preset\tVarianten eines Pakets"
 msgstr "Package Preset\tVariants of a package"
 
-#: modules/gui/widgets\menu_create.py:62
+#: modules/gui/widgets\menu_create.py:61
 msgid "FaKom Serien\tVarianten einer Serien Farbkombination"
 msgstr "FaKom series\tVariants of a series color combination"
 
-#: modules/gui/widgets\menu_create.py:64
+#: modules/gui/widgets\menu_create.py:63
 msgid "FaKom Option\tVarianten einer Farbkombination"
 msgstr "FaKom option\tVariants of a color combination"
 
-#: modules/gui/widgets\menu_create.py:66
+#: modules/gui/widgets\menu_create.py:65
 msgid "Ausgabe Objekt\tDefiniert einen Ausgabepfad"
 msgstr "Output node\tDefines an Output directory"
 
-#: modules/gui/widgets\menu_create.py:68
+#: modules/gui/widgets\menu_create.py:67
 msgid "PlmXml Objekt\tDefiniert einen Pfad zur PlmXml Datei"
 msgstr "PlmXml Object\tDefines a path to an PlmXml file"
 
-#: modules/gui/widgets\menu_create.py:70
+#: modules/gui/widgets\menu_create.py:69
 msgid "Kamera Objekt\tEnthält 3DS DeltaGen Kameradaten"
 msgstr "Camera Object\tContains 3DS DeltaGen Camera Data"
 
-#: modules/gui/widgets\menu_create.py:72
+#: modules/gui/widgets\menu_create.py:71
 msgid "Separator\tNicht-interagierbares Ordnungselement"
 msgstr "Separator\tNon-interactable order element"
 
-#: modules/gui/widgets\menu_create.py:109
+#: modules/gui/widgets\menu_create.py:108
 msgid "DeltaGen_Kamera_{:03d}"
 msgstr "DeltaGen_Camera_{:03d}"
 
@@ -554,7 +559,7 @@ msgid "Einfügen\tStrg+V"
 msgstr "Paste\tCtrl+V"
 
 #: modules/gui/widgets\menu_edit.py:86
-#: modules/gui/widgets\menu_tree_context.py:88 modules/gui/wizard\preset.py:296
+#: modules/gui/widgets\menu_tree_context.py:88 modules/gui/wizard\preset.py:295
 msgid "Selektierte Zeilen entfernen\tEntf"
 msgstr "Remove selected rows\tDel"
 
@@ -646,7 +651,7 @@ msgstr "Image conversion could not be started. No convertible files found."
 msgid "Ergebnis der Bildkonvertierung:"
 msgstr "Result of image conversion:"
 
-#: modules/gui/widgets\menu_file.py:342 modules/gui/wizard\menus.py:77
+#: modules/gui/widgets\menu_file.py:342 modules/gui/wizard\menus.py:76
 msgid "Keine Einträge vorhanden"
 msgstr "No entries"
 
@@ -699,7 +704,7 @@ msgstr "Move to the beginning of the queue"
 msgid "An das Ende der Warteschlange"
 msgstr "Move to the end of the queue"
 
-#: modules/gui/widgets\menu_language.py:21
+#: modules/gui/widgets\menu_language.py:20
 msgid "Sprache"
 msgstr "Language"
 
@@ -886,7 +891,7 @@ msgstr "Continue"
 
 #: modules/gui/widgets\message_box.py:69 modules/gui/widgets\message_box.py:114
 #: modules/gui/wizard\wizard.py:48 modules/gui/wizard\wizard.py:189
-#: modules/gui\main_app.py:150 modules/gui\main_app.py:169 modules\job.py:15
+#: modules/gui\main_app.py:151 modules/gui\main_app.py:170 modules\job.py:15
 msgid "Abbrechen"
 msgstr "Cancel"
 
@@ -1036,71 +1041,71 @@ msgstr "Select Color combinations from which to create presets."
 msgid "Ausgewählte Presets"
 msgstr "Selected Presets"
 
-#: modules/gui/wizard\menus.py:27
+#: modules/gui/wizard\menus.py:26
 msgid "Öffnen"
 msgstr "Open"
 
-#: modules/gui/wizard\menus.py:28
+#: modules/gui/wizard\menus.py:27
 msgid "Speichern unter ..."
 msgstr "Save as ..."
 
-#: modules/gui/wizard\menus.py:29
+#: modules/gui/wizard\menus.py:28
 msgid "Letzte Sitzung wiederherstellen"
 msgstr "Restore last session"
 
-#: modules/gui/wizard\menus.py:30
+#: modules/gui/wizard\menus.py:29
 msgid "Zurücksetzen"
 msgstr "Reset"
 
-#: modules/gui/wizard\menus.py:32
+#: modules/gui/wizard\menus.py:31
 msgid "Wizard Sitzung aus Datei laden"
 msgstr "Load wizard session from file"
 
-#: modules/gui/wizard\menus.py:33
+#: modules/gui/wizard\menus.py:32
 msgid "Wizard Sitzung in Datei sichern"
 msgstr "Save wizard session to file"
 
-#: modules/gui/wizard\menus.py:34
+#: modules/gui/wizard\menus.py:33
 msgid "Letzte automatisch gesicherte Sitzung wiederherstellen"
 msgstr "Restore last automatically saved session"
 
-#: modules/gui/wizard\menus.py:35
+#: modules/gui/wizard\menus.py:34
 msgid "Preset Wizard neustarten und vorhandene Daten verwerfen"
 msgstr "Reset Preset Wizard and discard existing data"
 
-#: modules/gui/wizard\menus.py:69
+#: modules/gui/wizard\menus.py:68
 msgid "Navigation"
 msgstr "Navigation"
 
-#: modules/gui/wizard\preset.py:70
+#: modules/gui/wizard\preset.py:69
 msgid "Preset auto&magisch befüllen"
 msgstr "Fill preset auto&magically"
 
-#: modules/gui/wizard\preset.py:72
+#: modules/gui/wizard\preset.py:71
 msgid "Aktuelles Preset automagisch mit nicht verwendeten Optionen befüllen. Bezugs-, Sitz-, Leder oder Fahrwerksoptionen werden ignoriert."
 msgstr "Automagically fill current preset with unused options. Seat cover, seat type, leather or ride height options are ignored."
 
-#: modules/gui/wizard\preset.py:80
+#: modules/gui/wizard\preset.py:79
 msgid "Bereits verwendete Optionen ein- oder ausblenden"
 msgstr "Hide already used options"
 
-#: modules/gui/wizard\preset.py:87
+#: modules/gui/wizard\preset.py:86
 msgid "Bereits verwendete Optionen für die Bearbeitung sperren"
 msgstr "Block already used Options for editing"
 
-#: modules/gui/wizard\preset.py:94
+#: modules/gui/wizard\preset.py:93
 msgid "Spalte Beschreibung ein- oder ausblenden"
 msgstr "Hide or Show description column"
 
-#: modules/gui/wizard\preset.py:293
+#: modules/gui/wizard\preset.py:292
 msgid "Alle Optionen entfernen"
 msgstr "Remove all options"
 
-#: modules/gui/wizard\preset.py:329
+#: modules/gui/wizard\preset.py:328
 msgid "Selektierte Optionen sperren"
 msgstr "Lock selected Options"
 
-#: modules/gui/wizard\preset.py:333
+#: modules/gui/wizard\preset.py:332
 msgid "Selektierte Optionen entsperren"
 msgstr "Unlock selected options"
 
@@ -1192,40 +1197,40 @@ msgstr "Ok"
 msgid "Soll der Assistent wirklich abgebrochen werden?"
 msgstr "Do you really want to cancel the wizard?"
 
-#: modules/gui\main_app.py:146 modules/gui\main_app.py:165
+#: modules/gui\main_app.py:147 modules/gui\main_app.py:166
 msgid "Anwendung beenden"
 msgstr "Exit application"
 
-#: modules/gui\main_app.py:147
+#: modules/gui\main_app.py:148
 msgid "Achtung! Ein Render Vorgang läuft.<br><br>Der Vorgang wird durch das Beenden abgebrochen.<br><br>Soll die Anwendung wirklich beendet werden?"
 msgstr "Attention! Render process is running.<br><br>The process will be canceled upon quitting.<br><br>Do you really want to exit the application?"
 
-#: modules/gui\main_app.py:151 modules/gui\main_app.py:168
+#: modules/gui\main_app.py:152 modules/gui\main_app.py:169
 msgid "Beenden erzwingen"
 msgstr "Force quit"
 
-#: modules/gui\main_app.py:166
+#: modules/gui\main_app.py:167
 msgid "Achtung! Ein laufender Prozess sendet Daten an DeltaGen.<br><br>Soll die Anwendung wirklich beendet werden?"
 msgstr "Attention! A running process sends data to DeltaGen.<br><br>Do you really want to quit the application?"
 
-#: modules/gui\main_app.py:187
+#: modules/gui\main_app.py:188
 msgid "<h3>Hoppla!</h3>Eine schwerwiegende Anwendungsausnahme ist aufgetreten. Speichern Sie Ihre Daten und starten Sie die Anwendung neu.<br><br>"
 msgstr "<h3> Oops!</h3>A fatal application exception has occurred. Save your data and restart the application.<br><br>"
 
-#: modules/gui\main_app.py:190
+#: modules/gui\main_app.py:191
 msgid "Anwendungsausnahme"
 msgstr "Application Exception"
 
-#: modules/gui\main_ui.py:60
+#: modules/gui\main_ui.py:59
 msgid "Variantenbaum"
 msgstr "Variants Tree"
 
-#: modules/gui\main_ui.py:60 modules/gui\ui_resource.py:119
+#: modules/gui\main_ui.py:59 modules/gui\ui_resource.py:123
 #: modules\knecht_render.py:667
 msgid "Renderliste"
 msgstr "Render Queue"
 
-#: modules/gui\main_ui.py:203
+#: modules/gui\main_ui.py:208
 msgid "Die Varianten enthalten keine Reset Schaltung! Die zu sendenden Varianten werden mit vorangegangen Schaltungen kollidieren."
 msgstr "The variants do not contain a reset circuit! The variants to be sent will collide with previous circuits."
 
@@ -1233,7 +1238,11 @@ msgstr "The variants do not contain a reset circuit! The variants to be sent wil
 msgid "Job übertragen"
 msgstr "Transfer job"
 
-#: modules/gui\ui_resource.py:118
+#: modules/gui\ui_resource.py:109
+msgid "Browser leeren"
+msgstr "Clear message history"
+
+#: modules/gui\ui_resource.py:122
 msgid "Variantenliste"
 msgstr "Variant List"
 
@@ -1438,11 +1447,11 @@ msgstr "Discard clipboard?"
 msgid "Die Zwischenablage enthält <i>{}</i> Elemente aus<br><i>{}</i><br><br>Diese werden durch Schließen des Dokumentes aus der Zwischenablage <b>entfernt</b>."
 msgstr "Clipboard contains <i>{}</i> elements from<br><i>{}</i><br><br>Those will be <b>deleted</b> from the clipboard upon close."
 
-#: modules/gui\ui_view_manager.py:48
+#: modules/gui\ui_view_manager.py:46
 msgid "Neues_Dokument.xml"
 msgstr "New_Document.xml"
 
-#: modules/gui\ui_view_manager.py:143
+#: modules/gui\ui_view_manager.py:141
 msgid "Kann Beschäftigten nicht entlassen. Verstoß gegen Arbeitnehmerschutzgesetz festgestellt."
 msgstr "Can not delete widget that is busy."
 
@@ -1458,107 +1467,107 @@ msgstr "Couldn't create a tree from Excel data."
 msgid "Erstelle Model {} {:02d}/{:02d}..."
 msgstr "Create Model {} {: 02d}/{:02d}..."
 
-#: modules/itemview\editor_create.py:26 modules/itemview\editor_create.py:30
+#: modules/itemview\editor_create.py:25 modules/itemview\editor_create.py:29
 msgid "Sollte einen im Modell vorhanden Reset Schalter betätigen"
 msgstr "Should activate a reset switch if present"
 
-#: modules/itemview\editor_create.py:34
+#: modules/itemview\editor_create.py:33
 msgid "Benötigte Optionen müssen nach dem Reset erneut geschaltet werden."
 msgstr "Required options must be switched again after the reset."
 
-#: modules/itemview\editor_create.py:40
+#: modules/itemview\editor_create.py:39
 msgid "Motorschalter"
 msgstr "Engine switch"
 
-#: modules/itemview\editor_create.py:40
+#: modules/itemview\editor_create.py:39
 msgid "Variante des Modells"
 msgstr "Variant of the model"
 
-#: modules/itemview\editor_create.py:43
+#: modules/itemview\editor_create.py:42
 msgid "Serien_Optionen"
 msgstr "Series_Options"
 
-#: modules/itemview\editor_create.py:43
+#: modules/itemview\editor_create.py:42
 msgid "Varianten der Serienumfänge"
 msgstr "Variants of series scopes"
 
-#: modules/itemview\editor_create.py:47
+#: modules/itemview\editor_create.py:46
 msgid "Paket"
 msgstr "Package"
 
-#: modules/itemview\editor_create.py:49
+#: modules/itemview\editor_create.py:48
 msgid "Paket_Variante"
 msgstr "Package Variant"
 
-#: modules/itemview\editor_create.py:49
+#: modules/itemview\editor_create.py:48
 msgid "Varianten der Paket Option"
 msgstr "Variant of the Package option"
 
-#: modules/itemview\editor_create.py:55
+#: modules/itemview\editor_create.py:54
 msgid "Schalter des Shot Varianten Sets"
 msgstr "Switch of the Shot Variant Set"
 
-#: modules/itemview\editor_create.py:64
+#: modules/itemview\editor_create.py:63
 msgid "Setzt das globale Sampling Level. Benutzt Clamping Einstellungen der geladenen Szene!"
 msgstr "Sets the global sampling level. Uses the Clamping Settings of the loaded Scene!"
 
-#: modules/itemview\editor_create.py:66
+#: modules/itemview\editor_create.py:65
 msgid "Datei Erweiterung"
 msgstr "File Extension"
 
-#: modules/itemview\editor_create.py:67
+#: modules/itemview\editor_create.py:66
 msgid "Setzt die Ausgabe Dateiendung. HDR wird als 8bit ausgegeben und berücksichtigt Viewport Display Adaption."
 msgstr "Sets the File Extension. HDR will be exported as 8bit and respects Viewport Display Settings."
 
-#: modules/itemview\editor_create.py:71
+#: modules/itemview\editor_create.py:70
 msgid "Auflösung"
 msgstr "Resolution"
 
-#: modules/itemview\editor_create.py:72
+#: modules/itemview\editor_create.py:71
 msgid "Auflösung kann auch manuell, mit einem Leerzeichen getrennt, eingegeben werden: X Y"
 msgstr "Resolution can be entered manually separated by a space. eg. X Y"
 
-#: modules/itemview\editor_create.py:78
+#: modules/itemview\editor_create.py:77
 msgid "XX_Farbschluessel"
 msgstr "XX_Colortrim"
 
-#: modules/itemview\editor_create.py:79
+#: modules/itemview\editor_create.py:78
 msgid "Zweistelliger Farbschluessel"
 msgstr "Double-digit color code"
 
-#: modules/itemview\editor_create.py:80
+#: modules/itemview\editor_create.py:79
 msgid "PRN_Sitzbezug"
 msgstr "PRN_SeatCover"
 
-#: modules/itemview\editor_create.py:80
+#: modules/itemview\editor_create.py:79
 msgid "Sitzbezug Option"
 msgstr "Seat cover option"
 
-#: modules/itemview\editor_create.py:81
+#: modules/itemview\editor_create.py:80
 msgid "PRN_Vordersitze"
 msgstr "PRN_FrontSeats"
 
-#: modules/itemview\editor_create.py:81
+#: modules/itemview\editor_create.py:80
 msgid "Sitzart Option"
 msgstr "Seat type Option"
 
-#: modules/itemview\editor_create.py:82
+#: modules/itemview\editor_create.py:81
 msgid "Lederpaket Option"
 msgstr "Leather package option"
 
-#: modules/itemview\editor_create.py:82
+#: modules/itemview\editor_create.py:81
 msgid "PRN_Lederumfang"
 msgstr "PRN_Leather Circumference"
 
-#: modules/itemview\editor_create.py:92
+#: modules/itemview\editor_create.py:91
 msgid "Ausgabe Pfad"
 msgstr "Output Path"
 
-#: modules/itemview\editor_create.py:92 modules/itemview\editor_create.py:95
+#: modules/itemview\editor_create.py:91 modules/itemview\editor_create.py:94
 msgid "<Kein Pfad gesetzt>"
 msgstr "<No valid path>"
 
-#: modules/itemview\editor_create.py:95
+#: modules/itemview\editor_create.py:94
 msgid "PlmXml Datei"
 msgstr "PlmXml File"
 
@@ -1790,59 +1799,59 @@ msgstr "The request to the database did not result in any result."
 msgid "Netzwerkverbindung konnte nicht beendet werden. Bitte warten und in einer Minute erneut versuchen."
 msgstr "Network connection could not be terminated. Please wait and try again in a minute."
 
-#: modules\knecht_deltagen.py:183
+#: modules\knecht_deltagen.py:198
 msgid "DeltaGen Verbindung erfolgreich verifiziert."
 msgstr "DeltaGen connection successfully verified."
 
-#: modules\knecht_deltagen.py:198
+#: modules\knecht_deltagen.py:213
 msgid "DeltaGen Verbindungsversuch ({!s}/{!s}) in {!s} Sekunden..."
 msgstr "DeltaGen connection attempt ({!s}/{!s}) in {!s} seconds ..."
 
-#: modules\knecht_deltagen.py:226
+#: modules\knecht_deltagen.py:241
 msgid "Prüfe Verbindung..."
 msgstr "Checking connection..."
 
-#: modules\knecht_deltagen.py:234
+#: modules\knecht_deltagen.py:249
 msgid "Sperre Viewer Fenster"
 msgstr "Lock viewer window"
 
-#: modules\knecht_deltagen.py:451
+#: modules\knecht_deltagen.py:467
 msgid "AsConnector aktive Szene: {}"
 msgstr "AsConnector active scene: {}"
 
-#: modules\knecht_deltagen.py:474
+#: modules\knecht_deltagen.py:490
 msgid "Es läuft bereits eine DeltaGen Sende Operation! Vorgang abwarten oder abbrechen und anschließend erneut versuchen."
 msgstr "DeltaGen send operation already running! Wait or cancel the running operation."
 
-#: modules\knecht_deltagen.py:515
+#: modules\knecht_deltagen.py:531
 msgid "Kopieren"
 msgstr "Copy"
 
-#: modules\knecht_deltagen.py:524
+#: modules\knecht_deltagen.py:540
 msgid "DeltaGen Sende Operation beendet."
 msgstr "DeltaGen Send Operation finished."
 
-#: modules\knecht_deltagen.py:527
+#: modules\knecht_deltagen.py:543
 msgid "Konnte <b>keine Verbindung</b> zu einer DeltaGen Instanz mit geladener Szene herstellen."
 msgstr "Could not <b> connect </ b> to a DeltaGen instance with a loaded scene."
 
-#: modules\knecht_deltagen.py:532
+#: modules\knecht_deltagen.py:548
 msgid "DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>"
 msgstr "DeltaGen command could not be sent. <b> No connection. </ b>"
 
-#: modules\knecht_deltagen.py:534
+#: modules\knecht_deltagen.py:550
 msgid "DeltaGen Sende Operation <b>abgebrochen.</b>"
 msgstr "DeltaGen Send Operation <b> aborted. </ B>"
 
-#: modules\knecht_deltagen.py:543
+#: modules\knecht_deltagen.py:559
 msgid "{0} {1} gesendet"
 msgstr "{0} {1} sent"
 
-#: modules\knecht_deltagen.py:631
+#: modules\knecht_deltagen.py:649
 msgid "Auswählen"
 msgstr "Select"
 
-#: modules\knecht_deltagen.py:635
+#: modules\knecht_deltagen.py:653
 msgid "Senden an DeltaGen abgeschlossen:<br /><i>{}</i>"
 msgstr "Send operation to DeltaGen finished:<br /><i>{}</i>"
 
@@ -1878,19 +1887,19 @@ msgstr "Couldn't create image file {}: {}"
 msgid "Konnte unkonvertierte Bilddatei nicht verschieben: {}"
 msgstr "Couldn't move unconverted image file: {}"
 
-#: modules\knecht_plmxml.py:176
+#: modules\knecht_plmxml.py:174
 msgid "DeltaGen Szene stimmt nicht mit PlmXml überein. Fehlende Knoten:\n"
 msgstr "DeltaGen scene does not match PlmXml. Missing nodes:\n"
 
-#: modules\knecht_plmxml.py:181
+#: modules\knecht_plmxml.py:179
 msgid ""
 "\n"
 "..und {} weitere Knoten."
 msgstr ""
 "\n"
-".. and {} other nodes."
+".. and {} additional nodes."
 
-#: modules\knecht_plmxml.py:182
+#: modules\knecht_plmxml.py:180
 msgid ""
 "\n"
 "Diese Prüfung kann in den DeltaGen Optionen deaktiviert werden."
@@ -1898,15 +1907,15 @@ msgstr ""
 "\n"
 "This check can be disabled in the DeltaGen options."
 
-#: modules\knecht_plmxml.py:186
+#: modules\knecht_plmxml.py:184
 msgid "DeltaGen Szenenstruktur erfolgreich mit PlmXml Struktur abgeglichen."
 msgstr "DeltaGen scene successfully matched with PlmXml."
 
-#: modules\knecht_plmxml.py:188
+#: modules\knecht_plmxml.py:186
 msgid "Konnte DeltaGen Szene nicht mit PlmXml abgleichen. Keine Verbindung zum AsConnector2."
 msgstr "Could not match DeltaGen scene with PlmXml. No connection to AsConnector2."
 
-#: modules\knecht_plmxml.py:191
+#: modules\knecht_plmxml.py:189
 msgid ""
 "\n"
 "Die folgenden Material Targets fehlen oder sind nicht geladen:\n"
@@ -1914,15 +1923,15 @@ msgstr ""
 "\n"
 "The following material targets are missing or not loaded:\n"
 
-#: modules\knecht_plmxml.py:202
+#: modules\knecht_plmxml.py:200
 msgid "Konfiguriere PlmXml Instanz"
 msgstr "Configure PlmXml Instance"
 
-#: modules\knecht_plmxml.py:217
+#: modules\knecht_plmxml.py:215
 msgid "Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur ..."
 msgstr "Validating DeltaGen scene against PlmXml structure."
 
-#: modules\knecht_plmxml.py:226
+#: modules\knecht_plmxml.py:224
 msgid "Konfiguriere DeltaGen Szenenstruktur ..."
 msgstr "Configuring DeltaGen Scene Structure ..."
 
@@ -2022,53 +2031,53 @@ msgstr "Session successfully saved while idle"
 msgid "Sitzungswiederherstellung abgeschlossen"
 msgstr "Session restore finished"
 
-#: modules\knecht_socketio.py:46
-msgid "Verbunden zum SteckbuchseReinRaus Server"
-msgstr "Connected to the SocketIO Server"
-
-#: modules\knecht_socketio.py:51
-msgid "Verbunden als {}"
-msgstr "Connected as {}"
-
-#: modules\knecht_socketio.py:57 modules\knecht_socketio.py:202
-msgid "Verbindung getrennt."
-msgstr "Disconnected."
-
-#: modules\knecht_socketio.py:72
-msgid "Erhielt Transfer Presets Ereignis mit Daten:"
-msgstr "Received Transfer Presets Event with Data:"
-
-#: modules\knecht_socketio.py:95
-msgid "Erhielt Senden PR-String Ereignis mit Daten:"
-msgstr "Received Send PR-String Event with Data:"
-
-#: modules\knecht_socketio.py:133
-msgid "PlmXml Datei Eintrag gefunden aber keine lokale Datei vorhanden!"
-msgstr "PlmXml file entry found but no local file exists!"
-
-#: modules\knecht_socketio.py:148
-msgid "Konnte Datei nicht heruterladen von: {}"
-msgstr "Couldn't reload file from: {}"
-
-#: modules\knecht_socketio.py:158
-msgid "Konnte Download Datei nicht finden: {}"
-msgstr "Couldn't find download file: {}"
-
-#: modules\knecht_socketio.py:165
-msgid "Konnte Download Datei nicht speichern: {}"
-msgstr "Couldn't save download file: {}"
-
-#: modules\knecht_socketio.py:184
+#: modules\knecht_socketio.py:87
 msgid "Verbinde mit {} als {}"
 msgstr "Connecting to {} as {}"
 
-#: modules\knecht_socketio.py:190
-msgid "<b>Konnte nicht verbinden mit {}: {}</b>"
-msgstr "<b>Couldn't connect to {}: {}</b>"
+#: modules\knecht_socketio.py:97
+msgid "<b>Konnte nicht verbinden mit {}</b>"
+msgstr "<b>Couldn't connect to {}</b>"
 
-#: modules\knecht_socketio.py:192
+#: modules\knecht_socketio.py:99
 msgid "Navigieren Sie zu Ihrer KnechtWolke Benutzer Profil and transferieren sie die Einstellungen hier. Prüfen Sie die korrekte Adresse eingegeben zu haben und das jener Server verfügbar ist von Ihrem lokalen Bereichsnetz. Tun Sie auch diese App zu Ihrer Feuerwalzenweißliste hinzu."
 msgstr "Navigate to your KnechtWolke user profile and transfer the settings here. Check to have entered the correct address and that that server is available from your local area network. Also add this app to your fire roll whitelist."
+
+#: modules\knecht_socketio.py:111
+msgid "Verbunden zum SteckbuchseReinRaus Server"
+msgstr "Connected to the SocketIO Server"
+
+#: modules\knecht_socketio.py:119
+msgid "Verbindung getrennt."
+msgstr "Disconnected."
+
+#: modules\knecht_socketio.py:122
+msgid "Verbunden als {}"
+msgstr "Connected as {}"
+
+#: modules\knecht_socketio.py:135
+msgid "Erhielt Transfer Presets Ereignis mit Daten:"
+msgstr "Received Transfer Presets Event with Data:"
+
+#: modules\knecht_socketio.py:158
+msgid "Erhielt Senden PR-String Ereignis mit Daten:"
+msgstr "Received Send PR-String Event with Data:"
+
+#: modules\knecht_socketio.py:196
+msgid "PlmXml Datei Eintrag gefunden aber keine lokale Datei vorhanden!"
+msgstr "PlmXml file entry found but no local file exists!"
+
+#: modules\knecht_socketio.py:211
+msgid "Konnte Datei nicht heruterladen von: {}"
+msgstr "Couldn't reload file from: {}"
+
+#: modules\knecht_socketio.py:221
+msgid "Konnte Download Datei nicht finden: {}"
+msgstr "Couldn't find download file: {}"
+
+#: modules\knecht_socketio.py:228
+msgid "Konnte Download Datei nicht speichern: {}"
+msgstr "Couldn't save download file: {}"
 
 #: modules\knecht_update.py:216
 msgid "Suche nach Anwendungs Updates gestartet."
@@ -2260,4 +2269,4 @@ msgstr "Open path"
 
 #: modules\path_render_service.py:733
 msgid "Ausgabe öffnen"
-msgstr "Open output"
+msgstr "Open output directory"

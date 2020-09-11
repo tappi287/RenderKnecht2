@@ -60,7 +60,9 @@ class KnechtWindow(QMainWindow):
         tree_filter_widgets = [self.lineEdit_Var_filter, self.lineEdit_Ren_filter]
 
         # View Mgr will replace placeholder presetTree
-        self.view_mgr = UiViewManager(self, self.presetTree)
+        self.view_mgr = UiViewManager(self)
+        self.view_mgr.view_updated.connect(self._connect_message_browser)
+        self.view_mgr.setup_initial_tab_view(self.presetTree)
         # Set presetTree to current View Mgr view to avoid accessing deleted object
         self.presetTree = self.view_mgr.current_view()
 
@@ -155,6 +157,10 @@ class KnechtWindow(QMainWindow):
 
         self.taskbar_progress.setRange(0, 100)
         self.taskbar_progress.valueChanged.connect(self.taskbar_progress.show)
+
+    def _connect_message_browser(self, view: KnechtTreeView):
+        LOGGER.debug('Setting up message browser for: %s', view.objectName())
+        view.info_overlay.setup_message_browser(self.messageBrowser, self.tabWidget)
 
     def show_tray_notification(self, title: str, message: str, clicked_callback=None):
         if not self.system_tray.isVisible():

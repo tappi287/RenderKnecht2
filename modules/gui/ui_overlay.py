@@ -5,7 +5,7 @@ from PySide2.QtCore import QAbstractAnimation, QPropertyAnimation, QTimer, Qt
 from PySide2.QtGui import QEnterEvent, QMouseEvent, QMovie, QRegion
 
 from modules.globals import Resource
-from modules.gui.animation import BgrAnimation
+from modules.gui.animation import BgrAnimation, TabBgrAnimation
 from modules.gui.gui_utils import SetupWidget
 from modules.language import get_translation
 from modules.log import init_logging
@@ -47,6 +47,11 @@ class InfoOverlay(QtWidgets.QWidget):
         self.queue = list()
         self.btn_list = list()
         self.message_active = False
+
+        # -- Prepare Message Browser --
+        self.msg_browser = None
+        self.tab_widget_anim = TabBgrAnimation(self)  # Animate MainWindow TabWidget Tab background color
+        self.use_msg_browser = False
 
         # --- Get header height ---
         self.header_height = 0
@@ -139,6 +144,11 @@ class InfoOverlay(QtWidgets.QWidget):
         reg += self.overlay_grp.frameGeometry()
         self.setMask(reg)
 
+    def setup_message_browser(self, message_browser: QtWidgets.QTextBrowser, ui_tab_widget):
+        self.tab_widget_anim = TabBgrAnimation(ui_tab_widget)
+        self.msg_browser = message_browser
+        self.use_msg_browser = True
+
     def set_opacity(self, opacity: int):
         opacity = min(255, max(0, opacity))
         self.overlay_grp.setStyleSheet(self.style.format(opacity, opacity))
@@ -195,9 +205,14 @@ class InfoOverlay(QtWidgets.QWidget):
         else:
             self.btn_box.hide()
 
-        self.text_label.setText(message)
-        self.show_all()
-        self.restore_visibility()
+        if not self.use_msg_browser:
+            self.text_label.setText(message)
+            self.show_all()
+            self.restore_visibility()
+        else:
+            self.msg_browser: QtWidgets.QTextBrowser
+            self.msg_browser.append(message)
+            self.tab_widget_anim.blink()
 
         # Animate if not called from the queue timer
         if not called_from_timer and not self.message_active:
@@ -225,15 +240,18 @@ class InfoOverlay(QtWidgets.QWidget):
     def create_button(self, button):
         """ Dynamic button creation on request """
         txt, callback = button
+        if callback is None:
+            callback = self.display_exit
+
+        if self.use_msg_browser:
+            # TODO: implement ::anchorClicked(const QUrl &link) to callback
+            pass
 
         new_button = QtWidgets.QPushButton(txt, self.btn_box)
         new_button.setStyleSheet('background: rgba(80, 80, 80, 255); color: rgb(230, 230, 230);')
         self.btn_box.layout().addWidget(new_button, 0, Qt.AlignLeft)
 
-        if callback is None:
-            new_button.pressed.connect(self.display_exit)
-        else:
-            new_button.pressed.connect(callback)
+        new_button.pressed.connect(callback)
 
         return new_button
 

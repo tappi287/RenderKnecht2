@@ -106,6 +106,11 @@ class MainWindowWidgets(QObject):
         # ---- KnechtWolke Ui ---
         self.knechtwolke_ui = KnechtWolkeUi(ui)
 
+        # ---- Message Browser ----
+        self.ui.clearMessageBrowserBtn.pressed.connect(self.ui.messageBrowser.clear)
+        self.ui.messageBrowser.append(_('Mitteilungen der Anwendung werden hier aufgelistet.'))
+        self.ui.messageBrowserLabel.setText(_('<h4>Mitteilungen Browser</h4>'))
+
     @Slot()
     def dg_expand_toggle(self):
         if self.ui.dg_expand_btn.isChecked():

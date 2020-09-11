@@ -337,6 +337,11 @@
           </property>
           <item>
            <widget class="QTabWidget" name="tabWidget">
+            <property name="styleSheet">
+             <string notr="true">QTabBar::tab:last { background-color: rgb(240, 240, 240); border: 1px solid rgb(221, 221, 221); padding-left: 15px;}
+QTabBar::tab:last:selected { background-color: rgb(255, 255, 255);}
+QTabBar::tab:last:hover { background-color: rgb(216, 234, 249);}</string>
+            </property>
             <property name="tabPosition">
              <enum>QTabWidget::North</enum>
             </property>
@@ -1679,12 +1684,20 @@ p, li { white-space: pre-wrap; }
                   <property name="text">
                    <string>Verbinden</string>
                   </property>
+                  <property name="icon">
+                   <iconset resource="res/gui_resource.qrc">
+                    <normaloff>:/main/switch.png</normaloff>:/main/switch.png</iconset>
+                  </property>
                  </widget>
                 </item>
                 <item>
                  <widget class="QPushButton" name="disconnectBtn">
                   <property name="text">
                    <string>Trennen</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="res/gui_resource.qrc">
+                    <normaloff>:/main/close.png</normaloff>:/main/close.png</iconset>
                   </property>
                  </widget>
                 </item>
@@ -1699,6 +1712,42 @@ p, li { white-space: pre-wrap; }
                  </font>
                 </property>
                </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="MessagesTab">
+             <attribute name="icon">
+              <iconset resource="res/gui_resource.qrc">
+               <normaloff>:/type/assignment.svg</normaloff>:/type/assignment.svg</iconset>
+             </attribute>
+             <attribute name="title">
+              <string/>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_10">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_12">
+                <item>
+                 <widget class="QLabel" name="messageBrowserLabel">
+                  <property name="text">
+                   <string>&lt;h3&gt;Message Browser&lt;/h3&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item alignment="Qt::AlignRight">
+                 <widget class="QPushButton" name="clearMessageBrowserBtn">
+                  <property name="text">
+                   <string>Clear Message Browser</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="res/gui_resource.qrc">
+                    <normaloff>:/main/delete_list.png</normaloff>:/main/delete_list.png</iconset>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QTextBrowser" name="messageBrowser"/>
               </item>
              </layout>
             </widget>
@@ -2021,7 +2070,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1600</width>
-     <height>18</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuInfo">

@@ -343,6 +343,7 @@ class ViewManager(QObject):
         tree_view.clean_changed.connect(self.view_clean_changed)
 
         LOGGER.debug('View manager basic tree setup for %s %s', tree_view.objectName(), file.name)
+        self.view_updated.emit(tree_view)
 
         self.additional_tree_setup(tree_view)
 

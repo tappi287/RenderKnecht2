@@ -103,12 +103,16 @@ class IconRsc:
             (ui.pathRefreshBtn, 'refresh', ''),
             (ui.pathBtnHelp, 'help', ''),
             (ui.pathConnectBtn, 'switch', ''),
-            (ui.pathJobSendBtn, 'forward', _('Job übertragen'))
+            (ui.pathJobSendBtn, 'forward', _('Job übertragen')),
+            (ui.connectBtn, 'switch', _('Verbinden')),
+            (ui.disconnectBtn, 'close', _('Trennen')),
+            (ui.clearMessageBrowserBtn, 'delete_list', _('Browser leeren')),
             ]
 
         for button, icon_key, btn_text in ui_btns:
-            icon = cls.get_icon(icon_key)
-            button.setIcon(icon)
+            if icon_key:
+                icon = cls.get_icon(icon_key)
+                button.setIcon(icon)
 
             if btn_text:
                 button.setText(btn_text)
@@ -118,7 +122,8 @@ class IconRsc:
             0: ('options', _('Variantenliste')),  # Variants List
             1: ('img', _('Renderliste')),  # Render List
             2: ('pfad_aeffchen', ''),  # Path Render Service
-            3: ('kw_icon', '')  # KnechtWolke
+            3: ('kw_icon', ''),  # KnechtWolke
+            4: ('assignment', ''),  # Message Browser
             }
 
         for tab_idx in range(0, ui.tabWidget.count()):
