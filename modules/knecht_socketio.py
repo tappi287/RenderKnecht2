@@ -73,7 +73,9 @@ class WolkeController(Thread):
             self.exit_event.wait(2)
 
         self.cmd_queue.put(dict(cmd='shutdown'))
-        s.join(timeout=5)
+
+        if s.is_alive():
+            s.join(timeout=5)
 
     def connect_wolke(self):
         self.cmd_queue.put(
