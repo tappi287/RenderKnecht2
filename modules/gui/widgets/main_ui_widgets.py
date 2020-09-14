@@ -5,8 +5,10 @@ from PySide2.QtCore import QObject, QTimer, Slot
 from PySide2.QtWidgets import QPushButton
 
 from modules.gui.gui_utils import MouseDblClickFilter
+from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.expandable_widget import KnechtExpandableWidget
 from modules.gui.widgets.knechtwolke import KnechtWolkeUi
+from modules.gui.ui_overlay import InfoOverlay
 from modules.gui.widgets.path_util import SetDirectoryPath
 from modules.gui.widgets.variants_field import VariantInputFields
 from modules.knecht_render import CPU_COUNT, KnechtRenderThread
@@ -108,6 +110,7 @@ class MainWindowWidgets(QObject):
 
         # ---- Message Browser ----
         self.ui.clearMessageBrowserBtn.pressed.connect(self.ui.messageBrowser.clear)
+        self.ui.tabWidget.currentChanged.connect(self.tab_index_changed)  # Reset unread messages icon on tab focus
         self.ui.messageBrowser.append(_('Mitteilungen der Anwendung werden hier aufgelistet.'))
         self.ui.messageBrowserLabel.setText(_('<h4>Mitteilungen Browser</h4>'))
 
@@ -197,6 +200,12 @@ class MainWindowWidgets(QObject):
         elif checked:
             KnechtSettings.dg['long_render_timeout'] = True
             KnechtSettings.dg['check_variants'] = True
+
+    @Slot(int)
+    def tab_index_changed(self, tab_index):
+        # -- Reset "unread messages" icon if message tab focused
+        if tab_index == InfoOverlay.msg_tab_idx:
+            self.ui.tabWidget.setTabIcon(tab_index, IconRsc.get_icon('assignment_msg'))
 
     def toggle_splitter_labels(self, pos, index):
         if self.ui.widgetVariants.visibleRegion().isEmpty():

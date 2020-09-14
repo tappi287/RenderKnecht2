@@ -1718,7 +1718,7 @@ p, li { white-space: pre-wrap; }
             <widget class="QWidget" name="MessagesTab">
              <attribute name="icon">
               <iconset resource="res/gui_resource.qrc">
-               <normaloff>:/type/assignment.svg</normaloff>:/type/assignment.svg</iconset>
+               <normaloff>:/main/assignment_msg.png</normaloff>:/main/assignment_msg.png</iconset>
              </attribute>
              <attribute name="title">
               <string/>

@@ -27,7 +27,6 @@ InfoMessage.auth = 'Stefan Tapper'
 InfoMessage.mail = 'tapper.stefan@gmail.com'
 InfoMessage.cred = ['Python Community', 'PyCharm Community Edition', 'Stackoverflow', 'PySide Docs']
 
-# TODO: Shutdown SocketIO Client before GUI is locked while closing
 # TODO: Implement PlmXml QA LookLibrary Targets != AsConnector2.targetGetAllNames
 # should find Targets that are listed inside PlmXml but not available inside the DG Scene
 # maybe even catch the error before configuring to prevent AsConnector Exception resulting

@@ -123,7 +123,7 @@ class IconRsc:
             1: ('img', _('Renderliste')),  # Render List
             2: ('pfad_aeffchen', ''),  # Path Render Service
             3: ('kw_icon', ''),  # KnechtWolke
-            4: ('assignment', ''),  # Message Browser
+            4: ('assignment_msg', ''),  # Message Browser
             }
 
         for tab_idx in range(0, ui.tabWidget.count()):

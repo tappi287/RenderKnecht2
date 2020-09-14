@@ -1,12 +1,15 @@
 import re
 
 from PySide2 import QtWidgets
-from PySide2.QtCore import QAbstractAnimation, QPropertyAnimation, QTimer, Qt
+from PySide2.QtCore import QAbstractAnimation, QPropertyAnimation, QTimer, Qt, QUrl
 from PySide2.QtGui import QEnterEvent, QMouseEvent, QMovie, QRegion
+from datetime import datetime
 
 from modules.globals import Resource
 from modules.gui.animation import BgrAnimation, TabBgrAnimation
 from modules.gui.gui_utils import SetupWidget
+from modules.gui.ui_resource import IconRsc
+from modules.idgen import KnechtUuidGenerator
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -30,6 +33,9 @@ class InfoOverlay(QtWidgets.QWidget):
 
     queue_limit = 12
 
+    # Message tab index
+    msg_tab_idx = 4
+
     def __init__(self, parent: QtWidgets.QWidget):
         super(InfoOverlay, self).__init__(parent)
 
@@ -49,7 +55,9 @@ class InfoOverlay(QtWidgets.QWidget):
         self.message_active = False
 
         # -- Prepare Message Browser --
-        self.msg_browser = None
+        self.msg_browser = QtWidgets.QTextBrowser()
+        self.anchors = dict()
+        self.msg_tab = QtWidgets.QTabWidget()
         self.tab_widget_anim = TabBgrAnimation(self)  # Animate MainWindow TabWidget Tab background color
         self.use_msg_browser = False
 
@@ -144,10 +152,21 @@ class InfoOverlay(QtWidgets.QWidget):
         reg += self.overlay_grp.frameGeometry()
         self.setMask(reg)
 
-    def setup_message_browser(self, message_browser: QtWidgets.QTextBrowser, ui_tab_widget):
+    def setup_message_browser(self, message_browser: QtWidgets.QTextBrowser, ui_tab_widget: QtWidgets.QTabWidget):
         self.tab_widget_anim = TabBgrAnimation(ui_tab_widget)
+        self.msg_tab = ui_tab_widget
         self.msg_browser = message_browser
+        self.msg_browser.anchorClicked.connect(self._msg_browser_anchor_clicked)
         self.use_msg_browser = True
+
+    def _msg_browser_anchor_clicked(self, url: QUrl):
+        anchor_id = url.toDisplayString()[1:]
+
+        if anchor_id in self.anchors:
+            callback = self.anchors.get(anchor_id)
+            if callback is not None:
+                callback()
+            LOGGER.info('Message Browser Anchor clicked: %s', anchor_id)
 
     def set_opacity(self, opacity: int):
         opacity = min(255, max(0, opacity))
@@ -176,6 +195,7 @@ class InfoOverlay(QtWidgets.QWidget):
         self.msg_timer.stop()
 
         if self.btn_list:
+            self.anchors = dict()
             for btn in self.btn_list:
                 btn.deleteLater()
             self.btn_list = list()
@@ -200,6 +220,7 @@ class InfoOverlay(QtWidgets.QWidget):
             return
 
         if buttons:
+            self.anchors = dict()
             self.btn_list = [self.create_button(btn) for btn in buttons]
             self.btn_box.show()
         else:
@@ -210,9 +231,11 @@ class InfoOverlay(QtWidgets.QWidget):
             self.show_all()
             self.restore_visibility()
         else:
-            self.msg_browser: QtWidgets.QTextBrowser
+            message = f'<b>{self.parent.objectName()} {datetime.now().strftime("(%H:%M:%S)")}:</b><br />{message}'
             self.msg_browser.append(message)
             self.tab_widget_anim.blink()
+            if self.msg_tab.currentIndex() != self.msg_tab_idx:
+                self.msg_tab.setTabIcon(self.msg_tab_idx, IconRsc.get_icon('assignment_msg_new'))
 
         # Animate if not called from the queue timer
         if not called_from_timer and not self.message_active:
@@ -240,18 +263,18 @@ class InfoOverlay(QtWidgets.QWidget):
     def create_button(self, button):
         """ Dynamic button creation on request """
         txt, callback = button
-        if callback is None:
-            callback = self.display_exit
 
-        if self.use_msg_browser:
-            # TODO: implement ::anchorClicked(const QUrl &link) to callback
-            pass
+        if self.use_msg_browser and callback is not None:
+            anchor_id = f'{KnechtUuidGenerator.create_id().toString()[1:-1]}'
+            anchor = f'<a name="{anchor_id}" href="#{anchor_id}">{txt}</a>'
+            self.msg_browser.append(anchor)
+            self.anchors[anchor_id] = callback
 
         new_button = QtWidgets.QPushButton(txt, self.btn_box)
         new_button.setStyleSheet('background: rgba(80, 80, 80, 255); color: rgb(230, 230, 230);')
         self.btn_box.layout().addWidget(new_button, 0, Qt.AlignLeft)
 
-        new_button.pressed.connect(callback)
+        new_button.pressed.connect(callback or self.display_exit)
 
         return new_button
 
