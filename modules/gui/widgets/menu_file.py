@@ -5,6 +5,8 @@ from PySide2.QtGui import QKeySequence
 from PySide2.QtWidgets import QAction, QMenu
 
 from modules.globals import get_current_modules_dir, KNECHT_VIEWER_BIN, POS_SCHNUFFI_BIN
+from modules.gui.ui_generic_tab import GenericTabWidget
+from modules.gui.widgets.material_merger import MaterialMerger
 from modules.gui.widgets.menu_import import ImportMenu
 from modules.gui.widgets.path_util import path_exists
 from modules.gui.widgets.progress_overlay import ShowTreeViewProgressMessage
@@ -143,6 +145,11 @@ class FileMenu(QObject):
         img_conv.setIcon(IconRsc.get_icon('render'))
         self.menu.insertAction(insert_before, img_conv)
 
+        material_merger = QAction('AViT Material Merger')
+        material_merger.triggered.connect(self.start_material_merger)
+        material_merger.setIcon(IconRsc.get_icon('options'))
+        self.menu.insertAction(insert_before, material_merger)
+
         self.menu.insertSeparator(insert_before)
 
         # ---- Recent files menu ----
@@ -162,6 +169,10 @@ class FileMenu(QObject):
 
     def start_schnuffi_app(self):
         start_app(self.schnuffi_app)
+
+    def start_material_merger(self):
+        material_merger = MaterialMerger(self.ui)
+        GenericTabWidget(self.ui, material_merger)
 
     def save_xml(self):
         if not self.view_mgr.current_tab_is_document_tab():

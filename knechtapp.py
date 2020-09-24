@@ -19,7 +19,7 @@ if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     print('Using high dpi Pixmaps')
 
-VERSION = '1.44'
+VERSION = '1.45'
 
 InfoMessage.ver = VERSION
 InfoMessage.lic = 'GPL v3'
