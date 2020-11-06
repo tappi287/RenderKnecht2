@@ -164,6 +164,11 @@ class WolkeController(Thread):
                 camera_cmd = KnechtImageCameraInfo.rtt_camera_cmds.get(camera_tag)
                 camera_value = value.replace(' ', '')
 
+                # - Filter 0 Clip values
+                if camera_tag in ('knecht_clip_far', 'knecht_clip_near'):
+                    if int(float(camera_value)) == 0:
+                        continue
+
                 # - Map values into camera-command
                 try:
                     camera_cmd = camera_cmd.format(*camera_value.split(','))
