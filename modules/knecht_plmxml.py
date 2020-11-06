@@ -205,8 +205,9 @@ class KnechtUpdatePlmXml(Thread):
         if not plm_xml_instance.is_valid:
             LOGGER.error(plm_xml_instance.error)
             self.signals.plmxml_result.emit(plm_xml_instance.error)
-            self.signals.send_finished.emit(DeltaGenResult.cmd_failed)
-            return
+            # - Move on for now so we will be abler to configure invalid PlmXml's
+            # self.signals.send_finished.emit(DeltaGenResult.cmd_failed)
+            # return
 
         # -- Configure the PlmXml product instances and LookLibrary with a configuration string
         conf = PlmXmlConfigurator(plm_xml_instance, create_pr_string_from_variants(self.variants_ls))

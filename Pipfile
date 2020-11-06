@@ -22,8 +22,8 @@ ujson = "*"
 mysql-connector = "*"
 setuptools = "*"
 python-socketio = {extras = ["client"],version = "*"}
-knecht-socketio-client = {version = "==0.92",index = "piwigo"}
-plmxml = {version = "0.86",index = "piwigo"}
+knecht-socketio-client = {version = "*",index = "piwigo"}
+plmxml = {version = "0.87",index = "piwigo"}
 
 [dev-packages]
 paramiko = "*"
