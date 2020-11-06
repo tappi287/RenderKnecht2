@@ -12,6 +12,7 @@ from knecht_socketio_client import SocketProcess
 from modules import KnechtSettings
 from modules.globals import get_settings_dir
 from modules.knecht_objects import KnechtVariantList
+from modules.knecht_camera import KnechtImageCameraInfo
 from modules.language import get_translation
 from modules.log import init_logging
 
@@ -128,6 +129,10 @@ class WolkeController(Thread):
         elif event == 'transfer_presets':
             LOGGER.debug('Received Transfer Presets event with data: %s', data)
             self.transfer_presets(data)
+        # -- Send Camera
+        elif event == 'send_camera':
+            LOGGER.info('Received Send Camera event with data: %s', data)
+            self.send_camera(data)
 
     def transfer_presets(self, data: dict):
         url = f"{KnechtSettings.wolke.get('host')}:{KnechtSettings.wolke.get('port')}{data.get('url')}"
@@ -151,6 +156,27 @@ class WolkeController(Thread):
 
         if presets:
             self.transfer_variants.emit({'label': data.get('document_label'), 'presets': presets})
+
+    def send_camera(self, data: dict):
+        variants = KnechtVariantList()
+        for camera_tag, value in data.items():
+            if camera_tag in KnechtImageCameraInfo.rtt_camera_cmds:
+                camera_cmd = KnechtImageCameraInfo.rtt_camera_cmds.get(camera_tag)
+                camera_value = value.replace(' ', '')
+
+                # - Map values into camera-command
+                try:
+                    camera_cmd = camera_cmd.format(*camera_value.split(','))
+                except Exception as e:
+                    LOGGER.warning('Camera Info Tag Value does not match %s\n%s', camera_value, e)
+                # - Add camera command to variants
+                variants.add(self.empty_model_index, camera_tag, camera_cmd, 'camera_command')
+
+        if variants.variants:
+            self.status_signal.emit('Triggered camera send operation')
+            self.send_variants.emit(variants)
+        else:
+            self.status_signal.emit(f'Received camera send event but found not enough camera info: {data}')
 
     def send_pr_string(self, data: dict):
         url = f"{KnechtSettings.wolke.get('host')}:{KnechtSettings.wolke.get('port')}{data.get('url')}"
