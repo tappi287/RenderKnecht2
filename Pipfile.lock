@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d8d370b969ef5a9dce06f5d56d933157ba46dea4d476024971fc205bdc2da54c"
+            "sha256": "185fe863aa58c5828f5ef7292a90aaaf7dd5d722ed8ce9aa1a53c30b1fd22df7"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -28,10 +28,10 @@
         },
         "certifi": {
             "hashes": [
-                "sha256:5930595817496dd21bb8dc35dad090f1c2cd0adfaf21204bf6732ca5d8ee34d3",
-                "sha256:8fc0819f1f30ba15bdb34cceffb9ef04d99f420f68eb75d901e9560b8749fc41"
+                "sha256:1f422849db327d534e3d0c5f02a263458c3955ec0aae4ff09b95f195c59f4edd",
+                "sha256:f05def092c44fbf25834a51509ef6e631dc19765ab8a57b4e7ab85531f0a9cf4"
             ],
-            "version": "==2020.6.20"
+            "version": "==2020.11.8"
         },
         "chardet": {
             "hashes": [
@@ -187,10 +187,10 @@
         },
         "plmxml": {
             "hashes": [
-                "sha256:b971f54a3c5cba98586fd53e1db9f752121a140ff52cda484ae161711b54b046"
+                "sha256:09c1598543f749094fc89067912e3adfe434adfed83852835c9a66bc3d2d4b67"
             ],
             "index": "piwigo",
-            "version": "==0.87"
+            "version": "==0.95"
         },
         "pyside2": {
             "hashes": [

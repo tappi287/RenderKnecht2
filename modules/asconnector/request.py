@@ -4,7 +4,8 @@ from typing import Iterator, List, Union, Dict
 from lxml import etree as Et
 from requests import Response
 from plmxml.globals import PlmXmlGlobals as Pg
-from plmxml.objects import MaterialTarget, NodeInfo, NodeInfoTypes
+from plmxml.material import MaterialTarget
+from plmxml.node_info import NodeInfo, NodeInfoTypes
 
 from modules.language import get_translation
 from modules.log import init_logging

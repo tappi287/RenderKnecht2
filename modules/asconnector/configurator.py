@@ -2,7 +2,9 @@ import re
 from typing import Tuple, List, Set, Dict
 
 from plmxml import PlmXml
-from plmxml.objects import NodeInfo, MaterialTarget
+from plmxml.configurator import PlmXmlBaseConfigurator
+from plmxml.node_info import NodeInfo
+from plmxml.material import MaterialTarget
 from plmxml.utils import pr_tags_to_reg_ex
 
 from modules.language import get_translation
@@ -19,7 +21,7 @@ lang.install()
 _ = lang.gettext
 
 
-class PlmXmlConfigurator:
+class PlmXmlConfigurator(PlmXmlBaseConfigurator):
     def __init__(self, plmxml: PlmXml, config: str):
         """ Parses a configuration String against an initialized PlmXml instance and edits the
             product instances and materials that need their visibility or source looks changed.
@@ -27,6 +29,7 @@ class PlmXmlConfigurator:
         :param PlmXml plmxml: PlmXml instance holding info about look library and product instances
         :param str config: Configuration String
         """
+        super(PlmXmlConfigurator, self).__init__(plmxml, config)
         self.plmxml = plmxml
         self.config = config
         self.errors = list()
@@ -42,6 +45,15 @@ class PlmXmlConfigurator:
     def update_config(self, config: str):
         self.config = config
         self._parse_plmxml_against_config()
+
+    def _parse_plmxml_against_config(self):
+        """ Request plmxml instance update from BaseConfigurator.
+            This will update visibility of ProductInstances and visible_variants of LookLibrary Materials.
+        """
+        self.update()
+
+        # -- Print result
+        self._set_status_msg()
 
     def _update_plmxml_with_as_connector_nodes(self, scene_get_structure_result_nodes: Dict[str, NodeInfo]):
         idx = 0
@@ -198,15 +210,6 @@ class PlmXmlConfigurator:
 
         return AsMaterialConnectToTargetsRequest(valid_material_targets)
 
-    def _match(self, pr_tags) -> bool:
-        """ Match a PR Tag against the current configuration string """
-        m = re.match(pr_tags_to_reg_ex(pr_tags), self.config, flags=re.IGNORECASE)
-
-        if m:
-            return True
-
-        return False
-
     def _set_status_msg(self):
         self.status_msg += _('Aktualisiere PlmXml Konfiguration. ')
         self.status_msg += f'{len([t for t in self.plmxml.look_lib.iterate_active_targets()])} '
@@ -219,36 +222,3 @@ class PlmXmlConfigurator:
         self.status_msg += _('Die folgenden {} Materialien erzielten keine Treffer ').format(len(not_updated))
         self.status_msg += _('in der Konfiguration. Sie werden nicht aktualisiert:')
         self.status_msg += f'\n{"; ".join(not_updated)}'
-
-    def _parse_plmxml_against_config(self):
-        # -- Geometry
-        # -- Set Visibility of Parts with PR_TAGS
-        for n in self.plmxml.iterate_configurable_nodes():
-            # Match PR TAGS against configuration
-            if self._match(n.pr_tags):
-                n.visible = True
-            else:
-                n.visible = False
-
-        # -- Materials
-        self._update_plmxml_look_library()
-
-        # -- Print result
-        self._set_status_msg()
-
-    def _update_plmxml_look_library(self):
-        # -- Materials
-        # -- Reset visible variants
-        self.plmxml.look_lib.reset()
-
-        # -- Assign Source to Target materials
-        for target, variant in self.plmxml.look_lib.iterate_materials():
-            if not variant.pr_tags:
-                continue
-
-            # Match material PR TAGS against configuration
-            if self._match(variant.pr_tags):
-                target.visible_variant = variant
-
-                if self.plmxml.debug:
-                    LOGGER.debug(f'Switching Material {target.name[:40]:40} -> {variant.name}')
