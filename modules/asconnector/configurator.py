@@ -173,7 +173,7 @@ class PlmXmlConfigurator(PlmXmlBaseConfigurator):
                 LOGGER.debug('%s', as_conn.error)
 
         # -- Update Materials
-        req_result = as_conn.request(self.create_material_connect_to_targets_request())
+        req_result = as_conn.request(self.create_material_connect_to_targets_request(as_conn))
 
         if not req_result or not result:
             self.errors.append(as_conn.error)
@@ -198,7 +198,7 @@ class PlmXmlConfigurator(PlmXmlBaseConfigurator):
 
         return visible_request, invisible_request
 
-    def create_material_connect_to_targets_request(self) -> AsMaterialConnectToTargetsRequest:
+    def create_material_connect_to_targets_request(self, as_conn: AsConnectorConnection) -> AsMaterialConnectToTargetsRequest:
         valid_material_targets, invalid_material_targets = self._get_valid_material_targets()
 
         # --- Report Missing Material Targets ---
@@ -208,7 +208,13 @@ class PlmXmlConfigurator(PlmXmlBaseConfigurator):
             self.status_msg += f'\n{"; ".join([m.name for m in invalid_material_targets])}\n'
             self.status_msg += _('Diese wurden bei der Konfiguration ignoriert.')
 
-        return AsMaterialConnectToTargetsRequest(valid_material_targets)
+        if as_conn.version >= '2.15':
+            # New argument useLookUpTable from v2.15
+            material_req = AsMaterialConnectToTargetsRequest(valid_material_targets, use_lookup_table=False)
+        else:
+            material_req = AsMaterialConnectToTargetsRequest(valid_material_targets)
+
+        return material_req
 
     def _set_status_msg(self):
         self.status_msg += _('Aktualisiere PlmXml Konfiguration. ')

@@ -19,6 +19,7 @@ class AsConnectorConnection:
     def __init__(self):
         self._connected = False
         self.error = str()
+        self.version = str()
 
     @property
     def connected(self):
@@ -34,9 +35,10 @@ class AsConnectorConnection:
         version_request = AsGetVersionInfoRequest()
         result = self.request(version_request)
 
-        if result and selected_result:
+        if result or selected_result:
+            self.version = version_request.result or str()
+            LOGGER.debug(f'Connected to AsConnector {version_request.result or "<no version result!>"}')
             self.connected = True
-            LOGGER.debug(f'Connected to AsConnector {version_request.result}')
         else:
             self.connected = False
             self.error = _('Konnte mit keiner AsConnector Instanz verbinden.')

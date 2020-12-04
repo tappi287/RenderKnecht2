@@ -1,5 +1,5 @@
 from pathlib import Path, WindowsPath
-from typing import Iterator, List, Union, Dict
+from typing import Iterator, List, Union, Dict, Optional
 
 from lxml import etree as Et
 from requests import Response
@@ -147,23 +147,26 @@ class AsMaterialConnectToTargetsRequest(AsConnectorRequest):
     def __init__(self,
                  target_materials: Union[Iterator, List[MaterialTarget]],
                  use_copy_method: bool=False,
-                 replace_target_name: bool=False
+                 replace_target_name: bool=False,
+                 use_lookup_table: Optional[bool]=None
                  ):
         """ Create a Material:ConnectToTarget Request
 
         :param List[MaterialTarget] target_materials:
         :param bool use_copy_method:
         :param bool replace_target_name:
+        :param bool use_lookup_table:
         """
         super(AsMaterialConnectToTargetsRequest, self).__init__()
         self.url = 'material/connecttotargets'
 
-        self._set_request(target_materials, use_copy_method, replace_target_name)
+        self._set_request(target_materials, use_copy_method, replace_target_name, use_lookup_table)
 
     def _set_request(self,
                      target_materials: Union[Iterator, List[MaterialTarget]],
                      use_copy_method: bool,
-                     replace_target_name: bool
+                     replace_target_name: bool,
+                     use_lookup_table: bool
                      ):
         e = self._create_request_root_element('Material', 'ConnectToTargets')
         material_names_parent = Et.SubElement(e, 'materialNames')
@@ -177,9 +180,11 @@ class AsMaterialConnectToTargetsRequest(AsConnectorRequest):
             target_node.text = target.name
 
         # -- Add additional parameters
-        for tag, value in [('useCopyMethod', use_copy_method), ('replaceTargetName', replace_target_name)]:
-            param_node = Et.SubElement(e, tag)
-            param_node.text = 'true' if value else 'false'
+        for tag, value in [('useCopyMethod', use_copy_method), ('replaceTargetName', replace_target_name),
+                           ('useLookUpTable', use_lookup_table)]:
+            if value is not None:
+                param_node = Et.SubElement(e, tag)
+                param_node.text = 'true' if value else 'false'
 
         self.request = e
 
