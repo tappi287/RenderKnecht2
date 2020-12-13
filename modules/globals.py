@@ -93,6 +93,7 @@ class Resource:
     icon_paths = dict()
     darkstyle = ":darkstyle/darkstyle.qss"
 
+
 # Send finished results
 class DeltaGenResult:
     send_success = 0
@@ -100,3 +101,5 @@ class DeltaGenResult:
     cmd_success = 2
     cmd_failed = 3
     aborted = 4
+    plmxml_mismatch = 5
+    as_connector_error = 6

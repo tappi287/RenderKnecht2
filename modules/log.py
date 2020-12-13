@@ -27,7 +27,7 @@ def setup_logging(logging_queue, overwrite_level: str=None):
         'disable_existing_loggers': False,
         'formatters': {
             'verbose': {
-                'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+                'format': '%(asctime)s P%(process)d T%(thread)d %(levelname)s %(name)s %(module)s: %(message)s'
                 },
             'simple': {
                 'format': '%(asctime)s %(name)s %(levelname)s: %(message)s',
@@ -45,7 +45,7 @@ def setup_logging(logging_queue, overwrite_level: str=None):
         'handlers': {
             'console': {
                 'level': log_level, 'class': 'logging.StreamHandler',
-                'stream': 'ext://sys.stdout', 'formatter': 'simple'
+                'stream': 'ext://sys.stdout', 'formatter': 'verbose'
                 },
             'guiHandler': {
                 'level': log_level, 'class': 'logging.NullHandler',

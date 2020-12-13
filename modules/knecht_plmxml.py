@@ -218,7 +218,7 @@ class KnechtUpdatePlmXml(Thread):
 
         if not scene_valid:
             self.signals.plmxml_result.emit(scene_result)
-            self.signals.send_finished.emit(DeltaGenResult.cmd_failed)
+            self.signals.send_finished.emit(DeltaGenResult.plmxml_mismatch)
             return
 
         # -- Request to show the updated configuration in DeltaGen, will block
@@ -227,7 +227,7 @@ class KnechtUpdatePlmXml(Thread):
             errors = '\n'.join(conf.errors)
             LOGGER.error(errors)
             self.signals.plmxml_result.emit(errors)
-            result = DeltaGenResult.send_failed
+            result = DeltaGenResult.as_connector_error
 
         if result == DeltaGenResult.send_success:
             self.signals.plmxml_result.emit(conf.status_msg)

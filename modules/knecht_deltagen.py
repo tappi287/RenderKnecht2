@@ -509,7 +509,7 @@ class SendToDeltaGen(QObject):
         self.plm_xml_controller.start_configuration()
 
     @Slot(int)
-    def _send_operation_finished(self, result: int):
+    def _send_operation_finished(self, result: DeltaGenResult):
         """ Thread will send result of the send operation """
         self.abort_btn.setEnabled(False)
         self.ui.taskbar_progress.reset()
@@ -534,7 +534,7 @@ class SendToDeltaGen(QObject):
 
         self.display_view.info_overlay.display_confirm(result, btns)
 
-    def _display_result(self, result: int):
+    def _display_result(self, result: DeltaGenResult):
         if result == DeltaGenResult.send_success:
             if not self.rendering:
                 self.ui.msg(_('DeltaGen Sende Operation beendet.'), 2500)
@@ -548,6 +548,11 @@ class SendToDeltaGen(QObject):
             self.ui.msg(_('DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>'), 5000)
         elif result == DeltaGenResult.aborted:
             self.ui.msg(_('DeltaGen Sende Operation <b>abgebrochen.</b>'), 2500)
+        elif result == DeltaGenResult.plmxml_mismatch:
+            self.ui.msg(_('PlmXml stimmt nicht mit geladener Szene überein! Kann DeltaGen '
+                          'Szene nicht aktualisieren.'), 5000)
+        elif result == DeltaGenResult.as_connector_error:
+            self.ui.msg(_('AsConnector konnte DeltaGen Szene nicht aktualisieren.'), 5000)
 
     def _update_status(self, message: str, duration: int=2500):
         self.display_view.info_overlay.display(message, duration, True)
