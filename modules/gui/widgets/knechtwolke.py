@@ -85,7 +85,6 @@ class KnechtWolkeUi(QObject):
         self.ui.app.send_dg.socketio_connected.connect(self.connected)
         self.ui.app.send_dg.socketio_disconnected.connect(self.disconnected)
         self.ui.app.send_dg.socketio_send_variants.connect(self._send_variants)
-        self.ui.app.send_dg.socketio_send_variants.connect(self._send_variants)
         self.ui.app.send_dg.socketio_transfer_variants.connect(self._transfer_variants)
 
         if KnechtSettings.wolke.get('autostart', False):
