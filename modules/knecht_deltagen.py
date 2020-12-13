@@ -32,11 +32,6 @@ class CommunicateDeltaGenSignals(QObject):
     send_finished = Signal(int)
     no_connection = Signal()
     status = Signal(str)
-    socketio_status = Signal(str)
-    socketio_discon = Signal()
-    socketio_conn = Signal()
-    socketio_send_var = Signal(KnechtVariantList)
-    socketio_transfer = Signal(dict)
     progress = Signal(int)
     variant_status = Signal(KnechtVariant)
 
@@ -71,16 +66,8 @@ class CommunicateDeltaGen(Thread):
     send_finished = signals.send_finished
     no_connection = signals.no_connection
     status = signals.status
-    socketio_status = signals.socketio_status
-    socketio_disconn = signals.socketio_discon
-    socketio_conn = signals.socketio_conn
-    socketio_send_var = signals.socketio_send_var
-    socketio_transfer = signals.socketio_transfer
     progress = signals.progress
     variant_status = signals.variant_status
-
-    # --- SocketIO --
-    wolke_controller = None
 
     def __init__(self, ui):
         super(CommunicateDeltaGen, self).__init__()
@@ -92,20 +79,10 @@ class CommunicateDeltaGen(Thread):
         # --- Socket Communication Class ---
         self.nc = Ncat(DG_TCP_IP, DG_TCP_PORT)
 
-        self.socketio_exit = Event()
-        self.socketio_connect_event = Event()
-        self.socketio_disconn_event = Event()
-
     def run(self):
         """ Thread loop running until exit_event set. As soon as a new send operation
             is scheduled, loop will pick up send operation on next loop cycle.
         """
-        self.wolke_controller = WolkeController(self.app, self.socketio_exit, self.socketio_connect_event,
-                                                self.socketio_disconn_event,self.socketio_status,
-                                                self.socketio_conn, self.socketio_disconn,
-                                                self.socketio_send_var, self.socketio_transfer)
-        self.wolke_controller.start()
-
         while not self.exit_event.is_set():
             if self.send_operation_in_progress:
                 LOGGER.debug('CommunicateDeltaGen Thread starts Variants Send operation.')
@@ -118,22 +95,7 @@ class CommunicateDeltaGen(Thread):
 
             self.exit_event.wait(timeout=0.8)
 
-        self.close_socket_io()
         LOGGER.debug('CommunicateDeltaGen Thread returned from run loop.')
-
-    def start_socket_io(self):
-        """ Called by user from GUI menu """
-        self.socketio_connect_event.set()
-
-    def disconnect_socket_io(self):
-        """ Called by user from GUI menu """
-        self.socketio_disconn_event.set()
-
-    def close_socket_io(self):
-        """ Called upon thread end """
-        LOGGER.info('Requesting WolkeServer thread to exit.')
-        self.socketio_exit.set()
-        self.wolke_controller.join(timeout=5)
 
     @Slot(bool)
     def set_rendering_mode(self, val: bool):
@@ -401,11 +363,6 @@ class SendToDeltaGen(QObject):
         self.dg.send_finished.connect(self._send_operation_finished)
         self.dg.progress.connect(self._update_progress)
         self.dg.variant_status.connect(self._update_variant_status)
-        self.dg.socketio_status.connect(self.socketio_status)
-        self.dg.socketio_conn.connect(self.socketio_connected)
-        self.dg.socketio_disconn.connect(self.socketio_disconnected)
-        self.dg.socketio_send_var.connect(self.socketio_send_variants)
-        self.dg.socketio_transfer.connect(self.socketio_transfer_variants)
 
         # Prepare thread inbound signals
         self.transfer_variants.connect(self.dg.set_variants_ls)
@@ -414,10 +371,27 @@ class SendToDeltaGen(QObject):
         self.transfer_rendering_mode.connect(self.dg.set_rendering_mode)
         self.abort_operation.connect(self.dg.abort)
         self.restore_viewer_cmd.connect(self.dg.restore_viewer)
-        self.start_socketio.connect(self.dg.start_socket_io)
-        self.stop_socketio.connect(self.dg.disconnect_socket_io)
+
+        # -- Prepare SocketIO KnechtWolke PlmXml Controller
+        self.socketio_exit = Event()
+        self.socketio_connect_event = Event()
+        self.socketio_disconn_event = Event()
+        self.wolke_controller = WolkeController(self.ui.app,
+                                                # Thread Events
+                                                self.socketio_exit,
+                                                self.socketio_connect_event,
+                                                self.socketio_disconn_event,
+                                                # Signals
+                                                self.socketio_status,
+                                                self.socketio_connected,
+                                                self.socketio_disconnected,
+                                                self.socketio_send_variants,
+                                                self.socketio_transfer_variants)
+        self.start_socketio.connect(self.start_socket_io)
+        self.stop_socketio.connect(self.disconnect_socket_io)
 
         self.dg.start()
+        self.wolke_controller.start()
 
     def _display_view_destroyed(self):
         """ If view is closed while sending fall back to variant tree """
@@ -574,6 +548,8 @@ class SendToDeltaGen(QObject):
             LOGGER.debug('Joining DeltaGen communication Thread.')
             self.dg.join(timeout=10)
 
+        self.close_socket_io()
+
         self.threads_finished.emit()
 
     def _setup_main_gui(self):
@@ -642,6 +618,20 @@ class SendToDeltaGen(QObject):
 
         src_model.setData(name_idx, name_color, Qt.BackgroundRole)
         src_model.setData(value_idx, value_color, Qt.BackgroundRole)
+
+    def start_socket_io(self):
+        """ Called by user from GUI menu """
+        self.socketio_connect_event.set()
+
+    def disconnect_socket_io(self):
+        """ Called by user from GUI menu """
+        self.socketio_disconn_event.set()
+
+    def close_socket_io(self):
+        """ Called upon thread end """
+        LOGGER.info('Requesting WolkeServer thread to exit.')
+        self.socketio_exit.set()
+        self.wolke_controller.join(timeout=5)
 
 
 class _OverlayPresetSelector:

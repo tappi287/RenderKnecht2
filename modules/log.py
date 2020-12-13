@@ -27,7 +27,7 @@ def setup_logging(logging_queue, overwrite_level: str=None):
         'disable_existing_loggers': False,
         'formatters': {
             'verbose': {
-                'format': '%(asctime)s P%(process)d T%(thread)d %(levelname)s %(name)s %(module)s: %(message)s'
+                'format': '%(asctime)s P%(process)d T%(thread)d %(levelname)s %(module)s: %(message)s'
                 },
             'simple': {
                 'format': '%(asctime)s %(name)s %(levelname)s: %(message)s',
