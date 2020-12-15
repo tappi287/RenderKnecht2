@@ -393,7 +393,7 @@ class SendToDeltaGen(QObject):
         self.dg.start()
         self.wolke_controller.start()
 
-    def _display_view_destroyed(self):
+    def reset_display_view(self):
         """ If view is closed while sending fall back to variant tree """
         self.display_view = self.ui.variantTree
         self.finished_queue = list()
@@ -406,7 +406,7 @@ class SendToDeltaGen(QObject):
         if view:
             self.display_view = view
             self.display_view.info_overlay.display_exit()
-            self.display_view.destroyed.connect(self._display_view_destroyed)
+            self.display_view.destroyed.connect(self.reset_display_view)
         else:
             self.display_view = self.ui.view_mgr.current_view()
 

@@ -71,15 +71,8 @@ class KnechtWolkeUi(QObject):
 
         # -- Setup Text Browser --
         self.txt: QTextBrowser = self.ui.textBrowser
-        QTimer.singleShot(1000, self.delayed_setup)
+        QTimer.singleShot(5000, self.delayed_setup)
 
-        # -- Warning --
-        """ no longer applies
-        self.txt.append(_('<b>ACHTUNG</b> Dieses Feature ist noch nicht für den produktiv Einsatz freigegeben. '
-                          'Sockenströme verursachen weltumspannende Interpretierer Sperren! '
-                          'Die Anwendung kann bei Verwendung jederzeit unvorhergesehen hängen. Vor dem testen '
-                          'wichtige Dokumente sichern!'))
-        """
     def delayed_setup(self):
         self.ui.app.send_dg.socketio_status.connect(self.update_txt)
         self.ui.app.send_dg.socketio_connected.connect(self.connected)
@@ -109,7 +102,8 @@ class KnechtWolkeUi(QObject):
         return False
 
     def _send_variants(self, variant_ls: KnechtVariantList):
-        self.ui.app.send_dg.send_variants(variant_ls)
+        LOGGER.info('SocketIO request to send Variants for %s', variant_ls.preset_name)
+        self.ui.app.send_dg.send_variants(variant_ls, self.ui.variantTree)
 
     def _transfer_variants(self, data: dict):
         LOGGER.debug(f"Starting Wolke transfer for {len(data.get('presets', list()))} presets.")
