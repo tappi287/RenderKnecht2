@@ -111,6 +111,8 @@ class MaterialMerger(QWidget):
         # -- Create initial source path widget
         self.add_source_path_object()
 
+        self.sorted_src_dirs = dict()
+
     def remove_source_path_object(self):
         btn = self.sender()
         src_path = [s for s in self.src_path_objects if s == btn.src_path][0]
@@ -184,27 +186,28 @@ class MaterialMerger(QWidget):
                 src_dirs[d.name].append(path_entry)
 
         # -- Sort entries by CSB File change time
-        sorted_src_dirs = dict()
+        self.sorted_src_dirs = dict()
         for dir_name, entry_list in src_dirs.items():
-            sorted_src_dirs[dir_name] = sorted(entry_list, key=lambda k: k['ctime'], reverse=True)[0]
+            self.sorted_src_dirs[dir_name] = sorted(entry_list, key=lambda k: k['ctime'], reverse=True)[0]
             if len(entry_list) > 1:
                 self.resultBrowser.append(dir_name)
                 self.resultBrowser.append(
                     f'Found {dir_name} in multiple sources. Selecting newer file from: '
-                    f'{sorted_src_dirs[dir_name]["path"].parent.parent.name} from '
-                    f'{datetime.utcfromtimestamp(sorted_src_dirs[dir_name]["ctime"]).strftime("%d.%m.%Y %H:%M")}')
+                    f'{self.sorted_src_dirs[dir_name]["path"].parent.parent.name} from '
+                    f'{datetime.utcfromtimestamp(self.sorted_src_dirs[dir_name]["ctime"]).strftime("%d.%m.%Y %H:%M")}')
 
                 for e in entry_list:
                     self.resultBrowser.append(
                         f'Checked: {e["path"].parent.parent.name} - CSB last modified date: '
                         f'{datetime.utcfromtimestamp(e["ctime"]).strftime("%d.%m.%Y %H:%M")}')
+
         del src_dirs
 
         # -- Replace Material directories in target dir
         thread_signals = ThreadSignals()
         thread_signals.update.connect(self.resultBrowser.append)
         self.copy_thread = Thread(target=copy_material_dirs,
-                                  args=(self.target_path_widget.path, sorted_src_dirs, thread_signals))
+                                  args=(self.target_path_widget.path, self.sorted_src_dirs, thread_signals))
         self.copy_thread.start()
         self.thread_timer.start()
 
@@ -216,5 +219,14 @@ class MaterialMerger(QWidget):
             return
 
         self.resultBrowser.append('Copy thread finished!')
+        self.report_untouched_materials()
         self.thread_timer.stop()
         self.mergeBtn.setEnabled(True)
+
+    def report_untouched_materials(self):
+        """ Report Materials not copied into target
+            Directories existing in the target path but not in any source path
+        """
+        for target_dir in self.target_path_widget.path.iterdir():
+            if target_dir.name not in self.sorted_src_dirs:
+                self.resultBrowser.append(f'{target_dir.name} was not in any source directory and was not updated.')
