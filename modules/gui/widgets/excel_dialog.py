@@ -111,7 +111,6 @@ class ExcelImportDialog(QDialog):
         # --- Reader Thread ---
         thread_signals = self.ThreadSignals()
         self.excel_thread = Thread(target=self.excel_load_thread, args=(thread_signals, self.file, pos_file))
-        self.excel_thread.daemon = True
         thread_signals.finished.connect(self.read_finished)
         thread_signals.error.connect(self.read_failed)
         thread_signals.exception_sig.connect(self._thread_exception)

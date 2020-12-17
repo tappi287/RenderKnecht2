@@ -226,20 +226,25 @@ class ExcelReader:
         load_start = time()
 
         # Read to Pandas data frame
-        with pd.ExcelFile(file.as_posix()) as excel_file:
-            LOGGER.info('Parsing excel file: %s', file.name)
+        try:
+            with pd.ExcelFile(file.as_posix()) as excel_file:
+                LOGGER.info('Parsing excel file: %s', file.name)
 
-            worksheets = self._load_worksheets(excel_file)
-            self.data += worksheets
+                worksheets = self._load_worksheets(excel_file)
+                self.data += worksheets
 
-            if not self._verify_loaded_worksheets(worksheets):
-                return False
+                if not self._verify_loaded_worksheets(worksheets):
+                    return False
 
-            if not self.data.verify():
-                self.errors.append(_('Die Arbeitsblätter für PR-Optionen oder Modelle enthalten keine Daten '
-                                     'oder konnten nicht gelesen werden.'))
-                LOGGER.error('Dataframes for Worksheets PR-Options or Models are empty. Aborting Excel read.')
-                return False
+                if not self.data.verify():
+                    self.errors.append(_('Die Arbeitsblätter für PR-Optionen oder Modelle enthalten keine Daten '
+                                         'oder konnten nicht gelesen werden.'))
+                    LOGGER.error('Dataframes for Worksheets PR-Options or Models are empty. Aborting Excel read.')
+                    return False
+        except Exception as e:
+            LOGGER.error('Error reading Excel with pandas and xlrd: %s', e)
+            self.errors.append(str(e))
+            return False
 
         LOGGER.info(f'Excel file parsed and converted to data frame in: {time() - load_start:.2f}s')
         return True
