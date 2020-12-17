@@ -15,15 +15,16 @@ numpy = "==1.18.4"
 pyside2 = "==5.15.2"
 pandas = "*"
 xlrd = "*"
-requests = "==2.23.0"
+requests = "*"
 bottleneck = "*"
 jsonpickle = "*"
 ujson = "*"
 mysql-connector = "*"
-setuptools = "*"
-python-socketio = {extras = ["client"],version = "*"}
+setuptools = "==51.0.0"
+python-socketio = "==4.6.1"
 knecht-socketio-client = {version = "==0.92",index = "piwigo"}
 plmxml = {version = "==0.95",index = "piwigo"}
+python-engineio = "==3.14.2"
 
 [dev-packages]
 paramiko = "*"

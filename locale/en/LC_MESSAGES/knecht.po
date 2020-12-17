@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-09-11 18:57+0200\n"
-"PO-Revision-Date: 2020-09-11 19:02+0200\n"
+"POT-Creation-Date: 2020-12-17 10:11+0100\n"
+"PO-Revision-Date: 2020-12-17 10:13+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: modules/gui/widgets\db_dialog.py:60
 msgid "Datapool Projekte"
@@ -368,7 +368,7 @@ msgstr "  0: Current state of the document"
 msgid "Verbindung herstellen"
 msgstr "Connect"
 
-#: modules/gui/widgets\knechtwolke.py:57 modules/gui/widgets\knechtwolke.py:103
+#: modules/gui/widgets\knechtwolke.py:57 modules/gui/widgets\knechtwolke.py:95
 #: modules/gui\ui_resource.py:107
 msgid "Verbinden"
 msgstr "Connect"
@@ -381,37 +381,57 @@ msgstr "Disconnect"
 msgid "Beim Anwendungsstart automatisch verbinden"
 msgstr "Automatically connect when the application starts"
 
-#: modules/gui/widgets\knechtwolke.py:97
+#: modules/gui/widgets\knechtwolke.py:89
 msgid "Verbunden"
 msgstr "Connected"
 
-#: modules/gui/widgets\main_ui_widgets.py:80
+#: modules/gui/widgets\main_ui_widgets.py:82
 msgid "Geschätzte Renderzeit ({} CPUs/GI)"
 msgstr "Estimated Render time ({} CPUs/GI)"
 
-#: modules/gui/widgets\main_ui_widgets.py:87
+#: modules/gui/widgets\main_ui_widgets.py:89
 msgid "Ausgabe Verzeichnis auswählen ..."
 msgstr "Choose output directory ..."
 
-#: modules/gui/widgets\main_ui_widgets.py:111
+#: modules/gui/widgets\main_ui_widgets.py:114
 msgid "Mitteilungen der Anwendung werden hier aufgelistet."
 msgstr "Messages from the application are listed here."
 
-#: modules/gui/widgets\main_ui_widgets.py:112
+#: modules/gui/widgets\main_ui_widgets.py:115
 msgid "<h4>Mitteilungen Browser</h4>"
 msgstr "<h4>Message Browser</h4>"
 
-#: modules/gui/widgets\main_ui_widgets.py:145
+#: modules/gui/widgets\main_ui_widgets.py:148
 msgid "Fehler beim sammeln der Preset Varianten. Einige Inhalte der Render Presets existieren nicht mehr."
 msgstr "Error collecting the preset variants. Some of the content of the Render Presets no longer exists."
 
-#: modules/gui/widgets\main_ui_widgets.py:153
+#: modules/gui/widgets\main_ui_widgets.py:156
 msgid "Es läuft bereits ein Render Vorgang."
 msgstr "Render process is already running."
 
-#: modules/gui/widgets\main_ui_widgets.py:175
+#: modules/gui/widgets\main_ui_widgets.py:178
 msgid "abgeschlossen am: "
 msgstr "finished on: "
+
+#: modules/gui/widgets\material_merger.py:88
+msgid "Quell-Verzeichnisse"
+msgstr "Source directories"
+
+#: modules/gui/widgets\material_merger.py:90
+msgid "Ziel-Verzeichnis"
+msgstr "Destination directory"
+
+#: modules/gui/widgets\material_merger.py:93
+msgid "Quelleordner hinzufügen"
+msgstr "Add source folder"
+
+#: modules/gui/widgets\material_merger.py:97
+msgid "Vereinen"
+msgstr "Merge"
+
+#: modules/gui/widgets\material_merger.py:155
+msgid "Vereine Material Verzeichnisse"
+msgstr "Merge Material directories"
 
 #: modules/gui/widgets\menu_asscene.py:18
 #: modules/gui/widgets\menu_deltagen.py:22
@@ -571,87 +591,87 @@ msgstr "Select references\tCtrl+R"
 msgid "Selektion aufheben\tStrg+D"
 msgstr "Clear selection\tCtrl+D"
 
-#: modules/gui/widgets\menu_file.py:53
+#: modules/gui/widgets\menu_file.py:55
 msgid "Zuletzt geöffnet"
 msgstr "Recent files"
 
-#: modules/gui/widgets\menu_file.py:94
+#: modules/gui/widgets\menu_file.py:96
 msgid "Neu\tStrg+N"
 msgstr "New\tCtrl+N"
 
-#: modules/gui/widgets\menu_file.py:100
+#: modules/gui/widgets\menu_file.py:102
 msgid "Öffnen\tStrg+O"
 msgstr "Open\tCtrl+O"
 
-#: modules/gui/widgets\menu_file.py:110
+#: modules/gui/widgets\menu_file.py:112
 msgid "Speichern\tStrg+S"
 msgstr "Save\tCtrl+S"
 
-#: modules/gui/widgets\menu_file.py:116
+#: modules/gui/widgets\menu_file.py:118
 msgid "Speichern unter ...\tStrg+Shift+S"
 msgstr "Save as ...\tCtrl+Shift+S"
 
-#: modules/gui/widgets\menu_file.py:125
+#: modules/gui/widgets\menu_file.py:127
 msgid "KnechtViewer starten"
 msgstr "Start KnechtViewer"
 
-#: modules/gui/widgets\menu_file.py:133
+#: modules/gui/widgets\menu_file.py:135
 msgid "POS Schnuffi starten"
 msgstr "Start POS Schnuffi"
 
-#: modules/gui/widgets\menu_file.py:141
+#: modules/gui/widgets\menu_file.py:143
 msgid "Bilddaten konvertieren ..."
 msgstr "Convert Image data ..."
 
-#: modules/gui/widgets\menu_file.py:155
+#: modules/gui/widgets\menu_file.py:162
 msgid "Neues_Dokument_{:02d}.xml"
 msgstr "New_Document_{:02d}.xml"
 
-#: modules/gui/widgets\menu_file.py:208
+#: modules/gui/widgets\menu_file.py:219
 msgid "Datei gespeichert:{0}{1:.3}s"
 msgstr "File saved:{0}{1:.3}s"
 
-#: modules/gui/widgets\menu_file.py:235
+#: modules/gui/widgets\menu_file.py:246
 msgid "Daten werden gelesen"
 msgstr "Data is being read"
 
-#: modules/gui/widgets\menu_file.py:255
+#: modules/gui/widgets\menu_file.py:266
 msgid "{0} in {1:.3}s geladen."
 msgstr "{0} loaded in {1:.3}s."
 
-#: modules/gui/widgets\menu_file.py:297
+#: modules/gui/widgets\menu_file.py:308
 msgid "Zieldatei zum Speichern festlegen?"
 msgstr "Set destination file to save?"
 
-#: modules/gui/widgets\menu_file.py:298
+#: modules/gui/widgets\menu_file.py:309
 msgid "Die Datei: <i>{}</i><br>Pfad: <i>{}</i><br>wurde entfernt oder existiert nicht mehr.<br><br>Neue Zieldatei zum Speichern festlegen?"
 msgstr "The file: <i>{}</i><br>Path: <i>{}</i><br> has been removed or does not exist anymore.<br><br>Set new target file to save?"
 
-#: modules/gui/widgets\menu_file.py:303
+#: modules/gui/widgets\menu_file.py:314
 msgid "Speichern unter.."
 msgstr "Save as.."
 
-#: modules/gui/widgets\menu_file.py:312
+#: modules/gui/widgets\menu_file.py:323
 msgid "Zu konvertierendes Verzeichnis ist nicht erreichbar."
 msgstr "Can not access directory to convert."
 
-#: modules/gui/widgets\menu_file.py:321
+#: modules/gui/widgets\menu_file.py:332
 msgid "Konnte Bild Konvertierung Ausgabeverzeichnis nicht erstellen."
 msgstr "Could not create image conversion output directory."
 
-#: modules/gui/widgets\menu_file.py:328
+#: modules/gui/widgets\menu_file.py:339
 msgid "Bildkonvertierung gestartet.<br /><i>{}</i>"
 msgstr "Image conversion started.<br><i>{}</i>"
 
-#: modules/gui/widgets\menu_file.py:330
+#: modules/gui/widgets\menu_file.py:341
 msgid "Bildkonvertierung konnte nicht gestartet werden. Keine konvertierbaren Dateien gefunden."
 msgstr "Image conversion could not be started. No convertible files found."
 
-#: modules/gui/widgets\menu_file.py:335
+#: modules/gui/widgets\menu_file.py:346
 msgid "Ergebnis der Bildkonvertierung:"
 msgstr "Result of image conversion:"
 
-#: modules/gui/widgets\menu_file.py:342 modules/gui/wizard\menus.py:76
+#: modules/gui/widgets\menu_file.py:353 modules/gui/wizard\menus.py:76
 msgid "Keine Einträge vorhanden"
 msgstr "No entries"
 
@@ -1772,7 +1792,7 @@ msgid ""
 "Kann keine Verbindung zur Datenbank herstellen!\n"
 "{}"
 msgstr ""
-"Cannot connect to the database!\n"
+"Could not connect to database\n"
 "{}"
 
 #: modules\knecht_datapool.py:255
@@ -1780,7 +1800,7 @@ msgid ""
 "Kann Datenbank nicht finden!\n"
 "{}"
 msgstr ""
-"Can't find database!\n"
+"Could not find database\n"
 "{}"
 
 #: modules\knecht_datapool.py:257
@@ -1799,59 +1819,67 @@ msgstr "The request to the database did not result in any result."
 msgid "Netzwerkverbindung konnte nicht beendet werden. Bitte warten und in einer Minute erneut versuchen."
 msgstr "Network connection could not be terminated. Please wait and try again in a minute."
 
-#: modules\knecht_deltagen.py:198
+#: modules\knecht_deltagen.py:160
 msgid "DeltaGen Verbindung erfolgreich verifiziert."
 msgstr "DeltaGen connection successfully verified."
 
-#: modules\knecht_deltagen.py:213
+#: modules\knecht_deltagen.py:175
 msgid "DeltaGen Verbindungsversuch ({!s}/{!s}) in {!s} Sekunden..."
 msgstr "DeltaGen connection attempt ({!s}/{!s}) in {!s} seconds ..."
 
-#: modules\knecht_deltagen.py:241
+#: modules\knecht_deltagen.py:203
 msgid "Prüfe Verbindung..."
 msgstr "Checking connection..."
 
-#: modules\knecht_deltagen.py:249
+#: modules\knecht_deltagen.py:211
 msgid "Sperre Viewer Fenster"
 msgstr "Lock viewer window"
 
-#: modules\knecht_deltagen.py:467
+#: modules\knecht_deltagen.py:441
 msgid "AsConnector aktive Szene: {}"
 msgstr "AsConnector active scene: {}"
 
-#: modules\knecht_deltagen.py:490
+#: modules\knecht_deltagen.py:464
 msgid "Es läuft bereits eine DeltaGen Sende Operation! Vorgang abwarten oder abbrechen und anschließend erneut versuchen."
 msgstr "DeltaGen send operation already running! Wait or cancel the running operation."
 
-#: modules\knecht_deltagen.py:531
+#: modules\knecht_deltagen.py:505
 msgid "Kopieren"
 msgstr "Copy"
 
-#: modules\knecht_deltagen.py:540
+#: modules\knecht_deltagen.py:514
 msgid "DeltaGen Sende Operation beendet."
 msgstr "DeltaGen Send Operation finished."
 
-#: modules\knecht_deltagen.py:543
+#: modules\knecht_deltagen.py:517
 msgid "Konnte <b>keine Verbindung</b> zu einer DeltaGen Instanz mit geladener Szene herstellen."
 msgstr "Could not <b> connect </ b> to a DeltaGen instance with a loaded scene."
 
-#: modules\knecht_deltagen.py:548
+#: modules\knecht_deltagen.py:522
 msgid "DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>"
 msgstr "DeltaGen command could not be sent. <b> No connection. </ b>"
 
-#: modules\knecht_deltagen.py:550
+#: modules\knecht_deltagen.py:524
 msgid "DeltaGen Sende Operation <b>abgebrochen.</b>"
 msgstr "DeltaGen Send Operation <b> aborted. </ B>"
 
-#: modules\knecht_deltagen.py:559
+#: modules\knecht_deltagen.py:526
+msgid "PlmXml stimmt nicht mit geladener Szene überein! Kann DeltaGen Szene nicht aktualisieren."
+msgstr "PlmXml doesn't match loaded scene! Cannot update DeltaGen Scene."
+
+#: modules\knecht_deltagen.py:529
+msgid "AsConnector konnte DeltaGen Szene nicht aktualisieren."
+msgstr "AsConnector could not update DeltaGen Scene."
+
+#: modules\knecht_deltagen.py:538
 msgid "{0} {1} gesendet"
 msgstr "{0} {1} sent"
 
-#: modules\knecht_deltagen.py:649
+#: modules\knecht_deltagen.py:644
 msgid "Auswählen"
 msgstr "Select"
 
-#: modules\knecht_deltagen.py:653
+#: modules\knecht_deltagen.py:648
 msgid "Senden an DeltaGen abgeschlossen:<br /><i>{}</i>"
 msgstr "Send operation to DeltaGen finished:<br /><i>{}</i>"
 
@@ -1897,7 +1925,7 @@ msgid ""
 "..und {} weitere Knoten."
 msgstr ""
 "\n"
-".. and {} additional nodes."
+"..and {} additional nodes."
 
 #: modules\knecht_plmxml.py:180
 msgid ""
@@ -1921,17 +1949,17 @@ msgid ""
 "Die folgenden Material Targets fehlen oder sind nicht geladen:\n"
 msgstr ""
 "\n"
-"The following material targets are missing or not loaded:\n"
+"The following material targets are missing or unloaded:\n"
 
 #: modules\knecht_plmxml.py:200
 msgid "Konfiguriere PlmXml Instanz"
 msgstr "Configure PlmXml Instance"
 
-#: modules\knecht_plmxml.py:215
+#: modules\knecht_plmxml.py:216
 msgid "Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur ..."
 msgstr "Validating DeltaGen scene against PlmXml structure."
 
-#: modules\knecht_plmxml.py:224
+#: modules\knecht_plmxml.py:225
 msgid "Konfiguriere DeltaGen Szenenstruktur ..."
 msgstr "Configuring DeltaGen Scene Structure ..."
 
@@ -2031,51 +2059,51 @@ msgstr "Session successfully saved while idle"
 msgid "Sitzungswiederherstellung abgeschlossen"
 msgstr "Session restore finished"
 
-#: modules\knecht_socketio.py:87
+#: modules\knecht_socketio.py:88
 msgid "Verbinde mit {} als {}"
 msgstr "Connecting to {} as {}"
 
-#: modules\knecht_socketio.py:97
+#: modules\knecht_socketio.py:98
 msgid "<b>Konnte nicht verbinden mit {}</b>"
 msgstr "<b>Couldn't connect to {}</b>"
 
-#: modules\knecht_socketio.py:99
+#: modules\knecht_socketio.py:100
 msgid "Navigieren Sie zu Ihrer KnechtWolke Benutzer Profil and transferieren sie die Einstellungen hier. Prüfen Sie die korrekte Adresse eingegeben zu haben und das jener Server verfügbar ist von Ihrem lokalen Bereichsnetz. Tun Sie auch diese App zu Ihrer Feuerwalzenweißliste hinzu."
 msgstr "Navigate to your KnechtWolke user profile and transfer the settings here. Check to have entered the correct address and that that server is available from your local area network. Also add this app to your fire roll whitelist."
 
-#: modules\knecht_socketio.py:111
+#: modules\knecht_socketio.py:112
 msgid "Verbunden zum SteckbuchseReinRaus Server"
 msgstr "Connected to the SocketIO Server"
 
-#: modules\knecht_socketio.py:119
+#: modules\knecht_socketio.py:120
 msgid "Verbindung getrennt."
 msgstr "Disconnected."
 
-#: modules\knecht_socketio.py:122
+#: modules\knecht_socketio.py:123
 msgid "Verbunden als {}"
 msgstr "Connected as {}"
 
-#: modules\knecht_socketio.py:135
+#: modules\knecht_socketio.py:140
 msgid "Erhielt Transfer Presets Ereignis mit Daten:"
 msgstr "Received Transfer Presets Event with Data:"
 
-#: modules\knecht_socketio.py:158
+#: modules\knecht_socketio.py:189
 msgid "Erhielt Senden PR-String Ereignis mit Daten:"
 msgstr "Received Send PR-String Event with Data:"
 
-#: modules\knecht_socketio.py:196
+#: modules\knecht_socketio.py:227
 msgid "PlmXml Datei Eintrag gefunden aber keine lokale Datei vorhanden!"
 msgstr "PlmXml file entry found but no local file exists!"
 
-#: modules\knecht_socketio.py:211
+#: modules\knecht_socketio.py:242
 msgid "Konnte Datei nicht heruterladen von: {}"
 msgstr "Couldn't reload file from: {}"
 
-#: modules\knecht_socketio.py:221
+#: modules\knecht_socketio.py:252
 msgid "Konnte Download Datei nicht finden: {}"
 msgstr "Couldn't find download file: {}"
 
-#: modules\knecht_socketio.py:228
+#: modules\knecht_socketio.py:259
 msgid "Konnte Download Datei nicht speichern: {}"
 msgstr "Couldn't save download file: {}"
 
@@ -2269,4 +2297,4 @@ msgstr "Open path"
 
 #: modules\path_render_service.py:733
 msgid "Ausgabe öffnen"
-msgstr "Open output directory"
+msgstr "Open output"
