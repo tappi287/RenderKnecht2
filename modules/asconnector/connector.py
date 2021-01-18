@@ -51,14 +51,16 @@ class AsConnectorConnection:
         while not result and retry and (tries := tries + 1) < self.num_retries:
             try:
                 r = requests.post(
-                    as_request.get_url(), data=as_request.to_bytes(), headers=as_request.get_header(), timeout=self.timeout
+                    as_request.get_url(), data=as_request.to_bytes(), headers=as_request.get_header(),
+                    timeout=self.timeout
                     )
             except Exception as e:
                 LOGGER.error('Error connecting to AsConnector! %s', e)
                 err = str(e)
 
             if r is not None:
-                LOGGER.debug('Sent request to AsConnector, response code was: %s', r.status_code)
+                LOGGER.debug('Sent %s to AsConnector, response code was: %s', as_request.__class__.__name__,
+                             r.status_code)
                 result = as_request.handle_response(r)
                 self.error = as_request.error
             else:
