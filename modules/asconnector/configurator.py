@@ -1,11 +1,9 @@
-import re
 from typing import Tuple, List, Set, Dict
 
 from plmxml import PlmXml
 from plmxml.configurator import PlmXmlBaseConfigurator
 from plmxml.node_info import NodeInfo
 from plmxml.material import MaterialTarget
-from plmxml.utils import pr_tags_to_reg_ex
 
 from modules.language import get_translation
 from modules.log import init_logging
@@ -28,6 +26,8 @@ class PlmXmlConfigurator(PlmXmlBaseConfigurator):
 
         :param PlmXml plmxml: PlmXml instance holding info about look library and product instances
         :param str config: Configuration String
+        :param bool plmxml_changed: If the scene was changed we need to initially load a PlmXml inside
+                                    DeltaGen to re-initialize the AsConnector
         """
         super(PlmXmlConfigurator, self).__init__(plmxml, config)
         self.plmxml = plmxml
@@ -40,13 +40,13 @@ class PlmXmlConfigurator(PlmXmlBaseConfigurator):
         self._missing_targets: List[MaterialTarget] = list()
 
         # Parse PlmXml against config on initialisation
-        self._parse_plmxml_against_config()
+        self._setup_plmxml_product_instances()
 
     def update_config(self, config: str):
         self.config = config
-        self._parse_plmxml_against_config()
+        self._setup_plmxml_product_instances()
 
-    def _parse_plmxml_against_config(self):
+    def _setup_plmxml_product_instances(self):
         """ Request plmxml instance update from BaseConfigurator.
             This will update visibility of ProductInstances and visible_variants of LookLibrary Materials.
         """
@@ -151,10 +151,7 @@ class PlmXmlConfigurator(PlmXmlBaseConfigurator):
         return valid_targets, missing_targets
 
     def request_delta_gen_update(self) -> bool:
-        """ Send requests to AsConnector2 to update the DeltaGen scene with the current configuration
-
-        :return:
-        """
+        """ Send requests to AsConnector2 to update the DeltaGen scene with the current configuration """
         as_conn, result = AsConnectorConnection(), True
 
         # Check Connection
@@ -198,7 +195,8 @@ class PlmXmlConfigurator(PlmXmlBaseConfigurator):
 
         return visible_request, invisible_request
 
-    def create_material_connect_to_targets_request(self, as_conn: AsConnectorConnection) -> AsMaterialConnectToTargetsRequest:
+    def create_material_connect_to_targets_request(
+            self, as_conn: AsConnectorConnection) -> AsMaterialConnectToTargetsRequest:
         valid_material_targets, invalid_material_targets = self._get_valid_material_targets()
 
         # --- Report Missing Material Targets ---
