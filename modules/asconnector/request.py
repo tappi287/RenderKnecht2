@@ -294,6 +294,7 @@ class AsNodeGetSelection(AsConnectorRequest):
 
         if e is not None:
             self.result = NodeInfo.get_node_from_as_connector_element(e)
+            LOGGER.debug('Node/Get/Selection result: %s', self.result)
             return True
         else:
             return False
@@ -314,6 +315,7 @@ class AsGetSelectedNodeEventRequest(AsConnectorRequest):
 
     def _read_response(self, r_xml: Et._Element) -> bool:
         e = r_xml.find(self.response_xpath)
+        LOGGER.debug('Event/Selected result: %s', r_xml)
 
         if e is not None:
             return True
@@ -388,7 +390,11 @@ class AsSceneLoadRequest(AsConnectorRequest):
 
     def __init__(self, scene_path: Path, close_active_sessions: bool = False, load_assemblies: bool = False):
         """ Load a Scene with AsConnector
-        :returns: The name of the active scene as string
+
+        :param scene_path: The path to the file to load.
+        :param close_active_sessions: Specify whether or not to close the currently active session in the AS.
+        :param load_assemblies: Specify whether or not to load the connected assemblies.
+        :returns: True if the file starts loading.
         :rtype: str
         """
         super(AsSceneLoadRequest, self).__init__()
@@ -429,6 +435,73 @@ class AsSceneLoadRequest(AsConnectorRequest):
 
         if result:
             LOGGER.debug('AsConnector SceneLoad request successful: %s', self.result)
+
+        return result
+
+
+class AsSceneLoadPlmXmlRequest(AsSceneLoadRequest):
+    response_xpath = f'{Pg.AS_CONNECTOR_XMLNS}returnVal'
+
+    def __init__(self, scene_path: Path, close_active_sessions: bool = False, load_assemblies: bool = False,
+                 native: bool = False):
+        """ Load a Scene with AsConnector
+
+        :param native: If set to false, the authoring system will not use its internal file parser.
+                       Instead AsConnector2 parses and builds the scene structure.
+                       Only works with PlmXml.
+        :returns: True if the file starts loading.
+        :rtype: str
+        """
+        super(AsSceneLoadPlmXmlRequest, self).__init__(scene_path, close_active_sessions, load_assemblies)
+        self.url = 'scene/load'
+
+        self.result = str()
+        self.expected_result = 'true'
+        self.scene_path = scene_path
+
+        self._add_request_arg(native)
+
+    def _add_request_arg(self, native):
+        # -<native>
+        n = Et.SubElement(self.request, 'native')
+        n.text = str(native).lower()
+
+
+class AsSceneCloseRequest(AsConnectorRequest):
+    response_xpath = f'{Pg.AS_CONNECTOR_XMLNS}returnVal'
+
+    def __init__(self, scene_name: str):
+        """ Close the DeltaGen Scene with title scene_name
+
+        :param scene_name: Name of the scene to close
+        """
+        super(AsSceneCloseRequest, self).__init__()
+        self.url = 'scene/close'
+        self.result = str()
+        self.expected_result = 'true'
+        self._set_request(scene_name)
+
+    def _set_request(self, scene_name):
+        e = self._create_request_root_element('Scene', 'Close')
+        n = Et.SubElement(e, 'name')
+        m = Et.SubElement(n, 'string')
+        m.text = scene_name
+
+        self.request = e
+
+    def _read_response(self, r_xml: Et._Element) -> bool:
+        result = False
+
+        for e in r_xml.iterfind(self.response_xpath):
+            if e.text:
+                self.result = e.text
+                if self.result == self.expected_result:
+                    result = True
+
+        if result:
+            LOGGER.info('AsConnector SceneClose request successful: %s', self.result)
+        else:
+            LOGGER.error('AsConnector SceneClose request unsuccessful: %s', r_xml)
 
         return result
 
