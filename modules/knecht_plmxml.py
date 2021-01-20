@@ -252,7 +252,7 @@ class KnechtUpdatePlmXml(Thread):
         # -- Scene changed, re-initialize by loading plmxml --
         self.signals.status.emit(_('PlmXml weicht von vorhergehend geschalteter PlmXml ab. '
                                    'AsConnector muss re-initialisiert werden. Dies dauert einen Moment.') +
-                                 f'{plmxml_file.name}', 5000)
+                                 f' <i>{plmxml_file.name}</i>', 5000)
 
         as_conn = AsConnectorConnection()
         if not as_conn.check_connection():
