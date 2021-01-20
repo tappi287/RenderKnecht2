@@ -15,6 +15,9 @@ from queue import Queue
 from datetime import datetime, timedelta
 from functools import partial
 
+from PySide2.QtWidgets import QLineEdit
+
+from modules import KnechtSettings
 from modules.gui.widgets.path_util import SetDirectoryPath, path_exists
 from modules.gui.animation import AnimatedButton
 from modules.gui.ui_overlay import InfoOverlay, Overlay
@@ -152,6 +155,10 @@ class PathRenderService(QtCore.QObject):
         self.text_browser = self.ui.renderServiceBrowser
         self.text_browser.ovr = Overlay(self.text_browser)
 
+        # --------- Service Address Line Edit ---------
+        self.ui.serviceAddressEdit.setText(KnechtSettings.app.get('aeffchen_address'))
+        self.ui.serviceAddressEdit.editingFinished.connect(self.update_service_address)
+
         # Set splitter size
         self.ui.jobStatusSplitter.setSizes([200, 100])
 
@@ -176,6 +183,9 @@ class PathRenderService(QtCore.QObject):
             if not self.service_host:
                 # Highlight connect button
                 self.ui.pathConnectBtn.animation.play_highlight()
+
+    def update_service_address(self):
+        KnechtSettings.app['aeffchen_address'] = self.ui.serviceAddressEdit.text()
 
     def switch_service_on_off(self):
         self.switch_btn_timer.start()
@@ -210,6 +220,10 @@ class PathRenderService(QtCore.QObject):
                 self.send_thread = None
 
     def search_service(self):
+        if not self.service_host and KnechtSettings.app.get('aeffchen_address'):
+            self.update_status(_('Benutze angegebene Aeffchen IP. Suche wird übersprungen.'), 2)
+            self.search_service_result(KnechtSettings.app.get('aeffchen_address'))
+
         if self.service_host:
             self.send_message('GET_STATUS')
             return

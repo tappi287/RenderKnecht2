@@ -145,6 +145,7 @@ class KnechtSettings:
         recent_files=list(),
         app_style='Fusion',
         font_size=20,
+        aeffchen_address='',
         )
     dg = dict(
         freeze_viewer=True,
@@ -173,6 +174,7 @@ class KnechtSettings:
     excel = list()
 
     language = 'de'
+    last_plmxml = Path()
 
     @classmethod
     def load(cls) -> None:
