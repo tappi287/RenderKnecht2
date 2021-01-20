@@ -47,8 +47,9 @@ class AsConnectorConnection:
 
     def request(self, as_request: AsConnectorRequest, retry: bool = True) -> bool:
         r, err, tries, result = None, str(), 0, False
+        retries = self.num_retries if retry else 2
 
-        while not result and retry and (tries := tries + 1) < self.num_retries:
+        while not result and (tries := tries + 1) <= retries:
             try:
                 r = requests.post(
                     as_request.get_url(), data=as_request.to_bytes(), headers=as_request.get_header(),
