@@ -1,5 +1,6 @@
 from pathlib import Path
 from threading import Thread
+from time import sleep
 from typing import Tuple
 
 from PySide2.QtCore import QObject, Signal
@@ -7,13 +8,13 @@ from plmxml import PlmXml
 
 from modules.globals import DeltaGenResult
 from modules.knecht_objects import KnechtVariantList
+from modules.settings import KnechtSettings
 from modules.language import get_translation
 from modules.log import init_logging
 from modules.asconnector.configurator import PlmXmlConfigurator
 from modules.asconnector.connector import AsConnectorConnection
-from modules.asconnector.request import AsSceneSetActiveRequest, AsSceneGetAllRequest, AsSceneGetActiveRequest
-
-# from private.plmxml_example_data import example_pr_string, plm_xml_file
+from modules.asconnector.request import AsSceneSetActiveRequest, AsSceneGetAllRequest, AsSceneGetActiveRequest, \
+    AsSceneLoadPlmXmlRequest, AsSceneCloseRequest
 
 LOGGER = init_logging(__name__)
 
@@ -195,12 +196,17 @@ class KnechtUpdatePlmXml(Thread):
         self._setup_signals()
 
         result = DeltaGenResult.send_success
-        file = Path(self.variants_ls.plm_xml_path)
+        plmxml_file = Path(self.variants_ls.plm_xml_path)
+
+        # -- Re-initialize AsConnector if active scene has changed --
+        if not self._initialize_as_connector(plmxml_file):
+            self.signals.status.emit(_('Konnte AsConnector nicht initialisieren. PlugIn geladen?'), 8000)
+            return
 
         self.signals.status.emit(_('Konfiguriere PlmXml Instanz'), 4000)
 
         # -- Parse a PlmXml file, collecting product instances and LookLibrary
-        plm_xml_instance = PlmXml(file)
+        plm_xml_instance = PlmXml(plmxml_file)
 
         if not plm_xml_instance.is_valid:
             LOGGER.error(plm_xml_instance.error)
@@ -232,6 +238,50 @@ class KnechtUpdatePlmXml(Thread):
         if result == DeltaGenResult.send_success:
             self.signals.plmxml_result.emit(conf.status_msg)
         self.signals.send_finished.emit(result)
+
+    def _initialize_as_connector(self, plmxml_file: Path):
+        """ Re-initialize AsConnector if active scene has changed:
+            1. AsSceneGetActiveRequest
+            2. AsSceneLoadPlmXmlRequest
+            3. CloseScene
+            -> AsConnector is now initialized to a new scene.
+        """
+        if KnechtSettings.app.get('last_plmxml', '') == plmxml_file.name:
+            return True
+
+        # -- Scene changed, re-initialize by loading plmxml --
+        self.signals.status.emit(_('PlmXml weicht von vorhergehend geschalteter PlmXml ab. '
+                                   'AsConnector muss re-initialisiert werden. Dies dauert einen Moment.') +
+                                 f'{plmxml_file.name}', 5000)
+
+        as_conn = AsConnectorConnection()
+        if not as_conn.check_connection():
+            return False
+
+        # -- Load PlmXml as DeltaGen Scene --
+        load_request = AsSceneLoadPlmXmlRequest(plmxml_file)
+        load_response = as_conn.request(load_request, retry=False)
+
+        if not load_response:
+            self.signals.status.emit(_('Konnte PlmXml nicht in DeltaGen laden. '
+                                       'AsConnector konnte nicht re-initialisiert werdem! Materialschaltungen '
+                                       'könnten unter Umständen nicht funktionieren.'), 8000)
+            return False
+
+        # -- Close the loaded PlmXml --
+        sleep(0.3)
+        close_request = AsSceneCloseRequest(plmxml_file.name)
+        close_result = as_conn.request(close_request)
+
+        if not close_result:
+            self.signals.status.emit(_('Konnte geladene PlmXml nicht schliessen. '
+                                       'AsConnector konnte vermutlich re-initialisiert werden. '
+                                       'Die geladene PlmXml Szene kann geschlossen werden.'), 5000)
+            return False
+
+        self.signals.status.emit(_('AsConnector erfolgreich re-initialisiert.'), 5000)
+        KnechtSettings.app['last_plmxml'] = plmxml_file.name
+        return True
 
 
 def create_pr_string_from_variants(variants_ls: KnechtVariantList) -> str:
