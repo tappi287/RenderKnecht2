@@ -34,6 +34,8 @@ DG_TCP_PORT = 3333
 KNECHT_VIEWER_BIN = 'KnechtViewer.exe'
 POS_SCHNUFFI_BIN = 'PosSchnuffi.exe'
 
+CSB_DUMMY_MATERIAL = 'DUMMY-Froebus.csb'
+
 # Frozen or Debugger
 if getattr(sys, 'frozen', False):
     # -- Running in PyInstaller Bundle ---

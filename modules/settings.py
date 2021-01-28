@@ -160,6 +160,8 @@ class KnechtSettings:
         viewer_apply_bg=False,
         display_send_finished_overlay=False,
         validate_plmxml_scene=True,
+        use_material_dummy=False,
+        csb_material_dummy_path='',
         )
     wolke = dict(
         user='UserName',

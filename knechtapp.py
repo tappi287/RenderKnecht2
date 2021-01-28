@@ -12,6 +12,7 @@ from modules.gui.main_app import KnechtApp
 from modules.gui.widgets.about_page import InfoMessage
 from modules.log import init_logging, setup_log_queue_listener, setup_logging
 from modules.settings import KnechtSettings, delayed_log_setup
+from modules.gui.ui_resource import unpack_csb_dummy
 from modules.singleton import SingleInstance
 from ui import darkstyle, gui_resource
 
@@ -89,6 +90,10 @@ def main():
         LOGGER.fatal('Can not locate UI resource files! Shutting down application.')
         shutdown(log_listener)
         return
+
+    # Unpack CSB Dummy Material
+    if not unpack_csb_dummy():
+        LOGGER.error('Could not unpack CSB Dummy Material into settings path!')
 
     #
     #

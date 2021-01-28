@@ -1,7 +1,10 @@
+from pathlib import Path
+
+from PySide2.QtCore import QFile, QIODevice, QByteArray
 from PySide2.QtGui import QFont, QFontDatabase, QIcon, QPixmap
 from PySide2.QtMultimedia import QSound
 
-from modules.globals import Resource
+from modules.globals import Resource, get_settings_dir, CSB_DUMMY_MATERIAL
 from modules.language import get_translation
 from modules.log import init_logging
 from modules.settings import KnechtSettings
@@ -212,3 +215,36 @@ class SoundRsc:
     @classmethod
     def get_sound(cls, sound_key, parent=None):
         return cls._get_resource_from_key(sound_key, parent)
+
+
+def unpack_csb_dummy():
+    res_path = Resource.icon_paths.get('DUMMY-Froebus')
+    if not res_path:
+        LOGGER.error('Resource paths did not contain CSB Material Dummy!')
+        return False
+
+    f = QFile(res_path)
+    out_file = Path(get_settings_dir()) / CSB_DUMMY_MATERIAL
+
+    if out_file.exists():
+        KnechtSettings.dg['csb_material_dummy_path'] = out_file.as_posix()
+        return True
+
+    try:
+        # Read resource data
+        f.open(QIODevice.ReadOnly)
+        data: QByteArray = f.readAll()
+        data: bytes = data.data()
+
+        # Write to file
+        with open(out_file, 'wb') as csb_file:
+            csb_file.write(data)
+    except Exception as e:
+        LOGGER.error(e)
+        return False
+    finally:
+        f.close()
+
+    LOGGER.debug('Unpacked CSB Material Dummy successfully.')
+    KnechtSettings.dg['csb_material_dummy_path'] = out_file.as_posix()
+    return True
