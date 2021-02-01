@@ -246,20 +246,23 @@ class DatapoolConnector:
         return name, _id, pr, package, category, collage
 
     def _set_connection_error(self, err: mysql.connector.Error):
-        msg = _('Datenbank Fehler:\n')
+        msg = _('Datenbank Fehler:')
+        msg += '\n'
         LOGGER.error("Error connecting MySql: %s %s", err.errno, err)
 
         if err.errno in (my_sql_error_code.ER_ACCESS_DENIED_ERROR, my_sql_error_code.CR_CONN_HOST_ERROR):
-            msg += _('Kann keine Verbindung zur Datenbank herstellen!\n{}')
+            msg += _('Kann keine Verbindung zur Datenbank herstellen!')
         elif err.errno == my_sql_error_code.ER_BAD_DB_ERROR:
-            msg += _('Kann Datenbank nicht finden!\n{}')
+            msg += _('Kann Datenbank nicht finden!')
         else:
-            msg += _('Unbekannter Fehler:\n{}')
+            msg += _('Unbekannter Fehler:')
+        msg += '\n{}'
 
         self._error_msg = msg.format(err)
 
     def _set_sql_error(self, err: mysql.connector.Error, query: str=''):
-        msg = _('Datenbank Fehler:\n')
+        msg = _('Datenbank Fehler:')
+        msg += '\n'
         err_msg = f'SQLSTATE: {err.sqlstate}, Error Code: {err.errno}, Message: {err.msg}, Query: {query or ""}'
         LOGGER.error(err_msg)
         self._error_msg = msg + err_msg

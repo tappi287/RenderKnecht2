@@ -34,7 +34,7 @@ class DeltaGenMenu(QMenu):
         self.hidden_actions.setVisible(False)
 
         self.send_camera, self.display, self.display_overlay = None, None, None
-        self.validate_plmxml = None
+        self.enable_material_dummy, self.validate_plmxml = None, None
         self.as_scene_menu = QMenu()
 
         self.setup_deltagen_menu()
@@ -63,6 +63,10 @@ class DeltaGenMenu(QMenu):
         self.display_overlay = self._setup_checkable_action(_('Zuletzt gesendetes Preset als Overlay anzeigen'), False,
                                                             self.toggle_display_finished_overlay)
 
+        # ---- Assign Dummy Material before applying PlmXml Materials
+        self.enable_material_dummy = self._setup_checkable_action(_('Dummy Material auf PlmXml Konfiguration anwenden'),
+                                                                  False, self.toggle_plmxml_material_dummy)
+
         # ---- Validate DeltaGen Scene vs PlmXml before switching configurations
         self.validate_plmxml = self._setup_checkable_action(
             _('DeltaGen Szene vor dem konfigurieren mit PlmXml abgleichen.'), True,
@@ -72,11 +76,10 @@ class DeltaGenMenu(QMenu):
         self.as_scene_menu.deleteLater()
         self.as_scene_menu = AsSceneMenu(self.ui, _('AsConnector aktive Szene:'))
         self.addMenu(self.as_scene_menu)
-        self.as_scene_menu.menuAction().setActionGroup(self.hidden_actions)
 
         self._apply_settings()
 
-    def _setup_checkable_action(self, name: str, checked: bool, target: object, action_grp: QActionGroup=None):
+    def _setup_checkable_action(self, name: str, checked: bool, target: object, action_grp: QActionGroup = None):
         check_icon = IconRsc.get_icon('check_box_empty')
         check_icon.addPixmap(IconRsc.get_pixmap('check_box'), QIcon.Normal, QIcon.On)
 
@@ -110,6 +113,7 @@ class DeltaGenMenu(QMenu):
         self.send_camera.setChecked(KnechtSettings.dg.get('send_camera_data'))
         self.display.setChecked(KnechtSettings.dg.get('display_variant_check'))
         self.display_overlay.setChecked(KnechtSettings.dg.get('display_send_finished_overlay'))
+        self.enable_material_dummy.setChecked(KnechtSettings.dg.get('use_material_dummy'))
         self.validate_plmxml.setChecked(KnechtSettings.dg.get('validate_plmxml_scene'))
 
     @Slot(bool)
@@ -134,6 +138,10 @@ class DeltaGenMenu(QMenu):
         KnechtSettings.dg['display_send_finished_overlay'] = checked
 
     @Slot(bool)
+    def toggle_plmxml_material_dummy(self, checked: bool):
+        KnechtSettings.dg['use_material_dummy'] = checked
+
+    @Slot(bool)
     def toggle_validate_plmxml(self, checked: bool):
         KnechtSettings.dg['validate_plmxml_scene'] = checked
 
@@ -141,6 +149,6 @@ class DeltaGenMenu(QMenu):
     def toggle_camera_send(self, checked: bool):
         KnechtSettings.dg['send_camera_data'] = checked
 
-    def enable_menus(self, enabled: bool=True):
+    def enable_menus(self, enabled: bool = True):
         for a in self.menu.actions():
             a.setEnabled(enabled)

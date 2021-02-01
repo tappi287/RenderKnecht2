@@ -1,10 +1,12 @@
 import time
+from pathlib import WindowsPath, Path
 from threading import Event, Thread
-from typing import Union
+from typing import Union, Optional
 
 from PySide2.QtCore import QObject, QTimer, Signal, Slot, Qt, QUuid
 from PySide2.QtGui import QColor
 from PySide2.QtWidgets import QComboBox, QPushButton
+from plmxml import NodeInfo
 
 from modules.globals import DG_TCP_IP, DG_TCP_PORT, DeltaGenResult
 from modules.gui.widgets.button_color import QColorButton
@@ -353,6 +355,7 @@ class SendToDeltaGen(QObject):
         self.plm_xml_controller.progress.connect(self._update_progress)
         self.plm_xml_controller.plmxml_result.connect(self._plm_xml_display_result)
         self.plm_xml_controller.scene_active_result.connect(self._request_active_scene_result)
+        self.plm_xml_controller.material_dummy.connect(self._create_material_dummy)
 
         # Prepare Send Thread
         self.dg = CommunicateDeltaGen(self.ui)
@@ -474,6 +477,12 @@ class SendToDeltaGen(QObject):
 
     def restore_viewer(self):
         self.restore_viewer_cmd.emit()
+
+    def _create_material_dummy(self, material_dummy: Optional[NodeInfo]):
+        if KnechtSettings.dg.get('use_material_dummy') and material_dummy is None:
+            self._update_status(_('Füge Material Dummy zur Szenenstruktur hinzu.'))
+            cmd = f'ATTACH_FILE {str(WindowsPath(Path(KnechtSettings.dg.get("csb_material_dummy_path"))))}'
+            self.transfer_command.emit(cmd)
 
     def _no_connection(self):
         pass

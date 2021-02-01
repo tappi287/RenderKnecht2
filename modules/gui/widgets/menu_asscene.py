@@ -30,6 +30,9 @@ class AsSceneMenu(QMenu):
         self.action_grp.setExclusive(True)
 
         self.setIcon(IconRsc.get_icon('paperplane'))
+
+        self._awaiting_result = False
+
         self.aboutToShow.connect(self._about_to_show)
 
         QTimer.singleShot(500, self._delayed_setup)
@@ -47,6 +50,8 @@ class AsSceneMenu(QMenu):
 
         for scene_name in scenes:
             self.create_scene_action(scene_name, scene_name == active_scene)
+
+        self._awaiting_result = False
 
     def _warn_msg(self):
         return QAction(IconRsc.get_icon('warn'), _('AsConnector unterstützt nur Schaltungen in zuletzt geladener '
@@ -77,9 +82,12 @@ class AsSceneMenu(QMenu):
         self.addAction(self._warn_msg())
 
     def _about_to_show(self):
-        self._clear_menu()
-        self.addAction(self._requested_info())
+        if len(self.actions()) == 1:
+            self._clear_menu()
+            self.addAction(self._requested_info())
 
-        # Request list of available AsConnector scene without setting a scene active(None)
-        self.ui.app.send_dg.send_active_scene_request(None)
+        if not self._awaiting_result:
+            # Request list of available AsConnector scene without setting a scene active(None)
+            self.ui.app.send_dg.send_active_scene_request(None)
+            self._awaiting_result = True
 

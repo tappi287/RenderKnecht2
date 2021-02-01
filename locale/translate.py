@@ -8,7 +8,7 @@ from subprocess import call
 APP_NAME = 'knecht'
 # modules to translate
 MODULES = 'knechtapp.py modules/*.py modules/gui/*.py modules/gui/widgets/*.py ' \
-          'modules/gui/wizard/*.py modules/itemview/*.py'
+          'modules/gui/wizard/*.py modules/itemview/*.py modules/asconnector/*.py'
 
 ENCODING_VAL = 'cp1252'
 

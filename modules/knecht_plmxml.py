@@ -1,10 +1,10 @@
 from pathlib import Path
 from threading import Thread
 from time import sleep
-from typing import Tuple
+from typing import Tuple, Optional
 
 from PySide2.QtCore import QObject, Signal
-from plmxml import PlmXml
+from plmxml import PlmXml, NodeInfo
 
 from modules.globals import DeltaGenResult
 from modules.knecht_objects import KnechtVariantList
@@ -31,6 +31,7 @@ class KnechtPlmXmlController(QObject):
     progress = Signal(int)
     plmxml_result = Signal(str)
     scene_active_result = Signal(str, list)
+    material_dummy = Signal(NodeInfo)
 
     def __init__(self, variants_ls: KnechtVariantList):
         super(KnechtPlmXmlController, self).__init__()
@@ -57,7 +58,7 @@ class KnechtPlmXmlController(QObject):
 
         self.send_in_progress = True
 
-    def start_get_set_active_scenes(self, set_active_scene: str=None):
+    def start_get_set_active_scenes(self, set_active_scene: str = None):
         """ Request a list of available scene + str of currently active scene
             and, if set, request the provided <set_active_scene> to be set as active scene.
             Will emit Signal scene_result on success or no connection otherwise.
@@ -97,7 +98,7 @@ class KnechtUpdateActiveScene(Thread):
         self.signals.no_connection.connect(self.controller.no_connection)
         self.signals.scene_result.connect(self.controller.scene_active_result)
 
-    def start(self) -> None:
+    def run(self) -> None:
         self._setup_signals()
         active_scene, scene_list = self._request_scene_list()
 
@@ -117,8 +118,6 @@ class KnechtUpdateActiveScene(Thread):
     def _set_scene_active_request(scene_name: str):
         """ Request AsConnector to set scene with scene_name active """
         as_conn = AsConnectorConnection()
-        if not as_conn.check_connection():
-            return False
 
         set_active_req = AsSceneSetActiveRequest(scene_name)
         return as_conn.request(set_active_req)
@@ -126,22 +125,21 @@ class KnechtUpdateActiveScene(Thread):
     @staticmethod
     def _request_scene_list() -> Tuple[str, list]:
         as_conn = AsConnectorConnection()
-        if not as_conn.check_connection():
-            return str(), list()
 
         get_all_req = AsSceneGetAllRequest()
         result = as_conn.request(get_all_req)
+        scenes = get_all_req.result
 
         if not result:
-            return str(), list()
+            return str(), scenes or list()
 
         get_active_scene_req = AsSceneGetActiveRequest()
         result = as_conn.request(get_active_scene_req)
-        if not result:
-            return str(), list()
-
         active_scene = get_active_scene_req.result
-        scenes = get_all_req.result
+
+        if not result:
+            return active_scene or str(), scenes or list()
+
         return active_scene, scenes
 
 
@@ -151,12 +149,14 @@ class _KnechtUpdatePlmXmlSignals(QObject):
     status = Signal(str, int)
     progress = Signal(int)
     plmxml_result = Signal(str)
+    material_dummy = Signal(NodeInfo)
 
 
 class KnechtUpdatePlmXml(Thread):
     def __init__(self, controller: KnechtPlmXmlController):
         super(KnechtUpdatePlmXml, self).__init__()
         self.controller = controller
+        self.as_conn = None
         self.variants_ls = controller.variants_ls
         self.signals = _KnechtUpdatePlmXmlSignals()
 
@@ -166,31 +166,37 @@ class KnechtUpdatePlmXml(Thread):
         self.signals.progress.connect(self.controller.progress)
         self.signals.no_connection.connect(self.controller.no_connection)
         self.signals.plmxml_result.connect(self.controller.plmxml_result)
+        self.signals.material_dummy.connect(self.controller.material_dummy)
 
     @staticmethod
-    def _validate_scene(conf: PlmXmlConfigurator):
-        request_successful, missing_nodes, missing_targets = conf.validate_scene_vs_plmxml()
+    def _validate_scene(conf: PlmXmlConfigurator) -> Tuple[bool, str, Optional[NodeInfo]]:
+        request_successful, missing_nodes, missing_targets, material_dummy = conf.validate_scene_vs_plmxml()
 
         if request_successful and missing_nodes:
-            scene_result = _('DeltaGen Szene stimmt nicht mit PlmXml überein. Fehlende Knoten:\n')
+            scene_result = _('DeltaGen Szene stimmt nicht mit PlmXml überein. Fehlende Knoten:')
+            scene_result += '\n'
             scene_result += '\n'.join(
                 [f'Name: {m.name} LincId: {m.linc_id}' for m in missing_nodes[:20]]
                 )
             if len(missing_nodes) > 20:
-                scene_result += _('\n..und {} weitere Knoten.').format(len(missing_nodes[20:]))
-            scene_result += _('\nDiese Prüfung kann in den DeltaGen Optionen deaktiviert werden.')
+                scene_result += '\n'
+                scene_result += _('..und {} weitere Knoten.').format(len(missing_nodes[20:]))
+            scene_result += '\n'
+            scene_result += _('Diese Prüfung kann in den DeltaGen Optionen deaktiviert werden.')
 
-            return False, scene_result
+            return False, scene_result, material_dummy
         elif request_successful and not missing_nodes:
             scene_result = _('DeltaGen Szenenstruktur erfolgreich mit PlmXml Struktur abgeglichen.')
         else:
             scene_result = _('Konnte DeltaGen Szene nicht mit PlmXml abgleichen. Keine Verbindung zum AsConnector2.')
 
         if missing_targets:
-            scene_result += _('\nDie folgenden Material Targets fehlen oder sind nicht geladen:\n')
+            scene_result += '\n'
+            scene_result += _('Die folgenden Material Targets fehlen oder sind nicht geladen:')
+            scene_result += '\n'
             scene_result += f'{"; ".join(missing_targets)}'
 
-        return True, scene_result
+        return True, scene_result, material_dummy
 
     def run(self) -> None:
         self._setup_signals()
@@ -198,12 +204,18 @@ class KnechtUpdatePlmXml(Thread):
         result = DeltaGenResult.send_success
         plmxml_file = Path(self.variants_ls.plm_xml_path)
 
-        # -- Re-initialize AsConnector if active scene has changed --
-        if not self._initialize_as_connector(plmxml_file):
-            self.signals.status.emit(_('Konnte AsConnector nicht initialisieren. PlugIn geladen?'), 8000)
+        # -- Check AsConnector connection
+        self.as_conn = AsConnectorConnection()
+        if not self.as_conn.check_connection():
+            self._update_status(self.as_conn.error)
             return
 
-        self.signals.status.emit(_('Konfiguriere PlmXml Instanz'), 4000)
+        # -- Re-initialize AsConnector if active scene has changed --
+        if not self._initialize_as_connector(plmxml_file):
+            self._update_status(_('Konnte AsConnector nicht initialisieren. PlugIn geladen?'))
+            return
+
+        self._update_status(_('Konfiguriere PlmXml Instanz'))
 
         # -- Parse a PlmXml file, collecting product instances and LookLibrary
         plm_xml_instance = PlmXml(plmxml_file)
@@ -216,11 +228,15 @@ class KnechtUpdatePlmXml(Thread):
             # return
 
         # -- Configure the PlmXml product instances and LookLibrary with a configuration string
-        conf = PlmXmlConfigurator(plm_xml_instance, create_pr_string_from_variants(self.variants_ls))
+        conf = PlmXmlConfigurator(plm_xml_instance, create_pr_string_from_variants(self.variants_ls), self.as_conn,
+                                  self._update_status)
 
         # -- Validate Scene
-        self.signals.status.emit(_('Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur ...'), 8000)
-        scene_valid, scene_result = self._validate_scene(conf)
+        self._update_status(_('Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur ...'))
+        scene_valid, scene_result, material_dummy = self._validate_scene(conf)
+
+        # -- Report Material Dummy presence
+        self.signals.material_dummy.emit(material_dummy)
 
         if not scene_valid:
             self.signals.plmxml_result.emit(scene_result)
@@ -228,7 +244,7 @@ class KnechtUpdatePlmXml(Thread):
             return
 
         # -- Request to show the updated configuration in DeltaGen, will block
-        self.signals.status.emit(_('Konfiguriere DeltaGen Szenenstruktur ...'), 8000)
+        self._update_status(_('Konfiguriere DeltaGen Szenenstruktur ...'))
         if not conf.request_delta_gen_update():
             errors = '\n'.join(conf.errors)
             LOGGER.error(errors)
@@ -238,6 +254,9 @@ class KnechtUpdatePlmXml(Thread):
         if result == DeltaGenResult.send_success:
             self.signals.plmxml_result.emit(conf.status_msg)
         self.signals.send_finished.emit(result)
+
+    def _update_status(self, message: str):
+        self.signals.status.emit(message, 5000)
 
     def _initialize_as_connector(self, plmxml_file: Path):
         """ Re-initialize AsConnector if active scene has changed:
@@ -250,36 +269,32 @@ class KnechtUpdatePlmXml(Thread):
             return True
 
         # -- Scene changed, re-initialize by loading plmxml --
-        self.signals.status.emit(_('PlmXml weicht von vorhergehend geschalteter PlmXml ab. '
-                                   'AsConnector muss re-initialisiert werden. Dies dauert einen Moment.') +
-                                 f' <i>{plmxml_file.name}</i>', 5000)
-
-        as_conn = AsConnectorConnection()
-        if not as_conn.check_connection():
-            return False
+        self._update_status(_('PlmXml weicht von vorhergehend geschalteter PlmXml ab. '
+                              'AsConnector muss re-initialisiert werden. Dies dauert einen Moment.')
+                            + f' <i>{plmxml_file.name}</i>')
 
         # -- Load PlmXml as DeltaGen Scene --
         load_request = AsSceneLoadPlmXmlRequest(plmxml_file)
-        load_response = as_conn.request(load_request, retry=False)
+        load_response = self.as_conn.request(load_request, retry=False)
 
         if not load_response:
-            self.signals.status.emit(_('Konnte PlmXml nicht in DeltaGen laden. '
-                                       'AsConnector konnte nicht re-initialisiert werdem! Materialschaltungen '
-                                       'könnten unter Umständen nicht funktionieren.'), 8000)
+            self._update_status(_('Konnte PlmXml nicht in DeltaGen laden. '
+                                  'AsConnector konnte nicht re-initialisiert werdem! Materialschaltungen '
+                                  'könnten unter Umständen nicht funktionieren.'))
             return False
 
         # -- Close the loaded PlmXml --
         sleep(0.3)
         close_request = AsSceneCloseRequest(plmxml_file.name)
-        close_result = as_conn.request(close_request)
+        close_result = self.as_conn.request(close_request)
 
         if not close_result:
-            self.signals.status.emit(_('Konnte geladene PlmXml nicht schliessen. '
-                                       'AsConnector konnte vermutlich re-initialisiert werden. '
-                                       'Die geladene PlmXml Szene kann geschlossen werden.'), 5000)
+            self._update_status(_('Konnte geladene PlmXml nicht schliessen. '
+                                  'AsConnector konnte vermutlich re-initialisiert werden. '
+                                  'Die geladene PlmXml Szene kann geschlossen werden.'))
             return False
 
-        self.signals.status.emit(_('AsConnector erfolgreich re-initialisiert.'), 5000)
+        self._update_status(_('AsConnector erfolgreich re-initialisiert.'))
         KnechtSettings.app['last_plmxml'] = plmxml_file.name
         return True
 

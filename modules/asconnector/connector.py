@@ -30,10 +30,10 @@ class AsConnectorConnection:
         self._connected = value
 
     def check_connection(self) -> bool:
-        selected_event = AsGetSelectedNodeEventRequest()
-        selected_result = self.request(selected_event, False)
         version_request = AsGetVersionInfoRequest()
         result = self.request(version_request)
+        selected_event = AsGetSelectedNodeEventRequest()
+        selected_result = self.request(selected_event, False)
 
         if result or selected_result:
             self.version = version_request.result or str()

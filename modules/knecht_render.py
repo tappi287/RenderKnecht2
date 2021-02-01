@@ -65,8 +65,9 @@ def calculate_render_time(render_preset: KnechtRenderPreset) -> float:
 
     res_factor = res_x * RENDER_RES_FACTOR
     sample_factor = res_x * sampling
+    switching_time = 90.0  # Average time it takes with timeouts to switch a model
 
-    return sample_factor * cpu_factor * res_factor
+    return (sample_factor * cpu_factor * res_factor) + switching_time
 
 
 class KnechtRenderSignals(QObject):
