@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-12-17 10:11+0100\n"
-"PO-Revision-Date: 2020-12-17 10:13+0100\n"
+"POT-Creation-Date: 2021-02-01 11:20+0100\n"
+"PO-Revision-Date: 2021-02-01 11:21+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,6 +15,66 @@ msgstr ""
 "Language-Team: \n"
 "Language: en\n"
 "X-Generator: Poedit 2.4.2\n"
+
+#: modules/asconnector\configurator.py:143
+msgid "Sichtbarkeit der Szenenobjekte aktualisiert ..."
+msgstr "Updated Scene objects visibility ..."
+
+#: modules/asconnector\configurator.py:149
+msgid "Starte Materialzuweisung für angefragte Konfiguration ..."
+msgstr "Starting Material assignment for requested configuration ..."
+
+#: modules/asconnector\configurator.py:183
+msgid "Wende Dummy Material auf Target Materialien an"
+msgstr "Assigning Dummy material to target Materials"
+
+#: modules/asconnector\configurator.py:248
+msgid "Die Szene enthält ungeladene/fehlende Material Targets:"
+msgstr "The Scene contains unloaded or missing Materials:"
+
+#: modules/asconnector\configurator.py:250
+msgid "Diese wurden bei der Konfiguration ignoriert."
+msgstr "These have been ignored during configuration."
+
+#: modules/asconnector\configurator.py:262
+msgid "Aktualisiere PlmXml Konfiguration. "
+msgstr "Updating PlmXml Konfiguration. "
+
+#: modules/asconnector\configurator.py:264
+msgid "Materialien zum aktualisieren und "
+msgstr "Materials to update and "
+
+#: modules/asconnector\configurator.py:266
+msgid "Objekte zur Änderung der Sichtbarkeit gefunden."
+msgstr "objects to change visibility found."
+
+#: modules/asconnector\configurator.py:270
+msgid "Die folgenden {} Materialien erzielten keine Treffer "
+msgstr "The following {} Materials did not match "
+
+#: modules/asconnector\configurator.py:271
+msgid "in der Konfiguration. Sie werden nicht aktualisiert:"
+msgstr "the configuration. They will not be updated."
+
+#: modules/asconnector\connector.py:44
+msgid "Konnte mit keiner AsConnector Instanz verbinden."
+msgstr "Could not connect to any AsConnector instance."
+
+#: modules/asconnector\request.py:58
+msgid "Kein Fehler definiert."
+msgstr "Unknown error."
+
+#: modules/asconnector\request.py:113
+msgid "{} konnte AsConnector Antwort nicht interpretieren: {}"
+msgstr "{} could not interpret AsConnector response: {}"
+
+#: modules/asconnector\request.py:158
+msgid "Fehler beim senden von {} Anfrage."
+msgstr "Error while sending {} request."
+
+#: modules/asconnector\request.py:160
+msgid "AsConnector antwortete:"
+msgstr "AsConnector responded:"
 
 #: modules/gui/widgets\db_dialog.py:60
 msgid "Datapool Projekte"
@@ -68,7 +128,7 @@ msgstr "wagenbauteil Id"
 msgid "Name"
 msgstr "Name"
 
-#: modules/gui/widgets\db_dialog.py:170 modules\path_render_service.py:127
+#: modules/gui/widgets\db_dialog.py:170 modules\path_render_service.py:130
 msgid "Erstellt"
 msgstr "Created"
 
@@ -84,20 +144,20 @@ msgstr "Timeout"
 msgid "Zeitüberschreitung bei Datenbankverbindung. Die Verbindung wurde automatisch getrennt."
 msgstr "Database connection timeout. The connection has been automatically disconnected."
 
-#: modules/gui/widgets\db_dialog.py:272 modules/gui/widgets\excel_dialog.py:432
+#: modules/gui/widgets\db_dialog.py:272 modules/gui/widgets\excel_dialog.py:431
 msgid "Importvorgang"
 msgstr "Import process"
 
-#: modules/gui/widgets\db_dialog.py:273 modules/gui/widgets\excel_dialog.py:433
+#: modules/gui/widgets\db_dialog.py:273 modules/gui/widgets\excel_dialog.py:432
 msgid "Soll der Vorgang wirklich abgebrochen werden?"
 msgstr "Do you really want to cancel this process?"
 
-#: modules/gui/widgets\db_dialog.py:274 modules/gui/widgets\excel_dialog.py:434
+#: modules/gui/widgets\db_dialog.py:274 modules/gui/widgets\excel_dialog.py:433
 #: modules/gui/widgets\menu_tree.py:105 modules/gui/wizard\wizard.py:206
 msgid "Ja"
 msgstr "Yes"
 
-#: modules/gui/widgets\db_dialog.py:275 modules/gui/widgets\excel_dialog.py:435
+#: modules/gui/widgets\db_dialog.py:275 modules/gui/widgets\excel_dialog.py:434
 #: modules/gui/widgets\menu_tree.py:106 modules/gui/wizard\wizard.py:207
 msgid "Nein"
 msgstr "No"
@@ -123,95 +183,95 @@ msgstr "Market"
 msgid "Model"
 msgstr "Model"
 
-#: modules/gui/widgets\excel_dialog.py:125
+#: modules/gui/widgets\excel_dialog.py:124
 msgid "Optionen"
 msgstr "Options"
 
-#: modules/gui/widgets\excel_dialog.py:127
+#: modules/gui/widgets\excel_dialog.py:126
 msgid "Trimlines erstellen"
 msgstr "Create Trimlines"
 
-#: modules/gui/widgets\excel_dialog.py:130
+#: modules/gui/widgets\excel_dialog.py:129
 msgid "Optionen erstellen"
 msgstr "Create Options"
 
-#: modules/gui/widgets\excel_dialog.py:133
+#: modules/gui/widgets\excel_dialog.py:132
 msgid "Pakete erstellen"
 msgstr "Create Packages"
 
-#: modules/gui/widgets\excel_dialog.py:136
+#: modules/gui/widgets\excel_dialog.py:135
 msgid "Optionen nach VPlus Wert filtern"
 msgstr "Filter Options by Vplus value"
 
-#: modules/gui/widgets\excel_dialog.py:138
+#: modules/gui/widgets\excel_dialog.py:137
 msgid "Nur optionale PR-Optionen mit Wert E auslesen. Anderfalls alle die nicht L entsprechen aus Vplus lesen."
 msgstr "Only create PR-Options marked E. Otherwise create Options not matching L value in VPlus."
 
-#: modules/gui/widgets\excel_dialog.py:142
+#: modules/gui/widgets\excel_dialog.py:141
 msgid "PR-Familien Filter Vorlagen"
 msgstr "PR-Families Filter Templates"
 
-#: modules/gui/widgets\excel_dialog.py:145
+#: modules/gui/widgets\excel_dialog.py:144
 msgid "Alle PR-Familien"
 msgstr "All PR-Families"
 
-#: modules/gui/widgets\excel_dialog.py:147
+#: modules/gui/widgets\excel_dialog.py:146
 msgid "Interieur I/VX-13"
 msgstr "Interior I/VX-13"
 
-#: modules/gui/widgets\excel_dialog.py:149
+#: modules/gui/widgets\excel_dialog.py:148
 msgid "Exterieur I/VX-13"
 msgstr "Exterior I/VX-13"
 
-#: modules/gui/widgets\excel_dialog.py:152
+#: modules/gui/widgets\excel_dialog.py:151
 msgid "PR-Familien Filter auf Pakete anwenden"
 msgstr "Apply PR-Families filter to Packages"
 
-#: modules/gui/widgets\excel_dialog.py:155
+#: modules/gui/widgets\excel_dialog.py:154
 msgid "Zum filtern tippen ..."
 msgstr "Type to start filtering..."
 
-#: modules/gui/widgets\excel_dialog.py:158
+#: modules/gui/widgets\excel_dialog.py:157
 msgid "Modellfilter"
 msgstr "Model filter"
 
-#: modules/gui/widgets\excel_dialog.py:160
+#: modules/gui/widgets\excel_dialog.py:159
 msgid "PR-Familien-Filter"
 msgstr "PR-Family Filter"
 
-#: modules/gui/widgets\excel_dialog.py:164
+#: modules/gui/widgets\excel_dialog.py:163
 msgid "PR Familien auswählen die ausgelesen werden sollen."
 msgstr "Choose PR-Families that should be imported."
 
-#: modules/gui/widgets\excel_dialog.py:166
+#: modules/gui/widgets\excel_dialog.py:165
 msgid "Modelle auswählen die ausgelesen werden sollen."
 msgstr "Choose Models that should be imported."
 
-#: modules/gui/widgets\excel_dialog.py:180
+#: modules/gui/widgets\excel_dialog.py:179
 msgid "Excel Datei wird gelesen..."
 msgstr "Reading Excel file..."
 
-#: modules/gui/widgets\excel_dialog.py:192
+#: modules/gui/widgets\excel_dialog.py:191
 msgid "POS Xml enthält keine bekannten Farbkombinationsmuster."
 msgstr "POS Xml contains no known color combination patterns."
 
-#: modules/gui/widgets\excel_dialog.py:196
+#: modules/gui/widgets\excel_dialog.py:195
 msgid "Konnte POS Xml Daten nicht lesen oder verarbeiten."
 msgstr "Could not read or process POS Xml data."
 
-#: modules/gui/widgets\excel_dialog.py:204
+#: modules/gui/widgets\excel_dialog.py:203
 msgid "Daten werden konvertiert..."
 msgstr "Data is being converted..."
 
-#: modules/gui/widgets\excel_dialog.py:216
+#: modules/gui/widgets\excel_dialog.py:215
 msgid "Daten übertragen..."
 msgstr "Transmit data..."
 
-#: modules/gui/widgets\excel_dialog.py:242
+#: modules/gui/widgets\excel_dialog.py:241
 msgid "Excel Daten werden geladen..."
 msgstr "Loading Excel data..."
 
-#: modules/gui/widgets\excel_dialog.py:255
+#: modules/gui/widgets\excel_dialog.py:254
 msgid "Excel Import Fehler"
 msgstr "Excel Import Error"
 
@@ -369,11 +429,11 @@ msgid "Verbindung herstellen"
 msgstr "Connect"
 
 #: modules/gui/widgets\knechtwolke.py:57 modules/gui/widgets\knechtwolke.py:95
-#: modules/gui\ui_resource.py:107
+#: modules/gui\ui_resource.py:110
 msgid "Verbinden"
 msgstr "Connect"
 
-#: modules/gui/widgets\knechtwolke.py:59 modules/gui\ui_resource.py:108
+#: modules/gui/widgets\knechtwolke.py:59 modules/gui\ui_resource.py:111
 msgid "Trennen"
 msgstr "Disconnect"
 
@@ -438,15 +498,15 @@ msgstr "Merge Material directories"
 msgid "DeltaGen"
 msgstr "DeltaGen"
 
-#: modules/gui/widgets\menu_asscene.py:52
+#: modules/gui/widgets\menu_asscene.py:57
 msgid "AsConnector unterstützt nur Schaltungen in zuletzt geladener Szene! Diese Funktion ist experimentell."
 msgstr "AsConnector will only correctly switch Scenes that have been loaded last. This is experimental."
 
-#: modules/gui/widgets\menu_asscene.py:56
+#: modules/gui/widgets\menu_asscene.py:61
 msgid "Keine AsConnector Verbindung oder keine Szenen geöffnet."
 msgstr "No AsConnector Connection or no Scene loaded."
 
-#: modules/gui/widgets\menu_asscene.py:59
+#: modules/gui/widgets\menu_asscene.py:64
 msgid "AsConnector Szenen angefordert, einen Moment."
 msgstr "AsConnector scenes requested. This will take a Moment."
 
@@ -538,11 +598,15 @@ msgstr "Show state check in the tree"
 msgid "Zuletzt gesendetes Preset als Overlay anzeigen"
 msgstr "Show last sent Preset as overlay"
 
-#: modules/gui/widgets\menu_deltagen.py:68
+#: modules/gui/widgets\menu_deltagen.py:67
+msgid "Dummy Material auf PlmXml Konfiguration anwenden"
+msgstr "Apply dummy material to PlmXml configuration"
+
+#: modules/gui/widgets\menu_deltagen.py:72
 msgid "DeltaGen Szene vor dem konfigurieren mit PlmXml abgleichen."
 msgstr "Validate DeltaGen scene before configuring it with PlmXml."
 
-#: modules/gui/widgets\menu_deltagen.py:73
+#: modules/gui/widgets\menu_deltagen.py:77
 msgid "AsConnector aktive Szene:"
 msgstr "AsConnector active scene: {}"
 
@@ -1245,8 +1309,8 @@ msgstr "Application Exception"
 msgid "Variantenbaum"
 msgstr "Variants Tree"
 
-#: modules/gui\main_ui.py:59 modules/gui\ui_resource.py:123
-#: modules\knecht_render.py:667
+#: modules/gui\main_ui.py:59 modules/gui\ui_resource.py:126
+#: modules\knecht_render.py:668
 msgid "Renderliste"
 msgstr "Render Queue"
 
@@ -1254,15 +1318,15 @@ msgstr "Render Queue"
 msgid "Die Varianten enthalten keine Reset Schaltung! Die zu sendenden Varianten werden mit vorangegangen Schaltungen kollidieren."
 msgstr "The variants do not contain a reset circuit! The variants to be sent will collide with previous circuits."
 
-#: modules/gui\ui_resource.py:106 modules/gui\ui_translations.py:188
+#: modules/gui\ui_resource.py:109 modules/gui\ui_translations.py:188
 msgid "Job übertragen"
 msgstr "Transfer job"
 
-#: modules/gui\ui_resource.py:109
+#: modules/gui\ui_resource.py:112
 msgid "Browser leeren"
 msgstr "Clear message history"
 
-#: modules/gui\ui_resource.py:122
+#: modules/gui\ui_resource.py:125
 msgid "Variantenliste"
 msgstr "Variant List"
 
@@ -1343,7 +1407,7 @@ msgid "Bricht laufende Sendung an DeltaGen ab."
 msgstr "Cancel running DeltaGen variants send operation."
 
 #: modules/gui\ui_translations.py:118 modules\job.py:13
-#: modules\knecht_render.py:698
+#: modules\knecht_render.py:699
 msgid "Rendering"
 msgstr "Rendering"
 
@@ -1391,7 +1455,7 @@ msgstr "Convert images to PNG"
 msgid "Konvertiert die ausgegebenen Bilder nach dem Render Vorgang in PNG."
 msgstr "Converts the created images to PNG after rendering."
 
-#: modules/gui\ui_translations.py:145 modules\knecht_render.py:331
+#: modules/gui\ui_translations.py:145 modules\knecht_render.py:332
 msgid "Rendering starten"
 msgstr "Start rendering"
 
@@ -1783,103 +1847,95 @@ msgstr "<b>Attention!</b><br /><i>{}</i><br />Some Camera Settings cannot be sen
 msgid "Keine Datenbankkonfiguration verfügbar. Datapool über das Netzwerk erreichbar?"
 msgstr "Database configuration not found. Datapool available on the Network?"
 
-#: modules\knecht_datapool.py:249 modules\knecht_datapool.py:262
-msgid "Datenbank Fehler:\n"
-msgstr "Database error:\n"
+#: modules\knecht_datapool.py:249 modules\knecht_datapool.py:264
+msgid "Datenbank Fehler:"
+msgstr "Database error:"
 
-#: modules\knecht_datapool.py:253
-msgid ""
-"Kann keine Verbindung zur Datenbank herstellen!\n"
-"{}"
-msgstr ""
-"Could not connect to database\n"
-"{}"
+#: modules\knecht_datapool.py:254
+msgid "Kann keine Verbindung zur Datenbank herstellen!"
+msgstr "Could not connect to database!"
 
-#: modules\knecht_datapool.py:255
-msgid ""
-"Kann Datenbank nicht finden!\n"
-"{}"
-msgstr ""
-"Could not find database\n"
-"{}"
+#: modules\knecht_datapool.py:256
+msgid "Kann Datenbank nicht finden!"
+msgstr "Could not locate database!"
 
-#: modules\knecht_datapool.py:257
-msgid ""
-"Unbekannter Fehler:\n"
-"{}"
-msgstr ""
-"Unknown error:\n"
-"{}"
+#: modules\knecht_datapool.py:258
+msgid "Unbekannter Fehler:"
+msgstr "Unknown error:"
 
-#: modules\knecht_datapool.py:269
+#: modules\knecht_datapool.py:272
 msgid "Die Anfrage an die Datenbank resultierte in keinem Ergebnis."
 msgstr "The request to the database did not result in any result."
 
-#: modules\knecht_datapool.py:381
+#: modules\knecht_datapool.py:384
 msgid "Netzwerkverbindung konnte nicht beendet werden. Bitte warten und in einer Minute erneut versuchen."
 msgstr "Network connection could not be terminated. Please wait and try again in a minute."
 
-#: modules\knecht_deltagen.py:160
+#: modules\knecht_deltagen.py:162
 msgid "DeltaGen Verbindung erfolgreich verifiziert."
 msgstr "DeltaGen connection successfully verified."
 
-#: modules\knecht_deltagen.py:175
+#: modules\knecht_deltagen.py:177
 msgid "DeltaGen Verbindungsversuch ({!s}/{!s}) in {!s} Sekunden..."
 msgstr "DeltaGen connection attempt ({!s}/{!s}) in {!s} seconds ..."
 
-#: modules\knecht_deltagen.py:203
+#: modules\knecht_deltagen.py:205
 msgid "Prüfe Verbindung..."
 msgstr "Checking connection..."
 
-#: modules\knecht_deltagen.py:211
+#: modules\knecht_deltagen.py:213
 msgid "Sperre Viewer Fenster"
 msgstr "Lock viewer window"
 
-#: modules\knecht_deltagen.py:441
+#: modules\knecht_deltagen.py:444
 msgid "AsConnector aktive Szene: {}"
 msgstr "AsConnector active scene: {}"
 
-#: modules\knecht_deltagen.py:464
+#: modules\knecht_deltagen.py:467
 msgid "Es läuft bereits eine DeltaGen Sende Operation! Vorgang abwarten oder abbrechen und anschließend erneut versuchen."
 msgstr "DeltaGen send operation already running! Wait or cancel the running operation."
 
-#: modules\knecht_deltagen.py:505
+#: modules\knecht_deltagen.py:483
+msgid "Füge Material Dummy zur Szenenstruktur hinzu."
+msgstr "Adding material dummy to the scene structure."
+
+#: modules\knecht_deltagen.py:514
 msgid "Kopieren"
 msgstr "Copy"
 
-#: modules\knecht_deltagen.py:514
+#: modules\knecht_deltagen.py:523
 msgid "DeltaGen Sende Operation beendet."
 msgstr "DeltaGen Send Operation finished."
 
-#: modules\knecht_deltagen.py:517
+#: modules\knecht_deltagen.py:526
 msgid "Konnte <b>keine Verbindung</b> zu einer DeltaGen Instanz mit geladener Szene herstellen."
 msgstr "Could not <b> connect </ b> to a DeltaGen instance with a loaded scene."
 
-#: modules\knecht_deltagen.py:522
+#: modules\knecht_deltagen.py:531
 msgid "DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>"
 msgstr "DeltaGen command could not be sent. <b> No connection. </ b>"
 
-#: modules\knecht_deltagen.py:524
+#: modules\knecht_deltagen.py:533
 msgid "DeltaGen Sende Operation <b>abgebrochen.</b>"
 msgstr "DeltaGen Send Operation <b> aborted. </ B>"
 
-#: modules\knecht_deltagen.py:526
+#: modules\knecht_deltagen.py:535
 msgid "PlmXml stimmt nicht mit geladener Szene überein! Kann DeltaGen Szene nicht aktualisieren."
 msgstr "PlmXml doesn't match loaded scene! Cannot update DeltaGen Scene."
 
-#: modules\knecht_deltagen.py:529
+#: modules\knecht_deltagen.py:538
 msgid "AsConnector konnte DeltaGen Szene nicht aktualisieren."
 msgstr "AsConnector could not update DeltaGen Scene."
 
-#: modules\knecht_deltagen.py:538
+#: modules\knecht_deltagen.py:547
 msgid "{0} {1} gesendet"
 msgstr "{0} {1} sent"
 
-#: modules\knecht_deltagen.py:644
+#: modules\knecht_deltagen.py:653
 msgid "Auswählen"
 msgstr "Select"
 
-#: modules\knecht_deltagen.py:648
+#: modules\knecht_deltagen.py:657
 msgid "Senden an DeltaGen abgeschlossen:<br /><i>{}</i>"
 msgstr "Send operation to DeltaGen finished:<br /><i>{}</i>"
 
@@ -1887,11 +1943,11 @@ msgstr "Send operation to DeltaGen finished:<br /><i>{}</i>"
 msgid "Datei exisitiert nicht: {}"
 msgstr "File does not exist: {}"
 
-#: modules\knecht_excel.py:239
+#: modules\knecht_excel.py:240
 msgid "Die Arbeitsblätter für PR-Optionen oder Modelle enthalten keine Daten oder konnten nicht gelesen werden."
 msgstr "The worksheets for PR-Options or Models contained no data or could not be read."
 
-#: modules\knecht_excel.py:381
+#: modules\knecht_excel.py:386
 msgid "Es wurden nicht alle benötigten Arbeitsblätter gefunden {}. Es fehlen: {}"
 msgstr "Not all necessary worksheets have been found {}. Missing: {}"
 
@@ -1915,139 +1971,147 @@ msgstr "Couldn't create image file {}: {}"
 msgid "Konnte unkonvertierte Bilddatei nicht verschieben: {}"
 msgstr "Couldn't move unconverted image file: {}"
 
-#: modules\knecht_plmxml.py:174
-msgid "DeltaGen Szene stimmt nicht mit PlmXml überein. Fehlende Knoten:\n"
-msgstr "DeltaGen scene does not match PlmXml. Missing nodes:\n"
+#: modules\knecht_plmxml.py:176
+msgid "DeltaGen Szene stimmt nicht mit PlmXml überein. Fehlende Knoten:"
+msgstr "DeltaGen scene does not match PlmXml. Missing nodes:"
 
-#: modules\knecht_plmxml.py:179
-msgid ""
-"\n"
-"..und {} weitere Knoten."
-msgstr ""
-"\n"
-"..and {} additional nodes."
+#: modules\knecht_plmxml.py:183
+msgid "..und {} weitere Knoten."
+msgstr "..and {} other nodes."
 
-#: modules\knecht_plmxml.py:180
-msgid ""
-"\n"
-"Diese Prüfung kann in den DeltaGen Optionen deaktiviert werden."
-msgstr ""
-"\n"
-"This check can be disabled in the DeltaGen options."
+#: modules\knecht_plmxml.py:185
+msgid "Diese Prüfung kann in den DeltaGen Optionen deaktiviert werden."
+msgstr "This check can be disabled in the DeltaGen options."
 
-#: modules\knecht_plmxml.py:184
+#: modules\knecht_plmxml.py:189
 msgid "DeltaGen Szenenstruktur erfolgreich mit PlmXml Struktur abgeglichen."
 msgstr "DeltaGen scene successfully matched with PlmXml."
 
-#: modules\knecht_plmxml.py:186
+#: modules\knecht_plmxml.py:191
 msgid "Konnte DeltaGen Szene nicht mit PlmXml abgleichen. Keine Verbindung zum AsConnector2."
 msgstr "Could not match DeltaGen scene with PlmXml. No connection to AsConnector2."
 
-#: modules\knecht_plmxml.py:189
-msgid ""
-"\n"
-"Die folgenden Material Targets fehlen oder sind nicht geladen:\n"
-msgstr ""
-"\n"
-"The following material targets are missing or unloaded:\n"
+#: modules\knecht_plmxml.py:195
+msgid "Die folgenden Material Targets fehlen oder sind nicht geladen:"
+msgstr "The following material targets are missing or unloaded:"
 
-#: modules\knecht_plmxml.py:200
+#: modules\knecht_plmxml.py:215
+msgid "Konnte AsConnector nicht initialisieren. PlugIn geladen?"
+msgstr "Could not initialise AsConnector. PlugIn loaded?"
+
+#: modules\knecht_plmxml.py:218
 msgid "Konfiguriere PlmXml Instanz"
 msgstr "Configure PlmXml Instance"
 
-#: modules\knecht_plmxml.py:216
+#: modules\knecht_plmxml.py:235
 msgid "Validiere DeltaGen Szenenstruktur gegen PlmXml Struktur ..."
 msgstr "Validating DeltaGen scene against PlmXml structure."
 
-#: modules\knecht_plmxml.py:225
+#: modules\knecht_plmxml.py:247
 msgid "Konfiguriere DeltaGen Szenenstruktur ..."
 msgstr "Configuring DeltaGen Scene Structure ..."
 
-#: modules\knecht_render.py:98
+#: modules\knecht_plmxml.py:272
+msgid "PlmXml weicht von vorhergehend geschalteter PlmXml ab. AsConnector muss re-initialisiert werden. Dies dauert einen Moment."
+msgstr "PlmXml differs from previous switched PlmXml. AsConnector must be re-initialized. This takes a moment."
+
+#: modules\knecht_plmxml.py:281
+msgid "Konnte PlmXml nicht in DeltaGen laden. AsConnector konnte nicht re-initialisiert werdem! Materialschaltungen könnten unter Umständen nicht funktionieren."
+msgstr "Could not load PlmXml into DeltaGen. AsConnector could not be re-initialized! Material assignment may not work."
+
+#: modules\knecht_plmxml.py:292
+msgid "Konnte geladene PlmXml nicht schliessen. AsConnector konnte vermutlich re-initialisiert werden. Die geladene PlmXml Szene kann geschlossen werden."
+msgstr "Unable to close loaded PlmXml. AsConnector could probably be re-initialized. The loaded PlmXml scene can be closed."
+
+#: modules\knecht_plmxml.py:297
+msgid "AsConnector erfolgreich re-initialisiert."
+msgstr "AsConnector successfully re-initialized."
+
+#: modules\knecht_render.py:99
 msgid "RenderKnecht Render Log erstellt am "
 msgstr "RenderKnecht render log created on "
 
-#: modules\knecht_render.py:99
+#: modules\knecht_render.py:100
 msgid "Erzeuge Bild mit Namen:"
 msgstr "Create picture with name:"
 
-#: modules\knecht_render.py:100
+#: modules\knecht_render.py:101
 msgid "Varianten:"
 msgstr "Variants:"
 
-#: modules\knecht_render.py:195
+#: modules\knecht_render.py:196
 msgid "Ungültige Auflösungseinstellungen in {}"
 msgstr "Invalid resolution settings in {}"
 
-#: modules\knecht_render.py:200
+#: modules\knecht_render.py:201
 msgid "Die folgenden Ausgabepfade sind zu lang, Rendering wird abgebrochen. {}{}"
 msgstr "The following output paths are too long, rendering will be canceled. {}{}"
 
-#: modules\knecht_render.py:206
+#: modules\knecht_render.py:207
 msgid "Die Render Presets enthalten ungültige Ausgabepfade. Rendering wird abgebrochen. {}{}"
 msgstr "The render presets contain invalid output paths. Rendering is canceled. {}{}"
 
-#: modules\knecht_render.py:238
+#: modules\knecht_render.py:239
 msgid "{} Rendering von {} Bildern abgeschlossen in {}"
 msgstr "{} Rendering of {} images completed in {}"
 
-#: modules\knecht_render.py:256
+#: modules\knecht_render.py:257
 msgid "Sende Varianten..."
 msgstr "Send variants ..."
 
-#: modules\knecht_render.py:263
+#: modules\knecht_render.py:264
 msgid "Sende Shot Varianten..."
 msgstr "Sending Shot Variants..."
 
-#: modules\knecht_render.py:273
+#: modules\knecht_render.py:274
 msgid "Sende Einstellungen..."
 msgstr "Send settings ..."
 
-#: modules\knecht_render.py:317 modules\knecht_render.py:401
+#: modules\knecht_render.py:318 modules\knecht_render.py:402
 msgid "Konvertiere Bilddaten..."
 msgstr "Convert image data ..."
 
-#: modules\knecht_render.py:382 modules\knecht_render.py:383
+#: modules\knecht_render.py:383 modules\knecht_render.py:384
 msgid "Prüfe Bilddaten..."
 msgstr "Checking image data..."
 
-#: modules\knecht_render.py:387 modules\knecht_render.py:388
+#: modules\knecht_render.py:388 modules\knecht_render.py:389
 msgid "Rendering erzeugt."
 msgstr "Rendering generated."
 
-#: modules\knecht_render.py:393
+#: modules\knecht_render.py:394
 msgid "Erzeuge nächstes Bild in {}..."
 msgstr "Creating next image in {}..."
 
-#: modules\knecht_render.py:434
+#: modules\knecht_render.py:435
 msgid "Bild Konvertierung: {}"
 msgstr "Image conversion: {}"
 
-#: modules\knecht_render.py:443
+#: modules\knecht_render.py:444
 msgid "Render Vorgang abgebrochen.{}Konnte keine Verbindung zu einer DeltaGen Instanz herstellen."
 msgstr "Render operation canceled.{}Could not connect to a DeltaGen instance."
 
-#: modules\knecht_render.py:482
+#: modules\knecht_render.py:483
 msgid "Bilddaten konnten nicht als gültiges Bild verifiziert werden.{}"
 msgstr "File could not be validated as a valid image file: {}"
 
-#: modules\knecht_render.py:494
+#: modules\knecht_render.py:495
 msgid "Bilddaten wurden erfolgreich verifiziert: {}"
 msgstr "Image data has been successfully verified: {}"
 
-#: modules\knecht_render.py:504
+#: modules\knecht_render.py:505
 msgid "{0}Datei konnte nicht als gültige Bilddatei verfiziert werden: {1}{0}"
 msgstr "{0}File could not be verified as valid image file: {1}{0}"
 
-#: modules\knecht_render.py:547
+#: modules\knecht_render.py:548
 msgid "{} Einstellungen - "
 msgstr "{} Settings - "
 
-#: modules\knecht_render.py:548
+#: modules\knecht_render.py:549
 msgid "Sampling: {} - Res: "
 msgstr "Sampling: {} - Res: "
 
-#: modules\knecht_render.py:549
+#: modules\knecht_render.py:550
 msgid "{}px - Ext: "
 msgstr "{}px - Ext: "
 
@@ -2143,158 +2207,162 @@ msgstr "Update"
 msgid "Version {} ist bereit zur Installation."
 msgstr "Version {} is ready for installation."
 
-#: modules\path_render_service.py:39
+#: modules\path_render_service.py:42
 msgid "Status prüfen"
 msgstr "Check status"
 
-#: modules\path_render_service.py:40
+#: modules\path_render_service.py:43
 msgid "Render Dienst im lokalen Netzwerk suchen"
 msgstr "Find Render Service on the local network"
 
-#: modules\path_render_service.py:88
+#: modules\path_render_service.py:91
 msgid "Benutze die Szeneneinstellung der Maya Binary Szene. Crypto Material AOV muss vorhanden sein!"
 msgstr "Use the scene setting of the Maya Binary scene. Crypto Material AOV must be available!"
 
-#: modules\path_render_service.py:109
+#: modules\path_render_service.py:112
 msgid "Ausgabe Verzeichnis auswählen"
 msgstr "Choose output directory"
 
-#: modules\path_render_service.py:126
+#: modules\path_render_service.py:129
 msgid "Ausgabeverzeichnis"
 msgstr "Output"
 
-#: modules\path_render_service.py:126
+#: modules\path_render_service.py:129
 msgid "Fortschritt"
 msgstr "Progress"
 
-#: modules\path_render_service.py:126
+#: modules\path_render_service.py:129
 msgid "Job Titel"
 msgstr "Job Title"
 
-#: modules\path_render_service.py:126
+#: modules\path_render_service.py:129
 msgid "Szenendatei"
 msgstr "Scene file"
 
-#: modules\path_render_service.py:127
+#: modules\path_render_service.py:130
 msgid "Klient"
 msgstr "Client"
 
-#: modules\path_render_service.py:127
+#: modules\path_render_service.py:130
 msgid "Läuft ab"
 msgstr "Expires"
 
-#: modules\path_render_service.py:127
+#: modules\path_render_service.py:130
 msgid "Remote Index"
 msgstr "Remote Index"
 
-#: modules\path_render_service.py:219
+#: modules\path_render_service.py:224
+msgid "Benutze angegebene Aeffchen IP. Suche wird übersprungen."
+msgstr "Using specified Aeffchen IP. Search is skipped."
+
+#: modules\path_render_service.py:233
 msgid "Suche nach Dienst im lokalen Netzwerk."
 msgstr "Search for service on the local network."
 
-#: modules\path_render_service.py:235
+#: modules\path_render_service.py:249
 msgid "Pfad Äffchen Render Dienst gefunden<br>IP: <i>{}</i>"
 msgstr "Path Aeffchen Render Service found<br>IP: <i>{}</i>"
 
-#: modules\path_render_service.py:241
+#: modules\path_render_service.py:255
 msgid "Kein Pfad Äffchen Render Dienst im lokalen Netzwerk gefunden"
 msgstr "No Path Aeffchen Render Service found on local network"
 
-#: modules\path_render_service.py:246
+#: modules\path_render_service.py:260
 msgid "Render Service erfolgreich verbunden.<br>"
 msgstr "Render service successfully connected.<br>"
 
-#: modules\path_render_service.py:252
+#: modules\path_render_service.py:266
 msgid "Szenen Datei gesetzt:<br><i>{}</i>"
 msgstr "Scene file set:<br><i>{}</i>"
 
-#: modules\path_render_service.py:257
+#: modules\path_render_service.py:271
 msgid "Ungültiger / Nicht existenter Szenen-Pfad angegeben."
 msgstr "Invalid/non-existent scene path specified."
 
-#: modules\path_render_service.py:263
+#: modules\path_render_service.py:277
 msgid " Setze vorherigen Szenenpfad."
 msgstr " Set previous scene path."
 
-#: modules\path_render_service.py:264
+#: modules\path_render_service.py:278
 msgid "Vorherigen Szenenpfad gesetzt:<br><i>{}</i>"
 msgstr "Set the previous scene path:<br><i>{}</i>"
 
-#: modules\path_render_service.py:267
+#: modules\path_render_service.py:281
 msgid "Ungültigen Szenenpfad verworfen. Kein Szenen-Pfad gesetzt."
 msgstr "Invalid scene path discarded. No scene path set."
 
-#: modules\path_render_service.py:273
+#: modules\path_render_service.py:287
 msgid "Ausgabeverzeichnis gesetzt:<br><i>{}</i>"
 msgstr "Output directory set:<br><i>{}</i>"
 
-#: modules\path_render_service.py:282
+#: modules\path_render_service.py:296
 msgid "CSB Import Option gesetzt: <i>ignoreHiddenObject={}</i>"
 msgstr "CSB Import Option Set:<i>ignoreHiddenObject={}</i>"
 
-#: modules\path_render_service.py:292
+#: modules\path_render_service.py:306
 msgid "Maya Prozess Option gesetzt: <i>maya_delete_hidden={}</i>"
 msgstr "Maya process option set:<i>maya_delete_hidden={}</i>"
 
-#: modules\path_render_service.py:302
+#: modules\path_render_service.py:316
 msgid "Maya Prozess Option gesetzt: <i>use_scene_settings={}</i>"
 msgstr "Maya process option set:<i>use_scene_settings={}</i>"
 
-#: modules\path_render_service.py:319
+#: modules\path_render_service.py:333
 msgid "<b>Ungültige Job Daten:</b><br>"
 msgstr "<b>Invalid Job Data:</b><br>"
 
-#: modules\path_render_service.py:331
+#: modules\path_render_service.py:345
 msgid "{} übertragen für {}<br>"
 msgstr "{} transferred for {}<br>"
 
-#: modules\path_render_service.py:364
+#: modules\path_render_service.py:378
 msgid "Verzeichnis existiert nicht.<br>{}<br>"
 msgstr "Directory does not exist. <br>{}<br>"
 
-#: modules\path_render_service.py:402
+#: modules\path_render_service.py:416
 msgid "Fehler: Datei {} konnte nicht entfernt werden.<br>{}<br>"
 msgstr "Error: File {} could not be removed.<br>{}<br>"
 
-#: modules\path_render_service.py:407
+#: modules\path_render_service.py:421
 msgid "Datei {} <b>existiert nicht mehr oder kann nicht gefunden werden.</b><br>"
 msgstr "File {} <b> no longer exists or cannot be found.</b><br>"
 
-#: modules\path_render_service.py:411
+#: modules\path_render_service.py:425
 msgid "Datei {} wurde entfernt."
 msgstr "File {} has been removed."
 
-#: modules\path_render_service.py:461
+#: modules\path_render_service.py:475
 msgid "<b>{}</b><br><i>Die bereits ausgegebenen Bilddaten werden in einem PSD zusammengestellt und der Job wird abgeschlossen. Dies kann wenige Minuten dauern.</i><br>"
 msgstr "<b>{}</b><br><i>The image data already rendered will be compiled in a PSD and the job will be completed. This can take a few minutes.</i><br>"
 
-#: modules\path_render_service.py:491
+#: modules\path_render_service.py:505
 msgid "<b>Render Service Warteschlange fertiggestellt.</b><br><i>Automatische Job Manager Updates wurden ausgeschaltet.</i><br>"
 msgstr "<b>Render Service queue completed.</b><br><i>Automatic Job Manager updates have been disabled.</i><br>"
 
-#: modules\path_render_service.py:547
+#: modules\path_render_service.py:561
 msgid "<span style=\"color:red;\"><b>Verbindung zum Render Dienst getrennt.</b></span><br>"
 msgstr "<span style=\\color: red;\\><b>Connection to the render Service terminated.</b></span><br>"
 
-#: modules\path_render_service.py:590
+#: modules\path_render_service.py:604
 msgid "Empfange: "
 msgstr "Receiving: "
 
-#: modules\path_render_service.py:592
+#: modules\path_render_service.py:606
 msgid "Sende   : "
 msgstr "Sending  : "
 
-#: modules\path_render_service.py:604
+#: modules\path_render_service.py:618
 msgid "Job Titel darf nur Buchstaben, Zahlen, Binde- oder _strich enthalten."
 msgstr "Job titles may contain letters, numbers, - or _score."
 
-#: modules\path_render_service.py:711
+#: modules\path_render_service.py:725
 msgid "Abgelaufen."
 msgstr "Expired."
 
-#: modules\path_render_service.py:727
+#: modules\path_render_service.py:741
 msgid "Pfad öffnen"
 msgstr "Open path"
 
-#: modules\path_render_service.py:733
+#: modules\path_render_service.py:747
 msgid "Ausgabe öffnen"
 msgstr "Open output"
