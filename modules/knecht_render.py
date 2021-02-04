@@ -124,6 +124,7 @@ class KnechtRenderThread(Thread):
         rendering_completed = 0
         rendering_aborted = 1
         rendering_failed = 2
+        error_during_rendering = 3
         not_set = -1
 
     def __init__(self, render_presets: List[KnechtRenderPreset], global_render_path: Path=Path('.')):
@@ -229,16 +230,21 @@ class KnechtRenderThread(Thread):
                 name, image_variants, shot_variants, img_out_dir = render_preset.get_next_render_image()
                 self.render_image(name, image_variants, shot_variants, render_preset, img_out_dir)
 
+                self._write_render_log(img_out_dir)
+
                 if self.abort_rendering:
                     return
 
-                self._write_render_log(img_out_dir)
-
+        duration = time_string(time.time() - self.render_start_time)
+        msg = _('{} Rendering von {} Bildern abgeschlossen in {}').format(
+                datetime.now().strftime('%A %H:%M -'), self.total_image_count(), duration)
         if self.rendered_img_count >= self.total_image_count():
-            duration = time_string(time.time() - self.render_start_time)
-            self.progress_text.emit(_('{} Rendering von {} Bildern abgeschlossen in {}').format(
-                datetime.now().strftime('%A %H:%M -'), self.total_image_count(), duration))
+            self.progress_text.emit(msg)
             self.render_result = self.Result.rendering_completed
+        elif not self.abort_rendering:
+            msg += ' ' + _('Einige Bilder wurden aufgrund von Fehler übersprungen! RenderLog ansehen.')
+            self.progress_text.emit(msg)
+            self.render_result = self.Result.error_during_rendering
 
     def render_image(self, name: str, image_variants: KnechtVariantList, shot_variants: KnechtVariantList,
                      render_preset: KnechtRenderPreset, out_dir: Path):
@@ -252,18 +258,25 @@ class KnechtRenderThread(Thread):
             progress_name = progress_name[:50] + ' ~ ' + progress_name[-11:]
         self.progress_text.emit(f'{progress_name} - {self.rendered_img_count + 1:02d}/{self.total_image_count():02d}')
 
+        # Add log entry for this render image
+        self.render_log += f'\n\n{self._return_date_time()} {self.render_log_msg[1]} {name}\n{self.render_log_msg[2]}\n'
+        self._add_variants_log(image_variants)  # Add image variants to log
+        self.render_log += ';'
+        self._add_variants_log(shot_variants)   # Add shot variants to log
+        self.render_log += '\n\n'
+
         # --- Send image variants
         self.send_variants.emit(image_variants)
         self.btn_text.emit(_('Sende Varianten...'))
         if not self._await_dg_result():
-            self.abort_no_connection()
+            self.handle_dg_error(name)
             return
 
         # --- Send shot variants
         self.send_variants.emit(shot_variants)
         self.btn_text.emit(_('Sende Shot Varianten...'))
         if not self._await_dg_result():
-            self.abort_no_connection()
+            self.handle_dg_error(name)
             return
 
         # --- Set Sampling Setting
@@ -273,7 +286,7 @@ class KnechtRenderThread(Thread):
             )
         self.btn_text.emit(_('Sende Einstellungen...'))
         if not self._await_dg_result():
-            self.abort_no_connection()
+            self.handle_dg_error(name)
             return
 
         # --- Apply viewer bg color
@@ -282,9 +295,8 @@ class KnechtRenderThread(Thread):
             self._await_dg_result()
 
         # --- Send fake variants to make sure DeltaGen is alive and ready
-        self.send_variants.emit(KnechtVariantList())
-        if not self._await_dg_result():
-            self.abort_no_connection()
+        if not self.verify_dg_connection():
+            self.handle_dg_error(name)
             return
 
         # --- Send Rendering command
@@ -300,13 +312,6 @@ class KnechtRenderThread(Thread):
             f'IMAGE "{img_path.absolute().as_posix()}" {render_preset.settings.get("resolution")}'
             )
         self._await_dg_result()
-
-        # Add log entry for this render image
-        self.render_log += f'\n\n{self._return_date_time()} {self.render_log_msg[1]} {name}\n{self.render_log_msg[2]}\n'
-        self._add_variants_log(image_variants)  # Add image variants to log
-        self.render_log += ';'
-        self._add_variants_log(shot_variants)   # Add shot variants to log
-        self.render_log += '\n\n'
 
         # --- Loop until image created
         LOGGER.info('Rendering image: %s', img_path.name)
@@ -326,10 +331,11 @@ class KnechtRenderThread(Thread):
 
         self.rendered_img_count += 1
 
-        return img_path.absolute()
-
     def finish_rendering(self):
         self.btn_text.emit(_('Rendering starten'))
+
+        if self.render_result == self.Result.error_during_rendering:
+            self.error.emit(_('Fehler während des Render Vorgangs! Bilder wurden übersprungen. RenderLog ansehen!'))
 
         self.finished.emit(self.render_result)
 
@@ -345,6 +351,9 @@ class KnechtRenderThread(Thread):
     def _await_dg_result(self) -> bool:
         """ Wait until Dg send operation finished -> return True on successful send """
         start_time = time.time()
+        self.dg_operation_result = -1
+        self.dg_operation_finished = False
+
         while not self.dg_operation_finished:
             time.sleep(1)
 
@@ -358,8 +367,6 @@ class KnechtRenderThread(Thread):
         if self.dg_operation_result not in [DeltaGenResult.send_success, DeltaGenResult.cmd_success]:
             result = False
 
-        self.dg_operation_finished = False
-        self.dg_operation_result = -1
         return result
 
     def _await_rendered_image(self, img_path: Path):
@@ -440,9 +447,47 @@ class KnechtRenderThread(Thread):
         self.dg_operation_result = result
         self.dg_operation_finished = True
 
+    def verify_dg_connection(self):
+        # --- Send fake variants to make sure DeltaGen is alive and ready
+        self.send_variants.emit(KnechtVariantList())
+        if not self._await_dg_result():
+            return False
+        return True
+
+    def handle_dg_error(self, name: str):
+        error_msg = ''
+
+        if self.dg_operation_result in (DeltaGenResult.send_failed, DeltaGenResult.cmd_failed):
+            error_msg += f'Could not complete DeltaGen operation for image:\n{name}\n'
+            error_msg += f'Rendering of ths image will be skipped.'
+            self.status.emit(error_msg)
+            self.btn_text.emit(_('Fehler.. Überspringe Bild'))
+            abort = not self.verify_dg_connection()
+        elif self.dg_operation_result == DeltaGenResult.as_connector_error:
+            error_msg += f'Could not complete AsConnector operation for image:\n{name}\n'
+            error_msg += f'Rendering of ths image will be skipped.'
+            self.status.emit(error_msg)
+            self.btn_text.emit(_('Fehler.. Überspringe Bild'))
+            abort = not self.verify_dg_connection()
+        elif self.dg_operation_result == DeltaGenResult.plmxml_mismatch:
+            self.error.emit(_('Render Vorgang abgebrochen.{}DeltaGen Szene stimmt nicht '
+                              'mit PlmXml überein.').format('\n\n'))
+            self.render_log += f'\n\nRendering failed. PlmXml and DeltaGen scene do not match.'
+            abort = True
+        else:
+            self.render_log += '\n\nUndefined error. Aborting rendering.'
+            self.error.emit(_('Render Vorgang abgebrochen.{}Konnte keine Verbindung zu einer '
+                              'DeltaGen Instanz herstellen.').format('\n\n'))
+            abort = True
+
+        if abort:
+            self.abort_no_connection()
+        else:
+            time.sleep(8)
+
+        self.render_log += error_msg
+
     def abort_no_connection(self):
-        self.error.emit(_('Render Vorgang abgebrochen.{}Konnte keine Verbindung zu einer '
-                          'DeltaGen Instanz herstellen.').format('\n\n'))
         self.abort()
         self.render_result = self.Result.rendering_failed
 
@@ -662,12 +707,15 @@ class KnechtRender(QObject):
 
         self.ui.pushButton_abortRender.setEnabled(False)
 
-        if result == KnechtRenderThread.Result.rendering_completed:
-            LOGGER.info('Rendering completed.')
+        if result in (KnechtRenderThread.Result.rendering_completed, KnechtRenderThread.Result.error_during_rendering):
             self.ui.progressBar_render.setTextVisible(True)
+
+        if result == KnechtRenderThread.Result.rendering_completed:
             self.ui.show_tray_notification(_('Renderliste'), self.ui.progressBar_render.text())
-            self.ui.app.alert(self.ui, 0)
             self.ui.play_finished_sound()
+
+        LOGGER.info('Rendering completed.')
+        self.ui.app.alert(self.ui, 0)
 
     @Slot()
     def rendering_aborted(self):

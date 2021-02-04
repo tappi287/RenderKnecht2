@@ -507,9 +507,6 @@ class SendToDeltaGen(QObject):
         def copy_to_clipboard():
             self.ui.app.clipboard().setText(result)
 
-        if self.rendering:
-            return
-
         btns = (
             (_('Kopieren'), copy_to_clipboard),
             ('[X]', None),
