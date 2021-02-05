@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-02-01 11:20+0100\n"
+"POT-Creation-Date: 2021-02-05 14:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -477,23 +477,23 @@ msgstr ""
 msgid "abgeschlossen am: "
 msgstr ""
 
-#: modules/gui/widgets\material_merger.py:88
+#: modules/gui/widgets\material_merger.py:91
 msgid "Quell-Verzeichnisse"
 msgstr ""
 
-#: modules/gui/widgets\material_merger.py:90
+#: modules/gui/widgets\material_merger.py:93
 msgid "Ziel-Verzeichnis"
 msgstr ""
 
-#: modules/gui/widgets\material_merger.py:93
+#: modules/gui/widgets\material_merger.py:96
 msgid "Quelleordner hinzufügen"
 msgstr ""
 
-#: modules/gui/widgets\material_merger.py:97
+#: modules/gui/widgets\material_merger.py:100
 msgid "Vereinen"
 msgstr ""
 
-#: modules/gui/widgets\material_merger.py:155
+#: modules/gui/widgets\material_merger.py:163
 msgid "Vereine Material Verzeichnisse"
 msgstr ""
 
@@ -1317,7 +1317,7 @@ msgid "Variantenbaum"
 msgstr ""
 
 #: modules/gui\main_ui.py:59 modules/gui\ui_resource.py:126
-#: modules\knecht_render.py:668
+#: modules\knecht_render.py:714
 msgid "Renderliste"
 msgstr ""
 
@@ -1414,7 +1414,7 @@ msgid "Bricht laufende Sendung an DeltaGen ab."
 msgstr ""
 
 #: modules/gui\ui_translations.py:118 modules\job.py:13
-#: modules\knecht_render.py:699
+#: modules\knecht_render.py:747
 msgid "Rendering"
 msgstr ""
 
@@ -1462,7 +1462,7 @@ msgstr ""
 msgid "Konvertiert die ausgegebenen Bilder nach dem Render Vorgang in PNG."
 msgstr ""
 
-#: modules/gui\ui_translations.py:145 modules\knecht_render.py:332
+#: modules/gui\ui_translations.py:145 modules\knecht_render.py:335
 msgid "Rendering starten"
 msgstr ""
 
@@ -1908,43 +1908,43 @@ msgstr ""
 msgid "Füge Material Dummy zur Szenenstruktur hinzu."
 msgstr ""
 
-#: modules\knecht_deltagen.py:514
+#: modules\knecht_deltagen.py:511
 msgid "Kopieren"
 msgstr ""
 
-#: modules\knecht_deltagen.py:523
+#: modules\knecht_deltagen.py:520
 msgid "DeltaGen Sende Operation beendet."
 msgstr ""
 
-#: modules\knecht_deltagen.py:526
+#: modules\knecht_deltagen.py:523
 msgid "Konnte <b>keine Verbindung</b> zu einer DeltaGen Instanz mit geladener Szene herstellen."
 msgstr ""
 
-#: modules\knecht_deltagen.py:531
+#: modules\knecht_deltagen.py:528
 msgid "DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>"
 msgstr ""
 
-#: modules\knecht_deltagen.py:533
+#: modules\knecht_deltagen.py:530
 msgid "DeltaGen Sende Operation <b>abgebrochen.</b>"
 msgstr ""
 
-#: modules\knecht_deltagen.py:535
+#: modules\knecht_deltagen.py:532
 msgid "PlmXml stimmt nicht mit geladener Szene überein! Kann DeltaGen Szene nicht aktualisieren."
 msgstr ""
 
-#: modules\knecht_deltagen.py:538
+#: modules\knecht_deltagen.py:535
 msgid "AsConnector konnte DeltaGen Szene nicht aktualisieren."
 msgstr ""
 
-#: modules\knecht_deltagen.py:547
+#: modules\knecht_deltagen.py:544
 msgid "{0} {1} gesendet"
 msgstr ""
 
-#: modules\knecht_deltagen.py:653
+#: modules\knecht_deltagen.py:650
 msgid "Auswählen"
 msgstr ""
 
-#: modules\knecht_deltagen.py:657
+#: modules\knecht_deltagen.py:654
 msgid "Senden an DeltaGen abgeschlossen:<br /><i>{}</i>"
 msgstr ""
 
@@ -2020,19 +2020,23 @@ msgstr ""
 msgid "Konfiguriere DeltaGen Szenenstruktur ..."
 msgstr ""
 
-#: modules\knecht_plmxml.py:272
+#: modules\knecht_plmxml.py:278
 msgid "PlmXml weicht von vorhergehend geschalteter PlmXml ab. AsConnector muss re-initialisiert werden. Dies dauert einen Moment."
 msgstr ""
 
-#: modules\knecht_plmxml.py:281
-msgid "Konnte PlmXml nicht in DeltaGen laden. AsConnector konnte nicht re-initialisiert werdem! Materialschaltungen könnten unter Umständen nicht funktionieren."
+#: modules\knecht_plmxml.py:283
+msgid "Aktive DeltaGen Szene weicht von vorhergehend geschalteter Szene ab. AsConnector muss re-initialisiert werden. Dies dauert einen Moment."
 msgstr ""
 
 #: modules\knecht_plmxml.py:292
+msgid "Konnte PlmXml nicht in DeltaGen laden. AsConnector konnte nicht re-initialisiert werdem! Materialschaltungen könnten unter Umständen nicht funktionieren."
+msgstr ""
+
+#: modules\knecht_plmxml.py:303
 msgid "Konnte geladene PlmXml nicht schliessen. AsConnector konnte vermutlich re-initialisiert werden. Die geladene PlmXml Szene kann geschlossen werden."
 msgstr ""
 
-#: modules\knecht_plmxml.py:297
+#: modules\knecht_plmxml.py:308
 msgid "AsConnector erfolgreich re-initialisiert."
 msgstr ""
 
@@ -2048,15 +2052,15 @@ msgstr ""
 msgid "Varianten:"
 msgstr ""
 
-#: modules\knecht_render.py:196
+#: modules\knecht_render.py:197
 msgid "Ungültige Auflösungseinstellungen in {}"
 msgstr ""
 
-#: modules\knecht_render.py:201
+#: modules\knecht_render.py:202
 msgid "Die folgenden Ausgabepfade sind zu lang, Rendering wird abgebrochen. {}{}"
 msgstr ""
 
-#: modules\knecht_render.py:207
+#: modules\knecht_render.py:208
 msgid "Die Render Presets enthalten ungültige Ausgabepfade. Rendering wird abgebrochen. {}{}"
 msgstr ""
 
@@ -2064,63 +2068,79 @@ msgstr ""
 msgid "{} Rendering von {} Bildern abgeschlossen in {}"
 msgstr ""
 
-#: modules\knecht_render.py:257
+#: modules\knecht_render.py:245
+msgid "Einige Bilder wurden aufgrund von Fehler übersprungen! RenderLog ansehen."
+msgstr ""
+
+#: modules\knecht_render.py:270
 msgid "Sende Varianten..."
 msgstr ""
 
-#: modules\knecht_render.py:264
+#: modules\knecht_render.py:277
 msgid "Sende Shot Varianten..."
 msgstr ""
 
-#: modules\knecht_render.py:274
+#: modules\knecht_render.py:287
 msgid "Sende Einstellungen..."
 msgstr ""
 
-#: modules\knecht_render.py:318 modules\knecht_render.py:402
+#: modules\knecht_render.py:323 modules\knecht_render.py:409
 msgid "Konvertiere Bilddaten..."
 msgstr ""
 
-#: modules\knecht_render.py:383 modules\knecht_render.py:384
+#: modules\knecht_render.py:338
+msgid "Fehler während des Render Vorgangs! Bilder wurden übersprungen. RenderLog ansehen!"
+msgstr ""
+
+#: modules\knecht_render.py:390 modules\knecht_render.py:391
 msgid "Prüfe Bilddaten..."
 msgstr ""
 
-#: modules\knecht_render.py:388 modules\knecht_render.py:389
+#: modules\knecht_render.py:395 modules\knecht_render.py:396
 msgid "Rendering erzeugt."
 msgstr ""
 
-#: modules\knecht_render.py:394
+#: modules\knecht_render.py:401
 msgid "Erzeuge nächstes Bild in {}..."
 msgstr ""
 
-#: modules\knecht_render.py:435
+#: modules\knecht_render.py:442
 msgid "Bild Konvertierung: {}"
 msgstr ""
 
-#: modules\knecht_render.py:444
+#: modules\knecht_render.py:464 modules\knecht_render.py:470
+msgid "Fehler.. Überspringe Bild"
+msgstr ""
+
+#: modules\knecht_render.py:473
+msgid "Render Vorgang abgebrochen.{}DeltaGen Szene stimmt nicht mit PlmXml überein."
+msgstr ""
+
+#: modules\knecht_render.py:479
 msgid "Render Vorgang abgebrochen.{}Konnte keine Verbindung zu einer DeltaGen Instanz herstellen."
 msgstr ""
 
-#: modules\knecht_render.py:483
+#: modules\knecht_render.py:528
 msgid "Bilddaten konnten nicht als gültiges Bild verifiziert werden.{}"
 msgstr ""
 
-#: modules\knecht_render.py:495
+#: modules\knecht_render.py:540
 msgid "Bilddaten wurden erfolgreich verifiziert: {}"
 msgstr ""
 
-#: modules\knecht_render.py:505
+#: modules\knecht_render.py:550
 msgid "{0}Datei konnte nicht als gültige Bilddatei verfiziert werden: {1}{0}"
 msgstr ""
 
-#: modules\knecht_render.py:548
+#: modules\knecht_render.py:593
 msgid "{} Einstellungen - "
 msgstr ""
 
-#: modules\knecht_render.py:549
+#: modules\knecht_render.py:594
 msgid "Sampling: {} - Res: "
 msgstr ""
 
-#: modules\knecht_render.py:550
+#: modules\knecht_render.py:595
 msgid "{}px - Ext: "
 msgstr ""
 

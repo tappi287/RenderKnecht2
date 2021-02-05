@@ -147,6 +147,7 @@ class KnechtSettings:
         font_size=20,
         aeffchen_address='',
         last_plmxml='',
+        last_scene='',
         )
     dg = dict(
         freeze_viewer=True,
