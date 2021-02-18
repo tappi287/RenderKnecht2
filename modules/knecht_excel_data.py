@@ -1,4 +1,5 @@
-from modules.knecht_excel import ExcelData
+from mbvconf.knecht_excel import ExcelData
+
 from modules.knecht_objects import KnData, KnPackage, KnPr, KnTrim, KnPrFam
 from modules.knecht_utils import list_class_values
 from modules.language import get_translation
