@@ -20,8 +20,10 @@ ujson = "*"
 mysql-connector = "*"
 python-socketio = "==4.6.1"
 knecht-socketio-client = {version = "==0.92",index = "piwigo"}
-mbvconf = {version = "==0.96",index = "piwigo"}
+mbvconf = {version = "==0.97",index = "piwigo"}
 python-engineio = "==3.14.2"
+xlrd = "==1.2.0"
+plmxml = {version = "==0.96",index = "piwigo"}
 
 [dev-packages]
 paramiko = "*"
