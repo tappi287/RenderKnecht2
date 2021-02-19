@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 
 from PySide2 import QtCore
 from PySide2.QtCore import QUrl
@@ -11,8 +12,9 @@ from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.menu_create import CreateMenu
 from modules.gui.widgets.menu_tree import TreeMenu
 from modules.gui.widgets.path_util import path_exists
-from modules.gui.widgets.plmxml_materials_page import KnechtPlmXmlMaterialsPage
+from modules.gui.widgets.plmxml_scene import KnechtPlmXmlScene
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
+from modules.knecht_objects import KnechtVariantList
 from modules.knecht_update import restart_knecht_app
 from modules.language import get_translation
 from modules.log import init_logging
@@ -57,15 +59,19 @@ class TreeContextMenu(QMenu):
         self.addAction(self.send_dg_short)
         self.addSeparator()
 
+        # -- PR-String Actions
         copy_pr = QAction(IconRsc.get_icon('options'), _('PR String in Zwischenablage kopieren'), self)
         copy_pr.triggered.connect(self.copy_strings_to_clipboard)
         self.addAction(copy_pr)
         copy_li = QAction(IconRsc.get_icon('assignment'), _('Linc String in Zwischenablage kopieren'), self)
         copy_li.triggered.connect(self.copy_linc_string_to_clipboard)
         self.addAction(copy_li)
-        show_plmxml_mats = QAction(IconRsc.get_icon('assignment'), _('PlmXml Materialien anzeigen'), self)
-        show_plmxml_mats.triggered.connect(self.show_plmxml_materials)
-        self.addAction(show_plmxml_mats)
+        self.addSeparator()
+
+        # -- PlmXml Actions
+        self.show_plmxml_scn = QAction(IconRsc.get_icon('dog'), 'PlmXml Schnuffi', self)
+        self.show_plmxml_scn.triggered.connect(self.show_plmxml_scene)
+        self.addAction(self.show_plmxml_scn)
         self.addSeparator()
 
         # ---- Create preset from selected actions ----
@@ -188,7 +194,10 @@ class TreeContextMenu(QMenu):
 
         self.ui.app.clipboard().setText(pr_string)
 
-    def show_plmxml_materials(self):
+    def _get_plmxml_item(self, variants: KnechtVariantList) -> Optional[Path]:
+        if variants.plm_xml_path:
+            return Path(variants.plm_xml_path)
+
         index, src_model = self.view.editor.get_current_selection()
         current_item = src_model.get_item(index)
 
@@ -199,9 +208,16 @@ class TreeContextMenu(QMenu):
             if not path_exists(plmxml_file):
                 return
 
-        plmxml = PlmXml(plmxml_file)
-        plmxml_page = KnechtPlmXmlMaterialsPage(self.ui, plmxml)
-        GenericTabWidget(self.ui, plmxml_page)
+        return plmxml_file
+
+    def show_plmxml_scene(self):
+        variants = self.view.editor.collect.collect_current_index()
+        plmxml_file = self._get_plmxml_item(variants)
+        if not plmxml_file:
+            return
+        plmxml_scene_page = KnechtPlmXmlScene(self.ui, plmxml_file, variants)
+
+        GenericTabWidget(self.ui, plmxml_scene_page)
 
     def hide_id_columns(self):
         self.view.hideColumn(Kg.REF)
@@ -274,3 +290,9 @@ class TreeContextMenu(QMenu):
         if self.view.is_render_view:
             self.send_dg_action.setEnabled(False)
             self.send_dg_short.setEnabled(False)
+
+        self.show_plmxml_scn.setEnabled(False)
+        index, src_model = self.view.editor.get_current_selection()
+        current_item = src_model.get_item(index)
+        if current_item.userType in (Kg.plmxml_item, Kg.preset):
+            self.show_plmxml_scn.setEnabled(True)

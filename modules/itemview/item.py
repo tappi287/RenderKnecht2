@@ -362,6 +362,9 @@ class KnechtItem(QObject):
     def style_recursive(self):
         KnechtItemStyle.style_row(self, Qt.BackgroundRole, ItemStyleDefaults.bg_red)
 
+    def style_bg_green(self):
+        KnechtItemStyle.style_row(self, Qt.BackgroundRole, ItemStyleDefaults.variant_valid_color)
+
 
 class ItemRename:
     rename_count = 0
