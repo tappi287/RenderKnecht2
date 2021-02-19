@@ -55,6 +55,7 @@ class GenericTabWidget(QWidget):
 
         # Forward tab close request to widget
         self.widget.close()
+        self.widget.deleteLater()
 
     def close_event_wrapper(self, event):
         self.org_widget_close_event(event)
