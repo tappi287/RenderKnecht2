@@ -13,16 +13,17 @@ openimageio = {version = "==2.1.16",index = "piwigo"}
 lxml = "*"
 numpy = "==1.18.4"
 pyside2 = "==5.15.2"
+pandas = "*"
+xlrd = "==1.2.0"
 requests = "*"
 bottleneck = "*"
 jsonpickle = "==1.5.0"
 ujson = "*"
 mysql-connector = "*"
-python-socketio = "==4.6.1"
-knecht-socketio-client = {version = "==0.92",index = "piwigo"}
+python-socketio = "==5.1.0"
+knecht-socketio-client = {version = "==0.93",index = "piwigo"}
+python-engineio = "==4.0.1"
 mbvconf = {version = "==0.97",index = "piwigo"}
-python-engineio = "==3.14.2"
-xlrd = "==1.2.0"
 plmxml = {version = "==0.96",index = "piwigo"}
 
 [dev-packages]
