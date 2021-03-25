@@ -8,6 +8,7 @@ from typing import Optional, Union
 import requests
 from PySide2.QtCore import QModelIndex, Signal
 from knecht_socketio_client import SocketProcess
+from knecht_socketio_client.singleton import SingleInstanceException
 
 from modules import KnechtSettings
 from modules.globals import get_settings_dir
@@ -61,7 +62,11 @@ class WolkeController(Thread):
             # -- Process incoming app events
             if self.connect_event.is_set():
                 if not s.is_alive():
-                    s.start()
+                    try:
+                        s.start()
+                    except SingleInstanceException:
+                        self._socket_process_already_running()
+                        continue
                 self.connect_wolke()
             if self.disconnect_event.is_set():
                 self.disconnect_wolke()
@@ -101,6 +106,12 @@ class WolkeController(Thread):
               'Einstellungen hier. Prüfen Sie die korrekte Adresse eingegeben zu haben '
               'und das jener Server verfügbar ist von Ihrem lokalen Bereichsnetz. '
               'Tun Sie auch diese App zu Ihrer Feuerwalzenweißliste hinzu.'))
+
+    def _socket_process_already_running(self):
+        self.status_signal.emit(_('Ein SocketIO Prozess läuft bereits. Diese Anwendung schließen und '
+                                  'eventuell hängende Instanzen unter TaskManager>Details>RenderKnecht.exe '
+                                  'beenden.'))
+        self.connect_event.clear()
 
     def _process_socketio_events(self, e: dict):
         event = e.get('event', '')
