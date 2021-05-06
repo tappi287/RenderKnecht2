@@ -298,7 +298,8 @@ class Ncat:
         """
         if not self.check_connection():
             return False
-        verify_msg = 'SUBSCRIBE LIGHT Headlight;LIGHT_COLOR Headlight 1.0 0.5 1.0;LIGHT_COLOR Headlight 1.0 1.0 1.0;'
+        verify_msg = 'SUBSCRIBE LIGHT Headlight;LIGHT_COLOR Headlight 1.0 0.5 1.0;LIGHT_COLOR Headlight 1.0 1.0 1.0;' \
+                     'INTENSITY Headlight 0.0;AMBIENTINTENSITY Headlight 0.0;'
 
         try:
             self.send(verify_msg)
