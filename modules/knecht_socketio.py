@@ -136,6 +136,10 @@ class WolkeController(Thread):
         elif event == 'send_pr_string':
             LOGGER.debug('Received PR-String send event with data: %s', data)
             self.send_pr_string(data)
+        # -- Send PR-String
+        elif event == 'send_pr_string_ave':
+            LOGGER.debug('Received AVE PR-String send event with data: %s', data)
+            self.send_pr_string(data, target_ave=True)
         # -- Transfer Preset
         elif event == 'transfer_presets':
             LOGGER.debug('Received Transfer Presets event with data: %s', data)
@@ -194,7 +198,7 @@ class WolkeController(Thread):
         else:
             self.status_signal.emit(f'Received camera send event but found not enough camera info: {data}')
 
-    def send_pr_string(self, data: dict):
+    def send_pr_string(self, data: dict, target_ave: bool = False):
         url = f"{KnechtSettings.wolke.get('host')}:{KnechtSettings.wolke.get('port')}{data.get('url')}"
         file_hash = data.get("hash")
         self.status_signal.emit(_('Erhielt Senden PR-String Ereignis mit Daten:') +
@@ -203,22 +207,27 @@ class WolkeController(Thread):
                                 f'File Hash: {file_hash}<br />'
                                 f'File Url: {url}')
 
-        file = self._get_plmxml(file_hash, url)
-        if not file:
-            return
+        file = None
+        if not target_ave:
+            file = self._get_plmxml(file_hash, url)
+            if not file:
+                return
 
         # -- Prepare Variants
         variants = self._get_knecht_variants(file, data)
+        if target_ave:
+            variants.ave = True
 
         # -- Send Variants
         if variants.variants:
             self.status_signal.emit('Triggered send operation')
             self.send_variants.emit(variants)
 
-    def _get_knecht_variants(self, file, preset_data: dict) -> KnechtVariantList:
+    def _get_knecht_variants(self, file: Optional[Path], preset_data: dict) -> KnechtVariantList:
         # -- Prepare Variants
         variants = KnechtVariantList()
-        variants.plm_xml_path = file.as_posix()
+        if file is not None:
+            variants.plm_xml_path = file.as_posix()
         variants.preset_name = preset_data.get('name')
         for pr in preset_data.get('result').split('+'):
             if pr == '':
