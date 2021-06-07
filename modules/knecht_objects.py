@@ -47,6 +47,7 @@ class KnechtVariantList:
         self.variants: List[KnechtVariant] = list()
         self.output_path = None
         self.plm_xml_path = None
+        self.ave = False
 
         self.preset_name: str = ''
         self.preset_id = None

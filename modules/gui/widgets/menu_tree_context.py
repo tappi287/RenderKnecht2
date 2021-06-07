@@ -51,6 +51,14 @@ class TreeContextMenu(QMenu):
         self.addAction(self.send_dg_action)
         self.addSeparator()
 
+        self.send_ave_action = QAction(IconRsc.get_icon('paperplane'), _('Senden an AVE'), self)
+        dg_tip_1 = _('Selektierte Bauminhalte als Konfiguration an laufende AVE Instanz senden.')
+        self.send_ave_action.setToolTip(dg_tip_1)
+        self.send_ave_action.setStatusTip(dg_tip_1)
+        self.send_ave_action.triggered.connect(self.send_to_ave)
+        self.addAction(self.send_ave_action)
+        self.addSeparator()
+
         self.send_dg_short = QAction(IconRsc.get_icon('paperplane'), _('Ohne Reset an DeltaGen senden'), self)
         dg_tip_2 = _('Selektierte Bauminhalte ohne einen Reset an DeltaGen senden.')
         self.send_dg_short.setToolTip(dg_tip_2)
@@ -170,6 +178,11 @@ class TreeContextMenu(QMenu):
 
     def send_to_deltagen(self):
         variants = self.view.editor.collect.collect_current_index()
+        self.ui.app.send_dg.send_variants(variants, self.view)
+
+    def send_to_ave(self):
+        variants = self.view.editor.collect.collect_current_index()
+        variants.ave = True
         self.ui.app.send_dg.send_variants(variants, self.view)
 
     def send_to_deltagen_wo_reset(self):

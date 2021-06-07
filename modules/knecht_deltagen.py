@@ -15,6 +15,7 @@ from modules.itemview.model import KnechtModel
 from modules.itemview.tree_view import KnechtTreeView
 from modules.itemview.model_globals import KnechtModelGlobals as Kg
 from modules.knecht_plmxml import KnechtPlmXmlController
+from modules.knecht_ave import KnechtAVEController
 from modules.knecht_socket import Ncat
 from modules.knecht_socketio import WolkeController
 from modules.knecht_objects import KnechtVariant, KnechtVariantList
@@ -357,6 +358,13 @@ class SendToDeltaGen(QObject):
         self.plm_xml_controller.scene_active_result.connect(self._request_active_scene_result)
         self.plm_xml_controller.material_dummy.connect(self._create_material_dummy)
 
+        # AVE Controller
+        self.ave_controller = KnechtAVEController(KnechtVariantList())
+        self.ave_controller.send_finished.connect(self._send_operation_finished)
+        self.ave_controller.status.connect(self._update_status)
+        self.ave_controller.progress.connect(self._update_progress)
+        self.ave_controller.ave_result.connect(self._plm_xml_display_result)
+
         # Prepare Send Thread
         self.dg = CommunicateDeltaGen(self.ui)
 
@@ -417,8 +425,12 @@ class SendToDeltaGen(QObject):
 
         self.transfer_options.emit(KnechtSettings.dg)
 
-        if variant_ls.plm_xml_path is not None:
+        if variant_ls.plm_xml_path is not None and not variant_ls.ave:
             self._send_as_connector(variant_ls)
+            return
+
+        if variant_ls.ave:
+            self._send_ave(variant_ls)
             return
         
         self.transfer_variants.emit(variant_ls)
@@ -490,6 +502,10 @@ class SendToDeltaGen(QObject):
     def _send_as_connector(self, variant_ls: KnechtVariantList):
         self.plm_xml_controller.variants_ls = variant_ls
         self.plm_xml_controller.start_configuration()
+
+    def _send_ave(self, variant_ls: KnechtVariantList):
+        self.ave_controller.variants_ls = variant_ls
+        self.ave_controller.start_configuration()
 
     @Slot(int)
     def _send_operation_finished(self, result: DeltaGenResult):

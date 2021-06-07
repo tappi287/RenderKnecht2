@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2021-02-05 14:54+0100\n"
-"PO-Revision-Date: 2021-02-05 14:55+0100\n"
+"POT-Creation-Date: 2021-06-07 15:00+0200\n"
+"PO-Revision-Date: 2021-06-07 15:02+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -46,7 +46,7 @@ msgstr "Materials to update and "
 
 #: modules/asconnector\configurator.py:266
 msgid "Objekte zur Änderung der Sichtbarkeit gefunden."
-msgstr "objects to change visibility found."
+msgstr "Objects to change visibility found."
 
 #: modules/asconnector\configurator.py:270
 msgid "Die folgenden {} Materialien erzielten keine Treffer "
@@ -643,7 +643,8 @@ msgid "Einfügen\tStrg+V"
 msgstr "Paste\tCtrl+V"
 
 #: modules/gui/widgets\menu_edit.py:86
-#: modules/gui/widgets\menu_tree_context.py:88 modules/gui/wizard\preset.py:295
+#: modules/gui/widgets\menu_tree_context.py:102
+#: modules/gui/wizard\preset.py:295
 msgid "Selektierte Zeilen entfernen\tEntf"
 msgstr "Remove selected rows\tDel"
 
@@ -793,7 +794,7 @@ msgid "Sprache"
 msgstr "Language"
 
 #: modules/gui/widgets\menu_tab_context.py:21
-#: modules/gui/widgets\menu_tree_context.py:30
+#: modules/gui/widgets\menu_tree_context.py:32
 msgid "Baum Kontextmenü"
 msgstr "Tree Contextmenu"
 
@@ -865,35 +866,39 @@ msgstr "Do you want to <b>completely discard</b> the Contents of: <br><i>{}</i>?
 msgid "{} vollständig verwerfen"
 msgstr "{} completely discard"
 
-#: modules/gui/widgets\menu_tree_context.py:44
+#: modules/gui/widgets\menu_tree_context.py:46
 msgid "Senden an DeltaGen"
 msgstr "Send to DeltaGen"
 
-#: modules/gui/widgets\menu_tree_context.py:45
+#: modules/gui/widgets\menu_tree_context.py:47
 msgid "Selektierte Bauminhalte als Variantenschaltung mit vorherigem Reset an DeltaGen senden."
 msgstr "Send selected tree content to DeltaGen with prior reset."
 
-#: modules/gui/widgets\menu_tree_context.py:52
+#: modules/gui/widgets\menu_tree_context.py:54
+msgid "Senden an AVE"
+msgstr "Send to AVE"
+
+#: modules/gui/widgets\menu_tree_context.py:55
+msgid "Selektierte Bauminhalte als Konfiguration an laufende AVE Instanz senden."
+msgstr "Send selected tree contents as configuration to running AVE instance."
+
+#: modules/gui/widgets\menu_tree_context.py:62
 msgid "Ohne Reset an DeltaGen senden"
 msgstr "Send to DeltaGen without reset"
 
-#: modules/gui/widgets\menu_tree_context.py:53
+#: modules/gui/widgets\menu_tree_context.py:63
 msgid "Selektierte Bauminhalte ohne einen Reset an DeltaGen senden."
 msgstr "Send selected tree content to DeltaGen without prior reset."
 
-#: modules/gui/widgets\menu_tree_context.py:60
+#: modules/gui/widgets\menu_tree_context.py:71
 msgid "PR String in Zwischenablage kopieren"
 msgstr "Copy PR String to clipboard"
 
-#: modules/gui/widgets\menu_tree_context.py:63
+#: modules/gui/widgets\menu_tree_context.py:74
 msgid "Linc String in Zwischenablage kopieren"
 msgstr "Copy Linc PR String to clipboard"
 
-#: modules/gui/widgets\menu_tree_context.py:66
-msgid "PlmXml Materialien anzeigen"
-msgstr "View PlmXml Materials"
-
-#: modules/gui/widgets\menu_tree_context.py:101
+#: modules/gui/widgets\menu_tree_context.py:115
 msgid "Hide ID columns"
 msgstr "Hide ID columns"
 
@@ -1003,13 +1008,9 @@ msgstr "Choose directory"
 msgid "< Gültigen Pfad eingeben >"
 msgstr "< Enter valid path >"
 
-#: modules/gui/widgets\plmxml_materials_page.py:28
-msgid "PlmXml Materialien"
-msgstr "PlmXml Materials"
-
-#: modules/gui/widgets\plmxml_materials_page.py:33
-msgid " Quell Materialien"
-msgstr " Source Materials"
+#: modules/gui/widgets\plmxml_scene.py:43
+msgid "PlmXml Schnuffi"
+msgstr "PlmXml Schnuffi"
 
 #: modules/gui/widgets\search_dialog.py:45
 msgid "Suchen und Ersetzen"
@@ -1803,6 +1804,14 @@ msgstr "Unknown"
 msgid "{0:03d}/{1:03d} Layer erstellt"
 msgstr "{0:03d}/{1:03d} Layer created"
 
+#: modules\knecht_ave.py:73
+msgid "Sende Varianten an AVE Instanz"
+msgstr "Send variants to AVE instance"
+
+#: modules\knecht_ave.py:79
+msgid "Fehler beim Senden an AVE"
+msgstr "Error sending to AVE"
+
 #: modules\knecht_camera.py:51
 msgid "DeltaGen Kamera Sichtfeld: Angle"
 msgstr "DeltaGen Camera Field of View: Angle"
@@ -1871,85 +1880,73 @@ msgstr "The request to the database did not result in any result."
 msgid "Netzwerkverbindung konnte nicht beendet werden. Bitte warten und in einer Minute erneut versuchen."
 msgstr "Network connection could not be terminated. Please wait and try again in a minute."
 
-#: modules\knecht_deltagen.py:162
+#: modules\knecht_deltagen.py:163
 msgid "DeltaGen Verbindung erfolgreich verifiziert."
 msgstr "DeltaGen connection successfully verified."
 
-#: modules\knecht_deltagen.py:177
+#: modules\knecht_deltagen.py:178
 msgid "DeltaGen Verbindungsversuch ({!s}/{!s}) in {!s} Sekunden..."
 msgstr "DeltaGen connection attempt ({!s}/{!s}) in {!s} seconds ..."
 
-#: modules\knecht_deltagen.py:205
+#: modules\knecht_deltagen.py:206
 msgid "Prüfe Verbindung..."
 msgstr "Checking connection..."
 
-#: modules\knecht_deltagen.py:213
+#: modules\knecht_deltagen.py:214
 msgid "Sperre Viewer Fenster"
 msgstr "Lock viewer window"
 
-#: modules\knecht_deltagen.py:444
+#: modules\knecht_deltagen.py:456
 msgid "AsConnector aktive Szene: {}"
 msgstr "AsConnector active scene: {}"
 
-#: modules\knecht_deltagen.py:467
+#: modules\knecht_deltagen.py:479
 msgid "Es läuft bereits eine DeltaGen Sende Operation! Vorgang abwarten oder abbrechen und anschließend erneut versuchen."
 msgstr "DeltaGen send operation already running! Wait or cancel the running operation."
 
-#: modules\knecht_deltagen.py:483
+#: modules\knecht_deltagen.py:495
 msgid "Füge Material Dummy zur Szenenstruktur hinzu."
 msgstr "Adding material dummy to the scene structure."
 
-#: modules\knecht_deltagen.py:511
+#: modules\knecht_deltagen.py:527
 msgid "Kopieren"
 msgstr "Copy"
 
-#: modules\knecht_deltagen.py:520
+#: modules\knecht_deltagen.py:536
 msgid "DeltaGen Sende Operation beendet."
 msgstr "DeltaGen Send Operation finished."
 
-#: modules\knecht_deltagen.py:523
+#: modules\knecht_deltagen.py:539
 msgid "Konnte <b>keine Verbindung</b> zu einer DeltaGen Instanz mit geladener Szene herstellen."
 msgstr "Could not <b> connect </ b> to a DeltaGen instance with a loaded scene."
 
-#: modules\knecht_deltagen.py:528
+#: modules\knecht_deltagen.py:544
 msgid "DeltaGen Befehl konnte nicht gesendet werden. <b>Keine Verbindung.</b>"
 msgstr "DeltaGen command could not be sent. <b> No connection. </ b>"
 
-#: modules\knecht_deltagen.py:530
+#: modules\knecht_deltagen.py:546
 msgid "DeltaGen Sende Operation <b>abgebrochen.</b>"
 msgstr "DeltaGen Send Operation <b> aborted. </ B>"
 
-#: modules\knecht_deltagen.py:532
+#: modules\knecht_deltagen.py:548
 msgid "PlmXml stimmt nicht mit geladener Szene überein! Kann DeltaGen Szene nicht aktualisieren."
 msgstr "PlmXml doesn't match loaded scene! Cannot update DeltaGen Scene."
 
-#: modules\knecht_deltagen.py:535
+#: modules\knecht_deltagen.py:551
 msgid "AsConnector konnte DeltaGen Szene nicht aktualisieren."
 msgstr "AsConnector could not update DeltaGen Scene."
 
-#: modules\knecht_deltagen.py:544
+#: modules\knecht_deltagen.py:560
 msgid "{0} {1} gesendet"
 msgstr "{0} {1} sent"
 
-#: modules\knecht_deltagen.py:650
+#: modules\knecht_deltagen.py:666
 msgid "Auswählen"
 msgstr "Select"
 
-#: modules\knecht_deltagen.py:654
+#: modules\knecht_deltagen.py:670
 msgid "Senden an DeltaGen abgeschlossen:<br /><i>{}</i>"
 msgstr "Send operation to DeltaGen finished:<br /><i>{}</i>"
-
-#: modules\knecht_excel.py:223
-msgid "Datei exisitiert nicht: {}"
-msgstr "File does not exist: {}"
-
-#: modules\knecht_excel.py:240
-msgid "Die Arbeitsblätter für PR-Optionen oder Modelle enthalten keine Daten oder konnten nicht gelesen werden."
-msgstr "The worksheets for PR-Options or Models contained no data or could not be read."
-
-#: modules\knecht_excel.py:386
-msgid "Es wurden nicht alle benötigten Arbeitsblätter gefunden {}. Es fehlen: {}"
-msgstr "Not all necessary worksheets have been found {}. Missing: {}"
 
 #: modules\knecht_image.py:87
 msgid "Konnte Ausgabe Verzeichnis nicht erstellen: {}"
@@ -2143,51 +2140,55 @@ msgstr "Session successfully saved while idle"
 msgid "Sitzungswiederherstellung abgeschlossen"
 msgstr "Session restore finished"
 
-#: modules\knecht_socketio.py:88
+#: modules\knecht_socketio.py:93
 msgid "Verbinde mit {} als {}"
 msgstr "Connecting to {} as {}"
 
-#: modules\knecht_socketio.py:98
+#: modules\knecht_socketio.py:103
 msgid "<b>Konnte nicht verbinden mit {}</b>"
 msgstr "<b>Couldn't connect to {}</b>"
 
-#: modules\knecht_socketio.py:100
+#: modules\knecht_socketio.py:105
 msgid "Navigieren Sie zu Ihrer KnechtWolke Benutzer Profil and transferieren sie die Einstellungen hier. Prüfen Sie die korrekte Adresse eingegeben zu haben und das jener Server verfügbar ist von Ihrem lokalen Bereichsnetz. Tun Sie auch diese App zu Ihrer Feuerwalzenweißliste hinzu."
 msgstr "Navigate to your KnechtWolke user profile and transfer the settings here. Check to have entered the correct address and that that server is available from your local area network. Also add this app to your fire roll whitelist."
 
-#: modules\knecht_socketio.py:112
+#: modules\knecht_socketio.py:111
+msgid "Ein SocketIO Prozess läuft bereits. Diese Anwendung schließen und eventuell hängende Instanzen unter TaskManager>Details>RenderKnecht.exe beenden."
+msgstr "A SocketIO process is already running. Close this application and exit any hanging instances under TaskManager>Details>RenderKnecht.exe."
+
+#: modules\knecht_socketio.py:123
 msgid "Verbunden zum SteckbuchseReinRaus Server"
 msgstr "Connected to the SocketIO Server"
 
-#: modules\knecht_socketio.py:120
+#: modules\knecht_socketio.py:131
 msgid "Verbindung getrennt."
 msgstr "Disconnected."
 
-#: modules\knecht_socketio.py:123
+#: modules\knecht_socketio.py:134
 msgid "Verbunden als {}"
 msgstr "Connected as {}"
 
-#: modules\knecht_socketio.py:140
+#: modules\knecht_socketio.py:155
 msgid "Erhielt Transfer Presets Ereignis mit Daten:"
 msgstr "Received Transfer Presets Event with Data:"
 
-#: modules\knecht_socketio.py:189
+#: modules\knecht_socketio.py:204
 msgid "Erhielt Senden PR-String Ereignis mit Daten:"
 msgstr "Received Send PR-String Event with Data:"
 
-#: modules\knecht_socketio.py:227
+#: modules\knecht_socketio.py:247
 msgid "PlmXml Datei Eintrag gefunden aber keine lokale Datei vorhanden!"
 msgstr "PlmXml file entry found but no local file exists!"
 
-#: modules\knecht_socketio.py:242
+#: modules\knecht_socketio.py:262
 msgid "Konnte Datei nicht heruterladen von: {}"
 msgstr "Couldn't reload file from: {}"
 
-#: modules\knecht_socketio.py:252
+#: modules\knecht_socketio.py:272
 msgid "Konnte Download Datei nicht finden: {}"
 msgstr "Couldn't find download file: {}"
 
-#: modules\knecht_socketio.py:259
+#: modules\knecht_socketio.py:279
 msgid "Konnte Download Datei nicht speichern: {}"
 msgstr "Couldn't save download file: {}"
 
