@@ -7,6 +7,8 @@ UI_PATHS_FILE = 'gui_resource_paths.json'
 LOG_FILE_NAME = 'renderknecht2.log'
 MAIN_LOGGER_NAME = 'knecht_main'
 DEV_LOGGER_NAME = 'dev_module'
+SOCKET_LOG_FILE_NAME = 'knecht_socketio_client.log'
+SOCKET_MAIN_LOGGER_NAME = 'socketio_proc'
 
 SETTINGS_FILE = 'settings.json'
 SETTINGS_DIR_NAME = 'RenderKnecht2'

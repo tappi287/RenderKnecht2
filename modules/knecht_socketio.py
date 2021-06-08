@@ -7,8 +7,8 @@ from typing import Optional, Union
 
 import requests
 from PySide2.QtCore import QModelIndex, Signal
-from knecht_socketio_client import SocketProcess
-from knecht_socketio_client.singleton import SingleInstanceException
+from modules.knecht_socketio_client import SocketProcess
+from modules.singleton import SingleInstanceException
 
 from modules import KnechtSettings
 from modules.globals import get_settings_dir
