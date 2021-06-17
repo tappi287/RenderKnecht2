@@ -242,6 +242,12 @@ class WolkeController(Thread):
             if not self.download(url, file_hash):
                 return
 
+        # -- If file found in settings but not present on disk re-try download
+        file = Path(KnechtSettings.wolke.get('files', dict())[file_hash])
+        if not file.is_file():
+            if not self.download(url, file_hash):
+                return
+
         file = Path(KnechtSettings.wolke.get('files', dict())[file_hash])
         if not file.is_file():
             self.status_signal.emit(_('PlmXml Datei Eintrag gefunden aber keine lokale Datei vorhanden!'))
@@ -253,7 +259,8 @@ class WolkeController(Thread):
         output_dir = Path(get_settings_dir()) / 'plmxml_temp'
         if not output_dir.exists():
             output_dir.mkdir()
-        r = requests.get(url)
+        r = requests.get(url, headers={'user': KnechtSettings.wolke.get('user'),
+                                       'token': KnechtSettings.wolke.get("token")})
 
         if r.status_code == 200 and r.headers.get("Content-Disposition", False) and \
                 r.headers.get('Content-Type', '').startswith('application/xml'):
