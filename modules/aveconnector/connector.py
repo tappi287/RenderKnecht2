@@ -1,3 +1,5 @@
+import time
+
 import requests
 
 from modules.aveconnector.request import AVERequest
@@ -24,19 +26,22 @@ class AVEConnection:
         retries = self.num_retries if retry else 1
 
         while not result and (tries := tries + 1) <= retries:
+            response = None
             try:
-                r = requests.post(
-                    ave_request.get_url(), json=ave_request.get_json(), timeout=self.timeout
-                    )
+                with requests.Session() as s:
+                    response = s.post(ave_request.get_url(), json=ave_request.get_json(), timeout=self.timeout)
             except Exception as e:
                 LOGGER.error('Error connecting to AVE! %s', e)
                 err = str(e)
+                time.sleep(10)
 
-            if r is not None:
+            if response is not None:
                 LOGGER.debug('Sent %s to AVE, response code was: %s', ave_request.__class__.__name__,
-                             r.status_code)
-                result = ave_request.handle_response(r)
+                             response.status_code)
+                result = ave_request.handle_response(response)
                 self.error = ave_request.error
+                if not result or not response.ok:
+                    time.sleep(10)
             else:
                 self.error = str(err)
                 result = False
