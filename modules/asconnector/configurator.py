@@ -191,7 +191,14 @@ class PlmXmlConfigurator(PlmXmlBaseConfigurator):
             _dummy_target.visible_variant = dummy_variant
             dummy_targets.append(_dummy_target)
 
-        self.as_conn.request(self.create_material_connect_to_targets_request(dummy_targets), retry=False)
+        # -- Actually assign the Materials
+        if not self.as_conn.request(self.create_material_connect_to_targets_request(dummy_targets), retry=False):
+            LOGGER.debug('Dummy Assignment failed, trying to re-initialize AsConnector')
+            # -- Re-initialize AsConnector if Material Assignment fails
+            self.as_conn.initialize_as_connector(self.plmxml.file)
+            if not self.as_conn.request(self.create_material_connect_to_targets_request(dummy_targets), retry=False):
+                LOGGER.error('Dummy Assignment failed!')
+                self._update_status_message(_('Konnte DUMMY Material nicht anwenden: ') + self.as_conn.error)
 
     def _get_valid_material_targets(self) -> Tuple[List[MaterialTarget], List[MaterialTarget]]:
         """ This will acquire the materials from the scene and compare it to

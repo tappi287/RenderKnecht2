@@ -1,8 +1,12 @@
+from pathlib import Path
+from time import sleep
+
 import requests
 
+from modules.asconnector.request import AsConnectorRequest, AsGetVersionInfoRequest, AsGetSelectedNodeEventRequest, \
+    AsSceneLoadPlmXmlRequest, AsSceneCloseRequest
 from modules.language import get_translation
 from modules.log import init_logging
-from modules.asconnector.request import AsConnectorRequest, AsGetVersionInfoRequest, AsGetSelectedNodeEventRequest
 
 LOGGER = init_logging(__name__)
 
@@ -47,7 +51,7 @@ class AsConnectorConnection:
 
     def request(self, as_request: AsConnectorRequest, retry: bool = True) -> bool:
         r, err, tries, result = None, str(), 0, False
-        retries = self.num_retries if retry else 2
+        retries = self.num_retries if retry else 1
 
         while not result and (tries := tries + 1) <= retries:
             try:
@@ -69,3 +73,28 @@ class AsConnectorConnection:
                 result = False
 
         return result
+
+    def initialize_as_connector(self, plmxml_file: Path) -> bool:
+        """ Re-initialize AsConnector Id's and materials if e.g. DeltaGen scene changed
+            1. AsSceneLoadPlmXmlRequest
+            2. CloseScene
+            -> AsConnector is now initialized to a new scene.
+        """
+
+        # -- Load PlmXml as DeltaGen Scene --
+        load_request = AsSceneLoadPlmXmlRequest(plmxml_file)
+        load_response = self.request(load_request, retry=False)
+
+        if not load_response:
+            return False
+
+        # -- Close the loaded PlmXml --
+        sleep(0.3)
+        close_request = AsSceneCloseRequest(plmxml_file.name)
+        close_result = self.request(close_request)
+
+        if not close_result:
+            return False
+        sleep(0.2)
+
+        return True

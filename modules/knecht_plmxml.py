@@ -156,7 +156,7 @@ class KnechtUpdatePlmXml(Thread):
     def __init__(self, controller: KnechtPlmXmlController):
         super(KnechtUpdatePlmXml, self).__init__()
         self.controller = controller
-        self.as_conn = None
+        self.as_conn: Optional[AsConnectorConnection] = None
         self.variants_ls = controller.variants_ls
         self.signals = _KnechtUpdatePlmXmlSignals()
 
@@ -284,28 +284,15 @@ class KnechtUpdatePlmXml(Thread):
                                   'AsConnector muss re-initialisiert werden. Dies dauert einen Moment.')
                                 + f' <i>{KnechtSettings.app.get("last_scene") or active_scene}</i>')
 
-        # -- Load PlmXml as DeltaGen Scene --
-        load_request = AsSceneLoadPlmXmlRequest(plmxml_file)
-        load_response = self.as_conn.request(load_request, retry=False)
+        result = self.as_conn.initialize_as_connector(plmxml_file)
 
-        if not load_response:
+        if not result:
             self._update_status(_('Konnte PlmXml nicht in DeltaGen laden. '
                                   'AsConnector konnte nicht re-initialisiert werdem! Materialschaltungen '
-                                  'könnten unter Umständen nicht funktionieren.'))
+                                  'könnten unter Umständen nicht funktionieren. Fehler: ')
+                                + self.as_conn.error)
             return False
 
-        # -- Close the loaded PlmXml --
-        sleep(0.3)
-        close_request = AsSceneCloseRequest(plmxml_file.name)
-        close_result = self.as_conn.request(close_request)
-
-        if not close_result:
-            self._update_status(_('Konnte geladene PlmXml nicht schliessen. '
-                                  'AsConnector konnte vermutlich re-initialisiert werden. '
-                                  'Die geladene PlmXml Szene kann geschlossen werden.'))
-            return False
-
-        self._update_status(_('AsConnector erfolgreich re-initialisiert.'))
         KnechtSettings.app['last_plmxml'] = plmxml_file.name
         KnechtSettings.app['last_scene'] = active_scene
         return True

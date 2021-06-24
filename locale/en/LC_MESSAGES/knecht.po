@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2021-06-07 15:00+0200\n"
-"PO-Revision-Date: 2021-06-07 15:02+0200\n"
+"POT-Creation-Date: 2021-06-24 13:35+0200\n"
+"PO-Revision-Date: 2021-06-24 13:36+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,35 +28,39 @@ msgstr "Starting Material assignment for requested configuration ..."
 msgid "Wende Dummy Material auf Target Materialien an"
 msgstr "Assigning Dummy material to target Materials"
 
-#: modules/asconnector\configurator.py:248
+#: modules/asconnector\configurator.py:201
+msgid "Konnte DUMMY Material nicht anwenden: "
+msgstr "Could not apply DUMMY material: "
+
+#: modules/asconnector\configurator.py:255
 msgid "Die Szene enthält ungeladene/fehlende Material Targets:"
 msgstr "The Scene contains unloaded or missing Materials:"
 
-#: modules/asconnector\configurator.py:250
+#: modules/asconnector\configurator.py:257
 msgid "Diese wurden bei der Konfiguration ignoriert."
 msgstr "These have been ignored during configuration."
 
-#: modules/asconnector\configurator.py:262
+#: modules/asconnector\configurator.py:269
 msgid "Aktualisiere PlmXml Konfiguration. "
 msgstr "Updating PlmXml Konfiguration. "
 
-#: modules/asconnector\configurator.py:264
+#: modules/asconnector\configurator.py:271
 msgid "Materialien zum aktualisieren und "
 msgstr "Materials to update and "
 
-#: modules/asconnector\configurator.py:266
+#: modules/asconnector\configurator.py:273
 msgid "Objekte zur Änderung der Sichtbarkeit gefunden."
 msgstr "Objects to change visibility found."
 
-#: modules/asconnector\configurator.py:270
+#: modules/asconnector\configurator.py:277
 msgid "Die folgenden {} Materialien erzielten keine Treffer "
 msgstr "The following {} Materials did not match "
 
-#: modules/asconnector\configurator.py:271
+#: modules/asconnector\configurator.py:278
 msgid "in der Konfiguration. Sie werden nicht aktualisiert:"
 msgstr "the configuration. They will not be updated:"
 
-#: modules/asconnector\connector.py:44
+#: modules/asconnector\connector.py:48
 msgid "Konnte mit keiner AsConnector Instanz verbinden."
 msgstr "Could not connect to any AsConnector instance."
 
@@ -2016,17 +2020,9 @@ msgstr "PlmXml differs from previous switched PlmXml. AsConnector must be re-ini
 msgid "Aktive DeltaGen Szene weicht von vorhergehend geschalteter Szene ab. AsConnector muss re-initialisiert werden. Dies dauert einen Moment."
 msgstr "Active DeltaGen scene deviates from previous switched scene. AsConnector must be re-initialized. This takes a moment."
 
-#: modules\knecht_plmxml.py:292
-msgid "Konnte PlmXml nicht in DeltaGen laden. AsConnector konnte nicht re-initialisiert werdem! Materialschaltungen könnten unter Umständen nicht funktionieren."
-msgstr "Could not load PlmXml into DeltaGen. AsConnector could not be re-initialized! Material assignment may not work."
-
-#: modules\knecht_plmxml.py:303
-msgid "Konnte geladene PlmXml nicht schliessen. AsConnector konnte vermutlich re-initialisiert werden. Die geladene PlmXml Szene kann geschlossen werden."
-msgstr "Unable to close loaded PlmXml. AsConnector could probably be re-initialized. The loaded PlmXml scene can be closed."
-
-#: modules\knecht_plmxml.py:308
-msgid "AsConnector erfolgreich re-initialisiert."
-msgstr "AsConnector successfully re-initialized."
+#: modules\knecht_plmxml.py:290
+msgid "Konnte PlmXml nicht in DeltaGen laden. AsConnector konnte nicht re-initialisiert werdem! Materialschaltungen könnten unter Umständen nicht funktionieren. Fehler: "
+msgstr "Could not load PlmXml into DeltaGen. AsConnector could not be re-initialized! Material assignment may not work. Error: "
 
 #: modules\knecht_render.py:99
 msgid "RenderKnecht Render Log erstellt am "
@@ -2176,19 +2172,19 @@ msgstr "Received Transfer Presets Event with Data:"
 msgid "Erhielt Senden PR-String Ereignis mit Daten:"
 msgstr "Received Send PR-String Event with Data:"
 
-#: modules\knecht_socketio.py:247
+#: modules\knecht_socketio.py:253
 msgid "PlmXml Datei Eintrag gefunden aber keine lokale Datei vorhanden!"
 msgstr "PlmXml file entry found but no local file exists!"
 
-#: modules\knecht_socketio.py:262
+#: modules\knecht_socketio.py:269
 msgid "Konnte Datei nicht heruterladen von: {}"
 msgstr "Couldn't reload file from: {}"
 
-#: modules\knecht_socketio.py:272
+#: modules\knecht_socketio.py:279
 msgid "Konnte Download Datei nicht finden: {}"
 msgstr "Couldn't find download file: {}"
 
-#: modules\knecht_socketio.py:279
+#: modules\knecht_socketio.py:286
 msgid "Konnte Download Datei nicht speichern: {}"
 msgstr "Couldn't save download file: {}"
 
