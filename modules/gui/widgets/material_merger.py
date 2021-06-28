@@ -1,4 +1,4 @@
-import os
+import os, stat
 from pathlib import Path, WindowsPath
 from datetime import datetime
 
@@ -30,19 +30,32 @@ class ThreadSignals(QObject):
 
 
 def copy_material_dirs(target_path: Path, sorted_src_dirs: dict, signal_obj: ThreadSignals):
+    def _on_rm_error(func, path, exc_info):
+        """ Remove Read Only flag from files """
+        try:
+            p = Path(path)
+            p.chmod(stat.S_IWRITE)
+            func(path)
+        except Exception as err:
+            LOGGER.error('Error copying Material: %s', err)
+
     for target_dir in target_path.iterdir():
         if target_dir.name not in sorted_src_dirs:
             continue
 
         src_dir = sorted_src_dirs[target_dir.name]['path']
 
-        # Delete Target directory
-        shutil.rmtree(target_dir.as_posix(), ignore_errors=True)
-
-        # Copy directory contents
-        shutil.copytree(src_dir.as_posix(), target_dir.as_posix(), dirs_exist_ok=True)
-
-        signal_obj.update.emit(f'Updated <b>{target_dir.name}</b> from {str(WindowsPath(src_dir))}')
+        try:
+            # Delete Target directory
+            shutil.rmtree(target_dir.as_posix(), onerror=_on_rm_error)
+            # Copy directory contents
+            shutil.copytree(src_dir.as_posix(), target_dir.as_posix(), dirs_exist_ok=True)
+            LOGGER.debug('Material Merger copy thread copying: %s %s', src_dir.name, target_dir.name)
+        except Exception as e:
+            LOGGER.error('Error copying Material: %s %s', target_dir.name, e)
+            signal_obj.update.emit(f'<b>ERROR</b> could not copy <i>{target_dir.name}</i>! Exception: {e}')
+        else:
+            signal_obj.update.emit(f'Updated <b>{target_dir.name}</b> from {str(WindowsPath(src_dir))}')
 
 
 class MaterialMerger(QWidget):
