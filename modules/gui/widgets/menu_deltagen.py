@@ -1,12 +1,13 @@
 from PySide2 import QtCore
 from PySide2.QtCore import Slot
 from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QAction, QMenu, QActionGroup, QApplication
+from PySide2.QtWidgets import QAction, QMenu, QActionGroup, QApplication, QMessageBox, QSpinBox
 
 from modules.gui.ui_resource import IconRsc
 from modules.gui.widgets.menu_asscene import AsSceneMenu
 from modules.language import get_translation
 from modules.log import init_logging
+from modules.globals import DG_TCP_PORT
 from modules.settings import KnechtSettings
 
 LOGGER = init_logging(__name__)
@@ -34,7 +35,7 @@ class DeltaGenMenu(QMenu):
         self.hidden_actions.setVisible(False)
 
         self.send_camera, self.display, self.display_overlay = None, None, None
-        self.enable_material_dummy, self.validate_plmxml = None, None
+        self.enable_material_dummy, self.validate_plmxml, self.change_port = None, None, None
         self.as_scene_menu = QMenu()
 
         self.setup_deltagen_menu()
@@ -76,6 +77,11 @@ class DeltaGenMenu(QMenu):
         self.as_scene_menu.deleteLater()
         self.as_scene_menu = AsSceneMenu(self.ui, _('AsConnector aktive Szene:'))
         self.addMenu(self.as_scene_menu)
+
+        # --- Change DeltaGen Command Port
+        self.change_port = QAction(IconRsc.get_icon('paperplane'), _('DeltaGen Port ändern'), self)
+        self.change_port.triggered.connect(self.change_deltagen_port)
+        self.addAction(self.change_port)
 
         self._apply_settings()
 
@@ -148,6 +154,28 @@ class DeltaGenMenu(QMenu):
     @Slot(bool)
     def toggle_camera_send(self, checked: bool):
         KnechtSettings.dg['send_camera_data'] = checked
+
+    def change_deltagen_port(self):
+        box = QMessageBox(self)
+        box.setText(_('Port zwischen 3000-3999 angeben. '
+                      'Muss mit DeltaGen>Preferences>Tools>External Commands übereinstimmen.'))
+        box.setWindowTitle(_('DeltaGen Kommando Port'))
+
+        port = QSpinBox(box)
+        port.setMinimum(3000)
+        port.setMaximum(3999)
+        port.setValue(KnechtSettings.dg.get('port', DG_TCP_PORT))
+        box.layout().addWidget(port,  box.layout().rowCount() - 1, 0, 1, box.layout().columnCount())
+        box.layout().addWidget(box.layout().takeAt(box.layout().rowCount() - 1).widget(), box.layout().rowCount(),
+                               0, 1, box.layout().columnCount())
+        box.exec_()
+
+        if 3000 <= port.value() <= 3999:
+            KnechtSettings.dg['port'] = port.value()
+            box = QMessageBox(self)
+            box.setText(_('Anwendung neu starten um geänderten Port zu übernehmen.'))
+            box.setWindowTitle(_('Neustart erforderlich'))
+            box.exec_()
 
     def enable_menus(self, enabled: bool = True):
         for a in self.menu.actions():

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-06-24 13:35+0200\n"
+"POT-Creation-Date: 2021-09-01 10:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -481,28 +481,28 @@ msgstr ""
 msgid "abgeschlossen am: "
 msgstr ""
 
-#: modules/gui/widgets\material_merger.py:91
+#: modules/gui/widgets\material_merger.py:104
 msgid "Quell-Verzeichnisse"
 msgstr ""
 
-#: modules/gui/widgets\material_merger.py:93
+#: modules/gui/widgets\material_merger.py:106
 msgid "Ziel-Verzeichnis"
 msgstr ""
 
-#: modules/gui/widgets\material_merger.py:96
+#: modules/gui/widgets\material_merger.py:109
 msgid "Quelleordner hinzufügen"
 msgstr ""
 
-#: modules/gui/widgets\material_merger.py:100
+#: modules/gui/widgets\material_merger.py:113
 msgid "Vereinen"
 msgstr ""
 
-#: modules/gui/widgets\material_merger.py:163
+#: modules/gui/widgets\material_merger.py:176
 msgid "Vereine Material Verzeichnisse"
 msgstr ""
 
 #: modules/gui/widgets\menu_asscene.py:18
-#: modules/gui/widgets\menu_deltagen.py:22
+#: modules/gui/widgets\menu_deltagen.py:23
 msgid "DeltaGen"
 msgstr ""
 
@@ -583,40 +583,60 @@ msgstr ""
 msgid "DeltaGen_Kamera_{:03d}"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:47
+#: modules/gui/widgets\menu_deltagen.py:48
 msgid "Reset senden"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:50
+#: modules/gui/widgets\menu_deltagen.py:51
 msgid "Freeze Viewer"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:53
+#: modules/gui/widgets\menu_deltagen.py:54
 msgid "Varianten State Check"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:56
+#: modules/gui/widgets\menu_deltagen.py:57
 msgid "Kamera Daten übertragen"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:59
+#: modules/gui/widgets\menu_deltagen.py:60
 msgid "State Check im Baum anzeigen"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:63
+#: modules/gui/widgets\menu_deltagen.py:64
 msgid "Zuletzt gesendetes Preset als Overlay anzeigen"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:67
+#: modules/gui/widgets\menu_deltagen.py:68
 msgid "Dummy Material auf PlmXml Konfiguration anwenden"
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:72
+#: modules/gui/widgets\menu_deltagen.py:73
 msgid "DeltaGen Szene vor dem konfigurieren mit PlmXml abgleichen."
 msgstr ""
 
-#: modules/gui/widgets\menu_deltagen.py:77
+#: modules/gui/widgets\menu_deltagen.py:78
 msgid "AsConnector aktive Szene:"
+msgstr ""
+
+#: modules/gui/widgets\menu_deltagen.py:82
+msgid "DeltaGen Port ändern"
+msgstr ""
+
+#: modules/gui/widgets\menu_deltagen.py:160
+msgid "Port zwischen 3000-3999 angeben. Muss mit DeltaGen>Preferences>Tools>External Commands übereinstimmen."
+msgstr ""
+
+#: modules/gui/widgets\menu_deltagen.py:162
+msgid "DeltaGen Kommando Port"
+msgstr ""
+
+#: modules/gui/widgets\menu_deltagen.py:176
+msgid "Anwendung neu starten um geänderten Port zu übernehmen."
+msgstr ""
+
+#: modules/gui/widgets\menu_deltagen.py:177
+msgid "Neustart erforderlich"
 msgstr ""
 
 #: modules/gui/widgets\menu_edit.py:23

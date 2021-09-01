@@ -80,7 +80,7 @@ class CommunicateDeltaGen(Thread):
         self.exit_event = Event()
 
         # --- Socket Communication Class ---
-        self.nc = Ncat(DG_TCP_IP, DG_TCP_PORT)
+        self.nc = Ncat(DG_TCP_IP, KnechtSettings.dg.get('port', DG_TCP_PORT))
 
     def run(self):
         """ Thread loop running until exit_event set. As soon as a new send operation

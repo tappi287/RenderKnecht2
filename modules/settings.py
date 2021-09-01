@@ -8,7 +8,7 @@ from typing import Union, Any
 import jsonpickle
 from cryptography.fernet import Fernet
 
-from modules.globals import Resource, UI_PATH, UI_PATHS_FILE, SETTINGS_FILE, DB_CONFIG_FILE
+from modules.globals import Resource, UI_PATH, UI_PATHS_FILE, SETTINGS_FILE, DB_CONFIG_FILE, DG_TCP_PORT
 from modules.globals import get_current_modules_dir, get_settings_dir
 from modules.language import setup_translation
 
@@ -163,6 +163,7 @@ class KnechtSettings:
         validate_plmxml_scene=True,
         use_material_dummy=True,
         csb_material_dummy_path='',
+        port=DG_TCP_PORT,
         )
     wolke = dict(
         user='UserName',
